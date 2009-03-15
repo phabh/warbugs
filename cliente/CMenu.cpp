@@ -68,7 +68,7 @@ public:
 			created = true;
 			_myID = id;
 			_timer = new CTimer();
-			_timer->Initialize();
+			_timer->initialize();
 
 			_dispositivo->setWindowCaption(L"Warbugs - BETA Version 0.1");
 
@@ -95,7 +95,7 @@ public:
 			_skin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_TOOLTIP);
 
 			if(_myID != JOGO)
-				_camera = _gerenciadorCena->addCameraSceneNode();
+				_camera = _gerenciadorCena->addCameraSceneNode(0,vector3df(0,50,0), vector3df(0,0,50));
 
 		}
 	}
@@ -120,7 +120,7 @@ public:
 
 				_gerenciadorEventos.startEventProcess(); // Ativa a escuta de eventos.
 			
-				_timer->Update();
+				_timer->update();
 
 				switch(_myID)
 				{
@@ -178,7 +178,7 @@ public:
 		_gerenciadorCena->addTextSceneNode(_gerenciadorHud->getBuiltInFont(), 
 										   L"TESTE!!!!!!!!",
 										   SColor(255,255,255,255),
-										   0, vector3df(-100,0,-100));
+										   0, vector3df(0,0,0));
 	}
 	
 	void menuConfiguracao()
