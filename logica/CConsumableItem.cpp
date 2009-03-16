@@ -7,14 +7,11 @@
 *
 * Objetivo: Descreve os itens consumíveis
 *
-* Alterações: 
-* 01/03/2009 - Criação da classe
-* 07/03/2009 - Remoção do atributo APONTADOR PRA JOGADOR
 */
 
-#ifndef _CITEM
 #include "CItem.cpp"
-#endif
+
+#ifndef _CCONSUMABLEITEM
 #define _CCONSUMABLEITEM
 
 class CConsumableItem : public CItem{
@@ -25,3 +22,4 @@ private:
 	//NECESSITA DA CLASSE CONTADORA DE TEMPO -> duração caso seja temporario
 
 };
+#endif

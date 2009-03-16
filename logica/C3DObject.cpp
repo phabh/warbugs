@@ -7,13 +7,10 @@
 *
 * Objetivo: Objeto base para todas as outras classes 3D
 *
-* Alterações: 
-* 28/02/2009 - Criação da classe
-*
 */
-#ifndef _COBJECT
 #include "CObject.cpp"
-#endif
+
+#ifndef _C3DOBJECT
 
 //Define a criação da classe
 #define _C3DOBJECT
@@ -28,9 +25,11 @@ protected:
 	//Métodos 3D
 
 	//Métodos CObject
-	virtual void initialize(){
+	virtual void initialize(CObjectCount &counter){
+		CObject::initialize(counter);
 	}
 	virtual TipoClasse getClass(){
 		return(C3DOBJECT);
 	}
 };
+#endif

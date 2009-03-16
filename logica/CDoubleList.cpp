@@ -7,13 +7,10 @@
 *
 * Objetivo: Estrutura de dados capaz de armazenar quaisquer objetos do warbugs
 *
-* Alterações:
-* 28/02/2009 - Criação da classe
-*
 */
-#ifndef _CLOGICOBJECT
 #include "CLogicObject.cpp"
-#endif
+
+#ifndef _CDOUBLELIST
 #define _CDOUBLELIST
 
 class CDoubleList : public CLogicObject{
@@ -28,3 +25,4 @@ public:
 		return(CObject::getID());
 	}
 };
+#endif
