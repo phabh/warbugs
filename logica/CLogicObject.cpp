@@ -7,13 +7,11 @@
 *
 * Objetivo: Objeto base para todas as outras classes lógicas
 *
-* Alterações: 
-* 01/03/2009 - Criação da classe
-*
 */
-#ifndef _COBJECT
 #include "CObject.cpp"
-#endif
+
+#ifndef _CLOGICOBJECT
 #define _CLOGICOBJECT
 class CLogicObject abstract : public CObject{
 };
+#endif

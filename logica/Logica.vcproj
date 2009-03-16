@@ -190,7 +190,7 @@
 				>
 			</File>
 			<Filter
-				Name="Primarias"
+				Name="1 - Primarias"
 				>
 				<File
 					RelativePath=".\C3DObject.cpp"
@@ -206,15 +206,19 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Secundarias"
+				Name="2 - Secundarias"
 				>
+				<File
+					RelativePath=".\CAtributo.cpp"
+					>
+				</File>
 				<File
 					RelativePath=".\CItem.cpp"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="Instanciaveis"
+				Name="3 - Instanciaveis"
 				>
 				<File
 					RelativePath=".\CConsumableItem.cpp"
@@ -222,6 +226,14 @@
 				</File>
 				<File
 					RelativePath=".\CDoubleList.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CScroll.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CWeapon.cpp"
 					>
 				</File>
 			</Filter>

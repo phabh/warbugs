@@ -7,12 +7,10 @@
 *
 * Objetivo: Objeto base para todas as outras classes
 *
-* Alterações: 
-* 01/03/2009 - Criação da classe
-*
 */
 
 //Define a criação da classe
+#ifndef _COBJECT
 #define _COBJECT
 
 class CObject;
@@ -24,9 +22,18 @@ enum TipoClasse{
 	CLOGICOBJECT,
 	CDOUBLELIST,
 	CITEM,
-	CCONSUMABLEITEM
+	CCONSUMABLEITEM,
+	CWEAPON,
+	CARMOR,
+	CSCROLL,
+	CATRIBUTO,
+	CHABILIDADES,
+	CHABILIDADESSECUNDARIAS,
+	CLEALDADE
 };
 
+//Enumerador para retornar a raça do personagem
+enum Raca {BESOURO, ARANHA, LOUVADEUS, ESCORPIAO, VESPA, TODAS};
 /*
 Classe CObjectCount
 Classe criada excluisivamente no intuito de contar a quantidade de objetos, podendo assim 
@@ -74,12 +81,18 @@ protected:
 	void initialize(CObjectCount &counter){
 		_id = counter.giveID();
 	}
-	TipoClasse getClass();//Retorna um valor citado no enum TipoClasse
-	//AVISOS COM RELAÇÃO AO GETCLASS:
-	//1- TODA CLASSE DEVERÁ SER CADASTRADA NO ENUM TipoCLasse, COM EXCEÇÃO DA CObjectCount.
-	//2- TODA CLASSE CADASTRADA NO ENUM DEVERÁ TER O MÉTODO REIMPLEMENTADO EM SUA DEFINIÇÃO, PARA QUE POSSA SER USADO
-	//Carrega informações do Banco de Dados
-	//NECESSITA DE IMPLEMENTAÇÃO DA PARTE DE COMUNICAÇÃO E DEFINIÇÃO DO PROTOCOLO DE COMUNICAÇÃO
-	void loadDBData();//Irá carregar as informações necessárias para preencher os atributos dos objetos
-	void update();//Irá atualizar o objeto em seu estado atual, variará drasticamente entre os tipos de objeto
+	/* Retorna um valor citado no enum TipoClasse
+	 * AVISOS COM RELAÇÃO AO GETCLASS:
+	 * 1- TODA CLASSE DEVERÁ SER CADASTRADA NO ENUM TipoCLasse, COM EXCEÇÃO DA CObjectCount.
+	 * 2- TODA CLASSE CADASTRADA NO ENUM DEVERÁ TER O MÉTODO REIMPLEMENTADO EM SUA DEFINIÇÃO, PARA QUE POSSA SER USADO
+	 * Carrega informações do Banco de Dados
+	 * NECESSITA DE IMPLEMENTAÇÃO DA PARTE DE COMUNICAÇÃO E DEFINIÇÃO DO PROTOCOLO DE COMUNICAÇÃO
+	 */
+	TipoClasse getClass();
+	//Irá carregar as informações necessárias para preencher os atributos dos objetos
+	void loadDBData();
+	//Irá atualizar o objeto em seu estado atual, variará drasticamente entre os tipos de objeto
+	void update();
 };
+
+#endif

@@ -7,23 +7,17 @@
 *
 * Objetivo: Encapsular os dados básicos comuns a todos os itens
 *
-* Alterações: 
-* 28/02/2009 - Criação da classe
-* 07/03/2009 - Adição do apontador para o jogador
-* 07/03/2009 - Adição dos métodos loot e drop
-* 07/03/2009 - Adição do atributo dropavel
 */
 
 #include <string>
 using namespace std;
-#ifndef _C3DOBJECT
 #include "C3DObject.cpp"
-#endif
 
+#ifndef _CITEM
 //Define a criação da classe
 #define _CITEM
 
-enum EstadoItem{NAMOCHILA, NOCHAO, EQUIPADO};
+enum EstadoItem{NAMOCHILA, NOCHAO, EQUIPADO, USADO};
 enum TipoItem{USO, ARMA, ARMADURA, QUEST};
 class CItem abstract : public C3DObject{
 private:
@@ -62,13 +56,14 @@ protected:
 		_preco = novoPreco;
 	}
 	//Métodos da CObject
-	virtual void initialize(){
-		C3DObject::initialize();
+	virtual void initialize(CObjectCount &counter){
+		C3DObject::initialize(counter);
 	}
 	virtual TipoClasse getClass(){
 		return(CITEM);
 	}
 	//Métodos de manipulação de itens
-	virtual void loot();
-	virtual void drop();
+	virtual void loot(){}
+	virtual void drop(){}
 };
+#endif
