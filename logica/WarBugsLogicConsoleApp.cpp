@@ -17,13 +17,13 @@ CObjectCount contadorObj;
 int main(array<System::String ^> ^args)
 {
 	CDoubleList a;
-	a.inicializar(contadorObj);
+	a.initialize(contadorObj);
 	cout << a.getID() << endl;
 	CDoubleList b;
-	b.inicializar(contadorObj);
+	b.initialize(contadorObj);
 	cout << b.getID() << endl;
 	CDoubleList c;
-	c.inicializar(contadorObj);
+	c.initialize(contadorObj);
 	cout << c.getID() << endl;
 	cout << contadorObj.objCount << endl;
 	cout << "COMPILOU!!!\n";

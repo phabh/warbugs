@@ -28,7 +28,7 @@ protected:
 	//Métodos 3D
 
 	//Métodos CObject
-	virtual void inicializar(){
+	virtual void initialize(){
 	}
 	virtual TipoClasse getClass(){
 		return(C3DOBJECT);

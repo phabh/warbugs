@@ -18,8 +18,8 @@
 
 class CDoubleList : public CLogicObject{
 public:
-	void inicializar(CObjectCount &counter){
-		CObject::inicializar(counter);
+	void initialize(CObjectCount &counter){
+		CObject::initialize(counter);
 	}
 	TipoClasse getClass(){
 		return(CDOUBLELIST);
