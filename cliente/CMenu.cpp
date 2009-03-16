@@ -42,19 +42,20 @@ protected:
 	ICameraSceneNode *_camera;
 	menuID _myID;
 	CTimer *_timer;
-	ISound* _musicaFundo;
+	ISound* _musica[6];
 	CArquivoConfig *_gameCfg;
 	char *_arquivoCena;
 	bool _flags[10];
 
-	virtual void hudRefresh() {}
-	virtual void update() {}
+	virtual void updateHuds() {}
+	virtual menuID updateCommands() { return ERRO; }
+	virtual void updateGraphics() {}
 	
 public:
 
 	CMenu(){}
 	virtual bool start() { return false; }
-	virtual menuID execute() { return ERRO; }
+	virtual menuID run() { return ERRO; }
 };
 
 #endif;

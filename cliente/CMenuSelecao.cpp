@@ -1,35 +1,57 @@
-#ifndef __CMenuAbertura__
-#define __CMenuAbertura__
+#ifndef __CMenuSelecao__
+#define __CMenuSelecao__
 
 #include "CMenu.cpp"
 
-class CMenuAbertura : public CMenu
-{
+enum flagSelecao {CHANGED, OBJSELECTED};
 
+class CMenuSelecao : public CMenu
+{
 
 private:
 
+	ISceneNode *_nodoSelecionado;
+	int _idPersonagem;
+
 	void updateHuds()
 	{
+
 		_gerenciadorHud->clear();
-		_gerenciadorHud->addButton(rect<s32>(320, 500, 450, 532), 0, 100, L"pular video");
+		_gerenciadorHud->addButton(rect<s32>(440,500,540,540), 0, 3, L"Criar");
+
+		if(_flags[OBJSELECTED])
+			_gerenciadorHud->addButton(rect<s32>(320,500,430,540), 0, 3, L"Jogar");
+
+		_flags[CHANGED] = false;
 	}
 
 	menuID updateCommands()
 	{
 		_timer->update();
-		
-		if(_gerenciadorEventos.getEventCallerByElement(EGET_BUTTON_CLICKED))
-		{
-			// Trata os cliques em botões
 
-			if (_gerenciadorEventos.getEventCallerByID() == 100)
+		if(_gerenciadorEventos.isMouseButtonReleased(MBLEFT))
+		{
+			// Clique com o botao esquerdo
+						
+			if(_flags[OBJSELECTED])
 			{
-				// Clicou no botão 1 (pular video)
-				_gerenciadorAudio->stopAllSounds();
-				_dispositivo->drop();    // Deleta o dispositivo da memória
-				_gerenciadorAudio->drop(); // Deleta o gerenciador de som da memória
-				return LOGIN;
+				_flags[OBJSELECTED] = false; // Drop 3D
+				_flags[CHANGED] = true;
+			}
+			else
+			{
+				_idPersonagem = -1;
+
+				_nodoSelecionado = _gerenciadorCena->getSceneCollisionManager()->getSceneNodeFromScreenCoordinatesBB(_dispositivo->getCursorControl()->getPosition());
+
+				if (_nodoSelecionado)
+					_idPersonagem = _nodoSelecionado->getID();
+
+				if(_idPersonagem > 0)
+				{
+				   _flags[OBJSELECTED] = true; // Get 3D
+				   _flags[CHANGED] = true;
+				}
 			}
 		}
 
@@ -44,10 +66,13 @@ private:
 
 public:
 
-	CMenuAbertura(){}
+	CMenuSelecao(){}
 	
 	bool start()
 	{
+
+		//TypeCfg cfg, bool &created, menuID id, char* arquivo
+
 		_gameCfg = new CArquivoConfig();
 		TypeCfg cfg = _gameCfg->loadConfig();
 
@@ -66,10 +91,14 @@ public:
 		}
 		else
 		{
-			_myID = ABERTURA;
-			_arquivoCena = "recursos/cenas/abertura.irr";
+			_myID = SELECAOPERSONAGEM;
+			_arquivoCena = "recursos/cenas/selecao.irr";
 			_timer = new CTimer();
 			_timer->initialize();
+			_nodoSelecionado = 0;
+			_idPersonagem = -1;
+			_flags[OBJSELECTED] = false;
+			_flags[CHANGED] = false;
 
 			_dispositivo->setWindowCaption(L"Warbugs - BETA Version 0.1");
 
@@ -78,9 +107,11 @@ public:
 			_gerenciadorHud = _dispositivo->getGUIEnvironment(); // Cria o gerenciador de menu
 			_gerenciadorAudio = createIrrKlangDevice();
 
-			_musica[0] = _gerenciadorAudio->play2D("recursos/audio/abertura.ogg", true, false, false, ESM_AUTO_DETECT);
+			_musica[0] = _gerenciadorAudio->play2D("recursos/audio/selecao.ogg", true, false, false, ESM_AUTO_DETECT);
 			
+			//_musicaFundo->setIsPaused(true);
 			_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
+			//	setVolume(cfg.parametrosAudio.volumeMusica);
 
 			if(_arquivoCena)
 				_gerenciadorCena->loadScene(_arquivoCena);
@@ -92,10 +123,12 @@ public:
 				_skin->setFont(_font);
 
 			_skin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_TOOLTIP);
-	
-			_camera = _gerenciadorCena->addCameraSceneNode(0,vector3df(0,50,0), vector3df(0,0,50));		
-		}
 
+			
+			_camera = _gerenciadorCena->addCameraSceneNode(0,vector3df(0,50,0), vector3df(0,0,50));
+
+			
+		}
 		return (true);
 	}
 
@@ -119,13 +152,18 @@ public:
 		
 				_gerenciadorVideo->endScene();
 				// Stop Render
-	
+			
+				_timer->update();
+
 				_myID = updateCommands();
 
-				if(_myID != ABERTURA)
+				if(_myID != SELECAOPERSONAGEM)
 					return(_myID);
 
 				updateGraphics();
+
+				if(_flags[CHANGED])
+					updateHuds();
 
 				if(_gerenciadorEventos.isKeyDown(KEY_ESCAPE))
 				{
@@ -144,7 +182,6 @@ public:
 		_gerenciadorAudio->drop(); // Deleta o gerenciador de som da memória
 		return (SAIDA);
 	}
-
 };
 
 #endif;

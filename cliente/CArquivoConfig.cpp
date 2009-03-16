@@ -61,7 +61,7 @@ public:
 		_configuracao.parametrosVideo.Bits = 32;
 		_configuracao.parametrosVideo.Fullscreen = false;
 		_configuracao.parametrosVideo.Stencilbuffer = true;
-		_configuracao.parametrosVideo.Vsync = true;
+		_configuracao.parametrosVideo.Vsync = false;
 		_configuracao.parametrosVideo.AntiAlias = true;
 		_configuracao.parametrosVideo.EventReceiver = 0;
 		_configuracao.parametrosVideo.WithAlphaChannel = true;

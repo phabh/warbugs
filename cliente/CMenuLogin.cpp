@@ -8,18 +8,39 @@ class CMenuLogin : public CMenu
 
 private:
 
-protected:
-
-	void hudRefresh()
+	void updateHuds()
 	{
-		_gerenciadorCena->addTextSceneNode(_gerenciadorHud->getBuiltInFont(), 
-										   L"TESTE!!!!!!!!",
-										   SColor(255,255,255,255),
-										   0, vector3df(0,0,0));
+
+		_gerenciadorHud->clear();
+		_gerenciadorHud->addEditBox(L"login", rect<s32>(300,500,400,520), true, 0, 10);
+		_gerenciadorHud->addEditBox(L"senha", rect<s32>(300,530,400,550), true, 0, 20);
+		_gerenciadorHud->addButton(rect<s32>(420,500,520,550), 0, 30, L"conectar");
 	}
 
-	void update()
+	menuID updateCommands()
 	{
+		_timer->update();
+
+		if(_gerenciadorEventos.getEventCallerByElement(EGET_BUTTON_CLICKED))
+		{
+			// Trata os cliques em botões
+
+			if (_gerenciadorEventos.getEventCallerByID() == 30)
+			{
+				// Clicou no botão conectar
+				_gerenciadorAudio->stopAllSounds();
+				_dispositivo->drop();    // Deleta o dispositivo da memória
+				_gerenciadorAudio->drop(); // Deleta o gerenciador de som da memória
+				return SELECAOPERSONAGEM;
+			}
+		}
+
+		return _myID;
+	}
+
+	void updateGraphics()
+	{
+		_timer->update();
 	}
 	
 
@@ -51,7 +72,7 @@ public:
 		else
 		{
 			_myID = LOGIN;
-			strcpy(_arquivoCena, "recursos/cenas/login.irr");
+			_arquivoCena = "recursos/cenas/login.irr";
 			_timer = new CTimer();
 			_timer->initialize();
 
@@ -62,7 +83,7 @@ public:
 			_gerenciadorHud = _dispositivo->getGUIEnvironment(); // Cria o gerenciador de menu
 			_gerenciadorAudio = createIrrKlangDevice();
 
-			_musicaFundo = _gerenciadorAudio->play2D("recursos/audio/login.ogg", true, false, false, ESM_AUTO_DETECT);
+			_musica[0] = _gerenciadorAudio->play2D("recursos/audio/login.ogg", true, false, false, ESM_AUTO_DETECT);
 			
 			//_musicaFundo->setIsPaused(true);
 			_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
@@ -87,10 +108,10 @@ public:
 		return (true);
 	}
 
-	menuID execute()
+	menuID run()
 	{
 
-		hudRefresh();
+		updateHuds();
 
 
 		while(_dispositivo->run())
@@ -108,27 +129,34 @@ public:
 				_gerenciadorVideo->endScene();
 				// Stop Render
 
-				_gerenciadorEventos.startEventProcess(); // Ativa a escuta de eventos.
+				
 			
 				_timer->update();
 
-				update();
+				_myID = updateCommands();
 
+				if(_myID != LOGIN)
+					return(_myID);
+
+				updateGraphics();
 
 				if(_gerenciadorEventos.isKeyDown(KEY_ESCAPE))
 				{
+					_gerenciadorAudio->stopAllSounds();
 					_dispositivo->drop();    // Deleta o dispositivo da memória
 					_gerenciadorAudio->drop(); // Deleta o gerenciador de som da memória
 					return SAIDA;
 				}	
+
+				_gerenciadorEventos.startEventProcess(); // Ativa a escuta de eventos.
 			}
 		}
 
+		_gerenciadorAudio->stopAllSounds();
 		_dispositivo->drop(); // Deleta o dispositivo da memória
 		_gerenciadorAudio->drop(); // Deleta o gerenciador de som da memória
-		return (ERRO);
+		return (SAIDA);
 	}
-
 };
 
 #endif;

@@ -1,7 +1,7 @@
-//#include <windows.h>
 #include "CMenu.cpp"
 #include "CMenuAbertura.cpp"
 #include "CMenuLogin.cpp"
+#include "CMenuSelecao.cpp"
 
 #include <iostream>
 
@@ -9,17 +9,16 @@ using namespace std;
 
 int main()
 {
-	bool sucesso = true;
+	CMenu *menuCorrente;
+
 	menuID nextMenu = ABERTURA;
 
 	CTimer *timer = new CTimer();
 
-	//CArquivoConfig *gameCfg = new CArquivoConfig();
-	//gameCfg->reset();
-
-	CMenu *menuCorrente;
+	CArquivoConfig *gameCfg = new CArquivoConfig();
+	gameCfg->reset();
 	
-	while(nextMenu != SAIDA || nextMenu != ERRO)
+	while(nextMenu != SAIDA && nextMenu != ERRO)
 	{
 		menuCorrente = NULL;
 
@@ -27,19 +26,23 @@ int main()
 		{
 			case ABERTURA:
 
-				/*(CMenuAbertura*)*/menuCorrente = new CMenuAbertura();
+				menuCorrente = new CMenuAbertura();
 				if( ((CMenuAbertura*)menuCorrente)->start())
-					nextMenu = ((CMenuAbertura*)menuCorrente)->execute();
+					nextMenu = ((CMenuAbertura*)menuCorrente)->run();
 				break;
 
 			case LOGIN:
 
-				/*(CMenuLogin*)*/menuCorrente = new CMenuLogin();
+				menuCorrente = new CMenuLogin();
 				if( ((CMenuLogin*)menuCorrente)->start())
-					nextMenu = ((CMenuLogin*)menuCorrente)->execute();
+					nextMenu = ((CMenuLogin*)menuCorrente)->run();
 				break;
 
 			case SELECAOPERSONAGEM:
+
+				menuCorrente = new CMenuSelecao();
+				if( ((CMenuSelecao*)menuCorrente)->start())
+					nextMenu = ((CMenuSelecao*)menuCorrente)->run();
 				break;
 
 			case CRIACAOPERSONAGEM:
@@ -52,10 +55,6 @@ int main()
 				break;
 		};
 	}
-
-
-	
-	cout << "\n" << nextMenu << endl;
 
 	return 1;
 }
