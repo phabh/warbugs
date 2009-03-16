@@ -23,15 +23,15 @@ using namespace std;
 //Define a criação da classe
 #define _CITEM
 
-enum EstadoItem{NAMOCHILA, NOCHAO};
+enum EstadoItem{NAMOCHILA, NOCHAO, EQUIPADO};
 enum TipoItem{USO, ARMA, ARMADURA, QUEST};
 class CItem abstract : public C3DObject{
 private:
-	string _nome;
-	string _descricao;
-	EstadoItem _estado;
-	int _preco;
-	bool _dropavel;
+	string _nome;//Nome do item
+	string _descricao;//Breve descrição que irá explicar o que é o item e o que ele faz
+	EstadoItem _estado;//Estado atual do item, se ele esta no chao, no inventario de alguem, ou se ele esta equipado em alguem
+	int _preco;//Preço de compra do item
+	bool _dropavel;//Identifica se o item pode ou não ser dropado
 	//NECESSITA CLASSE JOGADOR -> apontador pro dono do item
 protected:
 	string getNome(){
@@ -62,8 +62,8 @@ protected:
 		_preco = novoPreco;
 	}
 	//Métodos da CObject
-	virtual void inicializar(){
-		C3DObject::inicializar();
+	virtual void initialize(){
+		C3DObject::initialize();
 	}
 	virtual TipoClasse getClass(){
 		return(CITEM);

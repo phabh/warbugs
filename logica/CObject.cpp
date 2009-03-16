@@ -71,7 +71,7 @@ protected:
 	 *@param: CObjectCount &counter: contador de objetos que irá gerar o ID
 	 *        OBS: - CRIAR APENS UM CONTADOR DURANTE TODO O PROGRAMA, CASO CONTRÁRIO OS IDs NÃO SERÃO MAIS ÚNICOS
 	 */
-	void inicializar(CObjectCount &counter){
+	void initialize(CObjectCount &counter){
 		_id = counter.giveID();
 	}
 	TipoClasse getClass();//Retorna um valor citado no enum TipoClasse
@@ -81,5 +81,5 @@ protected:
 	//Carrega informações do Banco de Dados
 	//NECESSITA DE IMPLEMENTAÇÃO DA PARTE DE COMUNICAÇÃO E DEFINIÇÃO DO PROTOCOLO DE COMUNICAÇÃO
 	void loadDBData();//Irá carregar as informações necessárias para preencher os atributos dos objetos
-	void atualizar();//Irá atualizar o objeto em seu estado atual, variará drasticamente entre os tipos de objeto
+	void update();//Irá atualizar o objeto em seu estado atual, variará drasticamente entre os tipos de objeto
 };
