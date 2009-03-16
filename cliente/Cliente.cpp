@@ -1,5 +1,7 @@
 //#include <windows.h>
 #include "CMenu.cpp"
+#include "CMenuAbertura.cpp"
+#include "CMenuLogin.cpp"
 
 #include <iostream>
 
@@ -8,22 +10,48 @@ using namespace std;
 int main()
 {
 	bool sucesso = true;
-	int nextMenu;
+	menuID nextMenu = ABERTURA;
 
 	CTimer *timer = new CTimer();
 
+	//CArquivoConfig *gameCfg = new CArquivoConfig();
+	//gameCfg->reset();
 
-	CArquivoConfig *gameCfg = new CArquivoConfig();
+	CMenu *menuCorrente;
+	
+	while(nextMenu != SAIDA || nextMenu != ERRO)
+	{
+		menuCorrente = NULL;
 
+		switch (nextMenu)
+		{
+			case ABERTURA:
 
-	gameCfg->reset();
+				/*(CMenuAbertura*)*/menuCorrente = new CMenuAbertura();
+				if( ((CMenuAbertura*)menuCorrente)->start())
+					nextMenu = ((CMenuAbertura*)menuCorrente)->execute();
+				break;
 
-	CMenu *listaMenus;
+			case LOGIN:
 
-	listaMenus = new CMenu( gameCfg->loadConfig(), sucesso, LOGIN, "recursos/cenas/login.irr" );
+				/*(CMenuLogin*)*/menuCorrente = new CMenuLogin();
+				if( ((CMenuLogin*)menuCorrente)->start())
+					nextMenu = ((CMenuLogin*)menuCorrente)->execute();
+				break;
 
-	if(sucesso)
-		nextMenu = listaMenus->execute();
+			case SELECAOPERSONAGEM:
+				break;
+
+			case CRIACAOPERSONAGEM:
+				break;
+
+			case JOGO:
+				break;
+
+			case CREDITOS:
+				break;
+		};
+	}
 
 
 	

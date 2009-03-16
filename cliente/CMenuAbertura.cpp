@@ -1,9 +1,9 @@
-#ifndef __CMenuLogin__
-#define __CMenuLogin__
+#ifndef __CMenuAbertura__
+#define __CMenuAbertura__
 
 #include "CMenu.cpp"
 
-class CMenuLogin : public CMenu
+class CMenuAbertura : public CMenu
 {
 
 private:
@@ -25,7 +25,7 @@ protected:
 
 public:
 
-	CMenuLogin(){}
+	CMenuAbertura(){}
 	
 	bool start()
 	{
@@ -33,6 +33,7 @@ public:
 		//TypeCfg cfg, bool &created, menuID id, char* arquivo
 
 		_gameCfg = new CArquivoConfig();
+
 		TypeCfg cfg = _gameCfg->loadConfig();
 
 		_dispositivo = createDevice(EDT_DIRECT3D9, 
@@ -50,8 +51,8 @@ public:
 		}
 		else
 		{
-			_myID = LOGIN;
-			strcpy(_arquivoCena, "recursos/cenas/login.irr");
+			_myID = ABERTURA;
+			_arquivoCena = "recursos/cenas/abertura.irr";
 			_timer = new CTimer();
 			_timer->initialize();
 
@@ -62,7 +63,7 @@ public:
 			_gerenciadorHud = _dispositivo->getGUIEnvironment(); // Cria o gerenciador de menu
 			_gerenciadorAudio = createIrrKlangDevice();
 
-			_musicaFundo = _gerenciadorAudio->play2D("recursos/audio/login.ogg", true, false, false, ESM_AUTO_DETECT);
+			_musicaFundo = _gerenciadorAudio->play2D("recursos/audio/abertura.ogg", true, false, false, ESM_AUTO_DETECT);
 			
 			//_musicaFundo->setIsPaused(true);
 			_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
@@ -84,6 +85,7 @@ public:
 
 			
 		}
+
 		return (true);
 	}
 
@@ -117,6 +119,7 @@ public:
 
 				if(_gerenciadorEventos.isKeyDown(KEY_ESCAPE))
 				{
+					//Sleep(5000);
 					_dispositivo->drop();    // Deleta o dispositivo da memória
 					_gerenciadorAudio->drop(); // Deleta o gerenciador de som da memória
 					return SAIDA;
