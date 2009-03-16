@@ -189,7 +189,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="CMenu"
+				Name="CMenus"
 				>
 				<File
 					RelativePath=".\CMenu.cpp"
@@ -203,12 +203,24 @@
 					RelativePath=".\CMenuLogin.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\CMenuSelecao.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="CTimer"
 				>
 				<File
 					RelativePath=".\CTimer.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="CGerEventos"
+				>
+				<File
+					RelativePath=".\CGerEventos.cpp"
 					>
 				</File>
 			</Filter>
