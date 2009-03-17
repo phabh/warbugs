@@ -2,6 +2,9 @@
 #include "CMenuAbertura.cpp"
 #include "CMenuLogin.cpp"
 #include "CMenuSelecao.cpp"
+#include "CMenuCriacao.cpp"
+//#include "CMenuJogo.cpp" 
+//#include "CMenuCreditos.cpp"
 
 #include <iostream>
 
@@ -46,12 +49,21 @@ int main()
 				break;
 
 			case CRIACAOPERSONAGEM:
+				menuCorrente = new CMenuCriacao();
+				if( ((CMenuCriacao*)menuCorrente)->start())
+					nextMenu = ((CMenuCriacao*)menuCorrente)->run();
 				break;
 
-			case JOGO:
+			case JOGO:/*
+				menuCorrente = new CMenuJogo();
+				if( ((CMenuJogo*)menuCorrente)->start())
+					nextMenu = ((CMenuJogo*)menuCorrente)->run();*/
 				break;
 
-			case CREDITOS:
+			case CREDITOS:/*
+				menuCorrente = new CMenuCreditos();
+				if( ((CMenuCreditos*)menuCorrente)->start())
+					nextMenu = ((CMenuCreditos*)menuCorrente)->run();*/
 				break;
 		};
 	}

@@ -200,6 +200,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\CMenuCriacao.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\CMenuLogin.cpp"
 					>
 				</File>
