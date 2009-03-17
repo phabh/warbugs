@@ -1,15 +1,15 @@
-#ifndef __CMenuSelecao__
-#define __CMenuSelecao__
+#ifndef __CMenuCriacao__
+#define __CMenuCriacao__
 
 #include "CMenu.cpp"
 
-
-class CMenuSelecao : public CMenu
+class CMenuCriacao : public CMenu
 {
 
 private:
 
-	enum flagSelecao {CHANGED, OBJSELECTED};
+	enum flagCriacao {CHANGED, OBJSELECTED};
+
 	ISceneNode *_nodoSelecionado;
 	int _idPersonagem;
 
@@ -17,10 +17,10 @@ private:
 	{
 
 		_gerenciadorHud->clear();
-		_gerenciadorHud->addButton(rect<s32>(440,500,540,540), 0, 100, L"Criar");
+		_gerenciadorHud->addButton(rect<s32>(440,500,540,540), 0, 10, L"Criar");
 
 		if(_flags[OBJSELECTED])
-			_gerenciadorHud->addButton(rect<s32>(320,500,430,540), 0, 200, L"Jogar");
+			_gerenciadorHud->addButton(rect<s32>(320,500,430,540), 0, 20, L"Jogar");
 
 		_flags[CHANGED] = false;
 	}
@@ -53,23 +53,7 @@ private:
 				   _flags[CHANGED] = true;
 				}
 			}
-
-			if(_gerenciadorEventos.getEventCallerByElement(EGET_BUTTON_CLICKED))
-			{
-				// Trata os cliques em botões
-
-				if (_gerenciadorEventos.getEventCallerByID() == 100)
-				{
-					// Clicou no botão conectar
-					_gerenciadorAudio->stopAllSounds();
-					_dispositivo->drop();    // Deleta o dispositivo da memória
-					_gerenciadorAudio->drop(); // Deleta o gerenciador de som da memória
-					return CRIACAOPERSONAGEM;
-				}
-			}		
 		}
-
-		
 
 		return _myID;
 	}
@@ -82,7 +66,7 @@ private:
 
 public:
 
-	CMenuSelecao(){}
+	CMenuCriacao(){}
 	
 	bool start()
 	{
@@ -107,8 +91,8 @@ public:
 		}
 		else
 		{
-			_myID = SELECAOPERSONAGEM;
-			_arquivoCena = "recursos/cenas/selecao.irr";
+			_myID = CRIACAOPERSONAGEM;
+			_arquivoCena = "recursos/cenas/criacao.irr";
 			_timer = new CTimer();
 			_timer->initialize();
 			_nodoSelecionado = 0;
@@ -123,7 +107,7 @@ public:
 			_gerenciadorHud = _dispositivo->getGUIEnvironment(); // Cria o gerenciador de menu
 			_gerenciadorAudio = createIrrKlangDevice();
 
-			_musica[0] = _gerenciadorAudio->play2D("recursos/audio/selecao.ogg", true, false, false, ESM_AUTO_DETECT);
+			_musica[0] = _gerenciadorAudio->play2D("recursos/audio/criacao.ogg", true, false, false, ESM_AUTO_DETECT);
 			
 			//_musicaFundo->setIsPaused(true);
 			_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
@@ -168,19 +152,19 @@ public:
 		
 				_gerenciadorVideo->endScene();
 				// Stop Render
-			
+			/*
 				_timer->update();
 
 				_myID = updateCommands();
 
-				if(_myID != SELECAOPERSONAGEM)
+				if(_myID != CRIACAOPERSONAGEM)
 					return(_myID);
 
 				updateGraphics();
 
 				if(_flags[CHANGED])
 					updateHuds();
-
+*/
 				if(_gerenciadorEventos.isKeyDown(KEY_ESCAPE))
 				{
 					_gerenciadorAudio->stopAllSounds();
