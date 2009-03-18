@@ -181,7 +181,7 @@
 				>
 			</File>
 			<Filter
-				Name="CArquivoConfig"
+				Name="ArquivoConfig"
 				>
 				<File
 					RelativePath=".\CArquivoConfig.cpp"
@@ -189,7 +189,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="CMenus"
+				Name="Menus"
 				>
 				<File
 					RelativePath=".\CMenu.cpp"
@@ -213,7 +213,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="CTimer"
+				Name="Timer"
 				>
 				<File
 					RelativePath=".\CTimer.cpp"
@@ -221,10 +221,18 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="CGerEventos"
+				Name="Eventos"
 				>
 				<File
 					RelativePath=".\CGerEventos.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Shaders"
+				>
+				<File
+					RelativePath=".\CToonShader.cpp"
 					>
 				</File>
 			</Filter>
