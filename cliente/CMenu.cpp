@@ -7,6 +7,7 @@
 #include "CArquivoConfig.cpp"
 #include "CGerEventos.cpp"
 #include "CTimer.cpp"
+#include "CToonShader.cpp"
 
 #include <iostream>
 
@@ -46,6 +47,8 @@ protected:
 	CArquivoConfig *_gameCfg;
 	char *_arquivoCena;
 	bool _flags[10];
+
+	CToonShader *_toonShader;
 
 	virtual void updateHuds() {}
 	virtual menuID updateCommands() { return ERRO; }
