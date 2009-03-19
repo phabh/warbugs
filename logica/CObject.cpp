@@ -64,7 +64,7 @@ public:
 		return(objCount);
 	}
 };
-
+// -------------------------------------------------------------------------------------------------------------------
 class CObject abstract{
 private:
 	int _id;//ID único de um objeto
@@ -78,8 +78,8 @@ protected:
 	 *@param: CObjectCount &counter: contador de objetos que irá gerar o ID
 	 *        OBS: - CRIAR APENS UM CONTADOR DURANTE TODO O PROGRAMA, CASO CONTRÁRIO OS IDs NÃO SERÃO MAIS ÚNICOS
 	 */
-	void initialize(CObjectCount &counter){
-		_id = counter.giveID();
+	void initialize(CObjectCount *counter){
+		_id = counter->giveID();
 	}
 	/* Retorna um valor citado no enum TipoClasse
 	 * AVISOS COM RELAÇÃO AO GETCLASS:

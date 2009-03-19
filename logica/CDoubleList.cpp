@@ -15,7 +15,7 @@
 
 class CDoubleList : public CLogicObject{
 public:
-	void initialize(CObjectCount &counter){
+	void initialize(CObjectCount *counter){
 		CObject::initialize(counter);
 	}
 	TipoClasse getClass(){
@@ -24,5 +24,7 @@ public:
 	int getID(){
 		return(CObject::getID());
 	}
+	void update(){}
+	void loadDBData(){}
 };
 #endif

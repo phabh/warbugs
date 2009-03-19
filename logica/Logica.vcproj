@@ -220,22 +220,50 @@
 			<Filter
 				Name="3 - Instanciaveis"
 				>
-				<File
-					RelativePath=".\CConsumableItem.cpp"
+				<Filter
+					Name="Tipos de Itens"
 					>
-				</File>
-				<File
-					RelativePath=".\CDoubleList.cpp"
+					<File
+						RelativePath=".\CArmor.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CConsumableItem.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CScroll.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CWeapon.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Estrutura de Dados"
 					>
-				</File>
-				<File
-					RelativePath=".\CScroll.cpp"
+					<File
+						RelativePath=".\CDoubleList.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Componentes de um personagem"
 					>
-				</File>
-				<File
-					RelativePath=".\CWeapon.cpp"
+					<File
+						RelativePath=".\CEquipamento.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Buff"
 					>
-				</File>
+					<File
+						RelativePath=".\CBuff.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
