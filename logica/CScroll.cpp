@@ -10,6 +10,7 @@
 */
 
 #include "CItem.cpp"
+#include "CAtributo.cpp"
 
 #ifndef _CSCROLL
 #define _CSCROLL
@@ -35,7 +36,7 @@ public:
 		_bDurabilidade = 0;
 	}
 	//Métodos da CObject
-	void initialize(CObjectCount &counter, int mod, int danM, int danX, int spd, int rng, int def, int dur){
+	void initialize(CObjectCount *counter, int mod, int danM, int danX, int spd, int rng, int def, int dur){
 		CItem::initialize(counter);
 		_bModificador = mod;
 		_bDanoMin = danM;
@@ -62,5 +63,16 @@ public:
 	int getDef(){return(_bDefesa);}
 	int getDurability(){return(_bDurabilidade);}
 };
-
+// -------------------------------------------------------------------------------------------------------------------
+class CLoyaltyScroll : public CItem{
+private:
+	CLealdade *_bonus;
+public:
+	CLoyaltyScroll(){
+		_bonus = new CLealdade();
+	}
+	void use(CLealdade *base){
+		base->addLoyalty(_bonus);
+	}
+};
 #endif

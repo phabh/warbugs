@@ -43,6 +43,7 @@ protected:
 	int getPreco(){
 		return(_preco);
 	}
+	//CPersonagem getOwner(){}
 	void setNome(string novoNome){
 		_nome = novoNome;
 	}
@@ -55,8 +56,9 @@ protected:
 	void setPreco(int novoPreco){
 		_preco = novoPreco;
 	}
+	//void setOwner(CPersonagem *newOwner){}
 	//Métodos da CObject
-	virtual void initialize(CObjectCount &counter){
+	virtual void initialize(CObjectCount *counter){
 		C3DObject::initialize(counter);
 	}
 	virtual TipoClasse getClass(){
@@ -65,5 +67,6 @@ protected:
 	//Métodos de manipulação de itens
 	virtual void loot(){}
 	virtual void drop(){}
+	
 };
 #endif
