@@ -142,9 +142,10 @@ public:
 			}
 		}
 
-		_gerenciadorAudio->stopAllSounds();
-		_dispositivo->drop(); // Deleta o dispositivo da memória
+		_gerenciadorAudio->setAllSoundsPaused();
 		_gerenciadorAudio->drop(); // Deleta o gerenciador de som da memória
+		_dispositivo->drop(); // Deleta o dispositivo da memória
+		
 		return _myID;
 	}
 
