@@ -51,7 +51,7 @@ protected:
 	CToonShader *_toonShader;
 
 	virtual void updateHuds() {}
-	virtual menuID updateCommands() { return ERRO; }
+	virtual void updateCommands() {}
 	virtual void updateGraphics() {}
 	
 public:

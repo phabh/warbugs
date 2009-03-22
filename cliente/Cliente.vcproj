@@ -200,7 +200,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\CMenuCreditos.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\CMenuCriacao.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CMenuJogo.cpp"
 					>
 				</File>
 				<File
@@ -233,6 +241,30 @@
 				>
 				<File
 					RelativePath=".\CToonShader.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Huds"
+				>
+				<File
+					RelativePath=".\CHudChat.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CHudInventario.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CHudMiniMapa.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CHudRoleta.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CHudStatus.cpp"
 					>
 				</File>
 			</Filter>

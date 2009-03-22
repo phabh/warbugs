@@ -15,7 +15,7 @@ private:
 		_gerenciadorHud->addButton(rect<s32>(320, 500, 450, 532), 0, 100, L"pular video");
 	}
 
-	menuID updateCommands()
+	void updateCommands()
 	{
 		_timer->update();
 		
@@ -24,16 +24,8 @@ private:
 			// Trata os cliques em botões
 
 			if (_gerenciadorEventos.getEventCallerByID() == 100)
-			{
-				// Clicou no botão 1 (pular video)
-				_gerenciadorAudio->stopAllSounds();
-				_dispositivo->drop();    // Deleta o dispositivo da memória
-				_gerenciadorAudio->drop(); // Deleta o gerenciador de som da memória
-				return LOGIN;
-			}
+				_myID = LOGIN;
 		}
-
-		return _myID;
 	}
 
 	void updateGraphics()
@@ -133,19 +125,17 @@ public:
 				_gerenciadorVideo->endScene();
 				// Stop Render
 	
-				_myID = updateCommands();
+				updateCommands();
 
 				if(_myID != ABERTURA)
-					return(_myID);
+					_dispositivo->closeDevice();
 
 				updateGraphics();
 
 				if(_gerenciadorEventos.isKeyDown(KEY_ESCAPE))
 				{
-					_gerenciadorAudio->stopAllSounds();
-					_dispositivo->drop();    // Deleta o dispositivo da memória
-					_gerenciadorAudio->drop(); // Deleta o gerenciador de som da memória
-					return SAIDA;
+					_myID = SAIDA;
+					_dispositivo->closeDevice();
 				}	
 
 				_gerenciadorEventos.startEventProcess(); // Ativa a escuta de eventos.
@@ -155,7 +145,7 @@ public:
 		_gerenciadorAudio->stopAllSounds();
 		_dispositivo->drop(); // Deleta o dispositivo da memória
 		_gerenciadorAudio->drop(); // Deleta o gerenciador de som da memória
-		return (SAIDA);
+		return _myID;
 	}
 
 };

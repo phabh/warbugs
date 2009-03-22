@@ -1,36 +1,48 @@
-#ifndef __CMenuLogin__
-#define __CMenuLogin__
+#ifndef __CMenuJogo__
+#define __CMenuJogo__
 
 #include "CMenu.cpp"
 
-class CMenuLogin : public CMenu
+#include "CHudChat.cpp"
+#include "CHudMiniMapa.cpp"
+#include "CHudRoleta.cpp"
+#include "CHudStatus.cpp"
+
+class CMenuJogo : public CMenu
 {
 
 private:
+
+	enum flagJogo {CHANGED, OBJSELECTED};
+	ISceneNode *_nodoSelecionado;
+	int _idPersonagem;
 
 	void updateHuds()
 	{
 
 		_gerenciadorHud->clear();
-		_gerenciadorHud->addEditBox(L"login", rect<s32>(300,500,400,520), true, 0, 10);
-		_gerenciadorHud->addEditBox(L"senha", rect<s32>(300,530,400,550), true, 0, 20);
-		_gerenciadorHud->addButton(rect<s32>(420,500,520,550), 0, 30, L"conectar");
+		_gerenciadorHud->addButton(rect<s32>(440,500,540,540), 0, 100, L"Sair");
+		_flags[CHANGED] = false;
 	}
 
 	void updateCommands()
 	{
 		_timer->update();
 
-		if(_gerenciadorEventos.getEventCallerByElement(EGET_BUTTON_CLICKED))
-		{
-			// Trata os cliques em botões
+		if(_gerenciadorEventos.isMouseButtonReleased(MBLEFT))
+		{		
 
-			if (_gerenciadorEventos.getEventCallerByID() == 30)
+			if(_gerenciadorEventos.getEventCallerByElement(EGET_BUTTON_CLICKED))
 			{
-				// Clicou no botão conectar
-				_myID = SELECAOPERSONAGEM;
-			}
-		}
+				// Trata os cliques em botões
+
+				if (_gerenciadorEventos.getEventCallerByID() == 100)
+				{
+					// Clicou no botão conectar
+					_myID = CREDITOS;
+				}
+			}		
+		}		
 	}
 
 	void updateGraphics()
@@ -41,7 +53,7 @@ private:
 
 public:
 
-	CMenuLogin(){}
+	CMenuJogo(){}
 	
 	bool start()
 	{
@@ -66,10 +78,14 @@ public:
 		}
 		else
 		{
-			_myID = LOGIN;
-			_arquivoCena = "recursos/cenas/login.irr";
+			_myID = JOGO;
+			_arquivoCena = "recursos/cenas/jogo.irr";
 			_timer = new CTimer();
 			_timer->initialize();
+			_nodoSelecionado = 0;
+			_idPersonagem = -1;
+			_flags[OBJSELECTED] = false;
+			_flags[CHANGED] = true;
 
 			_dispositivo->setWindowCaption(L"Warbugs - BETA Version 0.1");
 
@@ -78,7 +94,7 @@ public:
 			_gerenciadorHud = _dispositivo->getGUIEnvironment(); // Cria o gerenciador de menu
 			_gerenciadorAudio = createIrrKlangDevice();
 
-			_musica[0] = _gerenciadorAudio->play2D("recursos/audio/login.ogg", true, false, false, ESM_AUTO_DETECT);
+			_musica[0] = _gerenciadorAudio->play2D("recursos/audio/jogo.ogg", true, false, false, ESM_AUTO_DETECT);
 			
 			//_musicaFundo->setIsPaused(true);
 			_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
@@ -123,17 +139,18 @@ public:
 		
 				_gerenciadorVideo->endScene();
 				// Stop Render
-
-				
 			
 				_timer->update();
 
 				updateCommands();
 
-				if(_myID != LOGIN)
+				if(_myID != JOGO)
 					_dispositivo->closeDevice();
 
 				updateGraphics();
+
+				if(_flags[CHANGED])
+					updateHuds();
 
 				if(_gerenciadorEventos.isKeyDown(KEY_ESCAPE))
 				{
