@@ -49,8 +49,7 @@ public:
 		modelo->getMaterial(0).MaterialType = (E_MATERIAL_TYPE)toonMaterial;
 	}
 
-	~CToonShader()
-	{}
+	~CToonShader(){}
 
 	virtual void OnSetConstants(IMaterialRendererServices* servicos, s32 dados)
 	{

@@ -44,63 +44,63 @@ class CHudRoleta : public IGUIElement
 	public:
 	 
 		CHudRoleta(rect<s32> rect, IGUIEnvironment* env, IGUIElement* parent, ITexture* txCorpo, ITexture* txPonteiro) : gui::IGUIElement(EGUIET_ELEMENT, env, parent, -1, rect) 
-	{ 
-	   setupQuadMesh( CorpoMesh, 1.0f ); 
-	   setupQuadMesh( PonteiroMesh, 1.0f );
+		{ 
+		   setupQuadMesh( CorpoMesh, 1.0f ); 
+		   setupQuadMesh( PonteiroMesh, 1.0f );
 
-	   CorpoMesh.getMaterial().setTexture(0, txCorpo);  
-	   PonteiroMesh.getMaterial().setTexture(0, txPonteiro);
-	} 
+		   CorpoMesh.getMaterial().setTexture(0, txCorpo);  
+		   PonteiroMesh.getMaterial().setTexture(0, txPonteiro);
+		} 
 
-	//------------------------------------------------------------------------------ 
+		//------------------------------------------------------------------------------ 
 
-	void update( f32 rotacao ) 
-	{ 
-		Matrix.makeIdentity(); 
-		Matrix.setRotationDegrees(vector3df(0, 0, rotacao)); 
-	} 
+		void update( f32 rotacao ) 
+		{ 
+			Matrix.makeIdentity(); 
+			Matrix.setRotationDegrees(vector3df(0, 0, rotacao)); 
+		} 
 
-	//------------------------------------------------------------------------------ 
+		//------------------------------------------------------------------------------ 
 
-	void draw() 
-	{ 
-		IVideoDriver* driver = Environment->getVideoDriver(); 
-		
-		if (! (driver && IsVisible)) 
-			return; 
+		void draw() 
+		{ 
+			IVideoDriver* driver = Environment->getVideoDriver(); 
+			
+			if (! (driver && IsVisible)) 
+				return; 
 
-		rect<s32> oldViewPort = driver->getViewPort(); 
-		driver->setViewPort(getAbsolutePosition()); 
+			rect<s32> oldViewPort = driver->getViewPort(); 
+			driver->setViewPort(getAbsolutePosition()); 
 
-		// Limpa matriz de projeção 
-		matrix4 oldProjMat = driver->getTransform(ETS_PROJECTION); 
-		driver->setTransform(ETS_PROJECTION, matrix4()); 
+			// Limpa matriz de projeção 
+			matrix4 oldProjMat = driver->getTransform(ETS_PROJECTION); 
+			driver->setTransform(ETS_PROJECTION, matrix4()); 
 
-		// Limpa matriz da viewport 
-		matrix4 oldViewMat = driver->getTransform(ETS_VIEW); 
-		driver->setTransform(ETS_VIEW, matrix4()); 
+			// Limpa matriz da viewport 
+			matrix4 oldViewMat = driver->getTransform(ETS_VIEW); 
+			driver->setTransform(ETS_VIEW, matrix4()); 
 
-		driver->setTransform(ETS_WORLD, Matrix); 
+			driver->setTransform(ETS_WORLD, Matrix); 
 
-		// Desenha corpo da bussola 
-		driver->setMaterial(CorpoMesh.Material); 
-		driver->drawMeshBuffer(&CorpoMesh); 
+			// Desenha corpo da bussola 
+			driver->setMaterial(CorpoMesh.Material); 
+			driver->drawMeshBuffer(&CorpoMesh); 
 
-		driver->setTransform(ETS_WORLD, matrix4()); 
+			driver->setTransform(ETS_WORLD, matrix4()); 
 
-		// Desenha ponteiro da bussola
-		driver->setMaterial(PonteiroMesh.Material); 
-		driver->drawMeshBuffer(&PonteiroMesh); 
+			// Desenha ponteiro da bussola
+			driver->setMaterial(PonteiroMesh.Material); 
+			driver->drawMeshBuffer(&PonteiroMesh); 
 
-		// Restaurar a matriz da viewport 
-		driver->setTransform(ETS_VIEW, oldViewMat); 
+			// Restaurar a matriz da viewport 
+			driver->setTransform(ETS_VIEW, oldViewMat); 
 
-		// Restaurar a matriz de projeção
-		driver->setTransform(ETS_PROJECTION, oldProjMat); 
+			// Restaurar a matriz de projeção
+			driver->setTransform(ETS_PROJECTION, oldProjMat); 
 
-		// Restaurar a ViewPort 
-		driver->setViewPort(oldViewPort); 
-	}
+			// Restaurar a ViewPort 
+			driver->setViewPort(oldViewPort); 
+		}
 };
 
 #endif;
