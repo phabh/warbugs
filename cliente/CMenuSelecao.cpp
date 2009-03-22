@@ -25,7 +25,7 @@ private:
 		_flags[CHANGED] = false;
 	}
 
-	menuID updateCommands()
+	void updateCommands()
 	{
 		_timer->update();
 
@@ -57,21 +57,21 @@ private:
 			if(_gerenciadorEventos.getEventCallerByElement(EGET_BUTTON_CLICKED))
 			{
 				// Trata os cliques em botões
-
-				if (_gerenciadorEventos.getEventCallerByID() == 100)
+				switch (_gerenciadorEventos.getEventCallerByID())
 				{
-					// Clicou no botão conectar
-					_gerenciadorAudio->stopAllSounds();
-					_dispositivo->drop();    // Deleta o dispositivo da memória
-					_gerenciadorAudio->drop(); // Deleta o gerenciador de som da memória
-					return CRIACAOPERSONAGEM;
-				}
+					case 100:
+						_myID = CRIACAOPERSONAGEM;
+					break;
+
+					case 200:
+						_myID =  JOGO;
+					break;
+					
+					default:
+						cout << "\nID de botao desconhecido." << endl;
+				};
 			}		
 		}
-
-		
-
-		return _myID;
 	}
 
 	void updateGraphics()
@@ -171,10 +171,10 @@ public:
 			
 				_timer->update();
 
-				_myID = updateCommands();
+				updateCommands();
 
 				if(_myID != SELECAOPERSONAGEM)
-					return(_myID);
+					_dispositivo->closeDevice();
 
 				updateGraphics();
 
@@ -183,10 +183,8 @@ public:
 
 				if(_gerenciadorEventos.isKeyDown(KEY_ESCAPE))
 				{
-					_gerenciadorAudio->stopAllSounds();
-					_dispositivo->drop();    // Deleta o dispositivo da memória
-					_gerenciadorAudio->drop(); // Deleta o gerenciador de som da memória
-					return SAIDA;
+					_myID = SAIDA;
+					_dispositivo->closeDevice();
 				}	
 
 				_gerenciadorEventos.startEventProcess(); // Ativa a escuta de eventos.
@@ -196,7 +194,7 @@ public:
 		_gerenciadorAudio->stopAllSounds();
 		_dispositivo->drop(); // Deleta o dispositivo da memória
 		_gerenciadorAudio->drop(); // Deleta o gerenciador de som da memória
-		return (SAIDA);
+		return _myID;
 	}
 };
 

@@ -1,36 +1,27 @@
-#ifndef __CMenuLogin__
-#define __CMenuLogin__
+#ifndef __CMenuCreditos__
+#define __CMenuCreditos__
 
 #include "CMenu.cpp"
 
-class CMenuLogin : public CMenu
+class CMenuCreditos : public CMenu
 {
+
 
 private:
 
 	void updateHuds()
 	{
-
 		_gerenciadorHud->clear();
-		_gerenciadorHud->addEditBox(L"login", rect<s32>(300,500,400,520), true, 0, 10);
-		_gerenciadorHud->addEditBox(L"senha", rect<s32>(300,530,400,550), true, 0, 20);
-		_gerenciadorHud->addButton(rect<s32>(420,500,520,550), 0, 30, L"conectar");
+		_gerenciadorHud->addButton(rect<s32>(320, 500, 450, 532), 0, 100, L"Sair");
 	}
 
 	void updateCommands()
 	{
 		_timer->update();
-
+		
 		if(_gerenciadorEventos.getEventCallerByElement(EGET_BUTTON_CLICKED))
-		{
-			// Trata os cliques em botões
-
-			if (_gerenciadorEventos.getEventCallerByID() == 30)
-			{
-				// Clicou no botão conectar
-				_myID = SELECAOPERSONAGEM;
-			}
-		}
+			if (_gerenciadorEventos.getEventCallerByID() == 100)
+				_myID = SAIDA;
 	}
 
 	void updateGraphics()
@@ -41,13 +32,10 @@ private:
 
 public:
 
-	CMenuLogin(){}
+	CMenuCreditos(){}
 	
 	bool start()
 	{
-
-		//TypeCfg cfg, bool &created, menuID id, char* arquivo
-
 		_gameCfg = new CArquivoConfig();
 		TypeCfg cfg = _gameCfg->loadConfig();
 
@@ -66,8 +54,8 @@ public:
 		}
 		else
 		{
-			_myID = LOGIN;
-			_arquivoCena = "recursos/cenas/login.irr";
+			_myID = CREDITOS;
+			_arquivoCena = "recursos/cenas/creditos.irr";
 			_timer = new CTimer();
 			_timer->initialize();
 
@@ -78,11 +66,9 @@ public:
 			_gerenciadorHud = _dispositivo->getGUIEnvironment(); // Cria o gerenciador de menu
 			_gerenciadorAudio = createIrrKlangDevice();
 
-			_musica[0] = _gerenciadorAudio->play2D("recursos/audio/login.ogg", true, false, false, ESM_AUTO_DETECT);
+			_musica[0] = _gerenciadorAudio->play2D("recursos/audio/creditos.ogg", true, false, false, ESM_AUTO_DETECT);
 			
-			//_musicaFundo->setIsPaused(true);
 			_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
-			//	setVolume(cfg.parametrosAudio.volumeMusica);
 
 			if(_arquivoCena)
 				_gerenciadorCena->loadScene(_arquivoCena);
@@ -94,12 +80,23 @@ public:
 				_skin->setFont(_font);
 
 			_skin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_TOOLTIP);
+	
+			_camera = _gerenciadorCena->addCameraSceneNode(0,vector3df(0,50,0), vector3df(0,0,50));	
 
-			
-			_camera = _gerenciadorCena->addCameraSceneNode(0,vector3df(0,50,0), vector3df(0,0,50));
+			ILightSceneNode *luz = _gerenciadorCena->addLightSceneNode(0, vector3df(100, 100, 100));
 
-			
+			_toonShader = new CToonShader(_dispositivo, luz);
+
+			ISceneNode *modelo = _gerenciadorCena->addMeshSceneNode(_gerenciadorCena->getMesh("recursos/modelos/besouro.dae"));
+			modelo->setPosition(vector3df(0,20,50));
+			modelo->setRotation(vector3df(-90,0,0));
+			modelo->setScale(vector3df(3,3,3));
+
+
+			_toonShader->apply(modelo, "recursos/texturas/besouro.jpg");
+
 		}
+
 		return (true);
 	}
 
@@ -123,14 +120,10 @@ public:
 		
 				_gerenciadorVideo->endScene();
 				// Stop Render
-
-				
-			
-				_timer->update();
-
+	
 				updateCommands();
 
-				if(_myID != LOGIN)
+				if(_myID != CREDITOS)
 					_dispositivo->closeDevice();
 
 				updateGraphics();
@@ -150,6 +143,7 @@ public:
 		_gerenciadorAudio->drop(); // Deleta o gerenciador de som da memória
 		return _myID;
 	}
+
 };
 
 #endif;

@@ -3,8 +3,8 @@
 #include "CMenuLogin.cpp"
 #include "CMenuSelecao.cpp"
 #include "CMenuCriacao.cpp"
-//#include "CMenuJogo.cpp" 
-//#include "CMenuCreditos.cpp"
+#include "CMenuJogo.cpp" 
+#include "CMenuCreditos.cpp"
 
 #include <iostream>
 
@@ -54,17 +54,20 @@ int main()
 					nextMenu = ((CMenuCriacao*)menuCorrente)->run();
 				break;
 
-			case JOGO:/*
+			case JOGO:
 				menuCorrente = new CMenuJogo();
 				if( ((CMenuJogo*)menuCorrente)->start())
-					nextMenu = ((CMenuJogo*)menuCorrente)->run();*/
+					nextMenu = ((CMenuJogo*)menuCorrente)->run();
 				break;
 
-			case CREDITOS:/*
+			case CREDITOS:
 				menuCorrente = new CMenuCreditos();
 				if( ((CMenuCreditos*)menuCorrente)->start())
-					nextMenu = ((CMenuCreditos*)menuCorrente)->run();*/
+					nextMenu = ((CMenuCreditos*)menuCorrente)->run();
 				break;
+
+			default:
+				cout << "\nID de menu nao identificado." << endl;
 		};
 	}
 
