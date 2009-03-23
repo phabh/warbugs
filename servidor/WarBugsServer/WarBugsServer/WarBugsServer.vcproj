@@ -2,11 +2,11 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="WarBugs_Server"
-	ProjectGUID="{3593FCEF-2508-4718-A0B3-64C3D4BB3377}"
-	RootNamespace="WarBugs_Server"
-	Keyword="Win32Proj"
-	TargetFrameworkVersion="131072"
+	Name="WarBugsServer"
+	ProjectGUID="{71B888CD-82DF-42AE-837D-3EAA2C6A852E}"
+	RootNamespace="WarBugsServer"
+	Keyword="ManagedCProj"
+	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
 		<Platform
@@ -18,10 +18,11 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\..\exe\WarBugs_Server"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
+			ManagedExtensions="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -41,15 +42,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\WarBugs\Desktop\TCC_WarBugs\Projeto\WarBugs_Server\WarBugs_Server\MySQL&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
+				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\WarBugs\Desktop\TCC\servidor\WarBugsServer\WarBugsServer\MySQL&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -62,13 +60,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Libs\mysql++.lib"
+				AdditionalDependencies="Libs\mysql++.lib $(NOINHERIT)"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				SubSystem="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
+				AssemblyDebug="1"
+				SubSystem="2"
+				EntryPointSymbol="main"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -99,6 +96,7 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
+			ManagedExtensions="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -118,11 +116,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -136,13 +133,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="$(NoInherit)"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
-				SubSystem="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
+				SubSystem="2"
+				EntryPointSymbol="main"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -169,6 +164,31 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<AssemblyReference
+			RelativePath="System.dll"
+			AssemblyName="System, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="System.Data.dll"
+			AssemblyName="System.Data, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=x86"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="System.Drawing.dll"
+			AssemblyName="System.Drawing, Version=2.0.0.0, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="System.Windows.Forms.dll"
+			AssemblyName="System.Windows.Forms, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="System.XML.dll"
+			AssemblyName="System.Xml, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -176,6 +196,10 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath=".\AssemblyInfo.cpp"
+				>
+			</File>
 			<File
 				RelativePath=".\stdafx.cpp"
 				>
@@ -197,17 +221,9 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\WarBugs_Server.cpp"
+				RelativePath=".\WarBugsServer.cpp"
 				>
 			</File>
-			<Filter
-				Name="Principal"
-				>
-			</Filter>
-			<Filter
-				Name="MySQL"
-				>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -215,12 +231,30 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\frmPrincipal.h"
+				FileType="3"
+				>
+				<File
+					RelativePath=".\frmPrincipal.resX"
+					SubType="Designer"
+					>
+				</File>
+			</File>
+			<File
+				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
 			<Filter
-				Name="RakNet"
+				Name="WarBugs"
 				>
+				<File
+					RelativePath=".\CDataBase.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="MySQL"
@@ -290,32 +324,24 @@
 					>
 				</File>
 			</Filter>
-			<Filter
-				Name="WarBugs"
-				>
-				<File
-					RelativePath=".\CCenario.h"
-					>
-				</File>
-				<File
-					RelativePath=".\CCoreServer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\DataBase.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Menu.h"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+			<File
+				RelativePath=".\app.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\app.rc"
+				>
+			</File>
+			<File
+				RelativePath=".\warbugs.ico"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"

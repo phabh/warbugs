@@ -2,8 +2,7 @@
 #include <string.h>
 #include <vector>
 
-
-typedef std::vector<std::string> TDadosBD;
+typedef System::Collections::ArrayList TDadosBD;
 
 /**
 Classe para a manipulação de Banco de Dados
@@ -24,7 +23,8 @@ class CDataBase{
 		CDataBase();
 		CDataBase(char *host, char *bd, char *user, char *password);
 		bool     connectNow(char *host, char *bd, char *user, char *password);
-		void     selectNow(char *query, unsigned int &numFields, unsigned int &numRegs, TDadosBD &dados);
+		bool     selectNow(char *query, unsigned int &numFields, unsigned int &numRegs, TDadosBD ^ dados);
+		bool     isConnected();
 		bool     insertNow(char *query);
 		bool     updateNow(char *query);
 		bool     deleteNow(char *query);
@@ -81,8 +81,11 @@ bool CDataBase::connectNow(char *host, char *bd, char *user, char *password)
 	@param numRegs   - numero de registros que foram selecionados
 	@param - retorna as informações todas as linhas com seus respectivos dados
 */
-void CDataBase::selectNow(char *query, unsigned int &numFields, unsigned int &numRegs, TDadosBD &dados)
+bool CDataBase::selectNow(char *query, unsigned int &numFields, unsigned int &numRegs, TDadosBD ^dados)
 {
+
+	bool resultado = false;
+
 	if(_connected)
 	{
 		if(strlen(query) > 0)
@@ -91,22 +94,37 @@ void CDataBase::selectNow(char *query, unsigned int &numFields, unsigned int &nu
 		}
 	
 		_resultSet = mysql_store_result(_connection);
-		numRegs    = mysql_num_rows(_resultSet);
-		numFields  = mysql_num_fields(_resultSet);
-		std::string dado;
-
-		while((_row = mysql_fetch_row(_resultSet)))
+		if(_resultSet != NULL)
 		{
-			for(int i = 0; i < numFields; i++)
+			numRegs    = mysql_num_rows(_resultSet);
+			numFields  = mysql_num_fields(_resultSet);
+			MYSQL_FIELD * campo;
+
+			System::String ^ teste;
+
+			while((campo = mysql_fetch_field(_resultSet)))
 			{
-				dado = _row[i];
-				dados.push_back(dado);
+				char * tex = campo->name;
+				teste = gcnew System::String(tex);
+				dados->Add(teste);
 			}
-			dado = "Fim dado";
-			dados.push_back(dado);
+			
+			
+			while((_row = mysql_fetch_row(_resultSet)))
+			{
+				for(int i = 0; i < numFields; i++)
+				{
+					//dado = _row[i];
+					teste = gcnew System::String(_row[i]);
+					dados->Add(teste);
+				}
+			}
+			resultado = true;
 		}
 
+
 		mysql_free_result(_resultSet); 
+		return resultado;
 	}
 }
 
@@ -156,4 +174,14 @@ bool CDataBase::updateNow(char *query)
 void CDataBase::closeNow()
 {
 	mysql_close(_connection);
+}
+
+/*
+	Verifica se está conectado com o bd
+*/
+bool CDataBase::isConnected()
+{
+	_connected = mysql_ping(_connection) == 0;
+
+	return _connected;
 }
