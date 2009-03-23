@@ -1,0 +1,19 @@
+/*
+* Classe CDivisorXP
+*
+* Versão: 0.01
+*
+* Autor: Eder Figueiredo
+*
+* Objetivo: Descrever a lista de personagens que causaram dano a um inimigo para a divisao de xp
+*
+*/
+
+#ifndef _CDIVXP
+#define _CDIVXP
+#include "CPersonagemJogador.cpp"
+struct CDivisorXP{
+	int dano;
+	CPersonagemJogador *causador;
+};
+#endif
