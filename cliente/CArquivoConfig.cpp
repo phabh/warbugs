@@ -59,7 +59,7 @@ public:
 		_configuracao.parametrosVideo.DriverType = EDT_DIRECT3D9;
 		_configuracao.parametrosVideo.WindowSize = dimension2d <s32>( 800, 600 );
 		_configuracao.parametrosVideo.Bits = 32;
-		_configuracao.parametrosVideo.Fullscreen = true;
+		_configuracao.parametrosVideo.Fullscreen = false;
 		_configuracao.parametrosVideo.Stencilbuffer = true;
 		_configuracao.parametrosVideo.Vsync = false;
 		_configuracao.parametrosVideo.AntiAlias = true;

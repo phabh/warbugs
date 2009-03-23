@@ -88,7 +88,7 @@ public:
 			_camera = _gerenciadorCena->addCameraSceneNode(0,vector3df(0,50,0), vector3df(0,0,50));	
 
 			ILightSceneNode *luz = _gerenciadorCena->addLightSceneNode(0, vector3df(100, 100, 100));
-
+/*
 			_toonShader = new CToonShader(_dispositivo, luz);
 
 			ISceneNode *modelo = _gerenciadorCena->addMeshSceneNode(_gerenciadorCena->getMesh("recursos/modelos/besouro.dae"));
@@ -97,7 +97,7 @@ public:
 			modelo->setScale(vector3df(3,3,3));
 
 
-			_toonShader->apply(modelo, "recursos/texturas/besouro.jpg");
+			_toonShader->apply(modelo, "recursos/texturas/besouro.jpg");*/
 
 		}
 
