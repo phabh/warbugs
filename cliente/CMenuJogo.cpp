@@ -8,19 +8,31 @@
 #include "CHudRoleta.cpp"
 #include "CHudStatus.cpp"
 
+using namespace irr; 
+using namespace core; 
+using namespace scene; 
+using namespace video; 
+using namespace io; 
+using namespace gui; 
+
 class CMenuJogo : public CMenu
 {
 
 private:
 
-	enum flagJogo {CHANGED, OBJSELECTED};
+	enum flagJogo {CHANGED, OBJSELECTED, INVENTARIO, CHAT, STATUS};
 	ISceneNode *_nodoSelecionado;
 	int _idPersonagem;
 
+	IGUIListBox *_chatText;
+	IGUIEditBox *_chatInput; 
+
+	IGUIWindow *_invWindow,
+			   *_chatWindow,	
+			   *_statWindow;
+	
 	void updateHuds()
 	{
-
-		_gerenciadorHud->clear();
 		_gerenciadorHud->addButton(rect<s32>(440,500,540,540), 0, 100, L"Sair");
 		_flags[CHANGED] = false;
 	}
@@ -34,20 +46,57 @@ private:
 
 			if(_gerenciadorEventos.getEventCallerByElement(EGET_BUTTON_CLICKED))
 			{
-				// Trata os cliques em botões
-
 				if (_gerenciadorEventos.getEventCallerByID() == 100)
-				{
-					// Clicou no botão conectar
 					_myID = CREDITOS;
-				}
 			}		
-		}		
+		}	
+
+		if(_gerenciadorEventos.isKeyPressed(KEY_KEY_I))
+		{
+			if(_flags[INVENTARIO])
+			{
+				_invWindow->setVisible(false);
+				_flags[INVENTARIO] = false;
+			}
+			else
+			{
+				_invWindow->setVisible(true);
+				_flags[INVENTARIO] = true;
+			}
+		}
+
+		if(_gerenciadorEventos.isKeyPressed(KEY_KEY_C))
+		{
+			if(_flags[CHAT])
+			{
+				_chatWindow->setVisible(false);
+				_flags[CHAT] = false;
+			}
+			else
+			{
+				_chatWindow->setVisible(true);
+				_flags[CHAT] = true;
+			}
+		}
+
+		if(_gerenciadorEventos.isKeyPressed(KEY_KEY_S))
+		{
+			if(_flags[STATUS])
+			{
+				_statWindow->setVisible(false);
+				_flags[STATUS] = false;
+			}
+			else
+			{
+				_statWindow->setVisible(true);
+				_flags[STATUS] = true;
+			}
+		}
 	}
+
 
 	void updateGraphics()
 	{
-		_timer->update();
 	}
 	
 
@@ -86,6 +135,9 @@ public:
 			_idPersonagem = -1;
 			_flags[OBJSELECTED] = false;
 			_flags[CHANGED] = true;
+			_flags[INVENTARIO] = false;
+			_flags[CHAT] = false;
+			_flags[STATUS] = false;
 
 			_dispositivo->setWindowCaption(L"Warbugs - BETA Version 0.1");
 
@@ -96,9 +148,7 @@ public:
 
 			_musica[0] = _gerenciadorAudio->play2D("recursos/audio/jogo.ogg", true, false, false, ESM_AUTO_DETECT);
 			
-			//_musicaFundo->setIsPaused(true);
 			_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
-			//	setVolume(cfg.parametrosAudio.volumeMusica);
 
 			if(_arquivoCena)
 				_gerenciadorCena->loadScene(_arquivoCena);
@@ -112,9 +162,39 @@ public:
 			_skin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_TOOLTIP);
 
 			
-			_camera = _gerenciadorCena->addCameraSceneNode(0,vector3df(0,50,0), vector3df(0,0,50));
-
+			_camera = _gerenciadorCena->addCameraSceneNode(0,vector3df(0,50,0), vector3df(0,0,50));		
 			
+			s32 Width = _gerenciadorVideo->getViewPort().getWidth();
+			s32 Height = _gerenciadorVideo->getViewPort().getHeight();
+
+			_invWindow = _gerenciadorHud->addWindow(rect<s32>(0, 0, 250, 200), false, L"Inventario"); 
+			_invWindow->setVisible(true); 
+
+			_invWindow->getCloseButton()->setEnabled(false); 
+			_invWindow->getCloseButton()->setToolTipText(L""); 
+			_invWindow->getCloseButton()->setVisible(false); 
+
+			_chatWindow = _gerenciadorHud->addWindow(rect<s32>(0, Height-200, Width/4, Height), false, L"Chat");     
+			
+			_chatWindow->getCloseButton()->setEnabled(false); 
+			_chatWindow->getCloseButton()->setToolTipText(L""); 
+			_chatWindow->getCloseButton()->setVisible(false); 
+			
+			_chatText = _gerenciadorHud->addListBox(rect<s32>(5, 25, Width/4-5, 165), _chatWindow); 
+			_chatInput = _gerenciadorHud->addEditBox(L"", rect<s32>(5, 170, Width/4-30, 195), true, _chatWindow);
+
+
+			_statWindow = _gerenciadorHud->addWindow(rect<s32>(0, 0, 150, 80), false, L"Status"); 
+			_statWindow->setVisible(true); 
+
+			_statWindow->getCloseButton()->setEnabled(false); 
+			_statWindow->getCloseButton()->setToolTipText(L""); 
+			_statWindow->getCloseButton()->setVisible(false); 
+
+			_invWindow->setVisible(false);
+			_chatWindow->setVisible(false);
+			_statWindow->setVisible(false);
+
 		}
 		return (true);
 	}
