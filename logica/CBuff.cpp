@@ -13,7 +13,7 @@
 #ifndef _CBUFF
 #define _CBUFF
 
-class CBuff : public CLogicObject{
+class CBuff abstract : public CLogicObject{
 private:
 	int _duracao;
 	int _indiceImagem;
@@ -26,8 +26,11 @@ public:
 	}
 	void initialize(CObjectCount *counter){
 		CObject::initialize(counter);
-
 	}
+	void apply();
+	void remove();
+	void execute();
 };
+// -------------------------------------------------------------------------------------------------------------------
 
 #endif

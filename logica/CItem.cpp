@@ -9,16 +9,18 @@
 *
 */
 
-#include <string>
-using namespace std;
-#include "C3DObject.cpp"
-
 #ifndef _CITEM
 //Define a criação da classe
 #define _CITEM
 
+#include <string>
+using namespace std;
+#include "C3DObject.cpp"
+
 enum EstadoItem{NAMOCHILA, NOCHAO, EQUIPADO, USADO};
+// ------------------------------------------------------------------------------------------------------------
 enum TipoItem{USO, ARMA, ARMADURA, QUEST};
+// ------------------------------------------------------------------------------------------------------------
 class CItem abstract : public C3DObject{
 private:
 	string _nome;//Nome do item

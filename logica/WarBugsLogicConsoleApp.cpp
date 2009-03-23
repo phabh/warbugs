@@ -19,8 +19,12 @@ CObjectCount *contadorObj = new CObjectCount();
 
 int main(array<System::String ^> ^args)
 {
+	CDoubleList<int> *teste = new CDoubleList<int>();
+	teste->initialize(contadorObj);
+
+	teste->pushBack(1);
 	
-	CWeapon *d = new CWeapon();
+	/*CWeapon *d = new CWeapon();
 	CScroll *e = new CScroll();
 	CArmor *f = new CArmor();
 	CLealdade *g = new CLealdade();
@@ -28,7 +32,7 @@ int main(array<System::String ^> ^args)
 	
 	d->initialize(contadorObj, ESCORPIAO, 1, 0, 0, 0, 0, 0, 0);
 	e->initialize(contadorObj, 1, 10, 20, 30, 40, 50, 60);
-	f->initialize(contadorObj, BESOURO, 0, 1, 0);
+	f->initialize(contadorObj, BESOURO, 0, 1, 0);*/
 
 	/*TESTE DE UTILIZAÇÃO DE SCROLL EM ARMADURA -> APROVADO!!!
 	cout << "Defesa: " << f->getDef() << endl

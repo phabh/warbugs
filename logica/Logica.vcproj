@@ -232,6 +232,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\CQItem.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\CScroll.cpp"
 						>
 					</File>
@@ -252,7 +256,23 @@
 					Name="Componentes de um personagem"
 					>
 					<File
+						RelativePath=".\CBonus.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CDivisorXP.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\CEquipamento.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CPoder.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CQuest.cpp"
 						>
 					</File>
 				</Filter>
@@ -261,6 +281,30 @@
 					>
 					<File
 						RelativePath=".\CBuff.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Personagens"
+					>
+					<File
+						RelativePath=".\CInimigo.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CNPC.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CPersonagem.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CPersonagemJogador.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CVendedor.cpp"
 						>
 					</File>
 				</Filter>
