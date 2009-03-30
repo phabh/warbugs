@@ -81,6 +81,7 @@ class CGerEventos : public IEventReceiver
 			deltaMouseX = deltaMouseY = 0;
 
 			mouseHasMoved = false; 
+			wheelHasMoved = false;
 
 			generalCallerID = menuItemSelectedID = 0;
 
@@ -230,7 +231,9 @@ class CGerEventos : public IEventReceiver
 		inline f32 getDeltaMouseWheelPosition()
 		{
 		   f32 a = MouseData.wheelPos - MouseData.lwheelPos;
-		   return (f32)(a < 0 ? -a : a);
+
+		   //if(a > 0) 
+		   return a;//(f32)(a < 0 ? -a : a);
 		}
 
 	    
@@ -287,6 +290,16 @@ class CGerEventos : public IEventReceiver
 			elementStatus[EGET_COMBO_BOX_CHANGED] = NOK; // Setar o status de todos os eventos como falso
 		}
 
+		bool wheelMoved()
+		{
+			if(wheelHasMoved)
+			{
+				wheelHasMoved = false;
+				return true;
+			}
+			return false;
+		}
+
 		void endEventProcess() 
 		{ 
 			// Finalizar escuta
@@ -298,6 +311,7 @@ class CGerEventos : public IEventReceiver
 
 		bool OnEvent(const SEvent& event)
 		{
+
 			switch (event.EventType) 
 			{
 				
@@ -351,6 +365,7 @@ class CGerEventos : public IEventReceiver
 		          
 						case EMIE_MOUSE_WHEEL: // Movimento do scroll
 						{
+							wheelHasMoved = true;
 							MouseData.lwheelPos = MouseData.wheelPos;
 							MouseData.wheelPos += event.MouseInput.Wheel;
 		          
@@ -494,6 +509,7 @@ class CGerEventos : public IEventReceiver
 		int deltaMouseY;
 	    
 		bool mouseHasMoved;
+		bool wheelHasMoved;
 };
 
 #endif;

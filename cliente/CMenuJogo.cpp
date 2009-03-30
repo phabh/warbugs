@@ -30,6 +30,8 @@ private:
 	IGUIWindow *_invWindow,
 			   *_chatWindow,	
 			   *_statWindow;
+
+	CHudRoleta *_roleta;
 	
 	void updateHuds()
 	{
@@ -49,7 +51,12 @@ private:
 				if (_gerenciadorEventos.getEventCallerByID() == 100)
 					_myID = CREDITOS;
 			}		
-		}	
+		}
+
+		if(_gerenciadorEventos.wheelMoved())
+		{
+			_roleta->move(_gerenciadorEventos.getDeltaMouseWheelPosition());
+		}
 
 		if(_gerenciadorEventos.isKeyPressed(KEY_KEY_I))
 		{
@@ -195,6 +202,14 @@ public:
 			_chatWindow->setVisible(false);
 			_statWindow->setVisible(false);
 
+			_roleta = new CHudRoleta( 
+			rect<s32>(600, 400, 800, 600),  // Area da roleta
+			_gerenciadorHud,						 // Gerenciador de Hud
+			_gerenciadorHud->getRootGUIElement(), // Raiz do gerenciador de Hud 
+			_gerenciadorVideo->getTexture("recursos/huds/roleta.png"),   
+			_gerenciadorVideo->getTexture("recursos/huds/ponteiro.png")
+			);
+
 		}
 		return (true);
 	}
@@ -204,6 +219,7 @@ public:
 
 		updateHuds();
 
+		float rot = 1;
 
 		while(_dispositivo->run())
 		{
@@ -223,6 +239,8 @@ public:
 				_timer->update();
 
 				updateCommands();
+
+				_roleta->update();
 
 				if(_myID != JOGO)
 					_dispositivo->closeDevice();
