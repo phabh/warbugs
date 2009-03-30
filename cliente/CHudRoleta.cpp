@@ -16,6 +16,9 @@ class CHudRoleta : public IGUIElement
 		SMeshBuffer CorpoMesh; 
 		SMeshBuffer PonteiroMesh; 
 		matrix4 Matrix; 
+		float _angAlvo,
+			  _angAtual;
+
 
 		void setupQuadMesh( SMeshBuffer &mesh, f32 f32Width ) 
 		{ 
@@ -50,14 +53,43 @@ class CHudRoleta : public IGUIElement
 
 		   CorpoMesh.getMaterial().setTexture(0, txCorpo);  
 		   PonteiroMesh.getMaterial().setTexture(0, txPonteiro);
+
+		   _angAlvo = _angAtual = 0;
 		} 
 
 		//------------------------------------------------------------------------------ 
 
-		void update( f32 rotacao ) 
+		void move(f32 i)
+		{
+			if(_angAlvo == _angAtual)
+			{
+				if(i > 0)
+					_angAlvo+=60;
+				
+				else if(i < 0)
+					_angAlvo-=60;	
+			}
+		}
+
+		//------------------------------------------------------------------------------ 
+
+		void update() 
 		{ 
-			Matrix.makeIdentity(); 
-			Matrix.setRotationDegrees(vector3df(0, 0, rotacao)); 
+			
+			if(_angAlvo > _angAtual)
+			{
+				_angAtual++;
+				Matrix.makeIdentity(); 
+				Matrix.setRotationDegrees(vector3df(0, 0, _angAtual)); 
+				
+			}
+			else if(_angAlvo < _angAtual)
+			{
+				_angAtual--;
+				Matrix.makeIdentity(); 
+				Matrix.setRotationDegrees(vector3df(0, 0, _angAtual)); 
+				
+			}
 		} 
 
 		//------------------------------------------------------------------------------ 
