@@ -2,12 +2,15 @@
 #define __CMenuCreditos__
 
 #include "CMenu.cpp"
+#include "CHudFadingTextList.cpp"
 
 class CMenuCreditos : public CMenu
 {
 
 
 private:
+
+	CHudFadingTextList *_textList;
 
 	void updateHuds()
 	{
@@ -95,6 +98,8 @@ public:
 
 			_toonShader->apply(modelo, "recursos/texturas/besouro.jpg");*/
 
+			//_textList->start(_gerenciadorHud,_font,rect<s32>(10,10, 790, 500 ),255,10,true);
+
 		}
 
 		return (true);
@@ -105,6 +110,8 @@ public:
 
 		updateHuds();
 
+
+		int i = 0;
 
 		while(_dispositivo->run())
 		{
