@@ -8,9 +8,10 @@
 * Objetivo: Descrever cada personagem inimigo
 *
 */
+#include "CPersonagem.cpp"
 #ifndef _CINIMIGO
 #define _CINIMIGO
-#include "CPersonagem.cpp"
+
 
 class CInimigo : public CPersonagem{
 private:

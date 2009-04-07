@@ -8,15 +8,16 @@
 * Objetivo: Descrever os poderes de um personagem
 *
 */
-
-#ifndef _CPODER
-#define _CPODER
 #include "CLogicObject.cpp"
 #include "CBuff.cpp"
 #include <string>
 using namespace std;
+#ifndef _CPODER
+#define _CPODER
 
-class CPoder : public CLogicObject{
+
+class CPoder : public CLogicObject
+{
 private:
 	string _nome;
 	string _descricao;
@@ -26,7 +27,8 @@ private:
 	int _dano;
 	CBuff * _statusCausado;
 public:
-	CPoder(){
+	CPoder()
+	{
 		_nome = "";
 		_descricao = "";
 		_custoTC = 0;

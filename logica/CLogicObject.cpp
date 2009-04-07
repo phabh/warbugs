@@ -8,9 +8,10 @@
 * Objetivo: Objeto base para todas as outras classes lógicas
 *
 */
+#include "CObject.cpp"
 #ifndef _CLOGICOBJECT
 #define _CLOGICOBJECT
-#include "CObject.cpp"
+
 class CLogicObject abstract : public CObject{
 };
 #endif

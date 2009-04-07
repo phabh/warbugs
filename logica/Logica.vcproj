@@ -42,10 +42,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\Irrlicht\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -247,10 +249,6 @@
 				<Filter
 					Name="Estrutura de Dados"
 					>
-					<File
-						RelativePath=".\CDoubleList.cpp"
-						>
-					</File>
 				</Filter>
 				<Filter
 					Name="Componentes de um personagem"

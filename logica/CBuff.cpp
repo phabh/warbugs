@@ -9,22 +9,26 @@
 *
 */
 #include "CLogicObject.cpp"
-
 #ifndef _CBUFF
 #define _CBUFF
 
-class CBuff abstract : public CLogicObject{
+
+class CBuff : public CLogicObject
+{
 private:
 	int _duracao;
 	int _indiceImagem;
 	int _indiceEfeito;
+	bool _badBuff;
 public:
-	CBuff(){
+	CBuff()
+	{
 		_duracao = 0;
 		_indiceImagem = -1;
 		_indiceEfeito = -1;
 	}
-	void initialize(CObjectCount *counter){
+	void initialize(CObjectCount *counter)
+	{
 		CObject::initialize(counter);
 	}
 	void apply();

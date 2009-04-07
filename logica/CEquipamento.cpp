@@ -8,13 +8,15 @@
 * Objetivo: Descrever os equipamentos de um personagem
 *
 */
-#include "CWeapon.cpp"
-#include "CArmor.cpp"
+
 
 #ifndef _CEQUIPAMENTO
 #define _CEQUIPAMENTO
+#include "CArmor.cpp"
+#include "CWeapon.cpp"
 
-struct CEquipamento{
+struct CEquipamento
+{
 	CArmor *armadura;
 	CWeapon *arma;
 };

@@ -10,7 +10,7 @@ using namespace std;
 #include "CScroll.cpp"
 #include "CWeapon.cpp"
 #include "CArmor.cpp"
-#include "CDoubleList.cpp"
+#include "CPersonagemJogador.cpp"
 
 using namespace System;
 
@@ -19,10 +19,8 @@ CObjectCount *contadorObj = new CObjectCount();
 
 int main(array<System::String ^> ^args)
 {
-	CDoubleList<int> *teste = new CDoubleList<int>();
-	teste->initialize(contadorObj);
-
-	teste->pushBack(1);
+	srand(time(NULL));
+	CPersonagemJogador *a = new CPersonagemJogador();
 	
 	/*CWeapon *d = new CWeapon();
 	CScroll *e = new CScroll();

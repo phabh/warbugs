@@ -8,12 +8,11 @@
 * Objetivo: Descrever as armaduras do jogo
 *
 */
-
 #include "CItem.cpp"
 #include "CScroll.cpp"
-
 #ifndef _CARMOR
 #define _CARMOR
+
 
 class CArmor : public CItem{
 private:
@@ -58,7 +57,5 @@ public:
 	int getDef(){return(_defesa);}
 	int getDurability(){return(_durabilidade);}
 	int getMagicLevel(){return(_nivelMagico);}
-	//void equip(CPersonagem *alvo)
-	//void unequip()
 };
 #endif
