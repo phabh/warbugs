@@ -8,12 +8,12 @@
 * Objetivo: Objeto base para todas as outras classes 3D
 *
 */
-
+#include "CObject.cpp"
 #ifndef _C3DOBJECT
 
 //Define a criação da classe
 #define _C3DOBJECT
-#include "CObject.cpp"
+
 
 struct Ponto{
 	int x;

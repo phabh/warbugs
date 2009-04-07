@@ -9,8 +9,8 @@
 *
 */
 
-#include "CItem.cpp"
 
+#include "CItem.cpp"
 #ifndef _CCONSUMABLEITEM
 #define _CCONSUMABLEITEM
 

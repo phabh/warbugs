@@ -8,13 +8,16 @@
 * Objetivo: Descrever todos os personagens do jogo
 *
 */
-
-#ifndef _CPERSONAGEM
-#define _CPERSONAGEM
 #include "C3DObject.cpp"
 #include "CBonus.cpp"
 #include "CItem.cpp"
 #include "CPoder.cpp"
+#include <list>
+#include <irrlicht.h>
+using namespace std;
+#ifndef _CPERSONAGEM
+#define _CPERSONAGEM
+
 
 enum EstadoPersonagem{
 	PARADO,
@@ -22,17 +25,28 @@ enum EstadoPersonagem{
 };
 // ------------------------------------------------------------------------------------------------------------
 class CPersonagem : public C3DObject{
-private:
-	EstadoPersonagem _estado;
-	//TEmpo de respawn
-	//Lista do inventario
-	CHabilidadesSecundarias *_habilidadesSecundarias;
-	CBonusSecundario *_bonusSecundario;
-	//Lista de poderes
+protected:
+	EstadoPersonagem estado;
+	//Tempo de respawn
+	irr::core::array<CItem> *inventario;
+	CHabilidadesSecundarias *habilidadesSecundarias;
+	CBonusSecundario *bonusSecundario;
+	irr::core::array<CPoder> *poderes;
 public:
-	CPersonagem(){}
+	CPersonagem(){
+		inventario = new irr::core::array<CItem>();
+		habilidadesSecundarias = new CHabilidadesSecundarias();
+		bonusSecundario = new CBonusSecundario();
+		poderes = new irr::core::array<CPoder>();
+	}
+	//Getters e Setters
+	CHabilidadesSecundarias getStats()
+	{
+		return(habilidadesSecundarias);
+	}
+	//Outros métodos
 	void move(){}
-	void attack(CPersonagem *alvo){}
+	virtual void attack(CPersonagem *alvo, int attackType)=0;
 	void die(){}
 	void useItem(CItem *item){}
 	void useSkill(CPoder *skill){}

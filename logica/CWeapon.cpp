@@ -8,12 +8,11 @@
 * Objetivo: Descrever as armas do jogo
 *
 */
-
 #include "CItem.cpp"
 #include "CScroll.cpp"
-
 #ifndef _CWEAPON
 #define _CWEAPON
+
 
 class CWeapon : public CItem{
 private:
@@ -55,6 +54,7 @@ public:
 	int getID(){
 		return(CObject::getID());
 	}	
+	//Outros métodos
 	void useScroll(CScroll *&scroll){
 		if(scroll != NULL){
 			_modificador = _modificador + scroll->getMod();
@@ -82,7 +82,5 @@ public:
 	int getRange(){return(_alcance);}
 	int getDurability(){return(_durabilidade);}
 	int getMagicLevel(){return(_nivelMagico);}
-	//void equip(CPersonagem *alvo)
-	//void unequip()
 };
 #endif

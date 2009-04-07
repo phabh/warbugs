@@ -8,10 +8,10 @@
 * Objetivo: Descrever cada personagem vendedor
 *
 */
-
+#include "CPersonagem.cpp"
 #ifndef _CVENDEDOR
 #define _CVENDEDOR
-#include "CPersonagem.cpp"
+
 
 class CVendedor : public CPersonagem{
 private:

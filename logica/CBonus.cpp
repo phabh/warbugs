@@ -8,12 +8,14 @@
 * Objetivo: Descrever os bonus de um personagem
 *
 */
-#ifndef _CBONUS
-#define _CBONUS
 #include "CAtributo.cpp"
 #include "CBuff.cpp"
+#ifndef _CBONUS
+#define _CBONUS
 
-class CBonus abstract{
+
+class CBonus abstract
+{
 public:
 	CBuff *origem;
 	CBonus(){}
@@ -21,11 +23,13 @@ public:
 	void remove(){}
 };
 // ------------------------------------------------------------------------------------------------------------
-class CBonusPrimario : public CBonus{
+class CBonusPrimario : public CBonus
+{
 	CHabilidades *valor;
 };
 // ------------------------------------------------------------------------------------------------------------
-class CBonusSecundario : public CBonus{
+class CBonusSecundario : public CBonus
+{
 	CHabilidadesSecundarias *valor;
 };
 #endif

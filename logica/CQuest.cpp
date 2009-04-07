@@ -8,13 +8,11 @@
 * Objetivo: Descrever as quests do jogo
 *
 */
-
-#ifndef _CQUEST
-#define _CQUEST
 #include "CItem.cpp"
 #include "CLogicObject.cpp"
 #include "CAtributo.cpp"
-
+#ifndef _CQUEST
+#define _CQUEST
 
 class CQuest : public CLogicObject{
 private:

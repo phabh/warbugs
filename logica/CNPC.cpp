@@ -8,13 +8,14 @@
 * Objetivo: Descrever cada personagem npc
 *
 */
-#ifndef _CNPC
-#define _CNPC
 #include "CPersonagem.cpp"
 #include "CPersonagemJogador.cpp"
 #include <string>
 using namespace std;
 #include "CQuest.cpp"
+#ifndef _CNPC
+#define _CNPC
+
 
 class CNPC : public CPersonagem{
 private:

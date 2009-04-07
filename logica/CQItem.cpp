@@ -8,11 +8,11 @@
 * Objetivo: Descrever todos os itens de quest do jogo
 *
 */
-
-#ifndef _CQITEM
-#define _CQITEM
 #include "CItem.cpp"
 #include "CQuest.cpp"
+#ifndef _CQITEM
+#define _CQITEM
+
 
 class CQItem : public CItem{
 private:
