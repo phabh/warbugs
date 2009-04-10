@@ -188,6 +188,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CEventManager.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\WarBugsLogicConsoleApp.cpp"
 				>
 			</File>
@@ -199,10 +203,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\CLogicObject.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\CObject.cpp"
 					>
 				</File>
@@ -211,11 +211,19 @@
 				Name="2 - Secundarias"
 				>
 				<File
-					RelativePath=".\CAtributo.cpp"
+					RelativePath=".\CHabilidades.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CHabilidadesSecundarias.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\CItem.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CLealdade.cpp"
 					>
 				</File>
 			</Filter>
@@ -255,6 +263,14 @@
 					>
 					<File
 						RelativePath=".\CBonus.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CBonusPrimario.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CBonusSecundario.cpp"
 						>
 					</File>
 					<File

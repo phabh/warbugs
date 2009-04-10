@@ -9,7 +9,7 @@
 *
 */
 #include "CItem.cpp"
-#include "CAtributo.cpp"
+#include "CLealdade.cpp"
 #ifndef _CSCROLL
 #define _CSCROLL
 

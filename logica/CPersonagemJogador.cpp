@@ -1,8 +1,6 @@
 /*
 * Classe CPersonagemJogador
 *
-* Versão: 0.01
-*
 * Autor: Eder Figueiredo
 *
 * Objetivo: Descrever cada personagem controlado por um jogador
@@ -11,8 +9,12 @@
 #include "CPersonagem.cpp"
 #include "CEquipamento.cpp"
 #include "CBuff.cpp"
-#include "CAtributo.cpp"
+#include "CHabilidades.cpp"
+#include "CHabilidadesSecundarias.cpp"
+#include "CLealdade.cpp"
 #include "CQuest.cpp"
+#include "CBonusPrimario.cpp"
+#include "CConsumableItem.cpp"
 #include <list>
 #include <iostream>
 #include <time.h>
@@ -26,12 +28,13 @@ using namespace std;
 #define MAXFRIENDS 10
 #define MAXPARTYSIZE 4
 #define MAXSTATS 5
+#define MAXITENS 10
 //end Constantes
 
 class CPersonagemJogador : public CPersonagem
 {
 	CHabilidades *_habilidadesPrimarias;
-	CBonusPrimario *_bonusPrimario;
+	irr::core::array<CBonusPrimario*> *_bonusPrimario;
 	int _nivel;
 	int _experiencia;
 	int _dinheiro;
@@ -41,20 +44,21 @@ class CPersonagemJogador : public CPersonagem
 	irr::core::array<CPersonagemJogador*> *_party;
 	irr::core::array<CPersonagemJogador*> *_friends;
 	int _jogadorID;
+	CPersonagem *_alvo;
 public:
 	CPersonagemJogador()
 	{
 		_habilidadesPrimarias = new CHabilidades();
-		_bonusPrimario = new CBonusPrimario();
+		_bonusPrimario = new irr::core::array<CBonusPrimario*>();
 		_nivel = 1;
 		_experiencia = 0;
 		_dinheiro = 0;
-		_equip = new CEquipamento();
 		_status = new irr::core::array<CBuff*>();
 		_lealdade = new CLealdade();
 		_party = new irr::core::array<CPersonagemJogador*>();
 		_friends = new irr::core::array<CPersonagemJogador*>();
 		_jogadorID = 0;
+		_alvo = NULL;
 	}
 	//Getters e setters
 	void setParty(irr::core::array<CPersonagemJogador*> *lista)
@@ -62,21 +66,82 @@ public:
 		_party = lista;
 	}
 	//Outros Métodos
-	void equip(CItem *item)
+	//Manipulação de itens
+	int haveItem(CItem * item)
 	{
-		if(item->getClass() == CWEAPON)
+		return(inventario->binary_search_const(item));
+	}
+	void getItem(CItem *item)
+	{
+		if(inventario->size() < MAXITENS)
 		{
-			_equip->arma = (CWeapon*)item;
-			item->setEstado(EQUIPADO);
+			inventario->push_back(item);
+			inventario->sort();
 		}
-		else if(item->getClass() == CARMOR)
+	}
+	void dropItem(CItem *item)
+	{
+		irr::s32 i = this->haveItem(item);
+		if(i >= 0)
 		{
-			_equip->armadura = (CArmor*)item;
-			item->setEstado(EQUIPADO);
+			inventario->erase(i);
+			item->setEstado(NOCHAO);
+			item->setPosition(this->getPosition());
 		}
 		else
 		{
-			//ERRO: O ITEM NÃO É UMA ARMA/ARMADURA
+			//ERRO: O ITEM NÃO ESTÁ NO INVENTRÁRIO
+		}
+	}
+	void useItem(CItem *item)
+	{
+		irr::s32 i = this->haveItem(item);
+		if(i >= 0)
+		{
+			if(item->getTipo() == USO)
+			{
+				switch(item->getAtribute())
+				{
+				case NENHUM:
+					break;
+				case PV:
+					habilidadesSecundarias->addPV(item->getValue());
+					break;
+				case PM:
+					habilidadesSecundarias->addPM(item->getValue());
+					break;
+				default:
+					break;
+				}
+			}
+			else
+			{
+				//ERRO: EQUIPAMENTOS NÃO PODEM SER USADOS
+			}
+		}
+	}
+	void equip(CItem *item)
+	{
+		if(this->haveItem(item))
+		{
+			if(item->getClass() == CWEAPON)
+			{
+				_equip->arma = (CWeapon*)item;
+				item->setEstado(EQUIPADO);
+			}
+			else if(item->getClass() == CARMOR)
+			{
+				_equip->armadura = (CArmor*)item;
+				item->setEstado(EQUIPADO);
+			}
+			else
+			{
+				//ERRO: O ITEM NÃO É UMA ARMA/ARMADURA
+			}
+		}
+		else
+		{
+			//ERRO: O ITEM NÃO ESTÁ NO INVENTRÁRIO
 		}
 	}
 	void unequip(CItem *item)
@@ -96,6 +161,11 @@ public:
 			//ERRO: O ITEM ESPECIFICADO NÃO ESTÁ EQUIPADO
 		}
 	}
+	//Friends Manipulation
+	int isFriend(CPersonagemJogador *jogador)
+	{
+		return(_friends->binary_search_const(jogador));
+	}
 	void addFriend(CPersonagemJogador *newFriend)
 	{
 		if(_friends->size() < MAXFRIENDS)
@@ -107,8 +177,8 @@ public:
 	}
 	void removeFriend(CPersonagemJogador *jogador)
 	{
-		irr::u32 i =_friends->binary_search_const(jogador);
-		if(i > 0)
+		irr::s32 i = this->isFriend(jogador);
+		if(i >=	 0)
 		{
 			_friends->erase(i);
 		}
@@ -118,6 +188,7 @@ public:
 		}
 		return;
 	}
+	//Party Manipulation
 	bool isPartyLeader()
 	{
 		return((_party->empty())&&(_party->getLast() == this));
@@ -187,20 +258,38 @@ public:
 			_party->clear();
 		}
 	}
+	//Quest
 	void acceptQuest(CQuest *quest){}
+	//Speaking
 	void speakToPlayer(CPersonagemJogador *alvo){}
 	void speakToNPC(CPersonagem *alvo){}
 	//Implementando métodos pureVirtual
-	void attack(CPersonagem *alvo, int attackType)
+	//Batalha
+	void takeDamage(int damage)
+	{
+		habilidadesSecundarias->addPV(habilidadesSecundarias->getPV() - damage);
+	}
+	void attack(int attackType)
 	{
 		int testValue = 0;
-		if(attackType%2 == 0)
+		if((attackType%2 == 0)&&(this->getDistanceToPoint(_alvo->getPosition()) <= this->_equip->arma->getRange()))
 		{
 			//MELEE
 			testValue = habilidadesSecundarias->getMeleeAttack() + ((rand()%_equip->arma->getMaxDamage())+_equip->arma->getMinDamage())/2;
-			if(testValue > alvo->getStats().getDefense())
+			if(testValue > _alvo->getStats().getDefense())
 			{
 				testValue = habilidadesSecundarias->getMeleeDamage() + ((rand()%_equip->arma->getMaxDamage())+_equip->arma->getMinDamage());
+				_alvo->takeDamage(testValue);
+			}
+		}
+		else if(this->getDistanceToPoint(_alvo->getPosition()) <= this->_equip->arma->getRange())
+		{
+			//RANGED
+			testValue = habilidadesSecundarias->getRangedAttack() + ((rand()%_equip->arma->getMaxDamage())+_equip->arma->getMinDamage())/2;
+			if(testValue > _alvo->getStats().getDefense())
+			{
+				testValue = habilidadesSecundarias->getRangedDamage() + ((rand()%_equip->arma->getMaxDamage())+_equip->arma->getMinDamage());
+				_alvo->takeDamage(testValue);
 			}
 		}
 	}

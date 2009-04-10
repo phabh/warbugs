@@ -12,6 +12,7 @@
 #include "CBonus.cpp"
 #include "CItem.cpp"
 #include "CPoder.cpp"
+#include "CBonusSecundario.cpp"
 #include <list>
 #include <irrlicht.h>
 using namespace std;
@@ -28,16 +29,16 @@ class CPersonagem : public C3DObject{
 protected:
 	EstadoPersonagem estado;
 	//Tempo de respawn
-	irr::core::array<CItem> *inventario;
+	irr::core::array<CItem*> *inventario;
 	CHabilidadesSecundarias *habilidadesSecundarias;
 	CBonusSecundario *bonusSecundario;
-	irr::core::array<CPoder> *poderes;
+	irr::core::array<CPoder*> *poderes;
 public:
 	CPersonagem(){
-		inventario = new irr::core::array<CItem>();
+		inventario = new irr::core::array<CItem*>();
 		habilidadesSecundarias = new CHabilidadesSecundarias();
 		bonusSecundario = new CBonusSecundario();
-		poderes = new irr::core::array<CPoder>();
+		poderes = new irr::core::array<CPoder*>();
 	}
 	//Getters e Setters
 	CHabilidadesSecundarias getStats()
@@ -46,9 +47,11 @@ public:
 	}
 	//Outros métodos
 	void move(){}
-	virtual void attack(CPersonagem *alvo, int attackType)=0;
+	virtual void attack(int attackType)=0;
+	virtual void takeDamage(int damage)=0;
 	void die(){}
-	void useItem(CItem *item){}
+	virtual void useItem(CItem *item)=0;
 	void useSkill(CPoder *skill){}
+
 };
 #endif
