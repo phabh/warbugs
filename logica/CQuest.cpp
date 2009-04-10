@@ -9,12 +9,12 @@
 *
 */
 #include "CItem.cpp"
-#include "CLogicObject.cpp"
-#include "CAtributo.cpp"
+#include "CObject.cpp"
+#include "CLealdade.cpp"
 #ifndef _CQUEST
 #define _CQUEST
 
-class CQuest : public CLogicObject{
+class CQuest : public CObject{
 private:
 	//CPersonagem *_jogador;
 	CItem *_itemNecessario;

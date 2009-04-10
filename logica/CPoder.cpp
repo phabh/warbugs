@@ -8,7 +8,7 @@
 * Objetivo: Descrever os poderes de um personagem
 *
 */
-#include "CLogicObject.cpp"
+#include "CObject.cpp"
 #include "CBuff.cpp"
 #include <string>
 using namespace std;
@@ -16,7 +16,7 @@ using namespace std;
 #define _CPODER
 
 
-class CPoder : public CLogicObject
+class CPoder : public CObject
 {
 private:
 	string _nome;

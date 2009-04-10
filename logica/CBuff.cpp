@@ -8,12 +8,12 @@
 * Objetivo: Descrever os buffs que serão utilizados durante o jogo
 *
 */
-#include "CLogicObject.cpp"
+#include "CObject.cpp"
 #ifndef _CBUFF
 #define _CBUFF
 
 
-class CBuff : public CLogicObject
+class CBuff : public CObject
 {
 private:
 	int _duracao;

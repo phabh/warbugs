@@ -1,35 +1,36 @@
 /*
 * Classe CBonus
 *
-* Versão: 0.01
-*
 * Autor: Eder Figueiredo
 *
 * Objetivo: Descrever os bonus de um personagem
 *
 */
-#include "CAtributo.cpp"
+#include "CHabilidades.cpp"
+#include "CHabilidadesSecundarias.cpp"
 #include "CBuff.cpp"
 #ifndef _CBONUS
 #define _CBONUS
 
 
-class CBonus abstract
+class CBonus
 {
-public:
+protected:
 	CBuff *origem;
-	CBonus(){}
+public:
+	CBonus()
+	{
+		origem = NULL;
+	}
+	CBuff getBuff()
+	{
+		return(*origem);
+	}
+	void setOrigem(CBuff *buff)
+	{
+		origem = buff;
+	}
 	void aplly(){}
 	void remove(){}
-};
-// ------------------------------------------------------------------------------------------------------------
-class CBonusPrimario : public CBonus
-{
-	CHabilidades *valor;
-};
-// ------------------------------------------------------------------------------------------------------------
-class CBonusSecundario : public CBonus
-{
-	CHabilidadesSecundarias *valor;
 };
 #endif
