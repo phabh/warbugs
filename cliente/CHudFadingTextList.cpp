@@ -6,28 +6,35 @@ using namespace video;
 using namespace gui;
 using namespace scene;
 
+
+
 class CHudFadingTextList 
 { 
 
 public: 
 
+	int m_nItems; 
+	IGUIStaticText * *m_texts; 
+   
 	CHudFadingTextList(){}
 
-   void start(IGUIEnvironment * gui, IGUIFont * font, rect<s32> const & totalSize, 
-               u8 initialAlpha = 255, u8 finalAlpha = 64, bool scrollDown = true) 
+   void start(IGUIEnvironment * gui, IGUIFont * font, rect<s32> const & totalSize, u8 initialAlpha = 255, u8 finalAlpha = 64, bool scrollDown = true) 
    { 
+	   
+
       if(!gui || !font) 
          return; 
 
       s32 itemHeight = font->getDimension(L"A").Height; 
-      m_maxItems = (totalSize.LowerRightCorner.Y - totalSize.UpperLeftCorner.Y) / itemHeight; 
+	  m_nItems = (int)(totalSize.LowerRightCorner.Y - totalSize.UpperLeftCorner.Y) / itemHeight; 
+      
 
-      m_texts = (IGUIStaticText * *)malloc(sizeof(IGUIStaticText *) * m_maxItems); 
+      m_texts = (IGUIStaticText * *)malloc(sizeof(IGUIStaticText *) * m_nItems); 
 
       f32 currentAlpha = (f32)initialAlpha; 
-      f32 stepAlpha = (currentAlpha - finalAlpha) / (m_maxItems - 1); 
+      f32 stepAlpha = (currentAlpha - finalAlpha) / (m_nItems - 1); 
 
-      for(int item = 0; item < m_maxItems; ++item) 
+      for(int item = 0; item < m_nItems; ++item) 
       { 
          m_texts[item] = gui->addStaticText(L"", totalSize); 
          m_texts[item]->setOverrideFont(font); 
@@ -59,7 +66,7 @@ public:
    void addText(wchar_t const * text, SColor const & colour = SColor(255, 255, 255, 255)) 
    { 
  
-      for(int item = m_maxItems - 1; item > 0; --item) 
+      for(int item = m_nItems - 1; item > 0; --item) 
       { 
          m_texts[item]->setText(m_texts[item - 1]->getText()); 
          SColor movedColour(m_texts[item - 1]->getOverrideColor()); 
@@ -84,9 +91,10 @@ public:
       addText(wideText.c_str(), colour); 
    } 
 */
-private: 
 
-   IGUIStaticText * *   m_texts; 
-   int               m_maxItems; 
+   
+//private: 
+
+    
 
 }; 
