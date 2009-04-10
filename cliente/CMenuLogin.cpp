@@ -14,7 +14,7 @@ private:
 		_gerenciadorHud->clear();
 		_gerenciadorHud->addEditBox(L"login", rect<s32>(300,500,400,520), true, 0, 10);
 		_gerenciadorHud->addEditBox(L"senha", rect<s32>(300,530,400,550), true, 0, 20);
-		_gerenciadorHud->addButton(rect<s32>(420,500,520,550), 0, 30, L"conectar");
+		_gerenciadorHud->addButton(rect<s32>(420,500,520,550), 0, 2, L"conectar");
 	}
 
 	void updateCommands()
@@ -25,7 +25,7 @@ private:
 		{
 			// Trata os cliques em botões
 
-			if (_gerenciadorEventos->getEventCallerByID() == 30)
+			if (_gerenciadorEventos->getEventCallerByID() == 2)
 			{
 				// Clicou no botão conectar
 				_myID = SELECAOPERSONAGEM;

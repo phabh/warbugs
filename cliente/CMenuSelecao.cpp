@@ -13,14 +13,23 @@ private:
 	ISceneNode *_nodoSelecionado;
 	int _idPersonagem;
 
+	float _camRotation;
+	float _camCurrRotation;
+
 	void updateHuds()
 	{
 
 		_gerenciadorHud->clear();
-		_gerenciadorHud->addButton(rect<s32>(440,500,540,540), 0, 100, L"Criar");
+		
+		_gerenciadorHud->addButton(rect<s32>(440,500,540,540), 0, 3, L"Criar");
 
-		if(_flags[OBJSELECTED])
-			_gerenciadorHud->addButton(rect<s32>(320,500,430,540), 0, 200, L"Jogar");
+		
+
+		//if(_flags[OBJSELECTED])
+		_gerenciadorHud->addButton(rect<s32>(320,500,430,540), 0, 4, L"Jogar");
+
+		_gerenciadorHud->addButton(rect<s32>(140,10,240,50), 0, 5, L"<");
+		_gerenciadorHud->addButton(rect<s32>(540,10,640,50), 0, 6, L">");
 
 		_flags[CHANGED] = false;
 	}
@@ -28,6 +37,9 @@ private:
 	void updateCommands()
 	{
 		_timer->update();
+
+		_camera->setRotation(vector3df(0,_camCurrRotation,0));
+
 
 		if(_gerenciadorEventos->isMouseButtonReleased(MBLEFT))
 		{
@@ -59,14 +71,24 @@ private:
 				// Trata os cliques em botões
 				switch (_gerenciadorEventos->getEventCallerByID())
 				{
-					case 100:
+					case 3:
 						_myID = CRIACAOPERSONAGEM;
 					break;
 
-					case 200:
+					case 4:
 						_myID =  JOGO;
 					break;
-					
+
+					case 5:
+						_camRotation+=90;
+						cout << "\n" << _camRotation;
+					break;
+
+					case 6:
+						_camRotation-=90;
+						cout << "\n" << _camRotation;
+					break;
+				
 					default:
 						cout << "\nID de botao desconhecido." << endl;
 				};
@@ -77,6 +99,26 @@ private:
 	void updateGraphics()
 	{
 		_timer->update();
+
+		float delta = fabs(_camRotation - _camCurrRotation);
+
+		if(	_camRotation != _camCurrRotation )
+		{
+			if(delta < 4)
+				_camCurrRotation = _camRotation;
+			else
+			{
+				if(_camRotation > _camCurrRotation)
+					_camCurrRotation += 1*delta/100;
+
+				else if(_camRotation < _camCurrRotation)
+					_camCurrRotation -= 1*delta/100;
+			}
+		}
+
+		cout << "\n" << _camCurrRotation;
+
+		_camera->setRotation(vector3df(0,_camCurrRotation,0));
 	}
 	
 
@@ -125,10 +167,13 @@ public:
 			_skin->setFont(_font);
 
 		_skin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_TOOLTIP);
-
 		
-		_camera = _gerenciadorCena->addCameraSceneNode(0,vector3df(0,50,0), vector3df(0,0,50));
+		_camera = _gerenciadorCena->addCameraSceneNode(0, vector3df(0,0,0));
 
+		_camera->bindTargetAndRotation(true);
+
+		_camRotation = 0;
+		_camCurrRotation = 0;
 
 		return (true);
 	}

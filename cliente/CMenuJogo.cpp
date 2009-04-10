@@ -20,7 +20,7 @@ class CMenuJogo : public CMenu
 
 private:
 
-	enum flagJogo {CHANGED, OBJSELECTED, INVENTARIO, CHAT, STATUS};
+	enum flagJogo {CHANGED, OBJSELECTED, INVENTARIO, CHAT, STATUS, CFG};
 	ISceneNode *_nodoSelecionado;
 	int _idPersonagem;
 
@@ -29,15 +29,26 @@ private:
 
 	IGUIWindow *_invWindow,
 			   *_chatWindow,	
-			   *_statWindow;
+			   *_statWindow,
+			   *_configWindow;
 
 	CHudRoleta *_roleta;
 	
 	void updateHuds()
 	{
 		_gerenciadorHud->clear();
-		_gerenciadorHud->addButton(rect<s32>(440,500,540,540), 0, 100, L"Sair");
+		_gerenciadorHud->addButton(rect<s32>(440,500,540,540), 0, 8, L"Sair");
+
+		_gerenciadorHud->addButton(rect<s32>(0,0,50,50), 0, 9, L"Config");
 		_flags[CHANGED] = false;
+
+		_roleta = new CHudRoleta( 
+		rect<s32>(600, 400, 800, 600),  // Area da roleta
+		_gerenciadorHud,						 // Gerenciador de Hud
+		_gerenciadorHud->getRootGUIElement(), // Raiz do gerenciador de Hud 
+		_gerenciadorVideo->getTexture("recursos/huds/roleta.png"),   
+		_gerenciadorVideo->getTexture("recursos/huds/ponteiro.png")
+		);
 	}
 
 	void updateCommands()
@@ -49,7 +60,7 @@ private:
 
 			if(_gerenciadorEventos->getEventCallerByElement(EGET_BUTTON_CLICKED))
 			{
-				if (_gerenciadorEventos->getEventCallerByID() == 100)
+				if (_gerenciadorEventos->getEventCallerByID() == 8)
 					_myID = CREDITOS;
 			}		
 		}
@@ -59,21 +70,8 @@ private:
 			_roleta->move(_gerenciadorEventos->getDeltaMouseWheelPosition());
 		}
 
-		if(_gerenciadorEventos->isKeyPressed(KEY_KEY_I))
-		{
-			if(_flags[INVENTARIO])
-			{
-				_invWindow->setVisible(false);
-				_flags[INVENTARIO] = false;
-			}
-			else
-			{
-				_invWindow->setVisible(true);
-				_flags[INVENTARIO] = true;
-			}
-		}
-
-		if(_gerenciadorEventos->isKeyPressed(KEY_KEY_C))
+		 
+	    if(_gerenciadorEventos->isKeyPressed(KEY_RETURN))
 		{
 			if(_flags[CHAT])
 			{
@@ -87,17 +85,49 @@ private:
 			}
 		}
 
-		if(_gerenciadorEventos->isKeyPressed(KEY_KEY_S))
+		if(_gerenciadorEventos->isKeyDown(KEY_MENU))
 		{
-			if(_flags[STATUS])
+			// ALT +
+			if(_gerenciadorEventos->isKeyPressed(KEY_KEY_I))
 			{
-				_statWindow->setVisible(false);
-				_flags[STATUS] = false;
+				if(_flags[INVENTARIO])
+				{
+					_invWindow->setVisible(false);
+					_flags[INVENTARIO] = false;
+				}
+				else
+				{
+					_invWindow->setVisible(true);
+					_flags[INVENTARIO] = true;
+				}
 			}
-			else
+
+			if(_gerenciadorEventos->isKeyPressed(KEY_KEY_C))
 			{
-				_statWindow->setVisible(true);
-				_flags[STATUS] = true;
+				if(_flags[CHAT])
+				{
+					_configWindow->setVisible(false);
+					_flags[CFG] = false;
+				}
+				else
+				{
+					_chatWindow->setVisible(true);
+					_flags[CFG] = true;
+				}
+			}
+
+			if(_gerenciadorEventos->isKeyPressed(KEY_KEY_S))
+			{
+				if(_flags[STATUS])
+				{
+					_statWindow->setVisible(false);
+					_flags[STATUS] = false;
+				}
+				else
+				{
+					_statWindow->setVisible(true);
+					_flags[STATUS] = true;
+				}
 			}
 		}
 	}
@@ -134,6 +164,7 @@ public:
 		_flags[INVENTARIO] = false;
 		_flags[CHAT] = false;
 		_flags[STATUS] = false;
+		_flags[CFG] = false;
 
 		_dispositivo->setWindowCaption(L"Warbugs - BETA Version 0.1");
 
@@ -190,14 +221,6 @@ public:
 		_invWindow->setVisible(false);
 		_chatWindow->setVisible(false);
 		_statWindow->setVisible(false);
-
-		_roleta = new CHudRoleta( 
-		rect<s32>(600, 400, 800, 600),  // Area da roleta
-		_gerenciadorHud,						 // Gerenciador de Hud
-		_gerenciadorHud->getRootGUIElement(), // Raiz do gerenciador de Hud 
-		_gerenciadorVideo->getTexture("recursos/huds/roleta.png"),   
-		_gerenciadorVideo->getTexture("recursos/huds/ponteiro.png")
-		);
 
 		return (true);
 	}

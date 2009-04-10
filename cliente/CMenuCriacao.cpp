@@ -17,7 +17,7 @@ private:
 	{
 
 		_gerenciadorHud->clear();
-		_gerenciadorHud->addButton(rect<s32>(440,500,540,540), 0, 100, L"Criar");
+		_gerenciadorHud->addButton(rect<s32>(440,500,540,540), 0, 7, L"Criar");
 
 		_flags[CHANGED] = false;
 	}
@@ -57,7 +57,7 @@ private:
 
 				switch (_gerenciadorEventos->getEventCallerByID())
 				{
-					case 100:
+					case 7:
 						_myID = SELECAOPERSONAGEM;
 					break;
 					

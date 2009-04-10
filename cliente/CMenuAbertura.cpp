@@ -12,7 +12,7 @@ private:
 	void updateHuds()
 	{
 		_gerenciadorHud->clear();
-		_gerenciadorHud->addButton(rect<s32>(320, 500, 450, 532), 0, 100, L"pular video");
+		_gerenciadorHud->addButton(rect<s32>(320, 500, 450, 532), 0, 1, L"pular video");
 	}
 
 	void updateCommands()
@@ -22,7 +22,7 @@ private:
 		if(_gerenciadorEventos->getEventCallerByElement(EGET_BUTTON_CLICKED))
 		{
 			// Trata os cliques em botões
-			if (_gerenciadorEventos->getEventCallerByID() == 100)
+			if (_gerenciadorEventos->getEventCallerByID() == 1)
 				_myID = LOGIN;
 		}
 	}
@@ -68,7 +68,9 @@ public:
 			_gerenciadorCena->loadScene(_arquivoCena);
 		
 		_skin = _gerenciadorHud->getSkin();
-		_font = _gerenciadorHud->getFont("recursos/fonts/font_georgia.png");
+
+		_font = _gerenciadorHud->getFont("recursos/fonts/snapitc.xml");
+			//("recursos/fonts/font_georgia.png");
 		
 		if (_font)
 			_skin->setFont(_font);

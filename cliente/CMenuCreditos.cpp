@@ -10,11 +10,14 @@ class CMenuCreditos : public CMenu
 
 private:
 
-	CHudFadingTextList *_textList;
+	CHudFadingTextList _creditos;
 
 	void updateHuds()
 	{
 		_gerenciadorHud->clear();
+        
+		_creditos.start(_gerenciadorHud, _font, rect<s32>(0,0,500,500), 255, 1);
+
 		_gerenciadorHud->addButton(rect<s32>(320, 500, 450, 532), 0, 500, L"Sair");
 	}
 
@@ -30,16 +33,20 @@ private:
 	void updateGraphics()
 	{
 		_timer->update();
+
+		_creditos.addText(L"Testando creditos");
+		_creditos.addText(L"Testando creditos2");
+
 	}
 	
 
 public:
 
+
 	CMenuCreditos(){}
 	
 	bool start(IrrlichtDevice *grafico, ISoundEngine *audio)
 	{
-		
 		_gameCfg = new CArquivoConfig();
 		TypeCfg cfg = _gameCfg->loadConfig();
 
