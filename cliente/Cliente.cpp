@@ -14,12 +14,40 @@ int main()
 {
 	CMenu *menuCorrente;
 
+	IrrlichtDevice *dispositivoGrafico; 
+	ISoundEngine *dispositivoAudio;
+	CGerEventos gerenciadorEventos;
+
 	menuID nextMenu = ABERTURA;
 
 	CTimer *timer = new CTimer();
 
 	CArquivoConfig *gameCfg = new CArquivoConfig();
-	gameCfg->reset();
+	TypeCfg cfg = gameCfg->loadConfig();
+		
+
+dispositivoGrafico = createDevice(EDT_DIRECT3D9, 
+		  						cfg.parametrosVideo.WindowSize, 
+								cfg.parametrosVideo.Bits, 
+								cfg.parametrosVideo.Fullscreen, 
+								cfg.parametrosVideo.Stencilbuffer, 
+								cfg.parametrosVideo.Vsync, 									
+								&gerenciadorEventos);
+
+	if(!dispositivoGrafico)
+	{
+		cout << "\nERRO 0x00: Falha ao inicializar o dispositivo grafico.";
+		nextMenu = SAIDA;
+	}
+		
+	dispositivoAudio = createIrrKlangDevice();
+
+	if(!dispositivoAudio)
+	{
+		cout << "\nERRO 0x00: Falha ao inicializar o dispositivo de audio.";
+		nextMenu = SAIDA;
+	}
+
 	
 	while(nextMenu != SAIDA && nextMenu != ERRO)
 	{
@@ -30,39 +58,39 @@ int main()
 			case ABERTURA:
 
 				menuCorrente = new CMenuAbertura();
-				if( ((CMenuAbertura*)menuCorrente)->start())
+				if( ((CMenuAbertura*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio))
 					nextMenu = ((CMenuAbertura*)menuCorrente)->run();
 				break;
 
 			case LOGIN:
 
 				menuCorrente = new CMenuLogin();
-				if( ((CMenuLogin*)menuCorrente)->start())
+				if( ((CMenuLogin*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio))
 					nextMenu = ((CMenuLogin*)menuCorrente)->run();
 				break;
 
 			case SELECAOPERSONAGEM:
 
 				menuCorrente = new CMenuSelecao();
-				if( ((CMenuSelecao*)menuCorrente)->start())
+				if( ((CMenuSelecao*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio))
 					nextMenu = ((CMenuSelecao*)menuCorrente)->run();
 				break;
 
 			case CRIACAOPERSONAGEM:
 				menuCorrente = new CMenuCriacao();
-				if( ((CMenuCriacao*)menuCorrente)->start())
+				if( ((CMenuCriacao*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio))
 					nextMenu = ((CMenuCriacao*)menuCorrente)->run();
 				break;
 
 			case JOGO:
 				menuCorrente = new CMenuJogo();
-				if( ((CMenuJogo*)menuCorrente)->start())
+				if( ((CMenuJogo*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio))
 					nextMenu = ((CMenuJogo*)menuCorrente)->run();
 				break;
 
 			case CREDITOS:
 				menuCorrente = new CMenuCreditos();
-				if( ((CMenuCreditos*)menuCorrente)->start())
+				if( ((CMenuCreditos*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio))
 					nextMenu = ((CMenuCreditos*)menuCorrente)->run();
 				break;
 
@@ -70,6 +98,9 @@ int main()
 				cout << "\nID de menu nao identificado." << endl;
 		};
 	}
+
+	dispositivoGrafico->drop(); // Deleta o dispositivo grafico da memória
+    dispositivoAudio->drop();   // Deleta o dispositivo de audio da memória
 
 	return 1;
 }

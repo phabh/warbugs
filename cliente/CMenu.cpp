@@ -36,7 +36,7 @@ protected:
 	IVideoDriver *_gerenciadorVideo; 
 	ISceneManager *_gerenciadorCena; 
 	IGUIEnvironment *_gerenciadorHud;
-	CGerEventos _gerenciadorEventos;
+	CGerEventos *_gerenciadorEventos;
 	ISoundEngine *_gerenciadorAudio;
 	IGUISkin *_skin;
 	IGUIFont *_font;
@@ -50,15 +50,15 @@ protected:
 
 	CToonShader *_toonShader;
 
-	virtual void updateHuds() {}
-	virtual void updateCommands() {}
-	virtual void updateGraphics() {}
+	virtual void updateHuds()=0;// {}
+	virtual void updateCommands()=0;// {}
+	virtual void updateGraphics()=0;// {}
 	
 public:
 
 	CMenu(){}
-	virtual bool start() { return false; }
-	virtual menuID run() { return ERRO; }
+	virtual bool start(IrrlichtDevice *grafico, ISoundEngine *audio)= 0;// { return false; }
+	virtual menuID run() = 0;//{ return ERRO; }
 };
 
 #endif;
