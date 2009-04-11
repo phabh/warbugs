@@ -189,8 +189,11 @@ public:
 		_skin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_TOOLTIP);
 
 		
-		_camera = _gerenciadorCena->addCameraSceneNode(0,vector3df(0,50,0), vector3df(0,0,50));		
+		_camera = _gerenciadorCena->addCameraSceneNodeFPS();//(0, vector3df(990,70,980));//, vector3df(0,0,50));		
 		
+		_camera->setPosition(vector3df(990,70,980));
+		//_camera->setTarget(_camera->getPosition()+vector3df(0,-70,50));
+
 		s32 Width = _gerenciadorVideo->getViewPort().getWidth();
 		s32 Height = _gerenciadorVideo->getViewPort().getHeight();
 
