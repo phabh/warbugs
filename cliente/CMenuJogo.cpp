@@ -15,6 +15,7 @@ using namespace video;
 using namespace io; 
 using namespace gui; 
 
+
 class CMenuJogo : public CMenu
 {
 
@@ -33,7 +34,14 @@ private:
 			   *_configWindow;
 
 	CHudRoleta *_roleta;
-	
+
+	ITerrainSceneNode *_terreno;
+	IAnimatedMesh* _malha[10];
+	ITexture* _textura[10];
+	IAnimatedMeshSceneNode* _modelo[10];
+
+	float _direcao, _velocidade;
+
 	void updateHuds()
 	{
 		_gerenciadorHud->clear();
@@ -83,6 +91,36 @@ private:
 				_chatWindow->setVisible(true);
 				_flags[CHAT] = true;
 			}
+		}
+
+		if(_gerenciadorEventos->isKeyDown(KEY_KEY_W))
+		{
+			_modelo[0]->setPosition(_modelo[0]->getPosition() + 
+				                   vector3df(cos(((_direcao)*PI)/180)*_velocidade,
+								   0,
+								   -sin(((_direcao)*PI)/180)*_velocidade));
+
+			//_terreno->getHeight(_modelo[0]->getPosition().X, _modelo[0]->getPosition().Z)
+		}
+
+		if(_gerenciadorEventos->isKeyDown(KEY_KEY_S))
+		{
+			_modelo[0]->setPosition(_modelo[0]->getPosition() + 
+				                    vector3df(cos(((_direcao+180)*PI)/180)*_velocidade,
+									0,
+                                    -sin(((_direcao+180)*PI)/180)*_velocidade));
+		}
+
+		if(_gerenciadorEventos->isKeyDown(KEY_KEY_A))
+		{
+		   _direcao-=1;
+		   _modelo[0]->setRotation(vector3df(0.f, _direcao, 0.f));
+		}
+
+		if(_gerenciadorEventos->isKeyDown(KEY_KEY_D))
+		{
+		   _direcao+=1;
+		   _modelo[0]->setRotation(vector3df(0.f, _direcao, 0.f));
 		}
 
 		if(_gerenciadorEventos->isKeyDown(KEY_MENU))
@@ -188,11 +226,25 @@ public:
 
 		_skin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_TOOLTIP);
 
+		_terreno = (ITerrainSceneNode*)_gerenciadorCena->getSceneNodeFromType(ESNT_TERRAIN, 0);
 		
-		_camera = _gerenciadorCena->addCameraSceneNodeFPS();//(0, vector3df(990,70,980));//, vector3df(0,0,50));		
+	    _textura[0] = _gerenciadorVideo->getTexture("recursos/texturas/louva_lider.jpg");
+		_malha[0] = _gerenciadorCena->getMesh("recursos/modelos/louva_lider.3ds");
+
+		_modelo[0] = _gerenciadorCena->addAnimatedMeshSceneNode(_malha[0]);
+		_modelo[0]->setMaterialFlag(EMF_LIGHTING, false);
+		_modelo[0]->setMaterialTexture(0, _textura[0]);
+
+		_modelo[0]->setPosition(vector3df(990,_terreno->getHeight(990,980)+2,980));
+
+		_camera = _gerenciadorCena->addCameraSceneNode();
 		
-		_camera->setPosition(vector3df(990,70,980));
-		//_camera->setTarget(_camera->getPosition()+vector3df(0,-70,50));
+
+		_camera->setPosition(_modelo[0]->getPosition() + vector3df(-20,30,0));
+		_camera->setTarget(_modelo[0]->getPosition());
+
+		_direcao = 0;
+		_velocidade = 0.1;
 
 		s32 Width = _gerenciadorVideo->getViewPort().getWidth();
 		s32 Height = _gerenciadorVideo->getViewPort().getHeight();
@@ -253,6 +305,11 @@ public:
 				_timer->update();
 
 				updateCommands();
+
+				
+				_modelo[0]->setPosition(vector3df(_modelo[0]->getPosition().X, _terreno->getHeight(_modelo[0]->getPosition().X,_modelo[0]->getPosition().Z)+2, _modelo[0]->getPosition().Z));
+				_camera->setPosition(_modelo[0]->getPosition() + vector3df(-20,30,0));
+		        _camera->setTarget(_modelo[0]->getPosition());
 
 				_roleta->update();
 
