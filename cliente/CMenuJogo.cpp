@@ -31,16 +31,25 @@ private:
 	IGUIWindow *_invWindow,
 			   *_chatWindow,	
 			   *_statWindow,
-			   *_configWindow;
+			   *_cfgWindow;
 
 	CHudRoleta *_roleta;
 
 	ITerrainSceneNode *_terreno;
-	IAnimatedMesh* _malha[10];
-	ITexture* _textura[10];
-	IAnimatedMeshSceneNode* _modelo[10];
+	IAnimatedMesh *_malha[10];
+	ITexture *_textura[10];
+	IAnimatedMeshSceneNode *_modelo[10];
 
 	float _direcao, _velocidade;
+
+
+	//minipama
+	CHudMiniMapa *_miniMapa;
+	aabbox3df _terrenoBox;
+	ITexture* _heightmapTx;
+	dimension2d<s32> _miniMapaDim;
+	position2d<s32> _miniMapaPos;
+	dimension2d<s32> _terrenoBoxDim;
 
 	void updateHuds()
 	{
@@ -77,9 +86,9 @@ private:
 		{
 			_roleta->move(_gerenciadorEventos->getDeltaMouseWheelPosition());
 		}
-
+/*
 		 
-	    if(_gerenciadorEventos->isKeyPressed(KEY_RETURN))
+	    if(_gerenciadorEventos->isKeyPressed(KEY_KEY_H))
 		{
 			if(_flags[CHAT])
 			{
@@ -93,14 +102,60 @@ private:
 			}
 		}
 
+		if(_gerenciadorEventos->isKeyPressed(KEY_KEY_I))
+		{
+			if(_flags[INVENTARIO])
+			{
+				_invWindow->setVisible(false);
+				_flags[INVENTARIO] = false;
+			}
+			else
+			{
+				_invWindow->setVisible(true);
+				_flags[INVENTARIO] = true;
+			}
+		}
+
+		if(_gerenciadorEventos->isKeyPressed(KEY_KEY_C))
+		{
+			if(_flags[CFG])
+			{
+				_cfgWindow->setVisible(false);
+				_flags[CFG] = false;
+			}
+			else
+			{
+				_cfgWindow->setVisible(true);
+				_flags[CFG] = true;
+			}
+		}
+
+		if(_gerenciadorEventos->isKeyPressed(KEY_KEY_T))
+		{
+			if(_flags[STATUS])
+			{
+				_statWindow->setVisible(false);
+				_flags[STATUS] = false;
+			}
+			else
+			{
+				_statWindow->setVisible(true);
+				_flags[STATUS] = true;
+			}
+		}
+
+*/
+
+
+
+
+
 		if(_gerenciadorEventos->isKeyDown(KEY_KEY_W))
 		{
 			_modelo[0]->setPosition(_modelo[0]->getPosition() + 
 				                   vector3df(cos(((_direcao)*PI)/180)*_velocidade,
 								   0,
 								   -sin(((_direcao)*PI)/180)*_velocidade));
-
-			//_terreno->getHeight(_modelo[0]->getPosition().X, _modelo[0]->getPosition().Z)
 		}
 
 		if(_gerenciadorEventos->isKeyDown(KEY_KEY_S))
@@ -123,51 +178,6 @@ private:
 		   _modelo[0]->setRotation(vector3df(0.f, _direcao, 0.f));
 		}
 
-		if(_gerenciadorEventos->isKeyDown(KEY_MENU))
-		{
-			// ALT +
-			if(_gerenciadorEventos->isKeyPressed(KEY_KEY_I))
-			{
-				if(_flags[INVENTARIO])
-				{
-					_invWindow->setVisible(false);
-					_flags[INVENTARIO] = false;
-				}
-				else
-				{
-					_invWindow->setVisible(true);
-					_flags[INVENTARIO] = true;
-				}
-			}
-
-			if(_gerenciadorEventos->isKeyPressed(KEY_KEY_C))
-			{
-				if(_flags[CHAT])
-				{
-					_configWindow->setVisible(false);
-					_flags[CFG] = false;
-				}
-				else
-				{
-					_chatWindow->setVisible(true);
-					_flags[CFG] = true;
-				}
-			}
-
-			if(_gerenciadorEventos->isKeyPressed(KEY_KEY_S))
-			{
-				if(_flags[STATUS])
-				{
-					_statWindow->setVisible(false);
-					_flags[STATUS] = false;
-				}
-				else
-				{
-					_statWindow->setVisible(true);
-					_flags[STATUS] = true;
-				}
-			}
-		}
 	}
 
 
@@ -199,6 +209,7 @@ public:
 		_idPersonagem = -1;
 		_flags[OBJSELECTED] = false;
 		_flags[CHANGED] = true;
+
 		_flags[INVENTARIO] = false;
 		_flags[CHAT] = false;
 		_flags[STATUS] = false;
@@ -228,6 +239,22 @@ public:
 
 		_terreno = (ITerrainSceneNode*)_gerenciadorCena->getSceneNodeFromType(ESNT_TERRAIN, 0);
 		
+
+		//MINIMAPA
+		_terrenoBox = _terreno->getBoundingBox();
+
+		_heightmapTx = _gerenciadorVideo->getTexture("recursos/texturas/minimapa.png"); //map 
+
+		_miniMapaDim = _heightmapTx->getSize(); 
+		 
+		_miniMapaPos.X = 600; 
+		_miniMapaPos.Y = 0; 
+
+		_terrenoBoxDim = dimension2d<s32>(abs(_terrenoBox.MaxEdge.X) - abs(_terrenoBox.MinEdge.X), 
+								   abs(_terrenoBox.MaxEdge.Z) - abs(_terrenoBox.MinEdge.Z));
+
+		//------------
+
 	    _textura[0] = _gerenciadorVideo->getTexture("recursos/texturas/louva_lider.jpg");
 		_malha[0] = _gerenciadorCena->getMesh("recursos/modelos/louva_lider.3ds");
 
@@ -250,14 +277,21 @@ public:
 		s32 Height = _gerenciadorVideo->getViewPort().getHeight();
 
 		_invWindow = _gerenciadorHud->addWindow(rect<s32>(0, 0, 250, 200), false, L"Inventario"); 
-		_invWindow->setVisible(true); 
-
 		_invWindow->getCloseButton()->setEnabled(false); 
 		_invWindow->getCloseButton()->setToolTipText(L""); 
 		_invWindow->getCloseButton()->setVisible(false); 
 
+		_statWindow = _gerenciadorHud->addWindow(rect<s32>(0, 0, 150, 80), false, L"Status"); 
+		_statWindow->getCloseButton()->setEnabled(false); 
+		_statWindow->getCloseButton()->setToolTipText(L""); 
+		_statWindow->getCloseButton()->setVisible(false); 
+
+		_cfgWindow = _gerenciadorHud->addWindow(rect<s32>(0, 0, 500, 500), false, L"Config"); 
+		_cfgWindow->getCloseButton()->setEnabled(false); 
+		_cfgWindow->getCloseButton()->setToolTipText(L""); 
+		_cfgWindow->getCloseButton()->setVisible(false); 
+
 		_chatWindow = _gerenciadorHud->addWindow(rect<s32>(0, Height-200, Width/4, Height), false, L"Chat");     
-		
 		_chatWindow->getCloseButton()->setEnabled(false); 
 		_chatWindow->getCloseButton()->setToolTipText(L""); 
 		_chatWindow->getCloseButton()->setVisible(false); 
@@ -265,24 +299,17 @@ public:
 		_chatText = _gerenciadorHud->addListBox(rect<s32>(5, 25, Width/4-5, 165), _chatWindow); 
 		_chatInput = _gerenciadorHud->addEditBox(L"", rect<s32>(5, 170, Width/4-30, 195), true, _chatWindow);
 
-
-		_statWindow = _gerenciadorHud->addWindow(rect<s32>(0, 0, 150, 80), false, L"Status"); 
-		_statWindow->setVisible(true); 
-
-		_statWindow->getCloseButton()->setEnabled(false); 
-		_statWindow->getCloseButton()->setToolTipText(L""); 
-		_statWindow->getCloseButton()->setVisible(false); 
-
 		_invWindow->setVisible(false);
 		_chatWindow->setVisible(false);
 		_statWindow->setVisible(false);
+		_cfgWindow->setVisible(false);
 
 		return (true);
 	}
 
 	menuID run()
 	{
-
+		stringw tmp(L"");
 		updateHuds();
 
 		float rot = 1;
@@ -298,6 +325,9 @@ public:
 			
 					_gerenciadorCena->drawAll(); 
 					_gerenciadorHud->drawAll();
+
+					_gerenciadorVideo->draw2DImage(_heightmapTx, _miniMapaPos); 
+                    tmp += _miniMapa->update(_gerenciadorCena, _gerenciadorVideo, _miniMapaDim, _miniMapaPos, _terrenoBoxDim); 
 		
 				_gerenciadorVideo->endScene();
 				// Stop Render
@@ -326,6 +356,12 @@ public:
 					_myID = SAIDA;
 					return _myID;
 				}	
+
+                tmp += L"]"; 
+                _dispositivo->setWindowCaption(tmp.c_str()); 
+				tmp = L"";
+
+				
 
 				_gerenciadorEventos->startEventProcess(); // Ativa a escuta de eventos.
 			}
