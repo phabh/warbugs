@@ -69,7 +69,8 @@ public:
 		
 		_skin = _gerenciadorHud->getSkin();
 
-		_font = _gerenciadorHud->getFont("recursos/fonts/snapitc.xml");
+		_font = _gerenciadorHud->getFont("recursos/fonts/font_georgia.png");
+		//_font = _gerenciadorHud->getFont("recursos/fonts/snapitc.xml");
 			//("recursos/fonts/font_georgia.png");
 		
 		if (_font)
