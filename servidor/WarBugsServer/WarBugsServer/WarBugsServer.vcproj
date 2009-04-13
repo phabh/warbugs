@@ -60,7 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Libs\mysql++.lib $(NOINHERIT)"
+				AdditionalDependencies="Libs\mysql++.lib ws2_32.lib $(NOINHERIT)"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
@@ -224,6 +224,14 @@
 				RelativePath=".\WarBugsServer.cpp"
 				>
 			</File>
+			<Filter
+				Name="BugNet"
+				>
+				<File
+					RelativePath=".\dreamSock.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -252,7 +260,15 @@
 				Name="WarBugs"
 				>
 				<File
+					RelativePath=".\CCenarioServer.h"
+					>
+				</File>
+				<File
 					RelativePath=".\CDataBase.h"
+					>
+				</File>
+				<File
+					RelativePath=".\commom.h"
 					>
 				</File>
 			</Filter>
@@ -321,6 +337,18 @@
 				</File>
 				<File
 					RelativePath=".\MySQL\undef_short.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="BugNet"
+				>
+				<File
+					RelativePath=".\dreamSock.h"
+					>
+				</File>
+				<File
+					RelativePath=".\dreamSockLog.h"
 					>
 				</File>
 			</Filter>

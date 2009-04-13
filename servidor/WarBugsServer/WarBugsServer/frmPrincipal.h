@@ -1,5 +1,6 @@
 #pragma once
 #include "CDataBase.h"
+#include "dreamSock.h"
 #include <vcclr.h>
 
 
@@ -119,6 +120,8 @@ namespace WarBugsServer {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  nomePersonagem;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  nomeCenario;
 	private: System::Windows::Forms::Timer^  timerBD;
+	private: System::Windows::Forms::TabPage^  tabLog;
+	private: System::Windows::Forms::ListBox^  logBox;
 	private: System::ComponentModel::IContainer^  components;
 
 
@@ -182,6 +185,8 @@ namespace WarBugsServer {
 			this->menu = (gcnew System::Windows::Forms::MenuStrip());
 			this->arquivoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->timerBD = (gcnew System::Windows::Forms::Timer(this->components));
+			this->tabLog = (gcnew System::Windows::Forms::TabPage());
+			this->logBox = (gcnew System::Windows::Forms::ListBox());
 			this->abas->SuspendLayout();
 			this->tabJogadoresOn->SuspendLayout();
 			this->gbJogador->SuspendLayout();
@@ -191,12 +196,14 @@ namespace WarBugsServer {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->gridResultados))->BeginInit();
 			this->barStatus->SuspendLayout();
 			this->menu->SuspendLayout();
+			this->tabLog->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// abas
 			// 
 			this->abas->Controls->Add(this->tabJogadoresOn);
 			this->abas->Controls->Add(this->tabManutencaoBD);
+			this->abas->Controls->Add(this->tabLog);
 			this->abas->Location = System::Drawing::Point(2, 27);
 			this->abas->Name = L"abas";
 			this->abas->SelectedIndex = 0;
@@ -548,6 +555,27 @@ namespace WarBugsServer {
 			this->timerBD->Interval = 1000;
 			this->timerBD->Tick += gcnew System::EventHandler(this, &frmPrincipal::timerBD_Tick);
 			// 
+			// tabLog
+			// 
+			this->tabLog->Controls->Add(this->logBox);
+			this->tabLog->Cursor = System::Windows::Forms::Cursors::Arrow;
+			this->tabLog->Location = System::Drawing::Point(4, 22);
+			this->tabLog->Name = L"tabLog";
+			this->tabLog->Padding = System::Windows::Forms::Padding(3);
+			this->tabLog->Size = System::Drawing::Size(766, 423);
+			this->tabLog->TabIndex = 2;
+			this->tabLog->Text = L"Log";
+			this->tabLog->UseVisualStyleBackColor = true;
+			// 
+			// logBox
+			// 
+			this->logBox->FormattingEnabled = true;
+			this->logBox->Location = System::Drawing::Point(6, 10);
+			this->logBox->Name = L"logBox";
+			this->logBox->ScrollAlwaysVisible = true;
+			this->logBox->Size = System::Drawing::Size(754, 407);
+			this->logBox->TabIndex = 0;
+			// 
 			// frmPrincipal
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -574,6 +602,7 @@ namespace WarBugsServer {
 			this->barStatus->PerformLayout();
 			this->menu->ResumeLayout(false);
 			this->menu->PerformLayout();
+			this->tabLog->ResumeLayout(false);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
