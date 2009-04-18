@@ -86,17 +86,18 @@ int main(int argc, char* argv[])
    modelo->setMaterialTexture(0, driver->getTexture("besouro1.jpg"));
    modelo->setPosition(vector3df(0.f,0.f,0.f));
 
-   head = smgr->addAnimatedMeshSceneNode(smgr->getMesh("capacete.b3d"));
+   head = smgr->addAnimatedMeshSceneNode(smgr->getMesh("capacete1.b3d"));
    head->setRotation(vector3df(90.f,180.f,0.f));
-   head->setPosition(vector3df(0.f,-0.5f,4.f));
+   head->setPosition(vector3df(0.f,-0.5f,0.f));
    head->setMaterialFlag(EMF_LIGHTING, false);
    head->setMaterialTexture(0, driver->getTexture("hercules.jpg"));
 
    lhand = smgr->addAnimatedMeshSceneNode(smgr->getMesh("martelo.b3d"));
    lhand->setMaterialFlag(EMF_LIGHTING, false);
    lhand->setMaterialTexture(0, driver->getTexture("martelo.jpg"));
-   lhand->setPosition(vector3df(1.5f,-2.2f,-1.f));
-   lhand->setRotation(vector3df(90.f,-90.f,0.f));
+  // lhand->setPosition(vector3df(1.5f,-2.2f,-1.f));
+ //  lhand->setRotation(vector3df(90.f,-90.f,0.f));
+   lhand->setRotation(vector3df(-30.f,180.f,90.f));
 
    jHead = modelo->getJointNode("visao"); 
    jlHand = modelo->getJointNode("mao_L"); 
