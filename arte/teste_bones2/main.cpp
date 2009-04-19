@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
    IBoneSceneNode *jHead, *jlHand, *jHead1; 
   
    // Besouro 
-   modelo = smgr->addAnimatedMeshSceneNode(smgr->getMesh("besouro5.b3d")); 
+   modelo = smgr->addAnimatedMeshSceneNode(smgr->getMesh("besouro6.b3d")); 
    modelo->setMaterialFlag(EMF_LIGHTING, false);
    modelo->setMaterialTexture(0, driver->getTexture("besouro1.jpg"));
    modelo->setPosition(vector3df(0.f,0.f,0.f));
