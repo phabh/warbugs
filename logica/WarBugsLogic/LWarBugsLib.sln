@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LWarBugsLib", "LWarBugsLib\LWarBugsLib.vcproj", "{F07E17FC-B171-466E-8B54-AA99F69C836F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F07E17FC-B171-466E-8B54-AA99F69C836F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F07E17FC-B171-466E-8B54-AA99F69C836F}.Debug|Win32.Build.0 = Debug|Win32
+		{F07E17FC-B171-466E-8B54-AA99F69C836F}.Release|Win32.ActiveCfg = Release|Win32
+		{F07E17FC-B171-466E-8B54-AA99F69C836F}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
