@@ -10,6 +10,7 @@ using namespace gui;
 IrrlichtDevice *device; 
 IAnimatedMeshSceneNode *modelo; 
 IAnimatedMeshSceneNode *modelo1; 
+IAnimatedMeshSceneNode *modelo2; 
 
 #pragma comment (lib,"irrlicht.lib") 
 
@@ -88,9 +89,9 @@ int main(int argc, char* argv[])
    modelo->setMaterialTexture(0, driver->getTexture("besouro1.jpg"));
    modelo->setPosition(vector3df(0.f,0.f,0.f));
 
-   head = smgr->addAnimatedMeshSceneNode(smgr->getMesh("capacete1.b3d"));
-   head->setRotation(vector3df(90.f,180.f,0.f));
-   head->setPosition(vector3df(0.f,-0.5f,0.5f));
+   head = smgr->addAnimatedMeshSceneNode(smgr->getMesh("capacete2.b3d"));
+   //head->setRotation(vector3df(90.f,180.f,0.f));
+  // head->setPosition(vector3df(0.f,-0.5f,0.f));
    head->setMaterialFlag(EMF_LIGHTING, false);
    head->setMaterialTexture(0, driver->getTexture("hercules.jpg"));
 
@@ -123,11 +124,19 @@ int main(int argc, char* argv[])
    jHead->addChild(head); 
    jlHand->addChild(lhand); 
 
-   // parents Louva
+ //   parents Louva
    jHead1->addChild(head1); 
+
+   // lagarto
+  
+   modelo2 = smgr->addAnimatedMeshSceneNode(smgr->getMesh("lagarto.b3d")); 
+   modelo2->setMaterialFlag(EMF_LIGHTING, false);
+   modelo2->setMaterialTexture(0, driver->getTexture("lagarto1.jpg"));
+   modelo2->setPosition(vector3df(-10.f,10.f,0.f));
 
    modelo->setAnimationSpeed(30); // 30 fps
    modelo1->setAnimationSpeed(30);
+   modelo2->setAnimationSpeed(30);
 
    while (device->run()) 
    { 
