@@ -14,7 +14,7 @@
 #include "CPoder.cpp"
 #include "CBonusSecundario.cpp"
 #include <list>
-#include <irrlicht.h>
+//#include <//irrlicht.h>
 using namespace std;
 #ifndef _CPERSONAGEM
 #define _CPERSONAGEM
@@ -29,16 +29,16 @@ class CPersonagem : public C3DObject{
 protected:
 	EstadoPersonagem estado;
 	//Tempo de respawn
-	irr::core::array<CItem*> *inventario;
+	//irr::core::array<CItem*> *inventario;
 	CHabilidadesSecundarias *habilidadesSecundarias;
 	CBonusSecundario *bonusSecundario;
-	irr::core::array<CPoder*> *poderes;
+	//irr::core::array<CPoder*> *poderes;
 public:
 	CPersonagem(){
-		inventario = new irr::core::array<CItem*>();
+		//inventario = new //irr::core::array<CItem*>();
 		habilidadesSecundarias = new CHabilidadesSecundarias();
 		bonusSecundario = new CBonusSecundario();
-		poderes = new irr::core::array<CPoder*>();
+		//poderes = new //irr::core::array<CPoder*>();
 	}
 	//Getters e Setters
 	CHabilidadesSecundarias getStats()

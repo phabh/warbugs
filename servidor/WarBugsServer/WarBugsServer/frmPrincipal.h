@@ -1,7 +1,9 @@
 #pragma once
-#include "CDataBase.h"
-#include "dreamSock.h"
-#include <vcclr.h>
+#include "commom.h"
+#include "CCoreServer.h"
+//#include "CDataBase.h"
+//#include "dreamSock.h"
+
 
 
 namespace WarBugsServer {
@@ -26,8 +28,8 @@ namespace WarBugsServer {
 	{
 	public:
 		// Variaveis do Jogo
-		static CDataBase * _dataBase;
-
+		static CDataBase	* _dataBase;
+		static CCoreServer	* _coreServer;
 
 
 		frmPrincipal(void)
@@ -38,6 +40,7 @@ namespace WarBugsServer {
 			//
 			_dataBase = new CDataBase("localhost","warbugs","bd","bugsteam");
 			this->barStatusBD->Text = L"Status BD: "+( _dataBase->isConnected() ? "ON":"OFF");
+			_coreServer = new CCoreServer(_dataBase,30);
 		}
 
 	protected:
@@ -619,37 +622,19 @@ namespace WarBugsServer {
 			_dataBase = new CDataBase(toChar(txtHost->Text),toChar(txtBD->Text),toChar(txtLogin->Text),toChar(txtSenha->Text));
 		 }
 
-	/*Transforma a porra do tipo string do windows em coisa de macho!*/
-	public: char * toChar(System::String^ str){
-
-				char * target;
-
-				pin_ptr<const wchar_t> wch = PtrToStringChars( str );
-
-				int len = (( str->Length+1) * 2);
-
-				target = new char[ len ];
-				
-				wcstombs( target, wch, len );
-
-				return target;
-			 }
-
 private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  e) {
 			this->barStatusBD->Text = L"Status BD: "+( _dataBase->isConnected() ? "ON":"OFF");
 		 }
 
 
 private: System::Void btExecutar_Click(System::Object^  sender, System::EventArgs^  e) {
-			 System::Windows::Forms::MessageBox^ msg;
-
 			 if(_dataBase->insertNow(toChar(txtSQL->Text)))
 			 {
-				 msg->Show(L"OK, Feito!",L"Mensagem - OK");
+				 System::Windows::Forms::MessageBox::Show(L"OK, Feito!",L"Mensagem - OK");
 			 }
 			 else
 			 {
-				 msg->Show(L"É... Deu pau!",L"Mensagem - Erro");			 
+				 System::Windows::Forms::MessageBox::Show(L"É... Deu pau!",L"Mensagem - Erro");			 
 			 }
 		 }
 private: System::Void btConsultar_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -678,8 +663,8 @@ private: System::Void btConsultar_Click(System::Object^  sender, System::EventAr
 
 					while (numRegs > indexRegs)
 					{
-						int i = (indexRegs*numCampos);
-						int j = (numCampos*(indexRegs+1));
+						unsigned int i = (indexRegs*numCampos);
+						unsigned int j = (numCampos*(indexRegs+1));
 						for(indexCampos = i; indexCampos < j; indexCampos++)
 						{
 							String ^ text = gcnew String(toChar(dados[indexCampos]->ToString()) != NULL ? toChar(dados[indexCampos]->ToString()): "NULL");

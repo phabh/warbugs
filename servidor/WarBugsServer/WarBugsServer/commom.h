@@ -6,6 +6,8 @@
 */
 #include "dreamSock.h"
 #include "logica\CPersonagemJogador.cpp"
+#include "CDataBase.h"
+#include <vcclr.h>
 
 
 /*
@@ -38,24 +40,85 @@ enum TYPE_MESSAGE
 	PLAYER_EXIT,
 	ADD_PLAYER,
 	REMOVE_PLAYER,
-	EXIT_CENARIO
+	EXIT_CENARIO,
+//FALHAS
+	LOGIN_FAIL,
+	CREATE_PLAYER_FAIL,
+	SELECT_PLAYER_FAIL,
+	CHAT
 };
 
 #define FRAMES_HISTORIC 64
 #define PORT 30003
 
+/*Transforma a porra do tipo string do windows em coisa de macho!*/
+char * toChar(System::String^ str)
+{
+	char * target;
+
+	pin_ptr<const wchar_t> wch = PtrToStringChars( str );
+
+	int len = (( str->Length+1) * 2);
+
+	target = new char[ len ];
+				
+	wcstombs( target, wch, len );
+
+	return target;
+}
+
+
+#ifndef _CNETWORKPLAYER_
+#define _CNETWORKPLAYER_
 /*
 	Estrutura comum no Cliente e Servidor para armazenamento dos players que estão jogando
 */
-struct CDataPlayer
+class CNetWorkPlayer
 {
-	CPersonagemJogador   _frame[FRAMES_HISTORIC];
-	dreamClient        * _netPlayer;
-	CPersonagemJogador   _currentFrame;
-	CPersonagemJogador   _lastFrame;
+	/*
+- Vetor de flags (estados, buffs?)
+- Posição x,y
+- ID da animação corrente
+- ID da arma equipada
+- ID da armadura equipada
+- PV
+- PM
+- Nivel de experiência
+- Nome
+- ID
+- ID do modelo3D
+- Direção ( 0 a 359º)*/
+public:
+	bool			_buffs[5];
 
-	int					 _index;
+	int				_posX;	
+	int				_posY;
 
-	CDataPlayer        * _next;
-} CDataPlayer;
+	int				_idAnimation;
+	int				_idModel;
+
+	int				_idWeapon;
+	int				_idArmor;
+
+	int				_pv;
+	int				_pm;
+	int				_xp;
+
+	char			* _nome;
+
+	int				_direcao;
+
+	int				_id;
+
+
+	
+
+	dreamClient     * _netPlayer;
+
+	CNetWorkPlayer      * _next;
+
+};
+
+#endif  /*_CNETPLAYER_*/
+
 #endif
