@@ -87,7 +87,7 @@ public:
 	//virtual void loot(CPersonagem *jogador)=0;
 	//virtual void drop(CPersonagem *jogador)=0;
 	//Métodos virtuais pra funcionar
-	virtual int getValue(){}
-	virtual Atrib getAtribute(){}
+	//virtual int getValue(){}
+	//virtual Atrib getAtribute(){}
 };
 #endif

@@ -85,6 +85,8 @@ bool CDataBase::selectNow(char *query, unsigned int &numFields, unsigned int &nu
 {
 
 	bool resultado = false;
+	numFields = 0;
+	numRegs   = 0;
 
 	if(_connected)
 	{
@@ -96,7 +98,7 @@ bool CDataBase::selectNow(char *query, unsigned int &numFields, unsigned int &nu
 		_resultSet = mysql_store_result(_connection);
 		if(_resultSet != NULL)
 		{
-			numRegs    = mysql_num_rows(_resultSet);
+			numRegs    = (unsigned)mysql_num_rows(_resultSet);
 			numFields  = mysql_num_fields(_resultSet);
 			MYSQL_FIELD * campo;
 
@@ -112,7 +114,7 @@ bool CDataBase::selectNow(char *query, unsigned int &numFields, unsigned int &nu
 			
 			while((_row = mysql_fetch_row(_resultSet)))
 			{
-				for(int i = 0; i < numFields; i++)
+				for(unsigned int i = 0; i < numFields; i++)
 				{
 					//dado = _row[i];
 					teste = gcnew System::String(_row[i]);
@@ -124,8 +126,9 @@ bool CDataBase::selectNow(char *query, unsigned int &numFields, unsigned int &nu
 
 
 		mysql_free_result(_resultSet); 
-		return resultado;
 	}
+
+	return resultado;
 }
 
 /*

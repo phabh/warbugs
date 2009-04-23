@@ -18,7 +18,7 @@
 #include <list>
 #include <iostream>
 #include <time.h>
-#include <irrlicht.h>
+//#include <//irrlicht.h>
 using namespace std;
 #ifndef _CPERSONAGEMJOGADOR
 #define _CPERSONAGEMJOGADOR
@@ -34,39 +34,40 @@ using namespace std;
 class CPersonagemJogador : public CPersonagem
 {
 	CHabilidades *_habilidadesPrimarias;
-	irr::core::array<CBonusPrimario*> *_bonusPrimario;
+	////irr::core::array<CBonusPrimario*> *_bonusPrimario;
 	int _nivel;
 	int _experiencia;
 	int _dinheiro;
 	CEquipamento *_equip;
-	irr::core::array<CBuff*> *_status;
+	////irr::core::array<CBuff*> *_status;
 	CLealdade *_lealdade;
-	irr::core::array<CPersonagemJogador*> *_party;
-	irr::core::array<CPersonagemJogador*> *_friends;
+	////irr::core::array<CPersonagemJogador*> *_party;
+	////irr::core::array<CPersonagemJogador*> *_friends;
 	int _jogadorID;
 	CPersonagem *_alvo;
 public:
 	CPersonagemJogador()
 	{
 		_habilidadesPrimarias = new CHabilidades();
-		_bonusPrimario = new irr::core::array<CBonusPrimario*>();
+		//_bonusPrimario = new //irr::core::array<CBonusPrimario*>();
 		_nivel = 1;
 		_experiencia = 0;
 		_dinheiro = 0;
-		_status = new irr::core::array<CBuff*>();
+		//_status = new //irr::core::array<CBuff*>();
 		_lealdade = new CLealdade();
-		_party = new irr::core::array<CPersonagemJogador*>();
-		_friends = new irr::core::array<CPersonagemJogador*>();
+		//_party = new //irr::core::array<CPersonagemJogador*>();
+		//_friends = new //irr::core::array<CPersonagemJogador*>();
 		_jogadorID = 0;
 		_alvo = NULL;
 	}
 	//Getters e setters
-	void setParty(irr::core::array<CPersonagemJogador*> *lista)
+	/*void setParty(//irr::core::array<CPersonagemJogador*> *lista)
 	{
 		_party = lista;
-	}
+	}*/
 	//Outros Métodos
 	//Manipulação de itens
+	/*
 	int haveItem(CItem * item)
 	{
 		return(inventario->binary_search_const(item));
@@ -78,10 +79,10 @@ public:
 			inventario->push_back(item);
 			inventario->sort();
 		}
-	}
-	void dropItem(CItem *item)
+	}*/
+	/*void dropItem(CItem *item)
 	{
-		irr::s32 i = this->haveItem(item);
+		//irr::s32 i = this->haveItem(item);
 		if(i >= 0)
 		{
 			inventario->erase(i);
@@ -95,7 +96,7 @@ public:
 	}
 	void useItem(CItem *item)
 	{
-		irr::s32 i = this->haveItem(item);
+		//irr::s32 i = this->haveItem(item);
 		if(i >= 0)
 		{
 			if(item->getTipo() == USO)
@@ -177,7 +178,7 @@ public:
 	}
 	void removeFriend(CPersonagemJogador *jogador)
 	{
-		irr::s32 i = this->isFriend(jogador);
+		//irr::s32 i = this->isFriend(jogador);
 		if(i >=	 0)
 		{
 			_friends->erase(i);
@@ -220,7 +221,7 @@ public:
 		}
 		return;
 	}
-	void givePartyAlliesID(irr::core::array<CPersonagemJogador*> *lista)
+	void givePartyAlliesID(//irr::core::array<CPersonagemJogador*> *lista)
 	{
 		lista = _party;
 	}
@@ -257,7 +258,7 @@ public:
 			lider->removePartyMember(this);
 			_party->clear();
 		}
-	}
+	}*/
 	//Quest
 	void acceptQuest(CQuest *quest){}
 	//Speaking
