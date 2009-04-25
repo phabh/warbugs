@@ -34,8 +34,10 @@ class CBuff;
 
 class CPersonagemJogador : public CPersonagem
 {
+	char _nome[10];
+	Raca _raca;
 	CHabilidades *_habilidadesPrimarias;
-	CBonus *_bonusPrimario;
+	CBonusPrimario *_bonusPrimario;
 	int _nivel;
 	int _experiencia;
 	int _xpToNextLv;
@@ -55,21 +57,48 @@ class CPersonagemJogador : public CPersonagem
 	int _dano;
 	int _range;
 	int _speed;
-
+	//VARIAVEIS PRO HIMURA
 public:
+	CPersonagemJogador *next;
+
 	CPersonagemJogador();
-	//Getters e setters
+	//Getters
+	char *getName();
 	int getFOR();
 	int getDES();
 	int getAGI();
 	int getRES();
 	int getINS();
 	int getAttack();
+	CHabilidades *getBaseStats();
+	CBonusPrimario *getBaseBonus();
+	//Setters
+	void setName(char *name);
+	void setRace(Raca raca);
+	void setBaseStats(CHabilidades *stats);
+	void setBaseBonus(CBonus *bonus);
+	void setLevel(int level);
+	void setXP(int xp);
+	void setXPToNextLv(int xp);
+	void setXPToPrev(int xp);
+	void setPointsToDistribute(int points);
+	void setMoney(int value);
+	void setEquip(CEquipamento *equip);
+	void setStatus(CBuff *status);
+	void setLoyalty(CLealdade *lealdade);
 	void setParty(irr::core::array<CPersonagemJogador*> *lista);
+	void setFriends(irr::core::array<CPersonagemJogador*> *lista);
+	void setPlayer(int playerID);
+	void setTarget(CPersonagem *alvo);
+	void setBareHands(bool isBareHands);
+	void setAttack(int ataque);
+	void setDamage(int dano);
+	void setRange(int range);
+	void setSpeed(int speed);
 	//Outros Métodos
 	//Manipulação de itens
 	int haveItem(CItem * item);
-	void getItem(CItem *item);
+	void addItem(CItem *item);
 	void dropItem(CItem *item);
 	void useItem(CItem *item);
 	void equip(CItem *item);

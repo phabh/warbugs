@@ -49,6 +49,8 @@ protected:
 	CBonus *bonusSecundario;
 	irr::core::array<CPoder*> *poderes;
 public:
+	CPersonagem *next;
+
 	CPersonagem();
 	//Getters e Setters
 	CHabilidadesSecundarias *getStats();

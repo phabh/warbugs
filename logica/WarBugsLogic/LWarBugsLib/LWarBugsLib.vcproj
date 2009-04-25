@@ -61,6 +61,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="ws2_32.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -189,7 +190,7 @@
 				Name="3 - Instanciaveis"
 				>
 				<Filter
-					Name="Buff"
+					Name="3.1 - Buff"
 					>
 					<File
 						RelativePath=".\CBuff.cpp"
@@ -197,7 +198,7 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="Componentes de um Personagem"
+					Name="3.2 - Componentes de um Personagem"
 					>
 					<File
 						RelativePath=".\CBonus.cpp"
@@ -229,7 +230,7 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="Personagens"
+					Name="3.3 - Personagens"
 					>
 					<File
 						RelativePath=".\CInimigo.cpp"
@@ -253,7 +254,7 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="Tipos de Item"
+					Name="3.4 - Tipos de Item"
 					>
 					<File
 						RelativePath=".\CArmor.cpp"
@@ -277,6 +278,26 @@
 					</File>
 					<File
 						RelativePath=".\CWeapon.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="3.5 - Jogador"
+					>
+					<File
+						RelativePath=".\CJogador.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="3.6 - Cenario"
+					>
+					<File
+						RelativePath=".\CCenario.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CPortal.cpp"
 						>
 					</File>
 				</Filter>
@@ -327,7 +348,7 @@
 				Name="3 - Instanciaveis"
 				>
 				<Filter
-					Name="Buff"
+					Name="3.1 - Buff"
 					>
 					<File
 						RelativePath=".\CBuff.h"
@@ -335,7 +356,7 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="Componentes de um Personagem"
+					Name="3.2 - Componentes de um Personagem"
 					>
 					<File
 						RelativePath=".\CBonus.h"
@@ -367,7 +388,7 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="Personagens"
+					Name="3.3 - Personagens"
 					>
 					<File
 						RelativePath=".\CInimigo.h"
@@ -391,7 +412,7 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="Tipos de Item"
+					Name="3.4 - Tipos de Item"
 					>
 					<File
 						RelativePath=".\CArmor.h"
@@ -418,6 +439,26 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="3.5 - Jogador"
+					>
+					<File
+						RelativePath=".\CJogador.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="3.6 - Cenario"
+					>
+					<File
+						RelativePath=".\CCenario.h"
+						>
+					</File>
+					<File
+						RelativePath=".\CPortal.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -426,6 +467,14 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
+		<File
+			RelativePath=".\ClassDiagram1.cd"
+			>
+		</File>
+		<File
+			RelativePath=".\ClassDiagram2.cd"
+			>
+		</File>
 		<File
 			RelativePath=".\ReadMe.txt"
 			>

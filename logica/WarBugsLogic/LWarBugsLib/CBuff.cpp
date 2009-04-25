@@ -13,6 +13,7 @@
 
 #include "CBuff.h"
 #include "CPersonagemJogador.h"
+#include "CBonusSecundario.h"
 #include <iostream>
 using namespace std;
 
@@ -111,21 +112,102 @@ void CBuff::initialize(CObjectCount *counter)
 {
 	CWarBugObject::initialize(counter);
 }
-void CBuff::addBuff(CBuff * buff)
+void CBuff::addBuff(CBuff * buff, CPersonagemJogador *alvo)
 {
+	int index = 0;
+	bool overwrite = false;
 	CBuff *temp;// = new CBuff();
-	temp = this;
-	while(temp->_next != NULL)
+	CBuff *temp2;
+	CBonus *bonus;
+	temp = this->_next;
+	temp2 = this;
+	while((temp->_next != NULL)&&(!overwrite))
 	{
+		if(temp->getTipo() == buff->getTipo())
+		{
+			temp2->_next = buff;
+			buff->_next = temp->_next;
+			overwrite = true;
+		}
+		temp2 = temp;
 		temp = temp->_next;
+		index = index + 1;
 	}
-	temp->_next = buff;
-	buff->_next = NULL;
+	if((!overwrite)&&(index <= MAXSTATS))
+	{
+		temp->_next = buff;
+		buff->_next = NULL;
+	}
+	switch(buff->getTipo())
+	{
+		case DADIVA:
+			bonus = new CBonusPrimario();
+			bonus->createBonus(0, 0, 0, _valor1, 0);
+			bonus->setOrigem(this);
+			alvo->getBaseBonus()->add(bonus);
+			bonus = NULL;
+			delete bonus;
+			break;
+		case BERSERKER:
+			bonus = new CBonusPrimario();
+			bonus->createBonus(0,0,0,0,_valor3);
+			bonus->setOrigem(this);
+			alvo->getBaseBonus()->add(bonus);
+			bonus = NULL;
+			bonus = new CBonusSecundario();
+			bonus->createBonus(0,0,0,0,_valor3);
+			bonus->setOrigem(this);
+			alvo->getBonus()->add(bonus);
+			bonus = NULL;
+			delete bonus;
+			break;
+		case STRIKE:
+			bonus = new CBonusPrimario();
+			bonus->createBonus(0,0,0,0,_valor2);
+			bonus->setOrigem(this);
+			alvo->getBaseBonus()->add(bonus);
+			bonus = NULL;
+			bonus = new CBonusSecundario();
+			bonus->createBonus(0,0,0,0,_valor2);
+			bonus->setOrigem(this);
+			alvo->getBonus()->add(bonus);
+			bonus = NULL;
+			delete bonus;
+			break;
+		case LENTO:
+			bonus = new CBonusPrimario();
+			bonus->createBonus(0,_valor1,0,0,0);
+			bonus->setOrigem(this);
+			alvo->getBaseBonus()->add(bonus);
+			bonus = NULL;
+			delete bonus;
+			break;
+		case STUN:
+			bonus = new CBonusPrimario();
+			bonus->createBonus(0,((-1)*(alvo->getAGI())),0,0,0);
+			bonus->setOrigem(this);
+			alvo->getBaseBonus()->add(bonus);
+			bonus = NULL;
+			delete bonus;
+			break;
+		case ATORDOADO:
+			bonus = new CBonusPrimario();
+			bonus->createBonus(0,_valor1,_valor2,0,0);
+			bonus->setOrigem(this);
+			alvo->getBaseBonus()->add(bonus);
+			bonus = NULL;
+			delete bonus;
+			break;
+		default:
+			break;
+	}
 	temp = NULL;
+	temp2 = NULL;
 	delete temp;
+	delete temp2;
 	return;
 }
-void CBuff::remove(int index)
+void CBuff::remove(int index, CPersonagemJogador *alvo)
 {
 	CBuff *first;// = new CBuff();
 	CBuff *temp;// = new CBuff();
@@ -137,29 +219,33 @@ void CBuff::remove(int index)
 		index = index - 1;
 	}
 	temp->_next = first->_next;
-	temp = NULL;
-	first = NULL;
-	switch(_tipoBuff)
+	switch(first->getTipo())
 	{
-		case DESESPERO:
-			break;
-		case VENENO:
-			break;
 		case DADIVA:
+			alvo->getBaseBonus()->removeElement(this->getTipo());
 			break;
 		case BERSERKER:
+			alvo->getBaseBonus()->removeElement(this->getTipo());
+			alvo->getBonus()->removeElement(this->getTipo());
 			break;
 		case STRIKE:
-			break;
-		case BACKSTAB:
+			alvo->getBaseBonus()->removeElement(this->getTipo());
+			alvo->getBonus()->removeElement(this->getTipo());
 			break;
 		case LENTO:
+			alvo->getBaseBonus()->removeElement(this->getTipo());
 			break;
 		case STUN:
+			alvo->getBaseBonus()->removeElement(this->getTipo());
+			break;
+		case ATORDOADO:
+			alvo->getBaseBonus()->removeElement(this->getTipo());
 			break;
 		default:
 			break;
 	}
+	temp = NULL;
+	first = NULL;
 	delete first;
 	delete temp;
 	return;
@@ -174,9 +260,15 @@ void CBuff::execute(CPersonagemJogador *jogador)
 		switch(temp->getTipo())
 		{
 		case DESESPERO:
-			jogador->getFOR();
 			break;
 		case VENENO:
+			if(temp->getDuration()%FPS == 0)
+			{
+				if(jogador->getRES() < _valor2)
+				{
+					jogador->getStats()->addPV(((-1)*_valor1));
+				}
+			}
 			break;
 		case DADIVA:
 			break;
@@ -187,6 +279,13 @@ void CBuff::execute(CPersonagemJogador *jogador)
 		case BACKSTAB:
 			break;
 		case LENTO:
+			if(temp->getDuration()%FPS == 0)
+			{
+				if(jogador->getFOR() < _valor3)
+				{
+					jogador->getStats()->addPV(((-1)*_valor2));
+				}
+			}
 			break;
 		case STUN:
 			break;
@@ -198,7 +297,7 @@ void CBuff::execute(CPersonagemJogador *jogador)
 		temp->addDuration(-1);
 		if(temp->getDuration() == 0)
 		{
-			temp->remove(index);
+			temp->remove(index,jogador);
 		}
 		index = index + 1;
 	}
