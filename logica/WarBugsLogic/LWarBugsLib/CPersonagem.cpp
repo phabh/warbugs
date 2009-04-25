@@ -19,6 +19,7 @@ CPersonagem::CPersonagem()
 	habilidadesSecundarias = new CHabilidadesSecundarias();
 	bonusSecundario = new CBonusSecundario();
 	poderes = new irr::core::array<CPoder*>();
+	next = NULL;
 }
 //Getters e Setters
 CHabilidadesSecundarias *CPersonagem::getStats()

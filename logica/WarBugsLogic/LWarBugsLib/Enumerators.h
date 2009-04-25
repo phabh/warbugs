@@ -20,7 +20,7 @@ enum TipoClasse{
 };
 // ------------------------------------------------------------------------------------------------------------
 //Enumerador para retornar a raça do personagem
-enum Raca {BESOURO, ARANHA, LOUVADEUS, ESCORPIAO, VESPA, TODAS};
+enum Raca {NENHUMA, BESOURO, ARANHA, LOUVADEUS, ESCORPIAO, VESPA, TODAS};
 // ------------------------------------------------------------------------------------------------------------
 //#ifndef _SATRIB
 //#define _SATRIB
@@ -31,7 +31,7 @@ enum TipoBuff{NORMAL, DESESPERO, VENENO, DADIVA, BERSERKER, STRIKE, BACKSTAB, LE
 // ------------------------------------------------------------------------------------------------------------
 enum EstadoItem{NAMOCHILA, NOCHAO, EQUIPADO, USADO};
 // ------------------------------------------------------------------------------------------------------------
-enum TipoItem{USO, ARMA, ARMADURA, QUEST};
+enum TipoItem{USO, ARMA, ARMADURA, QUEST, SCROLL, LSCROLL};
 // ------------------------------------------------------------------------------------------------------------
 enum EstadoPersonagem{
 	PARADO,

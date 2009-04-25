@@ -15,7 +15,7 @@
 #ifndef MAXSTATS
 #define MAXSTATS 5
 #endif
-#define SECOND 8
+#define FPS 8
 
 #include "Enumerators.h"
 #include "CWarBugObject.h"
@@ -48,8 +48,8 @@ public:
 	void setDuration(int newDuration);
 	void addDuration(int newDuration);
 	void initialize(CObjectCount *counter);
-	void addBuff(CBuff * buff);
-	void remove(int index);
+	void addBuff(CBuff * buff, CPersonagemJogador *alvo);
+	void remove(int index, CPersonagemJogador *alvo);
 	void execute(CPersonagemJogador *jogador);
 };
 #endif

@@ -39,6 +39,10 @@ CPersonagemJogador::CPersonagemJogador()
 	_speed = 0;
 }
 //Getters e setters
+char *CPersonagemJogador::getName()
+{
+	return(_nome);
+}
 int CPersonagemJogador::getFOR()
 {
 	return(_habilidadesPrimarias->getFOR() + _bonusPrimario->getTotalBonusOf(FOR));
@@ -48,285 +52,379 @@ int CPersonagemJogador::getDES()
 	return(_habilidadesPrimarias->getDES() + _bonusPrimario->getTotalBonusOf(DES));
 }
 int CPersonagemJogador::getAGI()
-	{
-		return(_habilidadesPrimarias->getAGI() + _bonusPrimario->getTotalBonusOf(AGI));
-	}
+{
+	return(_habilidadesPrimarias->getAGI() + _bonusPrimario->getTotalBonusOf(AGI));
+}
 int CPersonagemJogador::getRES()
-	{
-		return(_habilidadesPrimarias->getRES() + _bonusPrimario->getTotalBonusOf(RES));
-	}
+{
+	return(_habilidadesPrimarias->getRES() + _bonusPrimario->getTotalBonusOf(RES));
+}
 int CPersonagemJogador::getINS()
-	{
-		return(_habilidadesPrimarias->getINS() + _bonusPrimario->getTotalBonusOf(INS));
-	}
+{
+	return(_habilidadesPrimarias->getINS() + _bonusPrimario->getTotalBonusOf(INS));
+}
 int CPersonagemJogador::getAttack()
-	{
-		if(_range <= MAXMELEERANGE)
-			return(_ataque + getBonus()->getTotalBonusOf(ATTACKMELEE));
-		else
-			return(_ataque + getBonus()->getTotalBonusOf(ATTACKRANGED));
-	}
+{
+	if(_range <= MAXMELEERANGE)
+		return(_ataque + getBonus()->getTotalBonusOf(ATTACKMELEE));
+	else
+		return(_ataque + getBonus()->getTotalBonusOf(ATTACKRANGED));
+}
+CHabilidades *CPersonagemJogador::getBaseStats()
+{
+	return(_habilidadesPrimarias);
+}
+CBonusPrimario *CPersonagemJogador::getBaseBonus()
+{
+	return(_bonusPrimario);
+}
+void CPersonagemJogador::setName(char *name)
+{
+	if(sizeof(_nome) >= strlen(name))
+		strcpy_s(_nome, name);
+}
+void CPersonagemJogador::setRace(Raca raca)
+{
+	_raca = raca;
+}
+void CPersonagemJogador::setBaseStats(CHabilidades *stats)
+{
+	_habilidadesPrimarias = stats;
+}
+void CPersonagemJogador::setBaseBonus(CBonus *bonus)
+{
+	_bonusPrimario = (CBonusPrimario*)bonus;
+}
+void CPersonagemJogador::setLevel(int level)
+{
+	_nivel = level;
+}
+void CPersonagemJogador::setXP(int xp)
+{
+	_experiencia = xp;
+}
+void CPersonagemJogador::setXPToNextLv(int xp)
+{
+	_xpToNextLv = xp;
+}
+void CPersonagemJogador::setXPToPrev(int xp)
+{
+	_xpToPrevLv = xp;
+}
+void CPersonagemJogador::setPointsToDistribute(int points)
+{
+	_pontoDistribuir = points;
+}
+void CPersonagemJogador::setMoney(int value)
+{
+	_dinheiro = value;
+}
+void CPersonagemJogador::setEquip(CEquipamento *equip)
+{
+	_equip = equip;
+}
+void CPersonagemJogador::setStatus(CBuff *status)
+{
+	_status = status;
+}
+void CPersonagemJogador::setLoyalty(CLealdade *lealdade)
+{
+	_lealdade = lealdade;
+}
 void CPersonagemJogador::setParty(irr::core::array<CPersonagemJogador*> *lista)
-	{
-		_party = lista;
-	}
+{
+	_party = lista;
+}
+void CPersonagemJogador::setFriends(irr::core::array<CPersonagemJogador*> *lista)
+{
+	_friends = lista;
+}
+void CPersonagemJogador::setPlayer(int playerID)
+{
+	_jogadorID = playerID;
+}
+void CPersonagemJogador::setTarget(CPersonagem *alvo)
+{
+	_alvo = alvo;
+}
+void CPersonagemJogador::setBareHands(bool isBareHands)
+{
+	_bareHands = isBareHands;
+}
+void CPersonagemJogador::setAttack(int ataque)
+{
+	_ataque = ataque;
+}
+void CPersonagemJogador::setDamage(int dano)
+{
+	_dano = dano;
+}
+void CPersonagemJogador::setRange(int range)
+{
+	_range = range;
+}
+void CPersonagemJogador::setSpeed(int speed)
+{
+	_speed = speed;
+}
+
 //Outros Métodos
 //Manipulação de itens
 int CPersonagemJogador::haveItem(CItem * item)
+{
+	return(inventario->binary_search_const(item));
+}
+void CPersonagemJogador::addItem(CItem *item)
+{
+	if(inventario->size() < MAXITENS)
 	{
-		return(inventario->binary_search_const(item));
+		inventario->push_back(item);
+		inventario->sort();
 	}
-void CPersonagemJogador::getItem(CItem *item)
-	{
-		if(inventario->size() < MAXITENS)
-		{
-			inventario->push_back(item);
-			inventario->sort();
-		}
-	}
+}
 void CPersonagemJogador::dropItem(CItem *item)
+{
+	irr::s32 i = this->haveItem(item);
+	if(i >= 0)
 	{
-		irr::s32 i = this->haveItem(item);
-		if(i >= 0)
-		{
-			inventario->erase(i);
-			item->setEstado(NOCHAO);
-			item->setPosition(this->getPosition());
-		}
-		else
-		{
-			//ERRO: O ITEM NÃO ESTÁ NO INVENTRÁRIO
-		}
+		inventario->erase(i);
+		item->setEstado(NOCHAO);
+		item->setPosition(this->getPosition());
 	}
+	else
+	{
+		//ERRO: O ITEM NÃO ESTÁ NO INVENTRÁRIO
+	}
+}
 void CPersonagemJogador::useItem(CItem *item)
+{
+	irr::s32 i = this->haveItem(item);
+	if(i >= 0)
 	{
-		irr::s32 i = this->haveItem(item);
-		if(i >= 0)
+		if(item->getTipo() == USO)
 		{
-			if(item->getTipo() == USO)
+			switch(item->getAtribute())
 			{
-				switch(item->getAtribute())
-				{
-				case NENHUM:
-					break;
-				case PV:
-					habilidadesSecundarias->addPV(item->getValue());
-					break;
-				case PM:
-					habilidadesSecundarias->addPM(item->getValue());
-					break;
-				default:
-					break;
-				}
-			}
-			else
-			{
-				//ERRO: EQUIPAMENTOS NÃO PODEM SER USADOS
+			case NENHUM:
+				break;
+			case PV:
+				habilidadesSecundarias->addPV(item->getValue());
+				break;
+			case PM:
+				habilidadesSecundarias->addPM(item->getValue());
+				break;
+			default:
+				break;
 			}
 		}
+		else
+		{
+			//ERRO: EQUIPAMENTOS NÃO PODEM SER USADOS
+		}
 	}
+}
 void CPersonagemJogador::equip(CItem *item)
+{
+	if(this->haveItem(item))
 	{
-		if(this->haveItem(item))
+		if(item->getClass() == CWEAPON)
 		{
-			if(item->getClass() == CWEAPON)
+			if(_equip->arma == NULL)
 			{
-				if(_equip->arma == NULL)
+				_equip->arma = (CWeapon*)item;
+				item->setEstado(EQUIPADO);
+				if(_equip->arma->getRange() <= MAXMELEERANGE)
 				{
-					_equip->arma = (CWeapon*)item;
-					item->setEstado(EQUIPADO);
-					if(_equip->arma->getRange() <= MAXMELEERANGE)
-					{
-						_ataque = habilidadesSecundarias->getMeleeAttack();
-						_dano = habilidadesSecundarias->getMeleeDamage();
-					}
-					else
-					{
-						_ataque = habilidadesSecundarias->getRangedAttack();
-						_dano = habilidadesSecundarias->getRangedDamage();
-					}
-					_range = _equip->arma->getRange();
-					_speed = _equip->arma->getSpeed();
-					_bareHands = false;
-				}
-				else if(inventario->size() < MAXITENS)
-				{
-					CItem *temp = new CWeapon();
-					temp = _equip->arma;
-					_equip->arma = (CWeapon*)item;
-					inventario->push_back(temp);
-					temp = NULL;
-					delete temp;
-					if(_equip->arma->getRange() <= MAXMELEERANGE)
-					{
-						_ataque = habilidadesSecundarias->getMeleeAttack();
-						_dano = habilidadesSecundarias->getMeleeDamage();
-					}
-					else
-					{
-						_ataque = habilidadesSecundarias->getRangedAttack();
-						_dano = habilidadesSecundarias->getRangedDamage();
-					}
-					_range = _equip->arma->getRange();
-					_speed = _equip->arma->getSpeed();
-					_bareHands = false;
+					_ataque = habilidadesSecundarias->getMeleeAttack();
+					_dano = habilidadesSecundarias->getMeleeDamage();
 				}
 				else
 				{
-					//ERRO: INVENTÁRIO CHEIO
+					_ataque = habilidadesSecundarias->getRangedAttack();
+					_dano = habilidadesSecundarias->getRangedDamage();
 				}
+				_range = _equip->arma->getRange();
+				_speed = _equip->arma->getSpeed();
+				_bareHands = false;
 			}
-			else if(item->getClass() == CARMOR)
+			else if(inventario->size() < MAXITENS)
 			{
-				if(_equip->armadura == NULL)
+				CItem *temp = new CWeapon();
+				temp = _equip->arma;
+				_equip->arma = (CWeapon*)item;
+				inventario->push_back(temp);
+				temp = NULL;
+				delete temp;
+				if(_equip->arma->getRange() <= MAXMELEERANGE)
 				{
-					_equip->armadura = (CArmor*)item;
-					item->setEstado(EQUIPADO);
-				}
-				else if(inventario->size() < MAXITENS)
-				{
-					CItem *temp = new CArmor();
-					temp = _equip->armadura;
-					_equip->armadura = (CArmor*)item;
-					inventario->push_back(temp);
-					temp = NULL;
-					delete temp;
+					_ataque = habilidadesSecundarias->getMeleeAttack();
+					_dano = habilidadesSecundarias->getMeleeDamage();
 				}
 				else
 				{
-					//ERRO: INVENTÁRIO CHEIO
+					_ataque = habilidadesSecundarias->getRangedAttack();
+					_dano = habilidadesSecundarias->getRangedDamage();
 				}
+				_range = _equip->arma->getRange();
+				_speed = _equip->arma->getSpeed();
+				_bareHands = false;
 			}
 			else
 			{
-				//ERRO: O ITEM NÃO É UMA ARMA/ARMADURA
+				//ERRO: INVENTÁRIO CHEIO
+			}
+		}
+		else if(item->getClass() == CARMOR)
+		{
+			if(_equip->armadura == NULL)
+			{
+				_equip->armadura = (CArmor*)item;
+				item->setEstado(EQUIPADO);
+			}
+			else if(inventario->size() < MAXITENS)
+			{
+				CItem *temp = new CArmor();
+				temp = _equip->armadura;
+				_equip->armadura = (CArmor*)item;
+				inventario->push_back(temp);
+				temp = NULL;
+				delete temp;
+			}
+			else
+			{
+				//ERRO: INVENTÁRIO CHEIO
 			}
 		}
 		else
 		{
-			//ERRO: O ITEM NÃO ESTÁ NO INVENTRÁRIO
+			//ERRO: O ITEM NÃO É UMA ARMA/ARMADURA
 		}
 	}
-void CPersonagemJogador::unequip(CItem *item)
+	else
 	{
-		if(_equip->arma == item)
-		{
-			_equip->arma = NULL;
-			item->setEstado(NAMOCHILA);
-			_ataque = _habilidadesPrimarias->getFOR();
-			_dano = _habilidadesPrimarias->getFOR();
-			_range = MAXMELEERANGE;
-			_speed = _habilidadesPrimarias->getAGI();
-			_bareHands = true;
-		}
-		else if(_equip->armadura == item)
-		{
-			_equip->arma = NULL;
-			item->setEstado(NAMOCHILA);
-		}
-		else
-		{
-			//ERRO: O ITEM ESPECIFICADO NÃO ESTÁ EQUIPADO
-		}
+		//ERRO: O ITEM NÃO ESTÁ NO INVENTRÁRIO
 	}
+}
+void CPersonagemJogador::unequip(CItem *item)
+{
+	if(_equip->arma == item)
+	{
+		_equip->arma = NULL;
+		item->setEstado(NAMOCHILA);
+		_ataque = _habilidadesPrimarias->getFOR();
+		_dano = _habilidadesPrimarias->getFOR();
+		_range = MAXMELEERANGE;
+		_speed = _habilidadesPrimarias->getAGI();
+		_bareHands = true;
+	}
+	else if(_equip->armadura == item)
+	{
+		_equip->arma = NULL;
+		item->setEstado(NAMOCHILA);
+	}
+	else
+	{
+		//ERRO: O ITEM ESPECIFICADO NÃO ESTÁ EQUIPADO
+	}
+}
 //Friends Manipulation
 int CPersonagemJogador::isFriend(CPersonagemJogador *jogador)
-	{
-		return(_friends->binary_search_const(jogador));
-	}
+{
+	return(_friends->binary_search_const(jogador));
+}
 void CPersonagemJogador::addFriend(CPersonagemJogador *newFriend)
+{
+	if(_friends->size() < MAXFRIENDS)
 	{
-		if(_friends->size() < MAXFRIENDS)
-		{
-			_friends->push_back(newFriend);
-			_friends->sort();
-		}
-		else return; // ERRO: NÚMERO MÁXIMO DE AMIGOS PERMITIDOS ATINGIDO
+		_friends->push_back(newFriend);
+		_friends->sort();
 	}
+	else return; // ERRO: NÚMERO MÁXIMO DE AMIGOS PERMITIDOS ATINGIDO
+}
 void CPersonagemJogador::removeFriend(CPersonagemJogador *jogador)
+{
+	irr::s32 i = this->isFriend(jogador);
+	if(i >=	 0)
 	{
-		irr::s32 i = this->isFriend(jogador);
-		if(i >=	 0)
-		{
-			_friends->erase(i);
-		}
-		else
-		{
-			//ERRO: O AMIGO NÃO CONSTA NA LISTA
-		}
-		return;
+		_friends->erase(i);
 	}
+	else
+	{
+		//ERRO: O AMIGO NÃO CONSTA NA LISTA
+	}
+	return;
+}
 //Party Manipulation
 bool CPersonagemJogador::isPartyLeader()
-	{
-		return((!_party->empty())&&(_party->getLast() == this));
-	}
+{
+	return((!_party->empty())&&(_party->getLast() == this));
+}
 int CPersonagemJogador::isPartyMember(CPersonagemJogador* jogador)
-	{
-		return(_party->binary_search_const(jogador));
-	}
+{
+	return(_party->binary_search_const(jogador));
+}
 void CPersonagemJogador::addPartyMember (CPersonagemJogador *jogador)
+{
+	if((this->isPartyLeader()) && (!this->isPartyMember(jogador)))
 	{
-		if((this->isPartyLeader()) && (!this->isPartyMember(jogador)))
-		{
-			_party->push_front(jogador);
-			_party->sort();
-		}
-		else
-		{
-			//ERRO: NÃO É LÍDER DO GRUPO
-		}
+		_party->push_front(jogador);
+		_party->sort();
 	}
+	else
+	{
+		//ERRO: NÃO É LÍDER DO GRUPO
+	}
+}
 void CPersonagemJogador::removePartyMember(CPersonagemJogador *jogador)
+{
+	if((_party->empty()) && ((this->isPartyMember(jogador))>=0))
 	{
-		if((_party->empty()) && ((this->isPartyMember(jogador))>=0))
-		{
-			_party->erase(this->isPartyMember(jogador));
-		}
-		else
-		{
-			//ERRO: O JOGADOR NÃO PERTENCE AO GRUPO
-		}
-		return;
+		_party->erase(this->isPartyMember(jogador));
 	}
+	else
+	{
+		//ERRO: O JOGADOR NÃO PERTENCE AO GRUPO
+	}
+	return;
+}
 void CPersonagemJogador::givePartyAlliesID(irr::core::array<CPersonagemJogador*> *lista)
-	{
-		lista = _party;
-	}
+{
+	lista = _party;
+}
 void CPersonagemJogador::updateAlliesID()
-	{
-	}
+{
+}
 void CPersonagemJogador::createParty()
+{
+	if(_party->empty())
 	{
-		if(_party->empty())
-		{
-			_party->push_back(this);
-		}
-		else
-		{
-			//ERRO: JÁ FAZ PARTE DE UMA PARTY
-		}
+		_party->push_back(this);
 	}
+	else
+	{
+		//ERRO: JÁ FAZ PARTE DE UMA PARTY
+	}
+}
 void CPersonagemJogador::joinParty(CPersonagemJogador *lider)
+{
+	if(_party->empty())
 	{
-		if(_party->empty())
-		{
-			lider->addPartyMember(this);
-			lider->givePartyAlliesID(_party);
-		}
-		else
-		{
-			//ERRO: JÁ FAZ PARTE DE UMA PARTY
-		}
+		lider->addPartyMember(this);
+		lider->givePartyAlliesID(_party);
 	}
+	else
+	{
+		//ERRO: JÁ FAZ PARTE DE UMA PARTY
+	}
+}
 void CPersonagemJogador::leaveParty(CPersonagemJogador *lider)
+{
+	if(!(_party->empty()))
 	{
-		if(!(_party->empty()))
-		{
-			lider->removePartyMember(this);
-			_party->clear();
-		}
+		lider->removePartyMember(this);
+		_party->clear();
 	}
+}
 //Quest
 void CPersonagemJogador::acceptQuest(CQuest *quest){}
 //Speaking
@@ -334,9 +432,9 @@ void CPersonagemJogador::speakToPlayer(CPersonagemJogador *alvo){}
 void CPersonagemJogador::speakToNPC(CPersonagem *alvo){}
 //Batalha
 void CPersonagemJogador::takeDamage(int damage)
-	{
-		habilidadesSecundarias->addPV(habilidadesSecundarias->getPV() - damage);
-	}
+{
+	habilidadesSecundarias->addPV(habilidadesSecundarias->getPV() - damage);
+}
 void CPersonagemJogador::attack()
 {
 	int testValue = 0;
@@ -368,31 +466,31 @@ void CPersonagemJogador::attack()
 //Level Up
 void CPersonagemJogador::updateXP(){/*Acessa banco de dados pra atualizar _xpToNextLv _xpToPrevLv*/}
 bool CPersonagemJogador::haveLevelUp()
+{
+	if(_experiencia >= _xpToNextLv)
 	{
-		if(_experiencia >= _xpToNextLv)
-		{
-			_pontoDistribuir = _pontoDistribuir + 5;
-			_nivel = _nivel + 1;
-			updateXP();
-			return(true);
-		}
-		else return(false);
+		_pontoDistribuir = _pontoDistribuir + 5;
+		_nivel = _nivel + 1;
+		updateXP();
+		return(true);
 	}
+	else return(false);
+}
 bool CPersonagemJogador::haveLevelDown()
+{
+	if(_experiencia < _xpToPrevLv)
 	{
-		if(_experiencia < _xpToPrevLv)
-		{
-			_nivel = _nivel - 1;
-			_habilidadesPrimarias->addFOR(-1);
-			_habilidadesPrimarias->addDES(-1);
-			_habilidadesPrimarias->addAGI(-1);
-			_habilidadesPrimarias->addRES(-1);
-			_habilidadesPrimarias->addINS(-1);
-			updateXP();
-			return(true);
-		}
-		else return(false);
+		_nivel = _nivel - 1;
+		_habilidadesPrimarias->addFOR(-1);
+		_habilidadesPrimarias->addDES(-1);
+		_habilidadesPrimarias->addAGI(-1);
+		_habilidadesPrimarias->addRES(-1);
+		_habilidadesPrimarias->addINS(-1);
+		updateXP();
+		return(true);
 	}
+	else return(false);
+}
 void CPersonagemJogador::distibutePoints(int points, int atribute)
 {
 	if(points <= _pontoDistribuir)

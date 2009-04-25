@@ -18,9 +18,9 @@ CBonus::CBonus()
 	next = NULL;
 	prev = NULL;
 }
-CBuff CBonus::getBuff()
+CBuff *CBonus::getBuff()
 {
-	return(*origem);
+	return(origem);
 }
 void CBonus::setOrigem(CBuff *buff)
 {
@@ -55,5 +55,18 @@ void CBonus::remove()
 	 temp2 = NULL;
 	 delete temp;
 	 delete temp2;
+}
+void CBonus::removeElement(TipoBuff indice)
+{
+	CBonus *temp = this;
+
+	while(temp != NULL)
+	{
+		if(temp->getBuff()->getTipo() == indice)
+		{
+			temp->remove();
+		}
+		temp = temp->next;
+	}
 }
 #endif

@@ -13,7 +13,9 @@
 #include "Enumerators.h"
 //#include "CBuff.h"
 
+#ifndef _CBUFF_H_
 class CBuff;
+#endif
 
 class CBonus
 {
@@ -24,10 +26,11 @@ public:
 	CBonus *next;
 public:
 	CBonus();
-	CBuff getBuff();
+	CBuff *getBuff();
 	void setOrigem(CBuff *buff);
 	void add(CBonus *bonus);
 	void remove();
+	void removeElement(TipoBuff indice);
 	//Métodos virtuais
 	virtual int getValue(Atrib tipo)=0;
 	virtual void createBonus(int FOR_ATC, int AGI_ATD, int DES_DMC, int INS_DMD, int RES_DEF)=0;
