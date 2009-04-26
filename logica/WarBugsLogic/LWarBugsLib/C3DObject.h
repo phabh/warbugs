@@ -17,7 +17,8 @@
 using namespace std;
 #include "CWarBugObject.h"
 
-struct Ponto{
+struct Ponto
+{
 	int x;
 	int y;
 };
