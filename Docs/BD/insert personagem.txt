@@ -1,0 +1,34 @@
+INSERT INTO PERSOANGEM VALUES
+(    ,//IDPERSONAGEM
+     ,//NOME
+     ,//TEMPORESPAW
+     ,//NIVEL
+     ,//DINHEIRO
+     ,//experiencia
+     ,//raca
+     ,//forca
+     ,//agilidade
+     ,//destreza
+     ,//resistencia
+     ,//instinto
+     ,//pv
+     ,//pp
+     ,//ataquedistancia
+     ,//danodistancia
+     ,//defesa
+     ,//taxaataque
+     ,//tempocarga
+     ,//tipopersonagem //NPC, INIMIGO, JOGADOR etc
+     ,//lealdade com aranha
+     ,//lealdade com besouro
+     ,//lealdade com escorpiao
+     ,//lealdade com louvadeus
+     ,//lealdade com vespa
+     ,//idarmor equipada
+     ,//idweapon equipada
+     ,//ponto x
+     ,//ponto y
+     ,//ponto z
+     ,//idtextura
+      //idmodelo
+);
