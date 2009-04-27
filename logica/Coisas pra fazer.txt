@@ -1,0 +1,2 @@
+-Colokr level nos inimigos
+-get e set dos inimigos
