@@ -8,7 +8,7 @@
 	das conexões para cada cenário
 */
 
-class CCenarioServer : public CObject
+class CCenarioServer : public CWarBugObject
 {
 
 	private:

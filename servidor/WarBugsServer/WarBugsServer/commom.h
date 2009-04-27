@@ -5,7 +5,12 @@
 	Inclusão das classes de lógica do jogo
 */
 #include "dreamSock.h"
-#include "logica\CPersonagemJogador.cpp"
+#include <CPersonagemJogador.h>
+#include <CJogador.h>
+#include <CCenario.h>
+#include <CTimer.cpp>
+#include <CInimigo.h>
+#include <CHabilidadesSecundarias.h>
 #include "CDataBase.h"
 #include <vcclr.h>
 
