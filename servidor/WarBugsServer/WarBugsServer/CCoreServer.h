@@ -2,17 +2,21 @@
 #define _CCORESERVER_H
 
 #include "commom.h"
-#include "CCenarioServer.h"
+//#include "CCenarioServer.h"
+ref class WarBugsLog
+{
+public:
+	static  System::Windows::Forms::ListBox^ _log;
+};
+
 
 class CCoreServer
 {
-				CCenarioServer  * _cenarioList;
+				CCenario		* _cenarioList;
 				dreamServer     * _networkServer;
 				CDataBase       * _db;
 				
-				System::Windows::Forms::ListBox^ _log;
-
-				CPrsonagemJogador * _limbo;
+				CPersonagemJogador * _limbo;
 				CJogador        * _playersList;
 
 				int               _fps;
@@ -21,7 +25,7 @@ class CCoreServer
 				bool              _serverStarted;
 				
 	public:
-						CCoreServer(CDataBase * db, int fps);	//Construtor
+						CCoreServer(CDataBase * db, int fps, System::Windows::Forms::ListBox^ log);	//Construtor
 
 		void			initialize();					//inicializará todo o server
 
@@ -66,8 +70,7 @@ class CCoreServer
 
 CCoreServer::CCoreServer(CDataBase *db, int fps, System::Windows::Forms::ListBox^ log)
 {
-
-	_log = log;
+	WarBugsLog::_log = log;
 
 	if(db != NULL)
 		return;
@@ -78,7 +81,7 @@ CCoreServer::CCoreServer(CDataBase *db, int fps, System::Windows::Forms::ListBox
 	_fps = fps;
 
 	System::String^ texto = L"Inicializando o Server...";
-	_log->Items->Add(texto);
+	WarBugsLog::_log->Items->Add(texto);
 	initialize();
 }
 
@@ -92,20 +95,124 @@ void CCoreServer::initialize()
 
 	
 	System::String^ texto = L"Pegando os dados do BD...";
-	_log->Items->Add(texto);	
+	WarBugsLog::_log->Items->Add(texto);	
+
 	if(_db->isConnected())
 	{
 		//1. selecionará os cenários jogáveis que há no bando de dados e irá criar a lista de cenários
 		sql = "SELECT * FROM CENARIO";
 		_db->selectNow(toChar(sql), numCampos, numRegs, dados);
 
-		for(int i = 0; i < numRegs; i++)
+		for(int i = 0; i < numCampos; i++)
 		{
-			
-		
+			dados->RemoveAt(0);
 		}
 
+		CCenario * cenarioTemp;
+
+		texto = L"Criando todos os cenários";
+		WarBugsLog::_log->Items->Add(texto);
+
+		//preenchimento de todos os cenários
+		for(int i = 0; i < numRegs; i++)
+		{
+
+			cenarioTemp = new CCenario();
+			cenarioTemp->setID(Int32::Parse(dados[0]->ToString());
+			cenarioTemp->setNome(Int32::Parse(dados[1]->ToString());
+			cenarioTemp->setIDModelo(Int32::Parse(dados[2]->ToString());
+			cenarioTemp->setIDTextura(Int32::Parse(dados[3]->ToString());
+			cenarioTemp->_next = NULL;
+
+			//se for o primeiro cenário
+			if(_cenarioList == NULL)
+			{
+				_cenarioList = cenarioTemp;
+			}
+			//do segundo em diante
+			else
+			{
+				CCenario * temp = _cenarioList;
+
+				for(; temp != NULL; temp = temp->_next)
+				{
+					
+				}
+
+				temp = cenarioTemp;				
+			}
+
+			for(int i = 0; i < numCampos; i++)
+			{
+				dados->RemoveAt(0);
+			}
+		}
+
+
+		texto = L"Criando todos os persoangens e colocando-os em seus respectivos cenários";
+		WarBugsLog::_log->Items->Add(texto);
+
+		//colocando todos os personagem em seus cenários
+		// 1 - Jogador
+		// 2 - Inimigo
+		// 3 - NPC
+		// 4 - Vendedor
 		
+		dados     = gcnew System::Collections::ArrayList();
+		numCampos = 0;
+		numRegs   = 0;
+
+		sql = "SELECT * FROM PERSONAGEM WHERE TIPO = 2";
+		_db->selectNow(toChar(sql), numCampos, numRegs, dados);		
+		
+		for(int i = 0; i < numCampos; i++)
+		{
+			dados->RemoveAt(0);
+		}
+
+		CInimigo * inimigoTemp;
+		CHabilidadesSecundarias * habiSecunTemp;
+
+		texto = L"Inimigos";
+		WarBugsLog::_log->Items->Add(texto);
+
+		for(int i = 0; i < numRegs; i++)
+		{
+			habiSecunTemp = new CHabilidadesSecundarias(
+				System::Int32::Parse(dados[12]->ToString()), //Pontos de Vida
+				System::Int32::Parse(dados[13]->ToString()), //Pontos de Poder
+				System::Int32::Parse(dados[15]->ToString()), //Ataque Corpo a Corpo
+				System::Int32::Parse(dados[14]->ToString()), //Ataque a Distancia
+				System::Int32::Parse(dados[16]->ToString()), //Dano Corpo a Corpo
+				System::Int32::Parse(dados[17]->ToString()), //Dano a Distancia
+				System::Int32::Parse(dados[18]->ToString()), //Defesa
+				System::Int32::Parse(dados[19]->ToString()), //Taxa de Ataque
+				System::Int32::Parse(dados[20]->ToString()));//Tempo de Carga
+
+			inimigoTemp = new CInimigo();
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setNome(dados[1]->ToString());
+			inimigoTemp->setNivel(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setPV(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+			inimigoTemp->setID(System::Int32::Parse(dados[0]->ToString()));
+		}
+
+
 
 	//Aki acontecerá o seguinte
 
