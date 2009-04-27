@@ -11,6 +11,8 @@ private:
 	int _cenarioDestino;
 	Ponto *_posicaoDestino;
 public:
+	CPortal *_next;
+
 	CPortal();
 	CPortal(int ID, int cenarioID, Ponto *posicao);
 	CPortal(int ID, int cenarioID, int x, int y);

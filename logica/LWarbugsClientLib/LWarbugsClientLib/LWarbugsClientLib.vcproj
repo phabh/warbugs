@@ -152,6 +152,14 @@
 				RelativePath=".\CClientCharacter.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\CClientEquipment.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CClientLoyalty.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -160,6 +168,14 @@
 			>
 			<File
 				RelativePath=".\CClientCharacter.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CClientEquipment.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CClientLoyalty.h"
 				>
 			</File>
 		</Filter>
