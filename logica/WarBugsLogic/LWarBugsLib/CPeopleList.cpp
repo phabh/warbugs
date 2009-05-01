@@ -1,29 +1,30 @@
-#include "CBolsa.h"
+#include "CPeopleList.h"
 
-CBolsa::CBolsa(void)
+CPeopleList::CPeopleList(void)
 {
 	_first = NULL;
 	_size = 0;
 }
-CBolsa::CBolsa(CItem *item)
+CPeopleList::CPeopleList(CPersonagem *personagem)
 {
-	_first->item = item;
+	_first->personagem = personagem;
 	_first->next = NULL;
 	_first->prev = NULL;
 	_size = 1;
 }
-bool CBolsa::isEmpty()
+bool CPeopleList::isEmpty()
 {
 	return(_first == NULL);
 }
-int CBolsa::size()
+int CPeopleList::size()
 {
 	return(_size);
 }
-void CBolsa::addItem(CItem *item)
+void CPeopleList::addPersonagem(CPersonagem *personagem)
 {
-	SElemento *nodo = new SElemento();
-	nodo->item = item;
+	_size = _size + 1;
+	SCharElemento *nodo = new SCharElemento();
+	nodo->personagem = personagem;
 	nodo->next = NULL;
 	nodo->prev = NULL;
 	if(isEmpty())
@@ -32,7 +33,7 @@ void CBolsa::addItem(CItem *item)
 	}
 	else
 	{
-		SElemento *temp = _first;
+		SCharElemento *temp = _first;
 		while(temp->next != NULL)
 		{
 			temp = temp->next;
@@ -45,38 +46,43 @@ void CBolsa::addItem(CItem *item)
 	nodo = NULL;
 	delete nodo;
 }
-/*CItem *CBolsa::removeItem(int posItem)
+CPersonagem *CPeopleList::removePersonagem(int IDpersonagem)
 {
-	SElemento *temp = _first;
-	posItem = posItem - 1;
-	while(posItem > 0)
+	SCharElemento *temp = _first;
+	while(temp->next != NULL)
 	{
+		if((temp->personagem)->getID() == IDpersonagem)
+		{
+			if(temp->prev != NULL)
+				(temp->prev)->next = temp->next;
+			else
+			{
+				_first = temp->next;
+				_first->next = (temp->next)->next;
+				_first->prev = NULL;
+			}
+
+			if(temp->next != NULL)
+				(temp->next)->prev = temp->prev;
+			else
+			{
+				(temp->prev)->next = NULL;
+			}
+			_size = _size - 1;
+			return(temp->personagem);
+		}
 		temp = temp->next;
-		posItem = posItem -1;
 	}
-	if(temp->prev != NULL)
-		(temp->prev)->next = temp->next;
-	else
-	{
-		_first = temp->next;
-		_first->next = (temp->next)->next;
-		_first->prev = NULL;
-	}
-
-	if(temp->next != NULL)
-		(temp->next)->prev = temp->prev;
-	else
-	{
-		(temp->prev)->next = NULL;
-	}
-	return(temp->item);
-}*/
-CItem *CBolsa::removeItem(int IDItem)
+	temp = NULL;
+	delete temp;
+	return (NULL);
+}
+CPersonagem *CPeopleList::removePersonagem(CPersonagem *personagem)
 {
-	SElemento *temp = _first;
+	SCharElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if((temp->item)->getID() == IDItem)
+		if(temp->personagem == personagem)
 		{
 			if(temp->prev != NULL)
 				(temp->prev)->next = temp->next;
@@ -93,36 +99,8 @@ CItem *CBolsa::removeItem(int IDItem)
 			{
 				(temp->prev)->next = NULL;
 			}
-			return(temp->item);
-		}
-	}
-	temp = NULL;
-	delete temp;
-	return(NULL);
-}
-CItem *CBolsa::removeItem(CItem *item)
-{
-	SElemento *temp = _first;
-	while(temp->next != NULL)
-	{
-		if(temp->item == item)
-		{
-			if(temp->prev != NULL)
-				(temp->prev)->next = temp->next;
-			else
-			{
-				_first = temp->next;
-				_first->next = (temp->next)->next;
-				_first->prev = NULL;
-			}
-
-			if(temp->next != NULL)
-				(temp->next)->prev = temp->prev;
-			else
-			{
-				(temp->prev)->next = NULL;
-			}
-			return(temp->item);
+			_size = _size - 1;
+			return(temp->personagem);
 		}
 		else
 		{
@@ -133,30 +111,28 @@ CItem *CBolsa::removeItem(CItem *item)
 	delete temp;
 	return(NULL);
 }
-CItem *CBolsa::getItem(int IDItem)
+CPersonagem *CPeopleList::getPersonagem(int IDpersonagem)
 {
-	SElemento *temp = _first;
+	SCharElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if((temp->item)->getID() == IDItem)
+		if((temp->personagem)->getID())
 		{
-			return(temp->item);
+			return(temp->personagem);
 		}
 		else
 		{
 			temp = temp->next;
 		}
 	}
-	temp = NULL;
-	delete temp;
 	return(NULL);
 }
-bool CBolsa::haveItem(CItem *item)
+bool CPeopleList::havePersonagem(CPersonagem *personagem)
 {
-	SElemento *temp = _first;
+	SCharElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if(temp->item == item)
+		if(temp->personagem == personagem)
 		{
 			temp = NULL;
 			delete temp;
@@ -171,3 +147,4 @@ bool CBolsa::haveItem(CItem *item)
 	delete temp;
 	return(false);
 }
+

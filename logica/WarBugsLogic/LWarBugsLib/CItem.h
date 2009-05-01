@@ -26,7 +26,6 @@ private:
 	bool _dropavel;//Identifica se o item pode ou não ser dropado
 	//NECESSITA CLASSE JOGADOR -> apontador pro dono do item
 public:
-	CItem *next;
 
 	CItem();
 	string getNome();

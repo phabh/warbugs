@@ -48,9 +48,11 @@ private:
 	int _id;//ID único de um objeto
 public:
 	CWarBugObject();
-protected:
+public:
 	int getID();
-	/*void inicializar(CObjectCount &counter)
+	void setID(int newID);
+protected:
+	/*void initialize(CObjectCount &counter)
 	 *inicializa o objeto, dando para ele um ID único e incrementando o contador de objetos
 	 *
 	 *@param: CObjectCount &counter: contador de objetos que irá gerar o ID

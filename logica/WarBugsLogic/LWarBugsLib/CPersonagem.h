@@ -12,6 +12,7 @@
 
 #include "Enumerators.h"
 #include "C3DObject.h"
+#include "CBolsa.h"
 
 #ifndef _CITEM_H_
 class CItem;
@@ -44,12 +45,11 @@ class CPersonagem : public C3DObject{
 protected:
 	EstadoPersonagem estado;
 	//Tempo de respawn
-	irr::core::array<CItem*> *inventario;
+	CBolsa *inventario;
 	CHabilidadesSecundarias *habilidadesSecundarias;
 	CBonus *bonusSecundario;
 	irr::core::array<CPoder*> *poderes;
 public:
-	CPersonagem *next;
 
 	CPersonagem();
 	//Getters e Setters

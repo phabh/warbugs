@@ -47,8 +47,8 @@ class CPersonagemJogador : public CPersonagem
 	CEquipamento *_equip;
 	CBuff *_status;
 	CLealdade *_lealdade;
-	irr::core::array<CPersonagemJogador*> *_party;
-	irr::core::array<CPersonagemJogador*> *_friends;
+	//irr::core::array<CPersonagemJogador*> *_party;
+	//irr::core::array<CPersonagemJogador*> *_friends;
 	int _jogadorID;
 	//Combate
 	CPersonagem *_alvo;
@@ -86,8 +86,8 @@ public:
 	void setEquip(CEquipamento *equip);
 	void setStatus(CBuff *status);
 	void setLoyalty(CLealdade *lealdade);
-	void setParty(irr::core::array<CPersonagemJogador*> *lista);
-	void setFriends(irr::core::array<CPersonagemJogador*> *lista);
+	//void setParty(irr::core::array<CPersonagemJogador*> *lista);
+	//void setFriends(irr::core::array<CPersonagemJogador*> *lista);
 	void setPlayer(int playerID);
 	void setTarget(CPersonagem *alvo);
 	void setBareHands(bool isBareHands);
@@ -104,7 +104,7 @@ public:
 	void equip(CItem *item);
 	void unequip(CItem *item);
 	//Friends Manipulation
-	int isFriend(CPersonagemJogador *jogador);
+	/*int isFriend(CPersonagemJogador *jogador);
 	void addFriend(CPersonagemJogador *newFriend);
 	void removeFriend(CPersonagemJogador *jogador);
 	//Party Manipulation
@@ -116,7 +116,7 @@ public:
 	void updateAlliesID();
 	void createParty();
 	void joinParty(CPersonagemJogador *lider);
-	void leaveParty(CPersonagemJogador *lider);
+	void leaveParty(CPersonagemJogador *lider);*/
 	//Quest
 	void acceptQuest(CQuest *quest);
 	//Speaking

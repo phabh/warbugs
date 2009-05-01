@@ -3,26 +3,31 @@
 using namespace std;
 #include "CItem.h"
 
-class CBolsa : C3DObject
+typedef struct SCelula
+{
+	CItem *item;
+	SCelula *prev;
+	SCelula *next;
+} SElemento;
+
+
+class CBolsa : public C3DObject
 {
 private:
-	CItem *_item;
-	CBolsa *_next;
+	SElemento *_first;
 	int _size;
 
 public:
 	CBolsa(void);
-	CBolsa(CBolsa * base);
 	CBolsa(CItem * item);
-
-	CItem *getThis();
-	CBolsa *getNext();
-	void setThis(CItem *item);
-	void setNext(CBolsa *next);
 
 	bool isEmpty();
 	int size();
 	void addItem(CItem *item);
+	//CItem *removeItem(int posItem);
 	CItem *removeItem(int IDItem);
-	CItem *getItem(intIDItem);
+	CItem *removeItem(CItem *item);
+	CItem *getItem(int IDItem);
+
+	bool haveItem(CItem *item);
 };
