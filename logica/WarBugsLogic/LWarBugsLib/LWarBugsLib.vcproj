@@ -163,7 +163,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\CBolsa.cpp"
+				RelativePath=".\CBolsaList.cpp"
 				>
 			</File>
 			<Filter
@@ -305,6 +305,18 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="3.7 - TAD"
+					>
+					<File
+						RelativePath=".\CBolsa.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CPeopleList.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -313,7 +325,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\CBolsa.h"
+				RelativePath=".\CBolsaList.h"
 				>
 			</File>
 			<File
@@ -464,6 +476,18 @@
 					</File>
 					<File
 						RelativePath=".\CPortal.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="3.7 - TAD"
+					>
+					<File
+						RelativePath=".\CBolsa.h"
+						>
+					</File>
+					<File
+						RelativePath=".\CPeopleList.h"
 						>
 					</File>
 				</Filter>

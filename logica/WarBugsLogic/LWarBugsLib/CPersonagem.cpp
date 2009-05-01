@@ -15,11 +15,10 @@
 
 CPersonagem::CPersonagem()
 {
-	inventario = new irr::core::array<CItem*>();
+	inventario = new CBolsa();
 	habilidadesSecundarias = new CHabilidadesSecundarias();
 	bonusSecundario = new CBonusSecundario();
 	poderes = new irr::core::array<CPoder*>();
-	next = NULL;
 }
 //Getters e Setters
 CHabilidadesSecundarias *CPersonagem::getStats()

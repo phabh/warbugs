@@ -14,7 +14,6 @@
 
 CItem::CItem()
 {
-	next = NULL;
 }
 string CItem::getNome()
 {

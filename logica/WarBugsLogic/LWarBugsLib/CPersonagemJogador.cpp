@@ -28,8 +28,8 @@ CPersonagemJogador::CPersonagemJogador()
 	_dinheiro = 0;
 	_status = new CBuff();
 	_lealdade = new CLealdade();
-	_party = new irr::core::array<CPersonagemJogador*>();
-	_friends = new irr::core::array<CPersonagemJogador*>();
+	//_party = new irr::core::array<CPersonagemJogador*>();
+	//_friends = new irr::core::array<CPersonagemJogador*>();
 	_jogadorID = 0;
 	_alvo = NULL;
 	_bareHands = true;
@@ -131,14 +131,14 @@ void CPersonagemJogador::setLoyalty(CLealdade *lealdade)
 {
 	_lealdade = lealdade;
 }
-void CPersonagemJogador::setParty(irr::core::array<CPersonagemJogador*> *lista)
+/*void CPersonagemJogador::setParty(irr::core::array<CPersonagemJogador*> *lista)
 {
 	_party = lista;
 }
 void CPersonagemJogador::setFriends(irr::core::array<CPersonagemJogador*> *lista)
 {
 	_friends = lista;
-}
+}*/
 void CPersonagemJogador::setPlayer(int playerID)
 {
 	_jogadorID = playerID;
@@ -172,22 +172,19 @@ void CPersonagemJogador::setSpeed(int speed)
 //Manipulação de itens
 int CPersonagemJogador::haveItem(CItem * item)
 {
-	return(inventario->binary_search_const(item));
+	return(inventario->haveItem(item));
 }
 void CPersonagemJogador::addItem(CItem *item)
 {
 	if(inventario->size() < MAXITENS)
 	{
-		inventario->push_back(item);
-		inventario->sort();
+		inventario->addItem(item);
 	}
 }
 void CPersonagemJogador::dropItem(CItem *item)
 {
-	irr::s32 i = this->haveItem(item);
-	if(i >= 0)
+	if(inventario->removeItem(item) != NULL)
 	{
-		inventario->erase(i);
 		item->setEstado(NOCHAO);
 		item->setPosition(this->getPosition());
 	}
@@ -198,8 +195,7 @@ void CPersonagemJogador::dropItem(CItem *item)
 }
 void CPersonagemJogador::useItem(CItem *item)
 {
-	irr::s32 i = this->haveItem(item);
-	if(i >= 0)
+	if(haveItem(item))
 	{
 		if(item->getTipo() == USO)
 		{
@@ -252,7 +248,7 @@ void CPersonagemJogador::equip(CItem *item)
 				CItem *temp = new CWeapon();
 				temp = _equip->arma;
 				_equip->arma = (CWeapon*)item;
-				inventario->push_back(temp);
+				inventario->addItem(temp);
 				temp = NULL;
 				delete temp;
 				if(_equip->arma->getRange() <= MAXMELEERANGE)
@@ -286,7 +282,7 @@ void CPersonagemJogador::equip(CItem *item)
 				CItem *temp = new CArmor();
 				temp = _equip->armadura;
 				_equip->armadura = (CArmor*)item;
-				inventario->push_back(temp);
+				inventario->addItem(temp);
 				temp = NULL;
 				delete temp;
 			}
@@ -328,7 +324,7 @@ void CPersonagemJogador::unequip(CItem *item)
 	}
 }
 //Friends Manipulation
-int CPersonagemJogador::isFriend(CPersonagemJogador *jogador)
+/*int CPersonagemJogador::isFriend(CPersonagemJogador *jogador)
 {
 	return(_friends->binary_search_const(jogador));
 }
@@ -424,7 +420,7 @@ void CPersonagemJogador::leaveParty(CPersonagemJogador *lider)
 		lider->removePartyMember(this);
 		_party->clear();
 	}
-}
+}*/
 //Quest
 void CPersonagemJogador::acceptQuest(CQuest *quest){}
 //Speaking
