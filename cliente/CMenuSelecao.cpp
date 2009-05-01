@@ -1,20 +1,20 @@
-#ifndef __CMenuSelecao__
-#define __CMenuSelecao__
+#pragma once
 
-#include "CMenu.cpp"
-
+#include "CMenu.h"
 
 class CMenuSelecao : public CMenu
 {
 
 private:
 
-	enum flagSelecao {CHANGED, OBJSELECTED};
+	
 	ISceneNode *_nodoSelecionado;
 	int _idPersonagem;
 
 	float _camRotation;
 	float _camCurrRotation;
+
+	void graphicsDrawAddOn(){}
 
 	void updateHuds()
 	{
@@ -31,15 +31,50 @@ private:
 		_gerenciadorHud->addButton(rect<s32>(140,10,240,50), 0, 5, L"<");
 		_gerenciadorHud->addButton(rect<s32>(540,10,640,50), 0, 6, L">");
 
-		_flags[CHANGED] = false;
+		_flags[HUDCHANGED] = false;
 	}
 
-	void updateCommands()
+	void readCommands()
 	{
-		_timer->update();
+//		_timer->update();
 
-		_camera->setRotation(vector3df(0,_camCurrRotation,0));
+		if(_gerenciadorEventos->isKeyDown(KEY_ESCAPE))
+		{
+			_nextID = SAIDA;
+			return;
+		}
 
+		if(_gerenciadorEventos->getEventCallerByElement(EGET_BUTTON_CLICKED))
+		{
+			// Trata os cliques em botões
+			switch (_gerenciadorEventos->getEventCallerByID())
+			{
+				case 3:
+					_nextID = CRIACAOPERSONAGEM;
+					return;
+				break;
+
+				case 4:
+					_nextID =  JOGO;
+					return;
+				break;
+
+				case 5:
+					_camRotation+=90;
+					cout << "\n" << _camRotation;
+				break;
+
+				case 6:
+					_camRotation-=90;
+					cout << "\n" << _camRotation;
+				break;
+			
+				default:
+					cout << "\nID de botao desconhecido." << endl;
+			};
+		}
+
+		_camera->setRotation(vector3df(0, _camCurrRotation, 0));
 
 		if(_gerenciadorEventos->isMouseButtonReleased(MBLEFT))
 		{
@@ -48,7 +83,7 @@ private:
 			if(_flags[OBJSELECTED])
 			{
 				_flags[OBJSELECTED] = false; // Drop 3D
-				_flags[CHANGED] = true;
+				_flags[HUDCHANGED] = true;
 			}
 			else
 			{
@@ -62,43 +97,15 @@ private:
 				if(_idPersonagem > 0)
 				{
 				   _flags[OBJSELECTED] = true; // Get 3D
-				   _flags[CHANGED] = true;
+				   _flags[HUDCHANGED] = true;
 				}
-			}
-
-			if(_gerenciadorEventos->getEventCallerByElement(EGET_BUTTON_CLICKED))
-			{
-				// Trata os cliques em botões
-				switch (_gerenciadorEventos->getEventCallerByID())
-				{
-					case 3:
-						_myID = CRIACAOPERSONAGEM;
-					break;
-
-					case 4:
-						_myID =  JOGO;
-					break;
-
-					case 5:
-						_camRotation+=90;
-						cout << "\n" << _camRotation;
-					break;
-
-					case 6:
-						_camRotation-=90;
-						cout << "\n" << _camRotation;
-					break;
-				
-					default:
-						cout << "\nID de botao desconhecido." << endl;
-				};
 			}		
 		}
 	}
 
 	void updateGraphics()
 	{
-		_timer->update();
+		//_timer->update();
 
 		float delta = fabs(_camRotation - _camCurrRotation);
 
@@ -137,14 +144,14 @@ public:
 		_gerenciadorAudio = audio;
 		_gerenciadorAudio->removeAllSoundSources();
 
-		_myID = SELECAOPERSONAGEM;
+		_myID = _nextID = SELECAOPERSONAGEM;
 		_arquivoCena = "recursos/cenas/selecao.irr";
-		_timer = new CTimer();
-		_timer->initialize();
+		//_timer = new CTimer();
+		//_timer->initialize();
 		_nodoSelecionado = 0;
 		_idPersonagem = -1;
 		_flags[OBJSELECTED] = false;
-		_flags[CHANGED] = false;
+		_flags[HUDCHANGED] = false;
 
 		_dispositivo->setWindowCaption(L"Warbugs - BETA Version 0.1");
 
@@ -152,7 +159,7 @@ public:
 		_gerenciadorVideo = _dispositivo->getVideoDriver();   // Cria o driver para o vídeo
 		_gerenciadorHud = _dispositivo->getGUIEnvironment(); // Cria o gerenciador de menu
 		
-		_musica[0] = _gerenciadorAudio->play2D("recursos/audio/selecao.ogg", true, false, false, ESM_AUTO_DETECT);
+		_musica = _gerenciadorAudio->play2D("recursos/audio/selecao.ogg", true, false, false, ESM_AUTO_DETECT);
 		
 		_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
 
@@ -177,7 +184,7 @@ public:
 
 		return (true);
 	}
-
+/*
 	menuID run()
 	{
 
@@ -190,40 +197,26 @@ public:
 			{
 				_gerenciadorEventos->endEventProcess(); // Desativa a escuta de eventos para desenhar.
 			
-				// Start Render
 				_gerenciadorVideo->beginScene(true, true, SColor(255, 0, 0, 0));
-			
-					_gerenciadorCena->drawAll(); 
-					_gerenciadorHud->drawAll();
-		
+				_gerenciadorCena->drawAll(); 
+				_gerenciadorHud->drawAll();
 				_gerenciadorVideo->endScene();
-				// Stop Render
-			
-				_timer->update();
 
-				updateCommands();
-
-				if(_myID != SELECAOPERSONAGEM)
-					return _myID;
+				readCommands();
 
 				updateGraphics();
 
-				if(_flags[CHANGED])
+				if(_flags[HUDCHANGED])
 					updateHuds();
 
-				if(_gerenciadorEventos->isKeyDown(KEY_ESCAPE))
-				{
-					_myID = SAIDA;
-					return _myID;
-				}	
-
 				_gerenciadorEventos->startEventProcess(); // Ativa a escuta de eventos.
+
+				if(_nextID != _myID)
+					return _nextID;
 			}
 		}
 
 		_gerenciadorAudio->stopAllSounds();
 		return _myID;
-	}
+	}*/
 };
-
-#endif;

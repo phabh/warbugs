@@ -1,13 +1,6 @@
-#ifndef __CHudRoleta__
-#define __CHudRoleta__
+#pragma once
 
-#include <irrlicht.h>
-
-using namespace irr;
-using namespace core;
-using namespace video;
-using namespace gui;
-using namespace scene;
+#include "Setup.h"
 
 class CHudRoleta : public IGUIElement
 {
@@ -78,14 +71,14 @@ class CHudRoleta : public IGUIElement
 			
 			if(_angAlvo > _angAtual)
 			{
-				_angAtual++;
+				_angAtual+=2;
 				Matrix.makeIdentity(); 
 				Matrix.setRotationDegrees(vector3df(0, 0, _angAtual)); 
 				
 			}
 			else if(_angAlvo < _angAtual)
 			{
-				_angAtual--;
+				_angAtual-=2;
 				Matrix.makeIdentity(); 
 				Matrix.setRotationDegrees(vector3df(0, 0, _angAtual)); 
 				
@@ -134,5 +127,3 @@ class CHudRoleta : public IGUIElement
 			driver->setViewPort(oldViewPort); 
 		}
 };
-
-#endif;

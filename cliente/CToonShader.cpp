@@ -1,13 +1,4 @@
-#include <irrlicht.h>
-
-using namespace irr;
-using namespace video;
-using namespace scene;
-using namespace core;
-using namespace io;
-using namespace gui;
-
-#pragma comment(lib,"irrlicht.lib")
+#include "Setup.h"
 
 class CToonShader : public IShaderConstantSetCallBack
 {

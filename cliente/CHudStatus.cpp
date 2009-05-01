@@ -1,10 +1,9 @@
-#ifndef __CHudStatus__
-#define __CHudStatus__
+#pragma once
+
+#include "Setup.h"
 
 class CHudStatus
 {
 public:
 	CHudStatus(){}
 };
-
-#endif;

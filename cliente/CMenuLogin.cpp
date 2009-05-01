@@ -1,12 +1,13 @@
-#ifndef __CMenuLogin__
-#define __CMenuLogin__
+#pragma once
 
-#include "CMenu.cpp"
+#include "CMenu.h"
 
 class CMenuLogin : public CMenu
 {
 
 private:
+
+	void graphicsDrawAddOn(){}
 
 	void updateHuds()
 	{
@@ -17,9 +18,15 @@ private:
 		_gerenciadorHud->addButton(rect<s32>(420,500,520,550), 0, 2, L"conectar");
 	}
 
-	void updateCommands()
+	void readCommands()
 	{
-		_timer->update();
+		//_timer->update();
+
+		if(_gerenciadorEventos->isKeyDown(KEY_ESCAPE))
+		{
+			_nextID = SAIDA;
+			return;
+		}
 
 		if(_gerenciadorEventos->getEventCallerByElement(EGET_BUTTON_CLICKED))
 		{
@@ -28,14 +35,15 @@ private:
 			if (_gerenciadorEventos->getEventCallerByID() == 2)
 			{
 				// Clicou no botão conectar
-				_myID = SELECAOPERSONAGEM;
+				_nextID = SELECAOPERSONAGEM;
+				return;
 			}
 		}
 	}
 
 	void updateGraphics()
 	{
-		_timer->update();
+		//_timer->update();
 	}
 	
 
@@ -45,7 +53,6 @@ public:
 	
 	bool start(IrrlichtDevice *grafico, ISoundEngine *audio)
 	{
-
 		_gameCfg = new CArquivoConfig();
 		TypeCfg cfg = _gameCfg->loadConfig();
 
@@ -54,10 +61,10 @@ public:
 		_gerenciadorAudio = audio;
 		_gerenciadorAudio->removeAllSoundSources();
 
-		_myID = LOGIN;
+		_myID = _nextID = LOGIN;
 		_arquivoCena = "recursos/cenas/login.irr";
-		_timer = new CTimer();
-		_timer->initialize();
+		//_timer = new CTimer();
+		//_timer->initialize();
 
 		_dispositivo->setWindowCaption(L"Warbugs - BETA Version 0.1");
 
@@ -65,7 +72,7 @@ public:
 		_gerenciadorVideo = _dispositivo->getVideoDriver();   // Cria o driver para o vídeo
 		_gerenciadorHud = _dispositivo->getGUIEnvironment(); // Cria o gerenciador de menu
 
-		_musica[0] = _gerenciadorAudio->play2D("recursos/audio/login.ogg", true, false, false, ESM_AUTO_DETECT);
+		_musica = _gerenciadorAudio->play2D("recursos/audio/login.ogg", true, false, false, ESM_AUTO_DETECT);
 		
 		_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
 
@@ -83,54 +90,8 @@ public:
 		
 		_camera = _gerenciadorCena->addCameraSceneNode(0,vector3df(0,50,0), vector3df(0,0,50));
 
+		_flags[HUDCHANGED] = false;
+
 		return (true);
 	}
-
-	menuID run()
-	{
-
-		updateHuds();
-
-
-		while(_dispositivo->run())
-		{
-			if (_dispositivo->isWindowActive())
-			{
-				_gerenciadorEventos->endEventProcess(); // Desativa a escuta de eventos para desenhar.
-			
-				// Start Render
-				_gerenciadorVideo->beginScene(true, true, SColor(255, 0, 0, 0));
-			
-					_gerenciadorCena->drawAll(); 
-					_gerenciadorHud->drawAll();
-		
-				_gerenciadorVideo->endScene();
-				// Stop Render
-
-				
-			
-				_timer->update();
-
-				updateCommands();
-
-				if(_myID != LOGIN)
-					return _myID;
-
-				updateGraphics();
-
-				if(_gerenciadorEventos->isKeyDown(KEY_ESCAPE))
-				{
-					_myID = SAIDA;
-					return _myID;
-				}	
-
-				_gerenciadorEventos->startEventProcess(); // Ativa a escuta de eventos.
-			}
-		}
-
-		_gerenciadorAudio->stopAllSounds();
-		return _myID;
-	}
 };
-
-#endif;

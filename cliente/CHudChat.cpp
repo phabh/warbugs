@@ -1,10 +1,9 @@
-#ifndef __CHudChat__
-#define __CHudChat__
+#pragma once
+
+#include "Setup.h"
 
 class CHudChat
 {
 public:
 	CHudChat(){}
 };
-
-#endif;

@@ -1,10 +1,9 @@
-#ifndef __CHudInventario__
-#define __CHudInventario__
+#pragma once
+
+#include "Setup.h"
 
 class CHudInventario
 {
 public:
 	CHudInventario(){}
 };
-
-#endif;
