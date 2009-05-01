@@ -1,12 +1,6 @@
-#include <irrlicht.h>
+#pragma once
 
-using namespace irr;
-using namespace core;
-using namespace video;
-using namespace gui;
-using namespace scene;
-
-
+#include "Setup.h"
 
 class CHudFadingTextList 
 { 
@@ -74,27 +68,10 @@ public:
          m_texts[item]->setOverrideColor(movedColour); 
       } 
 
-
       SColor newColour(colour); 
       newColour.setAlpha(m_texts[0]->getOverrideColor().getAlpha()); 
       m_texts[0]->setOverrideColor(newColour); 
       m_texts[0]->setText(text); 
 
    } 
-/*
-   void addText(char const * text, SColor const & colour = SColor(255, 255, 255, 255)) 
-   { 
-      irr::core::stringw wideText; 
-
-	
-      irr::core::stringc_to_stringw(wideText, text); 
-      addText(wideText.c_str(), colour); 
-   } 
-*/
-
-   
-//private: 
-
-    
-
 }; 

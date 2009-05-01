@@ -1,64 +1,35 @@
-#ifndef __CMenu__
-#define __CMenu__
+#include "CMenu.h"
 
-#include "irrlicht.h"
-#include "irrklang.h"
-
-#include "CArquivoConfig.cpp"
-#include "CGerEventos.cpp"
-#include "CTimer.cpp"
-#include "CToonShader.cpp"
-
-#include <iostream>
-
-using namespace std; 
-
-using namespace irr; 
-using namespace core; 
-using namespace scene; 
-using namespace video; 
-using namespace io; 
-using namespace gui;
-
-using namespace irrklang;
-
-#pragma comment(lib, "Irrlicht.lib")
-#pragma comment(lib, "irrKlang.lib")
-
-enum menuID {ABERTURA, LOGIN, CONFIGURACAO, SELECAOPERSONAGEM, CRIACAOPERSONAGEM, JOGO, CREDITOS, SAIDA, ERRO};
-
-class CMenu
+menuID CMenu::run()
 {
+	updateHuds();
 
-protected:
+	while(_dispositivo->run())
+	{
+		if (_dispositivo->isWindowActive())
+		{
+			_gerenciadorEventos->endEventProcess(); // Desativa a escuta de eventos para desenhar.
+		
+			_gerenciadorVideo->beginScene(true, true, SColor(255, 0, 0, 0));
+				_gerenciadorCena->drawAll(); 
+				_gerenciadorHud->drawAll();
+				graphicsDrawAddOn();
+			_gerenciadorVideo->endScene();
 
-	IrrlichtDevice *_dispositivo; 
-	IVideoDriver *_gerenciadorVideo; 
-	ISceneManager *_gerenciadorCena; 
-	IGUIEnvironment *_gerenciadorHud;
-	CGerEventos *_gerenciadorEventos;
-	ISoundEngine *_gerenciadorAudio;
-	IGUISkin *_skin;
-	IGUIFont *_font;
-	ICameraSceneNode *_camera;
-	menuID _myID;
-	CTimer *_timer;
-	ISound* _musica[6];
-	CArquivoConfig *_gameCfg;
-	char *_arquivoCena;
-	bool _flags[10];
+			readCommands();
 
-	CToonShader *_toonShader;
+			updateGraphics();
 
-	virtual void updateHuds()=0;// {}
-	virtual void updateCommands()=0;// {}
-	virtual void updateGraphics()=0;// {}
-	
-public:
+			if(_flags[HUDCHANGED])
+				updateHuds();
 
-	CMenu(){}
-	virtual bool start(IrrlichtDevice *grafico, ISoundEngine *audio)= 0;// { return false; }
-	virtual menuID run() = 0;//{ return ERRO; }
-};
+			if(_nextID != _myID)
+				return _nextID;
 
-#endif;
+			_gerenciadorEventos->startEventProcess(); // Ativa a escuta de eventos.
+		}
+	}
+
+	_gerenciadorAudio->stopAllSounds();
+	return _nextID;
+}

@@ -6,7 +6,7 @@
 *
 * Autor: Eduardo Fantini
 *
-* Objetivo: Encapsular os eventos de GUI
+* Objetivo: Encapsular os eventos de GUI da Irrlicht 1.5
 *
 * Ultima alteração: 26/02/2009
 *
@@ -231,11 +231,8 @@ class CGerEventos : public IEventReceiver
 		inline f32 getDeltaMouseWheelPosition()
 		{
 		   f32 a = MouseData.wheelPos - MouseData.lwheelPos;
-
-		   //if(a > 0) 
-		   return a;//(f32)(a < 0 ? -a : a);
+		   return a;
 		}
-
 	    
 		// Métodos do Ouvinte de eventos:
 		

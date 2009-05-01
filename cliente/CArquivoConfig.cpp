@@ -1,17 +1,7 @@
 #ifndef __CArquivoConfig__
 #define __CArquivoConfig__
 
-#include "irrlicht.h"
-#include "irrKlang.h"
-
-#include <fstream> 
-
-using namespace irr;
-using namespace core;
-using namespace video;
-using namespace irrklang;
-
-using namespace std;
+#include "Setup.h"
 
 struct TypeCfgAudio
 {
@@ -61,7 +51,7 @@ public:
 		_configuracao.parametrosVideo.Bits = 32;
 		_configuracao.parametrosVideo.Fullscreen = false;
 		_configuracao.parametrosVideo.Stencilbuffer = true;
-		_configuracao.parametrosVideo.Vsync = false;
+		_configuracao.parametrosVideo.Vsync = true;
 		_configuracao.parametrosVideo.AntiAlias = true;
 		_configuracao.parametrosVideo.EventReceiver = 0;
 		_configuracao.parametrosVideo.WithAlphaChannel = true;

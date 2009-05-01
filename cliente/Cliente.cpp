@@ -1,14 +1,13 @@
-#include "CMenu.cpp"
+#pragma once
+
+#include "Setup.h"
+#include "CMenu.h"
 #include "CMenuAbertura.cpp"
 #include "CMenuLogin.cpp"
 #include "CMenuSelecao.cpp"
 #include "CMenuCriacao.cpp"
 #include "CMenuJogo.cpp" 
 #include "CMenuCreditos.cpp"
-
-#include <iostream>
-
-using namespace std;
 
 int main()
 {
@@ -20,19 +19,26 @@ int main()
 
 	menuID nextMenu = ABERTURA;
 
-	CTimer *timer = new CTimer();
-
 	CArquivoConfig *gameCfg = new CArquivoConfig();
-	TypeCfg cfg = gameCfg->loadConfig();
-		
 
-dispositivoGrafico = createDevice(EDT_DIRECT3D9, 
-		  						cfg.parametrosVideo.WindowSize, 
-								cfg.parametrosVideo.Bits, 
-								cfg.parametrosVideo.Fullscreen, 
-								cfg.parametrosVideo.Stencilbuffer, 
-								cfg.parametrosVideo.Vsync, 									
-								&gerenciadorEventos);
+	TypeCfg cfg = gameCfg->loadConfig();
+
+	RECT desktop; // Faz uma referência para a tela do desktop   
+	const HWND hDesktop = GetDesktopWindow(); // Captura a dimensão da tela 
+	GetWindowRect(hDesktop, &desktop);   
+
+	cfg.parametrosVideo.WindowSize.Width = desktop.right;
+	cfg.parametrosVideo.WindowSize.Height = desktop.bottom;
+	cfg.parametrosVideo.Fullscreen = false;
+
+	dispositivoGrafico = createDevice(EDT_DIRECT3D9, 
+		  							cfg.parametrosVideo.WindowSize, 
+									cfg.parametrosVideo.Bits, 
+									cfg.parametrosVideo.Fullscreen, 
+									cfg.parametrosVideo.Stencilbuffer, 
+									cfg.parametrosVideo.Vsync, 									
+									&gerenciadorEventos);
+
 
 	if(!dispositivoGrafico)
 	{
@@ -44,7 +50,7 @@ dispositivoGrafico = createDevice(EDT_DIRECT3D9,
 
 	if(!dispositivoAudio)
 	{
-		cout << "\nERRO 0x00: Falha ao inicializar o dispositivo de audio.";
+		cout << "\nERRO 0x01: Falha ao inicializar o dispositivo de audio.";
 		nextMenu = SAIDA;
 	}
 
