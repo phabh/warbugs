@@ -10,11 +10,6 @@
 #define _CPERSONAGEMJOGADOR_CPP_
 
 #include "CPersonagemJogador.h"
-#include "CHabilidadesSecundarias.h"
-#include "CBuff.h"
-
-#include <iostream>
-using namespace std;
 
 CPersonagemJogador::CPersonagemJogador()
 {
@@ -26,7 +21,6 @@ CPersonagemJogador::CPersonagemJogador()
 	_xpToPrevLv = 0;
 	_pontoDistribuir = 0;
 	_dinheiro = 0;
-	_status = new CBuff();
 	_lealdade = new CLealdade();
 	//_party = new irr::core::array<CPersonagemJogador*>();
 	//_friends = new irr::core::array<CPersonagemJogador*>();
@@ -123,10 +117,10 @@ void CPersonagemJogador::setEquip(CEquipamento *equip)
 {
 	_equip = equip;
 }
-void CPersonagemJogador::setStatus(CBuff *status)
+/*void CPersonagemJogador::setStatus(CBuff *status)
 {
 	_status = status;
-}
+}*/
 void CPersonagemJogador::setLoyalty(CLealdade *lealdade)
 {
 	_lealdade = lealdade;

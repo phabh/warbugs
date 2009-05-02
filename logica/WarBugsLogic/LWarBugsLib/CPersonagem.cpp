@@ -10,15 +10,16 @@
 #define _CPERSONAGEM_CPP_
 
 #include "CPersonagem.h"
-#include "CHabilidadesSecundarias.h"
-#include "CBonusSecundario.h"
+
+#include "CBuff.h"
 
 CPersonagem::CPersonagem()
 {
 	inventario = new CBolsa();
 	habilidadesSecundarias = new CHabilidadesSecundarias();
 	bonusSecundario = new CBonusSecundario();
-	poderes = new irr::core::array<CPoder*>();
+	//poderes = new CPoder();
+	_status = new CBuff();
 }
 //Getters e Setters
 CHabilidadesSecundarias *CPersonagem::getStats()
@@ -32,5 +33,5 @@ CBonus *CPersonagem::getBonus()
 //Outros métodos
 void CPersonagem::move(){}
 void CPersonagem::die(){}
-void CPersonagem::useSkill(CPoder *skill){}
+//void CPersonagem::useSkill(CPoder *skill){}
 #endif

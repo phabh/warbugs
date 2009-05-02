@@ -12,10 +12,6 @@
 #define _CBUFF_CPP_
 
 #include "CBuff.h"
-#include "CPersonagemJogador.h"
-#include "CBonusSecundario.h"
-#include <iostream>
-using namespace std;
 
 CBuff::CBuff()
 	{
@@ -29,11 +25,11 @@ CBuff::CBuff()
 		_valor3 = 0;
 		_next = NULL;
 	}
-CBuff::CBuff(TipoBuff tipo, int dur, int img, int efc, int val1, int val2, int val3)
+CBuff::CBuff(TipoBuff tipo, int dur, /*int img, int efc,*/ int val1, int val2, int val3)
 {
 	_tipoBuff = tipo;
-	_indiceEfeito = efc;
-	_indiceImagem = img;
+	//_indiceEfeito = efc;
+	//_indiceImagem = img;
 	_duracao = dur;
 	switch(tipo)
 	{
@@ -143,7 +139,7 @@ void CBuff::addBuff(CBuff * buff, CPersonagemJogador *alvo)
 		case DADIVA:
 			bonus = new CBonusPrimario();
 			bonus->createBonus(0, 0, 0, _valor1, 0);
-			bonus->setOrigem(this);
+			bonus->setOrigem(this->getTipo());
 			alvo->getBaseBonus()->add(bonus);
 			bonus = NULL;
 			delete bonus;
@@ -151,12 +147,12 @@ void CBuff::addBuff(CBuff * buff, CPersonagemJogador *alvo)
 		case BERSERKER:
 			bonus = new CBonusPrimario();
 			bonus->createBonus(0,0,0,0,_valor3);
-			bonus->setOrigem(this);
+			bonus->setOrigem(this->getTipo());
 			alvo->getBaseBonus()->add(bonus);
 			bonus = NULL;
 			bonus = new CBonusSecundario();
 			bonus->createBonus(0,0,0,0,_valor3);
-			bonus->setOrigem(this);
+			bonus->setOrigem(this->getTipo());
 			alvo->getBonus()->add(bonus);
 			bonus = NULL;
 			delete bonus;
@@ -164,12 +160,12 @@ void CBuff::addBuff(CBuff * buff, CPersonagemJogador *alvo)
 		case STRIKE:
 			bonus = new CBonusPrimario();
 			bonus->createBonus(0,0,0,0,_valor2);
-			bonus->setOrigem(this);
+			bonus->setOrigem(this->getTipo());
 			alvo->getBaseBonus()->add(bonus);
 			bonus = NULL;
 			bonus = new CBonusSecundario();
 			bonus->createBonus(0,0,0,0,_valor2);
-			bonus->setOrigem(this);
+			bonus->setOrigem(this->getTipo());
 			alvo->getBonus()->add(bonus);
 			bonus = NULL;
 			delete bonus;
@@ -177,7 +173,7 @@ void CBuff::addBuff(CBuff * buff, CPersonagemJogador *alvo)
 		case LENTO:
 			bonus = new CBonusPrimario();
 			bonus->createBonus(0,_valor1,0,0,0);
-			bonus->setOrigem(this);
+			bonus->setOrigem(this->getTipo());
 			alvo->getBaseBonus()->add(bonus);
 			bonus = NULL;
 			delete bonus;
@@ -185,7 +181,7 @@ void CBuff::addBuff(CBuff * buff, CPersonagemJogador *alvo)
 		case STUN:
 			bonus = new CBonusPrimario();
 			bonus->createBonus(0,((-1)*(alvo->getAGI())),0,0,0);
-			bonus->setOrigem(this);
+			bonus->setOrigem(this->getTipo());
 			alvo->getBaseBonus()->add(bonus);
 			bonus = NULL;
 			delete bonus;
@@ -193,7 +189,7 @@ void CBuff::addBuff(CBuff * buff, CPersonagemJogador *alvo)
 		case ATORDOADO:
 			bonus = new CBonusPrimario();
 			bonus->createBonus(0,_valor1,_valor2,0,0);
-			bonus->setOrigem(this);
+			bonus->setOrigem(this->getTipo());
 			alvo->getBaseBonus()->add(bonus);
 			bonus = NULL;
 			delete bonus;
