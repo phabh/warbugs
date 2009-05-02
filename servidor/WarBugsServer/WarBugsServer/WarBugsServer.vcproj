@@ -273,6 +273,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\CDataManager.h"
+					>
+				</File>
+				<File
 					RelativePath=".\commom.h"
 					>
 				</File>

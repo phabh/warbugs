@@ -623,9 +623,10 @@ void lerPacotes()
 					mesRec.readByte();
 
 					int   idShot = mesRec.readLong();
+					int   idAlvo = mesRec.readLong();
 					float posX   = mesRec.readFloat();
 					float posZ   = mesRec.readFloat();
-					int   idAlvo = mesRec.readLong();
+
 
 					break;
 				}
