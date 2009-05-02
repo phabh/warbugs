@@ -40,4 +40,19 @@ enum EstadoPersonagem{
 // ------------------------------------------------------------------------------------------------------------
 enum Direcoes {NORTE, SUL, LESTE, OESTE};
 // ------------------------------------------------------------------------------------------------------------
+enum TipoPoder {SK_BERSERK_TORNADO, SK_ARIETE, SK_STRIKE};
+// ------------------------------------------------------------------------------------------------------------
+
+/*DEFINES*/
+#ifndef MAXSTATS
+#define MAXSTATS 5
+#endif
+#define FPS 8
+#define MAXFRIENDS 10
+#define MAXPARTYSIZE 4
+#ifndef MAXSTATS
+#define MAXSTATS 5
+#endif
+#define MAXITENS 10
+
 #endif

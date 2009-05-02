@@ -8,21 +8,20 @@
 */
 #ifndef _CBONUS_CPP_
 #define _CBONUS_CPP_
-#include <iostream>
+
 #include "CBonus.h"
-#include "CBuff.h"
 
 CBonus::CBonus()
 {
-	origem = NULL;
+	origem = NORMAL;
 	next = NULL;
 	prev = NULL;
 }
-CBuff *CBonus::getBuff()
+TipoBuff CBonus::getBuff()
 {
 	return(origem);
 }
-void CBonus::setOrigem(CBuff *buff)
+void CBonus::setOrigem(TipoBuff buff)
 {
 	origem = buff;
 }
@@ -62,7 +61,7 @@ void CBonus::removeElement(TipoBuff indice)
 
 	while(temp != NULL)
 	{
-		if(temp->getBuff()->getTipo() == indice)
+		if(temp->getBuff() == indice)
 		{
 			temp->remove();
 		}

@@ -9,29 +9,29 @@
 * Objetivo: Descrever os poderes de um personagem
 *
 */
+
+
+
 #ifndef _CPODER_H_
 #define _CPODER_H_
 
+#include "Enumerators.h"
 #include "CWarBugObject.h"
-//#include "CBuff.h"
-#include <string>
-using namespace std;
+#include "CBuff.h"
 
-class CBuff;
+#include "CPersonagem.h"
+
 
 class CPoder : public CWarBugObject
 {
 private:
-	string _nome;
-	string _descricao;
-	int _custoTC;
-	int _custoPP;
-	int _nivel;
-	int _dano;
-	CBuff * _statusCausado;
+	//Skills
+	static void berserkTornado(CPersonagemJogador *user, CPersonagem *target, int level);
+	//RaceTypes
+	static void beetleSkills(CPersonagem *user, CPersonagem *target, TipoPoder skillIndex, int level);
+
 public:
-	CPoder();
-	void cast();
+	static void cast(CPersonagem *user, CPersonagem *target, Raca userRace, TipoPoder skillIndex, int level);
 };
 
 #endif

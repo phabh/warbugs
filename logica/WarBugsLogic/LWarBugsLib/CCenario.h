@@ -15,7 +15,6 @@ using namespace std;
 class CCenario : public C3DObject
 {
 private:
-	char _nomeCenario[10];
 	CPeopleList *_jogadores;//Lista de personagens
 	CPeopleList *_inimigos;
 	CPeopleList *_npcs;
@@ -26,19 +25,16 @@ private:
 	CPortal *_saidaRight;
 public:
 
-	CCenario(int ID, char name[10], CPeopleList *players, CPeopleList *monsters, CPeopleList *npcs, CBolsaList *bolsa, CPortal *saidaNorte, CPortal *saidaSul, CPortal *saidaLeft, CPortal *saidaRight);
+	CCenario(int ID, CPeopleList *players, CPeopleList *monsters, CPeopleList *npcs, CBolsaList *bolsa, CPortal *saidaNorte, CPortal *saidaSul, CPortal *saidaLeft, CPortal *saidaRight);
 	void enterScene();
 	int personagemCount();
 	int itemCount();
-	char *getName();
 	CPersonagemJogador *getPlayer(int idJogador);
 	CInimigo *getMonster(int idInimigo);
 	CNPC *getNpc(int idNpc);
-	CItem *getItem(int idItem);
+	CBolsa *getBag(int idBag);
 	CPortal *getExit(Direcoes idPortal);
 
-	void setID(int value);
-	void setName(char *value);
 	void setExit(CPortal *newExit, Direcoes idPortal);
 
 	void addPlayer(CPersonagem *jogador);

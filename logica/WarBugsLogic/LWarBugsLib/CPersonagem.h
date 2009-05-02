@@ -8,37 +8,22 @@
 *
 */
 #ifndef _CPERSONAGEM_H_
-#define _CPERSONAGEM_H_
 
-#include "Enumerators.h"
-#include "C3DObject.h"
-#include "CBolsa.h"
-
-#ifndef _CITEM_H_
-class CItem;
-#endif
-
-#ifndef _CHABILIDADESSECUNDARIAS_H_
-class CHabilidadesSecundarias;
-#endif
-
-#ifndef _CBONUSSECUNDARIO_H_
-class BonusSecundario;
-#endif
-
-#include "CBonus.h"
-
-#ifndef _CPODER_H_
-class CPoder;
-#endif
-
-
-//#include "CItem.h"
 //#include "CHabilidadesSecundarias.h"
-//#include "CBonusSecundario.h"
-//#include "CPoder.h"
-#include <irrlicht.h>
-//using namespace std;
+	//#include "CWarBugObject.h"
+	//#include "CEquipamento.h"
+	//#include "CHabilidades.h"
+#include "CBolsa.h"
+	//#include "CItem.h"
+#include "CBonusPrimario.h"
+	//#include "CHabilidades.h"
+	//#include "CBonus.h"
+#include "CBonusSecundario.h"
+	//#include "CHabilidadesSecundarias.h"
+	//#include "CBonus.h"
+#ifndef _CBUFF_H_
+class CBuff;
+#endif
 
 // ------------------------------------------------------------------------------------------------------------
 class CPersonagem : public C3DObject{
@@ -47,8 +32,11 @@ protected:
 	//Tempo de respawn
 	CBolsa *inventario;
 	CHabilidadesSecundarias *habilidadesSecundarias;
-	CBonus *bonusSecundario;
-	irr::core::array<CPoder*> *poderes;
+	CBonusSecundario *bonusSecundario;
+	//CPoder *poderes;
+	CBuff *_status;
+	CHabilidades *_habilidadesPrimarias;
+	CBonusPrimario *_bonusPrimario;
 public:
 
 	CPersonagem();
@@ -61,7 +49,7 @@ public:
 	virtual void takeDamage(int damage)=0;
 	void die();
 	virtual void useItem(CItem *item)=0;
-	void useSkill(CPoder *skill);
+	//void useSkill(CPoder *skill);
 
 };
 #endif

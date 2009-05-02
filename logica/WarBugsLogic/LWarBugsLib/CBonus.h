@@ -9,25 +9,21 @@
 */
 #ifndef _CBONUS_H_
 #define _CBONUS_H_
-
+#include <iostream>
+using namespace std;
 #include "Enumerators.h"
-//#include "CBuff.h"
-
-#ifndef _CBUFF_H_
-class CBuff;
-#endif
 
 class CBonus
 {
 protected:
-	CBuff *origem;
+	TipoBuff origem;
 public:
 	CBonus *prev;
 	CBonus *next;
 public:
 	CBonus();
-	CBuff *getBuff();
-	void setOrigem(CBuff *buff);
+	TipoBuff getBuff();
+	void setOrigem(TipoBuff buff);
 	void add(CBonus *bonus);
 	void remove();
 	void removeElement(TipoBuff indice);

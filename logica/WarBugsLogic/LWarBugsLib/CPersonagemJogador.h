@@ -9,35 +9,29 @@
 */
 #ifndef _CPERSONAGEMJOGADOR_H_
 #define _CPERSONAGEMJOGADOR_H_
-
-//Constantes
-#define MAXFRIENDS 10
-#define MAXPARTYSIZE 4
-#ifndef MAXSTATS
-#define MAXSTATS 5
-#endif
-#define MAXITENS 10
-//end Constantes
+#include <iostream>
+using namespace std;
 
 #include "CPersonagem.h"
-#include "CEquipamento.h"
-//#include "CBuff.h"
-#ifndef _CBUFF_H_
-class CBuff;
-#endif
-#include "CHabilidades.h"
-#include "CLealdade.h"
+	//#include "CHabilidadesSecundarias.h"
+		//#include "CWarBugObject.h"
+		//#include "CEquipamento.h"
+		//#include "CHabilidades.h"
+	//#include "CBolsa.h"
+		//#include "CItem.h"
+	//#include "CBonusPrimario.h"
+		//#include "CHabilidades.h"
+		//#include "CBonus.h"
+	//#include "CBonusSecundario.h"
+		//#include "CHabilidadesSecundarias.h"
+		//#include "CBonus.h"
 #include "CQuest.h"
-#include "CBonusPrimario.h"
-#include "CConsumableItem.h"
-#include <irrlicht.h>
+	//#include "CLealdade.h"
 
 class CPersonagemJogador : public CPersonagem
 {
 	char _nome[10];
 	Raca _raca;
-	CHabilidades *_habilidadesPrimarias;
-	CBonusPrimario *_bonusPrimario;
 	int _nivel;
 	int _experiencia;
 	int _xpToNextLv;
@@ -45,7 +39,7 @@ class CPersonagemJogador : public CPersonagem
 	int _pontoDistribuir;
 	int _dinheiro;
 	CEquipamento *_equip;
-	CBuff *_status;
+	//CBuff *_status;
 	CLealdade *_lealdade;
 	//irr::core::array<CPersonagemJogador*> *_party;
 	//irr::core::array<CPersonagemJogador*> *_friends;
@@ -57,9 +51,7 @@ class CPersonagemJogador : public CPersonagem
 	int _dano;
 	int _range;
 	int _speed;
-	//VARIAVEIS PRO HIMURA
 public:
-	CPersonagemJogador *next;
 
 	CPersonagemJogador();
 	//Getters
@@ -84,7 +76,7 @@ public:
 	void setPointsToDistribute(int points);
 	void setMoney(int value);
 	void setEquip(CEquipamento *equip);
-	void setStatus(CBuff *status);
+	//void setStatus(CBuff *status);
 	void setLoyalty(CLealdade *lealdade);
 	//void setParty(irr::core::array<CPersonagemJogador*> *lista);
 	//void setFriends(irr::core::array<CPersonagemJogador*> *lista);

@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;.\Irrlicht\Include&quot;"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -162,10 +162,6 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<File
-				RelativePath=".\CBolsaList.cpp"
-				>
-			</File>
 			<Filter
 				Name="1 - Primarias"
 				>
@@ -313,6 +309,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\CBolsaList.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\CPeopleList.cpp"
 						>
 					</File>
@@ -324,10 +324,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\CBolsaList.h"
-				>
-			</File>
 			<File
 				RelativePath=".\Enumerators.h"
 				>
@@ -487,6 +483,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\CBolsaList.h"
+						>
+					</File>
+					<File
 						RelativePath=".\CPeopleList.h"
 						>
 					</File>
@@ -499,14 +499,6 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
-		<File
-			RelativePath=".\ClassDiagram1.cd"
-			>
-		</File>
-		<File
-			RelativePath=".\ClassDiagram2.cd"
-			>
-		</File>
 		<File
 			RelativePath=".\ReadMe.txt"
 			>

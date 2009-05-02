@@ -1,7 +1,6 @@
 #include "CCenario.h"
 
 CCenario::CCenario(int ID, 
-				   char name[10], 
 				   CPeopleList *players, 
 				   CPeopleList *monsters,
 				   CPeopleList *npcs,
@@ -12,7 +11,6 @@ CCenario::CCenario(int ID,
 				   CPortal *saidaRight)
 {
 	this->setID(ID);
-	_nomeCenario = name;
 	_jogadores = players;//Lista de personagens
 	_inimigos = monsters;
 	_npcs = npcs;
@@ -33,10 +31,6 @@ int CCenario::itemCount()
 {
 	return(_itens->size());
 }
-char *CCenario::getName()
-{
-	return(_nomeCenario);
-}
 CPersonagemJogador *CCenario::getPlayer(int idJogador)
 {
 	return((CPersonagemJogador*)_jogadores->getPersonagem(idJogador));
@@ -49,9 +43,9 @@ CNPC *CCenario::getNpc(int idNpc)
 {
 	return((CNPC*)_npcs->getPersonagem(idNpc));
 }
-CItem *CCenario::getItem(int idItem)
+CBolsa *CCenario::getBag(int idBag)
 {
-	return (_itens->getItem(idItem));
+	return (_itens->getBolsa(idBag));
 }
 	
 CPortal *CCenario::getExit(Direcoes idPortal)
@@ -67,6 +61,7 @@ CPortal *CCenario::getExit(Direcoes idPortal)
 	case OESTE:
 		return(_saidaLeft);
 	}
+	return(NULL);
 }
 void CCenario::setExit(CPortal *newExit, Direcoes idPortal)
 {

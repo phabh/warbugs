@@ -9,12 +9,11 @@
 #ifndef _CBONUSSECUNDARIO_CPP_
 #define _CBONUSSECUNDARIO_CPP_
 
-#include "CBonus.h"
 #include "CBonusSecundario.h"
 
 CBonusSecundario::CBonusSecundario()
 	{
-		origem = NULL;
+		origem = NORMAL;
 		next = NULL;
 		prev = NULL;
 		_valor = new CHabilidadesSecundarias();
