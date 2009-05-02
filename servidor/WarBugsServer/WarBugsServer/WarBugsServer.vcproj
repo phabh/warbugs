@@ -202,6 +202,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CCoreServer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -229,7 +233,19 @@
 				Name="BugNet"
 				>
 				<File
-					RelativePath=".\dreamSock.cpp"
+					RelativePath=".\Includes\dreamClient.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\dreamMessage.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\dreamServer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\dreamSock.cpp"
 					>
 				</File>
 			</Filter>
@@ -353,11 +369,23 @@
 				Name="BugNet"
 				>
 				<File
-					RelativePath=".\dreamSock.h"
+					RelativePath=".\Includes\dreamClient.h"
 					>
 				</File>
 				<File
-					RelativePath=".\dreamSockLog.h"
+					RelativePath=".\Includes\dreamMessage.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\dreamServer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\dreamSock.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\dreamSockLog.h"
 					>
 				</File>
 			</Filter>
