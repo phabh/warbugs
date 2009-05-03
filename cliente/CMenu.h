@@ -18,6 +18,7 @@ protected:
 	ISoundEngine *_gerenciadorAudio;
 	IGUISkin *_skin;
 	IGUIFont *_font;
+	ISceneNode *_nodoSelecionado;
 	ICameraSceneNode *_camera;
 	menuID _myID, _nextID;
 	ISound* _musica;
