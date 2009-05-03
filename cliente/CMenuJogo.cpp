@@ -13,8 +13,7 @@ class CMenuJogo : public CMenu
 
 private:
 
-	//enum flagJogo {CHANGED, OBJSELECTED, INVENTARIO, CHAT, STATUS, CFG};
-	ISceneNode *_nodoSelecionado;
+
 	int _idPersonagem;
 
 	IGUIListBox *_chatText;
@@ -46,42 +45,27 @@ private:
 	{
 		_gerenciadorHud->clear();
 		
-
-
         //_font->draw(temp, rect<s32>(130,10,300,50), SColor(255,255,255,255));
 
-		_gerenciadorHud->addButton(rect<s32>(440,500,540,540), 0, 8, L"Sair");
-		
-		_gerenciadorHud->addButton(rect<s32>(0,0,20,20), 0, 9, L"Config");
-		_gerenciadorHud->addButton(rect<s32>(0+40,0,20+40,20), 0, 10, L"Inventario");
-		_gerenciadorHud->addButton(rect<s32>(0+80,0,20+80,20), 0, 11, L"Status");
-		_gerenciadorHud->addButton(rect<s32>(0+120,0,20+120,20), 0, 12, L"Mapa");
-		_gerenciadorHud->addButton(rect<s32>(0+160,0,20+160,20), 0, 13, L"Trocar");
-		_gerenciadorHud->addButton(rect<s32>(0+200,0,20+200,20), 0, 14, L"Equipar");
-		_gerenciadorHud->addButton(rect<s32>(0+240,0,20+240,20), 0, 15, L"Mail");
-
-
+		// Criar janela de inventário do jogador
 		_invWindow = _gerenciadorHud->addWindow(rect<s32>(0, 0, 250, 200), false, L"Inventario"); 
 		_invWindow->getCloseButton()->setEnabled(false); 
 		_invWindow->getCloseButton()->setToolTipText(L""); 
 		_invWindow->getCloseButton()->setVisible(false); 
 
+		// Criar janela de status do jogador
 		_statWindow = _gerenciadorHud->addWindow(rect<s32>(0, 0, 150, 80), false, L"Status"); 
 		_statWindow->getCloseButton()->setEnabled(false); 
 		_statWindow->getCloseButton()->setToolTipText(L""); 
 		_statWindow->getCloseButton()->setVisible(false); 
 
+		// Criar janela de configurações do jogo
 		_cfgWindow = _gerenciadorHud->addWindow(rect<s32>(0, 0, 500, 500), false, L"Config"); 
 		_cfgWindow->getCloseButton()->setEnabled(false); 
 		_cfgWindow->getCloseButton()->setVisible(false);
 		_cfgWindow->getCloseButton()->setToolTipText(L""); 
-		/* 
-		_cfgWindow->getMinimizeButton()->setEnabled(true);
-		_cfgWindow->getMinimizeButton()->setVisible(true);
 
-		_cfgWindow->getMaximizeButton()->setEnabled(true);
-		_cfgWindow->getMaximizeButton()->setVisible(true);
-*/
+		// Criar janela de chat
 		_chatWindow = _gerenciadorHud->addWindow(rect<s32>(0, 600-200, 800/4, 600), false, L"Chat");     
 		_chatWindow->getCloseButton()->setEnabled(false); 
 		_chatWindow->getCloseButton()->setToolTipText(L""); 
@@ -90,7 +74,6 @@ private:
 		_chatText = _gerenciadorHud->addListBox(rect<s32>(5, 25, 800/4-5, 165), _chatWindow); 
 		_chatInput = _gerenciadorHud->addEditBox(L"", rect<s32>(5, 170, 800/4-30, 195), true, _chatWindow);
 
-		//_chatWindow->setVisible(true);
 
 		_invWindow->setVisible(_flags[INVENTARIOON]);
 				
@@ -98,9 +81,18 @@ private:
 
 		_statWindow->setVisible(_flags[STATUSON]);
 
-		/*if(_flags[CHATON])
-		{
-		}*/
+		_gerenciadorHud->addButton(rect<s32>(440,500,540,540), 0, 8, L"Sair");
+		_gerenciadorHud->addButton(rect<s32>(0,0,20,20), 0, 9, L"Config");
+
+		_gerenciadorHud->addButton(rect<s32>(0+40,0,20+40,20), _cfgWindow, 10, L"Inventario");
+		_gerenciadorHud->addButton(rect<s32>(0+80,0,20+80,20), 0, 11, L"Status");
+		_gerenciadorHud->addButton(rect<s32>(0+120,0,20+120,20), 0, 12, L"Mapa");
+		_gerenciadorHud->addButton(rect<s32>(0+160,0,20+160,20), 0, 13, L"Trocar");
+		_gerenciadorHud->addButton(rect<s32>(0+200,0,20+200,20), 0, 14, L"Equipar");
+		_gerenciadorHud->addButton(rect<s32>(0+240,0,20+240,20), 0, 15, L"Mail");
+
+		
+
 
 		if(_flags[MAPAON])
 		{
