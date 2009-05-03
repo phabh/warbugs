@@ -1,15 +1,10 @@
 #pragma once
 #include <iostream>
 using namespace std;
+#include "Enumerators.h"
 #include "CItem.h"
 
-typedef struct SCelula
-{
-	CItem *item;
-	SCelula *prev;
-	SCelula *next;
-} SElemento;
-
+typedef SCelula<CItem> SElemento;
 
 class CBolsa : public C3DObject
 {

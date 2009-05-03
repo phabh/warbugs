@@ -7,7 +7,7 @@ CBolsa::CBolsa(void)
 }
 CBolsa::CBolsa(CItem *item)
 {
-	_first->item = item;
+	_first->valor = item;
 	_first->next = NULL;
 	_first->prev = NULL;
 	_size = 1;
@@ -23,7 +23,7 @@ int CBolsa::size()
 void CBolsa::addItem(CItem *item)
 {
 	SElemento *nodo = new SElemento();
-	nodo->item = item;
+	nodo->valor = item;
 	nodo->next = NULL;
 	nodo->prev = NULL;
 	if(isEmpty())
@@ -76,7 +76,7 @@ CItem *CBolsa::removeItem(int IDItem)
 	SElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if((temp->item)->getID() == IDItem)
+		if((temp->valor)->getID() == IDItem)
 		{
 			if(temp->prev != NULL)
 				(temp->prev)->next = temp->next;
@@ -93,7 +93,7 @@ CItem *CBolsa::removeItem(int IDItem)
 			{
 				(temp->prev)->next = NULL;
 			}
-			return(temp->item);
+			return(temp->valor);
 		}
 	}
 	temp = NULL;
@@ -105,7 +105,7 @@ CItem *CBolsa::removeItem(CItem *item)
 	SElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if(temp->item == item)
+		if(temp->valor == item)
 		{
 			if(temp->prev != NULL)
 				(temp->prev)->next = temp->next;
@@ -122,7 +122,7 @@ CItem *CBolsa::removeItem(CItem *item)
 			{
 				(temp->prev)->next = NULL;
 			}
-			return(temp->item);
+			return(temp->valor);
 		}
 		else
 		{
@@ -138,9 +138,9 @@ CItem *CBolsa::getItem(int IDItem)
 	SElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if((temp->item)->getID() == IDItem)
+		if((temp->valor)->getID() == IDItem)
 		{
-			return(temp->item);
+			return(temp->valor);
 		}
 		else
 		{
@@ -156,7 +156,7 @@ bool CBolsa::haveItem(CItem *item)
 	SElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if(temp->item == item)
+		if(temp->valor == item)
 		{
 			temp = NULL;
 			delete temp;

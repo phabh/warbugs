@@ -313,7 +313,15 @@
 						>
 					</File>
 					<File
+						RelativePath=".\CCenarioList.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\CPeopleList.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CPlayerList.cpp"
 						>
 					</File>
 				</Filter>
@@ -487,7 +495,15 @@
 						>
 					</File>
 					<File
+						RelativePath=".\CCenarioList.h"
+						>
+					</File>
+					<File
 						RelativePath=".\CPeopleList.h"
+						>
+					</File>
+					<File
+						RelativePath=".\CPlayerList.h"
 						>
 					</File>
 				</Filter>

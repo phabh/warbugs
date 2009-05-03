@@ -1,29 +1,29 @@
-#include "CBolsaList.h"
+#include "CPlayerList.h"
 
-CBolsaList::CBolsaList(void)
+CPlayerList::CPlayerList(void)
 {
 	_first = NULL;
 	_size = 0;
 }
-CBolsaList::CBolsaList(CBolsa *bolsa)
+CPlayerList::CPlayerList(CJogador *Jogador)
 {
-	_first->valor = bolsa;
+	_first->valor = Jogador;
 	_first->next = NULL;
 	_first->prev = NULL;
 	_size = 1;
 }
-bool CBolsaList::isEmpty()
+bool CPlayerList::isEmpty()
 {
 	return(_first == NULL);
 }
-int CBolsaList::size()
+int CPlayerList::size()
 {
 	return(_size);
 }
-void CBolsaList::addBolsa(CBolsa *bolsa)
+void CPlayerList::addJogador(CJogador *Jogador)
 {
-	SBagElemento *nodo = new SBagElemento();
-	nodo->valor = bolsa;
+	SPlayerElemento *nodo = new SPlayerElemento();
+	nodo->valor = Jogador;
 	nodo->next = NULL;
 	nodo->prev = NULL;
 	if(isEmpty())
@@ -32,7 +32,7 @@ void CBolsaList::addBolsa(CBolsa *bolsa)
 	}
 	else
 	{
-		SBagElemento *temp = _first;
+		SPlayerElemento *temp = _first;
 		while(temp->next != NULL)
 		{
 			temp = temp->next;
@@ -45,14 +45,14 @@ void CBolsaList::addBolsa(CBolsa *bolsa)
 	nodo = NULL;
 	delete nodo;
 }
-/*CBolsa *CBolsaList::removebolsa(int posbolsa)
+/*CJogador *CPlayerList::removeJogador(int posJogador)
 {
-	SBagElemento *temp = _first;
-	posbolsa = posbolsa - 1;
-	while(posbolsa > 0)
+	SPlayerElemento *temp = _first;
+	posJogador = posJogador - 1;
+	while(posJogador > 0)
 	{
 		temp = temp->next;
-		posbolsa = posbolsa -1;
+		posJogador = posJogador -1;
 	}
 	if(temp->prev != NULL)
 		(temp->prev)->next = temp->next;
@@ -69,14 +69,14 @@ void CBolsaList::addBolsa(CBolsa *bolsa)
 	{
 		(temp->prev)->next = NULL;
 	}
-	return(temp->bolsa);
+	return(temp->Jogador);
 }*/
-CBolsa *CBolsaList::removeBolsa(int IDbolsa)
+CJogador *CPlayerList::removeJogador(int IDJogador)
 {
-	SBagElemento *temp = _first;
+	SPlayerElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if((temp->valor)->getID() == IDbolsa)
+		if((temp->valor)->getID() == IDJogador)
 		{
 			if(temp->prev != NULL)
 				(temp->prev)->next = temp->next;
@@ -100,12 +100,12 @@ CBolsa *CBolsaList::removeBolsa(int IDbolsa)
 	delete temp;
 	return(NULL);
 }
-CBolsa *CBolsaList::removeBolsa(CBolsa *bolsa)
+CJogador *CPlayerList::removeJogador(CJogador *Jogador)
 {
-	SBagElemento *temp = _first;
+	SPlayerElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if(temp->valor == bolsa)
+		if(temp->valor == Jogador)
 		{
 			if(temp->prev != NULL)
 				(temp->prev)->next = temp->next;
@@ -133,12 +133,12 @@ CBolsa *CBolsaList::removeBolsa(CBolsa *bolsa)
 	delete temp;
 	return(NULL);
 }
-CBolsa *CBolsaList::getBolsa(int IDbolsa)
+CJogador *CPlayerList::getJogador(int IDJogador)
 {
-	SBagElemento *temp = _first;
+	SPlayerElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if((temp->valor)->getID() == IDbolsa)
+		if((temp->valor)->getID() == IDJogador)
 		{
 			return(temp->valor);
 		}
@@ -151,12 +151,12 @@ CBolsa *CBolsaList::getBolsa(int IDbolsa)
 	delete temp;
 	return(NULL);
 }
-bool CBolsaList::haveBolsa(CBolsa *bolsa)
+bool CPlayerList::haveJogador(CJogador *Jogador)
 {
-	SBagElemento *temp = _first;
+	SPlayerElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if(temp->valor == bolsa)
+		if(temp->valor == Jogador)
 		{
 			temp = NULL;
 			delete temp;

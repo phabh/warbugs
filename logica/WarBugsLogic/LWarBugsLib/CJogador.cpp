@@ -2,11 +2,6 @@
 
 CJogador::CJogador(void)
 {
-	next = NULL;
-}
-int CJogador::getID()
-{
-	return(_ID);
 }
 char *CJogador::getName()
 {
@@ -31,10 +26,6 @@ char *CJogador::getPassword()
 sockaddr *CJogador::getSocketAddress()
 {
 	return(_socket);
-}
-void CJogador::setID(int newID)
-{
-	_ID = newID;
 }
 void CJogador::setName(char *value)
 {

@@ -64,6 +64,13 @@ int CPersonagemJogador::getAttack()
 	else
 		return(_ataque + getBonus()->getTotalBonusOf(ATTACKRANGED));
 }
+int CPersonagemJogador::getDamage()
+{
+	if(_range <= MAXMELEERANGE)
+		return(_dano + getBonus()->getTotalBonusOf(DAMAGEMELEE));
+	else
+		return(_dano + getBonus()->getTotalBonusOf(DAMAGERANGED));
+}
 CHabilidades *CPersonagemJogador::getBaseStats()
 {
 	return(_habilidadesPrimarias);

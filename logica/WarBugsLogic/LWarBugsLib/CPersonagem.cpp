@@ -30,6 +30,10 @@ CBonus *CPersonagem::getBonus()
 {
 	return(bonusSecundario);
 }
+CBuff *CPersonagem::getBuffs()
+{
+	return(_status);
+}
 //Outros métodos
 void CPersonagem::move(){}
 void CPersonagem::die(){}

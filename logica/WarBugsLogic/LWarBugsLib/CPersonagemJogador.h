@@ -62,6 +62,7 @@ public:
 	int getRES();
 	int getINS();
 	int getAttack();
+	int getDamage();
 	CHabilidades *getBaseStats();
 	CBonusPrimario *getBaseBonus();
 	//Setters
