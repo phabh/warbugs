@@ -56,8 +56,8 @@ public:
 	void setDefense(int valor);
 	void setAttackRate(int valor);
 	void setChargeTime(int valor);
-	void addPV(int valor);
-	void addPM(int valor);
+	bool addPV(int valor);
+	bool addPM(int valor);
 	void addMaxPV(int valor);
 	void addMaxPM(int valor);
 	void addMeleeAttack(int valor);

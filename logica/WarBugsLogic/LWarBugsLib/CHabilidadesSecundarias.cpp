@@ -167,21 +167,35 @@ CHabilidadesSecundarias::CHabilidadesSecundarias()
 		if(_tc > 100){_tc = 100;}
 		else if(_tc < 0){_tc = 0;}
 	}
-	void CHabilidadesSecundarias::addPV(int valor)
+	bool CHabilidadesSecundarias::addPV(int valor)
 	{
 		_pv = _pv + valor;
 		if(_pv > _maxpv)
 		{
 			_pv = _maxpv;
+			return(true);
 		}
+		else if(_pv <= 0)
+		{
+			_pv = 0;
+			return(false);
+		}
+		else return(true);
 	}
-	void CHabilidadesSecundarias::addPM(int valor)
+	bool CHabilidadesSecundarias::addPM(int valor)
 	{
 		_pm = _pm + valor;
 		if(_pm > _maxpm)
 		{
 			_pm = _maxpm;
+			return(true);
 		}
+		else if(_pm <= 0)
+		{
+			_pm = 0;
+			return(false);
+		}
+		else return(true);
 	}
 	void CHabilidadesSecundarias::addMaxPV(int valor)
 	{

@@ -1,29 +1,29 @@
-#include "CBolsaList.h"
+#include "CCenarioList.h"
 
-CBolsaList::CBolsaList(void)
+CCenarioList::CCenarioList(void)
 {
 	_first = NULL;
 	_size = 0;
 }
-CBolsaList::CBolsaList(CBolsa *bolsa)
+CCenarioList::CCenarioList(CCenario *Cenario)
 {
-	_first->valor = bolsa;
+	_first->valor = Cenario;
 	_first->next = NULL;
 	_first->prev = NULL;
 	_size = 1;
 }
-bool CBolsaList::isEmpty()
+bool CCenarioList::isEmpty()
 {
 	return(_first == NULL);
 }
-int CBolsaList::size()
+int CCenarioList::size()
 {
 	return(_size);
 }
-void CBolsaList::addBolsa(CBolsa *bolsa)
+void CCenarioList::addCenario(CCenario *Cenario)
 {
-	SBagElemento *nodo = new SBagElemento();
-	nodo->valor = bolsa;
+	SCenarioElemento *nodo = new SCenarioElemento();
+	nodo->valor = Cenario;
 	nodo->next = NULL;
 	nodo->prev = NULL;
 	if(isEmpty())
@@ -32,7 +32,7 @@ void CBolsaList::addBolsa(CBolsa *bolsa)
 	}
 	else
 	{
-		SBagElemento *temp = _first;
+		SCenarioElemento *temp = _first;
 		while(temp->next != NULL)
 		{
 			temp = temp->next;
@@ -45,14 +45,14 @@ void CBolsaList::addBolsa(CBolsa *bolsa)
 	nodo = NULL;
 	delete nodo;
 }
-/*CBolsa *CBolsaList::removebolsa(int posbolsa)
+/*CCenario *CCenarioList::removeCenario(int posCenario)
 {
-	SBagElemento *temp = _first;
-	posbolsa = posbolsa - 1;
-	while(posbolsa > 0)
+	SCenarioElemento *temp = _first;
+	posCenario = posCenario - 1;
+	while(posCenario > 0)
 	{
 		temp = temp->next;
-		posbolsa = posbolsa -1;
+		posCenario = posCenario -1;
 	}
 	if(temp->prev != NULL)
 		(temp->prev)->next = temp->next;
@@ -69,14 +69,14 @@ void CBolsaList::addBolsa(CBolsa *bolsa)
 	{
 		(temp->prev)->next = NULL;
 	}
-	return(temp->bolsa);
+	return(temp->Cenario);
 }*/
-CBolsa *CBolsaList::removeBolsa(int IDbolsa)
+CCenario *CCenarioList::removeCenario(int IDCenario)
 {
-	SBagElemento *temp = _first;
+	SCenarioElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if((temp->valor)->getID() == IDbolsa)
+		if((temp->valor)->getID() == IDCenario)
 		{
 			if(temp->prev != NULL)
 				(temp->prev)->next = temp->next;
@@ -100,12 +100,12 @@ CBolsa *CBolsaList::removeBolsa(int IDbolsa)
 	delete temp;
 	return(NULL);
 }
-CBolsa *CBolsaList::removeBolsa(CBolsa *bolsa)
+CCenario *CCenarioList::removeCenario(CCenario *Cenario)
 {
-	SBagElemento *temp = _first;
+	SCenarioElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if(temp->valor == bolsa)
+		if(temp->valor == Cenario)
 		{
 			if(temp->prev != NULL)
 				(temp->prev)->next = temp->next;
@@ -133,12 +133,12 @@ CBolsa *CBolsaList::removeBolsa(CBolsa *bolsa)
 	delete temp;
 	return(NULL);
 }
-CBolsa *CBolsaList::getBolsa(int IDbolsa)
+CCenario *CCenarioList::getCenario(int IDCenario)
 {
-	SBagElemento *temp = _first;
+	SCenarioElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if((temp->valor)->getID() == IDbolsa)
+		if((temp->valor)->getID() == IDCenario)
 		{
 			return(temp->valor);
 		}
@@ -151,12 +151,12 @@ CBolsa *CBolsaList::getBolsa(int IDbolsa)
 	delete temp;
 	return(NULL);
 }
-bool CBolsaList::haveBolsa(CBolsa *bolsa)
+bool CCenarioList::haveCenario(CCenario *Cenario)
 {
-	SBagElemento *temp = _first;
+	SCenarioElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if(temp->valor == bolsa)
+		if(temp->valor == Cenario)
 		{
 			temp = NULL;
 			delete temp;
@@ -171,3 +171,4 @@ bool CBolsaList::haveBolsa(CBolsa *bolsa)
 	delete temp;
 	return(false);
 }
+

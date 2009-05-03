@@ -43,6 +43,7 @@ public:
 	//Getters e Setters
 	CHabilidadesSecundarias *getStats();
 	CBonus *getBonus();
+	CBuff *getBuffs();
 	//Outros métodos
 	void move();
 	virtual void attack()=0;

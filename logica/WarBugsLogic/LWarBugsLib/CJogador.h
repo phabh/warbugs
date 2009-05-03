@@ -5,11 +5,11 @@
 #include <winsock2.h>
 #include <iostream>
 using namespace std;
+#include "CWarBugObject.h"
 
-class CJogador
+class CJogador : public CWarBugObject
 {
 private:
-	int _ID;
 	char _nome[20];
 	char _nascimento[10];
 	char _email[30];
@@ -18,17 +18,14 @@ private:
 	sockaddr *_socket;
 
 public:
-	CJogador *next;
 
 	CJogador();
-	int getID();
 	char *getName();
 	char *getBirthdate();
 	char *getEmail();
 	char *getLogin();
 	char *getPassword();
 	sockaddr *getSocketAddress();
-	void setID(int newID);
 	void setName(char *value);
 	void setBirthdate(char *value);
 	void setEmail(char *value);

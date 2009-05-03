@@ -1,18 +1,12 @@
 #pragma once
 #include <iostream>
 using namespace std;
-#include "CBolsaList.h"
+#include "Enumerators.h"
 #include "CBolsa.h"
 
-typedef struct SBagCelula
-{
-	CBolsa *bolsa;
-	SBagCelula *prev;
-	SBagCelula *next;
-} SBagElemento;
+typedef SCelula<CBolsa> SBagElemento;
 
-
-class CBolsaList : C3DObject
+class CBolsaList : public CWarBugObject
 {
 private:
 	SBagElemento *_first;

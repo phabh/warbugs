@@ -1,17 +1,12 @@
 #pragma once
+#include "Enumerators.h"
 #include "CPersonagem.h"
 #include <iostream>
 using namespace std;
 
-typedef struct SCharCelula
-{
-	CPersonagem *personagem;
-	SCharCelula *prev;
-	SCharCelula *next;
-} SCharElemento;
+typedef SCelula<CPersonagem> SCharElemento;
 
-
-class CPeopleList
+class CPeopleList : public CWarBugObject
 {
 private:
 	SCharElemento *_first;
