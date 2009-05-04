@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\Irrlicht\Include;.\Includes;.\MySQL"
+				AdditionalIncludeDirectories=".\Includes;.\MySQL"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -60,7 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Libs\mysql++.lib ws2_32.lib Libs\LWarBugsLib.lib Irrlicht\Lib\Irricht.lib $(NOINHERIT)"
+				AdditionalDependencies="Libs\mysql++.lib ws2_32.lib Libs\LWarBugsLib.lib $(NOINHERIT)"
 				LinkIncremental="2"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
@@ -202,10 +202,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\CCoreServer.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -246,6 +242,22 @@
 				</File>
 				<File
 					RelativePath=".\Includes\dreamSock.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Warbugs"
+				>
+				<File
+					RelativePath=".\CCoreServer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CDataBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CDataManager.cpp"
 					>
 				</File>
 			</Filter>
@@ -294,6 +306,10 @@
 				</File>
 				<File
 					RelativePath=".\commom.h"
+					>
+				</File>
+				<File
+					RelativePath=".\FunctionsCommom.h"
 					>
 				</File>
 			</Filter>
@@ -386,6 +402,142 @@
 				</File>
 				<File
 					RelativePath=".\Includes\dreamSockLog.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Logica"
+				>
+				<File
+					RelativePath=".\Includes\C3DObject.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CArmor.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CBolsa.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CBolsaList.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CBonus.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CBonusPrimario.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CBonusSecundario.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CBuff.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CCenario.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CCenarioList.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CConsumableItem.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CDivisorXP.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CEquipamento.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CHabilidades.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CHabilidadesSecundarias.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CInimigo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CItem.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CJogador.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CLealdade.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CLoyaltyScroll.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CNPC.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CPeopleList.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CPersonagem.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CPersonagemJogador.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CPlayerList.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CPoder.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CPortal.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CQItem.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CQuest.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CScroll.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CVendedor.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CWarBugObject.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\CWeapon.h"
 					>
 				</File>
 			</Filter>

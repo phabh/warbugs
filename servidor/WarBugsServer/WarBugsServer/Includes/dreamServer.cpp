@@ -407,7 +407,7 @@ int dreamServer::getPacket(char *data, struct sockaddr *from)
 void dreamServer::sendPackets(void)
 {
 	// Check if the server is set up
-	if(!socket)
+	if(!_socket)
 		return;
 
 	dreamClient *clList = _clientList;

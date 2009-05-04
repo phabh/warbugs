@@ -211,7 +211,7 @@ int dreamSock_StringToSockaddr(char *addressString, struct sockaddr *sadr)
 	struct sockaddr_in *addressPtr = (struct sockaddr_in *) sadr;
 	addressPtr->sin_family = AF_INET;
 	addressPtr->sin_port = htons(0);
-	strcpy(copy, addressString);
+	strcpy_s(copy, addressString);
 
 	// If the address string begins with a number, assume an IP address
 	if(copy[0] >= '0' && copy[0] <= '9')
