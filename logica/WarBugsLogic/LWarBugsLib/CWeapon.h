@@ -28,12 +28,10 @@ private:
 
 public:
 	CWeapon();
-	//Métodos da CObject
-	void initialize(CObjectCount *counter, Raca raca, int mod, int danM, int danX, int spd, int rng, int dur, int nM);
-	TipoClasse getClass();
-	int getID();
+	CWeapon(TypeItens nome, EstadoItem estado, int preco, bool isdropable, Raca raca, int mod, int danM, int danX, int spd, int rng, int dur, int nM);
 	//Outros métodos
 	void useScroll(CScroll *&scroll);
+	Raca getRace();
 	int getMod();
 	int getMinDamage();
 	int getMaxDamage();

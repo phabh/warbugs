@@ -1,2 +1,5 @@
 -Colokr level nos inimigos
 -get e set dos inimigos
+-Fazer a skill ariete andar ate o inimigo(ou colokr isso no metodo de ataque)
+-Fazer a skill berserker causar dano em área
+-Fazer o buff strike andar sem parar ate o fim do efeito

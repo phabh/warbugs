@@ -8,7 +8,6 @@
 *
 */
 #ifndef _CPERSONAGEMJOGADOR_H_
-#define _CPERSONAGEMJOGADOR_H_
 #include <iostream>
 using namespace std;
 
@@ -25,9 +24,15 @@ using namespace std;
 	//#include "CBonusSecundario.h"
 		//#include "CHabilidadesSecundarias.h"
 		//#include "CBonus.h"
+#ifndef _CQUEST_H_
 #include "CQuest.h"
 	//#include "CLealdade.h"
+#ifndef _CQUEST_H_
+class CQuest;
+#endif
+#endif
 
+#define _CPERSONAGEMJOGADOR_H_
 class CPersonagemJogador : public CPersonagem
 {
 	char _nome[10];
@@ -63,13 +68,10 @@ public:
 	int getINS();
 	int getAttack();
 	int getDamage();
-	CHabilidades *getBaseStats();
-	CBonusPrimario *getBaseBonus();
+	
 	//Setters
 	void setName(char *name);
 	void setRace(Raca raca);
-	void setBaseStats(CHabilidades *stats);
-	void setBaseBonus(CBonus *bonus);
 	void setLevel(int level);
 	void setXP(int xp);
 	void setXPToNextLv(int xp);

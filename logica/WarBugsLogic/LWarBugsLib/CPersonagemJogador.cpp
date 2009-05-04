@@ -13,8 +13,6 @@
 
 CPersonagemJogador::CPersonagemJogador()
 {
-	_habilidadesPrimarias = new CHabilidades();
-	_bonusPrimario = new CBonusPrimario();
 	_nivel = 1;
 	_experiencia = 0;
 	_xpToNextLv = 0;
@@ -39,23 +37,23 @@ char *CPersonagemJogador::getName()
 }
 int CPersonagemJogador::getFOR()
 {
-	return(_habilidadesPrimarias->getFOR() + _bonusPrimario->getTotalBonusOf(FOR));
+	return(habilidadesPrimarias->getFOR() + bonusPrimario->getTotalBonusOf(FOR));
 }
 int CPersonagemJogador::getDES()
 {
-	return(_habilidadesPrimarias->getDES() + _bonusPrimario->getTotalBonusOf(DES));
+	return(habilidadesPrimarias->getDES() + bonusPrimario->getTotalBonusOf(DES));
 }
 int CPersonagemJogador::getAGI()
 {
-	return(_habilidadesPrimarias->getAGI() + _bonusPrimario->getTotalBonusOf(AGI));
+	return(habilidadesPrimarias->getAGI() + bonusPrimario->getTotalBonusOf(AGI));
 }
 int CPersonagemJogador::getRES()
 {
-	return(_habilidadesPrimarias->getRES() + _bonusPrimario->getTotalBonusOf(RES));
+	return(habilidadesPrimarias->getRES() + bonusPrimario->getTotalBonusOf(RES));
 }
 int CPersonagemJogador::getINS()
 {
-	return(_habilidadesPrimarias->getINS() + _bonusPrimario->getTotalBonusOf(INS));
+	return(habilidadesPrimarias->getINS() + bonusPrimario->getTotalBonusOf(INS));
 }
 int CPersonagemJogador::getAttack()
 {
@@ -71,14 +69,7 @@ int CPersonagemJogador::getDamage()
 	else
 		return(_dano + getBonus()->getTotalBonusOf(DAMAGERANGED));
 }
-CHabilidades *CPersonagemJogador::getBaseStats()
-{
-	return(_habilidadesPrimarias);
-}
-CBonusPrimario *CPersonagemJogador::getBaseBonus()
-{
-	return(_bonusPrimario);
-}
+
 void CPersonagemJogador::setName(char *name)
 {
 	if(sizeof(_nome) >= strlen(name))
@@ -88,14 +79,7 @@ void CPersonagemJogador::setRace(Raca raca)
 {
 	_raca = raca;
 }
-void CPersonagemJogador::setBaseStats(CHabilidades *stats)
-{
-	_habilidadesPrimarias = stats;
-}
-void CPersonagemJogador::setBaseBonus(CBonus *bonus)
-{
-	_bonusPrimario = (CBonusPrimario*)bonus;
-}
+
 void CPersonagemJogador::setLevel(int level)
 {
 	_nivel = level;
@@ -184,7 +168,7 @@ void CPersonagemJogador::addItem(CItem *item)
 }
 void CPersonagemJogador::dropItem(CItem *item)
 {
-	if(inventario->removeItem(item) != NULL)
+	if((item->isDropable())&&(inventario->removeItem(item) != NULL))
 	{
 		item->setEstado(NOCHAO);
 		item->setPosition(this->getPosition());
@@ -224,7 +208,7 @@ void CPersonagemJogador::equip(CItem *item)
 {
 	if(this->haveItem(item))
 	{
-		if(item->getClass() == CWEAPON)
+		if(item->getTipo() == ARMA)
 		{
 			if(_equip->arma == NULL)
 			{
@@ -271,7 +255,7 @@ void CPersonagemJogador::equip(CItem *item)
 				//ERRO: INVENTÁRIO CHEIO
 			}
 		}
-		else if(item->getClass() == CARMOR)
+		else if(item->getTipo() == ARMADURA)
 		{
 			if(_equip->armadura == NULL)
 			{
@@ -308,10 +292,10 @@ void CPersonagemJogador::unequip(CItem *item)
 	{
 		_equip->arma = NULL;
 		item->setEstado(NAMOCHILA);
-		_ataque = _habilidadesPrimarias->getFOR();
-		_dano = _habilidadesPrimarias->getFOR();
+		_ataque = habilidadesPrimarias->getFOR();
+		_dano = habilidadesPrimarias->getFOR();
 		_range = MAXMELEERANGE;
-		_speed = _habilidadesPrimarias->getAGI();
+		_speed = habilidadesPrimarias->getAGI();
 		_bareHands = true;
 	}
 	else if(_equip->armadura == item)
@@ -478,11 +462,11 @@ bool CPersonagemJogador::haveLevelDown()
 	if(_experiencia < _xpToPrevLv)
 	{
 		_nivel = _nivel - 1;
-		_habilidadesPrimarias->addFOR(-1);
-		_habilidadesPrimarias->addDES(-1);
-		_habilidadesPrimarias->addAGI(-1);
-		_habilidadesPrimarias->addRES(-1);
-		_habilidadesPrimarias->addINS(-1);
+		habilidadesPrimarias->addFOR(-1);
+		habilidadesPrimarias->addDES(-1);
+		habilidadesPrimarias->addAGI(-1);
+		habilidadesPrimarias->addRES(-1);
+		habilidadesPrimarias->addINS(-1);
 		updateXP();
 		return(true);
 	}
@@ -495,23 +479,23 @@ void CPersonagemJogador::distibutePoints(int points, int atribute)
 		switch(atribute)
 		{
 		case 0:
-			_habilidadesPrimarias->addFOR(points);
+			habilidadesPrimarias->addFOR(points);
 			_pontoDistribuir = _pontoDistribuir - points;
 			break;
 		case 1:
-			_habilidadesPrimarias->addDES(points);
+			habilidadesPrimarias->addDES(points);
 			_pontoDistribuir = _pontoDistribuir - points;
 			break;
 		case 2:
-			_habilidadesPrimarias->addAGI(points);
+			habilidadesPrimarias->addAGI(points);
 			_pontoDistribuir = _pontoDistribuir - points;
 			break;
 		case 3:
-			_habilidadesPrimarias->addRES(points);
+			habilidadesPrimarias->addRES(points);
 			_pontoDistribuir = _pontoDistribuir - points;
 			break;
 		case 4:
-			_habilidadesPrimarias->addINS(points);
+			habilidadesPrimarias->addINS(points);
 			_pontoDistribuir = _pontoDistribuir - points;
 			break;
 		default:

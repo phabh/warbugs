@@ -2,23 +2,28 @@
 /*
 * Classe CQuest
 *
-* Versão: 0.01
-*
 * Autor: Eder Figueiredo
 *
 * Objetivo: Descrever as quests do jogo
 *
 */
 #ifndef _CQUEST_H_
-#define _CQUEST_H_
 
-#include "CItem.h"
 #include "CWarBugObject.h"
+
+#ifndef _CPERSONAGEMJOGADOR_H_
+#include "CPersonagemJogador.h"
+#ifndef _CPERSONAGEMJOGADOR_H_
+class CPersonagemJogador;
+#endif
+#endif
+
 #include "CLealdade.h"
 
+#define _CQUEST_H_
 class CQuest : public CWarBugObject{
 private:
-	//CPersonagem *_jogador;
+	CPersonagemJogador *_jogador;
 	CItem *_itemNecessario;
 	int _qtdNecessaria;
 	//NPC

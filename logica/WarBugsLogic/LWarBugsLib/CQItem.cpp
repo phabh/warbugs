@@ -11,7 +11,25 @@
 
 #include "CQItem.h"
 
-CQItem::CQItem(){}
+CQItem::CQItem()
+{
+	setEstado(USADO);
+	setPreco(0);
+	setDropable(false);
+	_quest = NULL;
+}
+CQItem::CQItem(TypeItens nome, EstadoItem estado, int preco, bool isdropable, CQuest *quest)
+{
+	setNome(nome);
+	setEstado(estado);
+	setPreco(preco);
+	setDropable(isdropable);
+	_quest = quest;
+}
+CQuest *CQItem::getQuest()
+{
+	return(_quest);
+}
 Atrib CQItem::getAtribute()
 {
 	return (NENHUM);

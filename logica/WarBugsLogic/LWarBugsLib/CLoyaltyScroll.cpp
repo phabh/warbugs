@@ -13,20 +13,30 @@
 
 CLoyaltyScroll::CLoyaltyScroll()
 {
-		_bonus = new CLealdade();
-	}
-	void CLoyaltyScroll::use(CLealdade *base)
-	{
-		base->addLoyalty(_bonus);
-	}
-
-	Atrib CLoyaltyScroll::getAtribute()
-	{
-		return (NENHUM);
-	}
-
-	int CLoyaltyScroll::getValue()
-	{
-		return -1;
-	}
+	_bonus = new CLealdade();
+}
+CLoyaltyScroll::CLoyaltyScroll(TypeItens nome, EstadoItem estado, int preco, bool isdropable,int aranha, int besouro, int louvadeus, int escorpiao, int vespa)
+{
+	setNome(nome);
+	setEstado(estado);
+	setPreco(preco);
+	setDropable(isdropable);
+	_bonus->setLoyaltyToBeetle(besouro);
+	_bonus->setLoyaltyToMantis(louvadeus);
+	_bonus->setLoyaltyToScorpion(escorpiao);
+	_bonus->setLoyaltyToSpider(aranha);
+	_bonus->setLoyaltyToWasp(vespa);
+}
+void CLoyaltyScroll::use(CLealdade *base)
+{
+	base->addLoyalty(_bonus);
+}
+Atrib CLoyaltyScroll::getAtribute()
+{
+	return (NENHUM);
+}
+int CLoyaltyScroll::getValue()
+{
+	return -1;
+}
 #endif
