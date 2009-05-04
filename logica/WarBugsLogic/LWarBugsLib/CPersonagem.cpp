@@ -15,11 +15,13 @@
 
 CPersonagem::CPersonagem()
 {
+	habilidadesPrimarias = new CHabilidades();
+	bonusPrimario = new CBonusPrimario();
 	inventario = new CBolsa();
 	habilidadesSecundarias = new CHabilidadesSecundarias();
 	bonusSecundario = new CBonusSecundario();
 	//poderes = new CPoder();
-	_status = new CBuff();
+	status = new CBuff();
 }
 //Getters e Setters
 CHabilidadesSecundarias *CPersonagem::getStats()
@@ -32,7 +34,32 @@ CBonus *CPersonagem::getBonus()
 }
 CBuff *CPersonagem::getBuffs()
 {
-	return(_status);
+	return(status);
+}
+CHabilidades *CPersonagem::getBaseStats()
+{
+	return(habilidadesPrimarias);
+}
+CBonusPrimario *CPersonagem::getBaseBonus()
+{
+	return(bonusPrimario);
+}
+
+void CPersonagem::setStats(CHabilidadesSecundarias *stats)
+{
+	habilidadesSecundarias = stats;
+}
+void CPersonagem::setBaseStats(CHabilidades *stats)
+{
+	habilidadesPrimarias = stats;
+}
+void CPersonagem::setBonus(CBonus *bonus)
+{
+	bonusSecundario = (CBonusSecundario*)bonus;
+}
+void CPersonagem::setBaseBonus(CBonus *bonus)
+{
+	bonusPrimario = (CBonusPrimario*)bonus;
 }
 //Outros métodos
 void CPersonagem::move(){}

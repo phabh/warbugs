@@ -19,8 +19,8 @@ private:
 	CQuest * _quest;
 public:
 	CQItem();
-	void initialize(CObjectCount *counter);
-	TipoClasse getClass();
+	CQItem(TypeItens nome, EstadoItem estado, int preco, bool isdropable, CQuest *quest);
+	CQuest *getQuest();
 	//Métodos de manipulação de itens
 	//virtual void use(CPersonagem *jogador)=0;
 	//virtual void loot(CPersonagem *jogador)=0;

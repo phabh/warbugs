@@ -34,9 +34,9 @@ protected:
 	CHabilidadesSecundarias *habilidadesSecundarias;
 	CBonusSecundario *bonusSecundario;
 	//CPoder *poderes;
-	CBuff *_status;
-	CHabilidades *_habilidadesPrimarias;
-	CBonusPrimario *_bonusPrimario;
+	CBuff *status;
+	CHabilidades *habilidadesPrimarias;
+	CBonusPrimario *bonusPrimario;
 public:
 
 	CPersonagem();
@@ -44,6 +44,13 @@ public:
 	CHabilidadesSecundarias *getStats();
 	CBonus *getBonus();
 	CBuff *getBuffs();
+	CHabilidades *getBaseStats();
+	CBonusPrimario *getBaseBonus();
+	
+	void setBaseStats(CHabilidades *stats);
+	void setStats(CHabilidadesSecundarias *stats);
+	void setBaseBonus(CBonus *bonus);
+	void setBonus(CBonus *bonus);
 	//Outros métodos
 	void move();
 	virtual void attack()=0;

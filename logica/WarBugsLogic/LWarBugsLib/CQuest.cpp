@@ -1,8 +1,6 @@
 /*
 * Classe CQuest
 *
-* Versão: 0.01
-*
 * Autor: Eder Figueiredo
 *
 * Objetivo: Descrever as quests do jogo

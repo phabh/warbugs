@@ -15,13 +15,9 @@
 CItem::CItem()
 {
 }
-string CItem::getNome()
+TypeItens CItem::getNome()
 {
 	return(_nome);
-}
-string CItem::getDescricao()
-{
-	return(_descricao);
 }
 EstadoItem CItem::getEstado()
 {
@@ -48,13 +44,9 @@ bool CItem::isDropable()
 	return(_dropavel);
 }
 //CPersonagem getOwner(){}
-void CItem::setNome(string novoNome)
+void CItem::setNome(TypeItens novoNome)
 {
 	_nome = novoNome;
-}
-void CItem::setDescricao(string novaDesc)
-{
-	_descricao = novaDesc;
 }
 void CItem::setEstado(EstadoItem novoEstado)
 {
@@ -69,26 +61,17 @@ void CItem::setDropable(bool isdropable)
 	_dropavel = isdropable;
 }
 //void setOwner(CPersonagem *newOwner){}
-//Métodos da CObject
-void CItem::initialize(CObjectCount *counter)
-{
-	C3DObject::initialize(counter);
-}
-TipoClasse CItem::getClass()
-{
-	return(CITEM);
-}
 //Métodos de manipulação de itens
 //virtual void use(CPersonagem *jogador)=0;
 //virtual void loot(CPersonagem *jogador)=0;
 //virtual void drop(CPersonagem *jogador)=0;
 //Métodos virtuais pra funcionar
-Atrib CItem::getAtribute()
+/*Atrib CItem::getAtribute()
 {
 	return (NENHUM);
 }
 int CItem::getValue()
 {
 	return -1;
-}
+}*/
 #endif

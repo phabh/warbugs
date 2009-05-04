@@ -27,9 +27,7 @@ private:
 public:
 	CScroll();
 	//Métodos da CObject
-	void initialize(CObjectCount *counter, int mod, int danM, int danX, int spd, int rng, int def, int dur);
-	TipoClasse getClass();
-	int getID();
+	CScroll(TypeItens nome, EstadoItem estado, int preco, bool isdropable, int mod, int danM, int danX, int spd, int rng, int def, int dur);
 	int getMod();
 	int getMinDamage();
 	int getMaxDamage();
@@ -38,7 +36,6 @@ public:
 	int getDef();
 	int getDurability();
 
-	void initialize(CObjectCount *counter);
 	//Métodos de manipulação de itens
 	//virtual void use(CPersonagem *jogador)=0;
 	//virtual void loot(CPersonagem *jogador)=0;
