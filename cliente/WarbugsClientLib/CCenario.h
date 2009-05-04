@@ -22,6 +22,7 @@ class CCenario
 	int _luaCorrente;
 	SBolsa _listaBolsas;
 	SPortal _portal[MAXPORTAIS];
+
 	 
 	public:
 	

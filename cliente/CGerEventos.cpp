@@ -1,5 +1,4 @@
-#ifndef __CGerEventos__
-#define __CGerEventos__
+#pragma once
 
 /*
 * Classe CGerEventos
@@ -508,5 +507,3 @@ class CGerEventos : public IEventReceiver
 		bool mouseHasMoved;
 		bool wheelHasMoved;
 };
-
-#endif;

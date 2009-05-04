@@ -1,5 +1,4 @@
-#ifndef __CArquivoConfig__
-#define __CArquivoConfig__
+#pragma once
 
 #include "Setup.h"
 
@@ -68,5 +67,3 @@ public:
 
 	
 };
-
-#endif;

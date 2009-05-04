@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Setup.h"
+#include "CGameData.cpp"
 #include "CMenu.h"
 #include "CMenuAbertura.cpp"
 #include "CMenuLogin.cpp"
@@ -54,7 +55,20 @@ int main()
 		nextMenu = SAIDA;
 	}
 
-	
+
+	int estagio = 0;
+
+	CGameData *_gameData= new CGameData();
+	_gameData->start(dispositivoGrafico);
+
+	while(estagio < 6)
+	{
+		_gameData->loadGameData(estagio);
+	    estagio++;
+	}
+
+
+
 	while(nextMenu != SAIDA && nextMenu != ERRO)
 	{
 		menuCorrente = NULL;
