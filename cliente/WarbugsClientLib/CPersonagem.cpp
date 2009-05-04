@@ -1,3 +1,5 @@
+#pragma once
+
 #include "CPersonagem.h"
 
 void CPersonagem::abrirBolsa(int idBolsa)

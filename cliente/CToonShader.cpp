@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Setup.h"
 
 class CToonShader : public IShaderConstantSetCallBack

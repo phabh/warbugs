@@ -1,3 +1,5 @@
+#pragma once
+
 #include "CCenario.h"
 
 void CCenario::addBolsa(int idBolsa, int posX, int posZ)

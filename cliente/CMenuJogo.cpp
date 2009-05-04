@@ -22,7 +22,10 @@ private:
 	IGUIWindow *_invWindow,
 			   *_chatWindow,	
 			   *_statWindow,
-			   *_cfgWindow;
+			   *_cfgWindow,
+			   *_mapWindow,
+			   *_equipWindow,
+			   *_alertWindow;
 
 	CHudRoleta *_roleta;
 
@@ -46,6 +49,13 @@ private:
 		_gerenciadorHud->clear();
 		
         //_font->draw(temp, rect<s32>(130,10,300,50), SColor(255,255,255,255));
+
+
+		// Criar janela de mini mapa
+		_mapWindow = _gerenciadorHud->addWindow(rect<s32>(0, 0, 200, 220), false, L"Mini Mapa"); 
+		_mapWindow->getCloseButton()->setEnabled(false); 
+		_mapWindow->getCloseButton()->setToolTipText(L""); 
+		_mapWindow->getCloseButton()->setVisible(false);
 
 		// Criar janela de inventário do jogador
 		_invWindow = _gerenciadorHud->addWindow(rect<s32>(0, 0, 250, 200), false, L"Inventario"); 
@@ -84,13 +94,34 @@ private:
 		_gerenciadorHud->addButton(rect<s32>(440,500,540,540), 0, 8, L"Sair");
 		_gerenciadorHud->addButton(rect<s32>(0,0,20,20), 0, 9, L"Config");
 
-		_gerenciadorHud->addButton(rect<s32>(0+40,0,20+40,20), _cfgWindow, 10, L"Inventario");
+		_gerenciadorHud->addButton(rect<s32>(0+40,0,20+40,20), 0, 10, L"Inventario");
 		_gerenciadorHud->addButton(rect<s32>(0+80,0,20+80,20), 0, 11, L"Status");
 		_gerenciadorHud->addButton(rect<s32>(0+120,0,20+120,20), 0, 12, L"Mapa");
 		_gerenciadorHud->addButton(rect<s32>(0+160,0,20+160,20), 0, 13, L"Trocar");
 		_gerenciadorHud->addButton(rect<s32>(0+200,0,20+200,20), 0, 14, L"Equipar");
 		_gerenciadorHud->addButton(rect<s32>(0+240,0,20+240,20), 0, 15, L"Mail");
 
+		// Elementos GUI da janela de configuração
+		_gerenciadorHud->addCheckBox(_gameCfg->loadConfig().parametrosVideo.Stencilbuffer, rect<s32>(50,50,50+20,50+20), _cfgWindow,16, L"");
+		_gerenciadorHud->addStaticText(L"Sombra", rect<s32>(50+20, 50, 50+50, 50+20), false, false, _cfgWindow, 17, true);
+
+		_gerenciadorHud->addCheckBox(_gameCfg->loadConfig().parametrosVideo.AntiAlias, rect<s32>(50,80,50+20,80+20), _cfgWindow,18, L"");
+		_gerenciadorHud->addStaticText(L"Anti-Aliasing", rect<s32>(50+20, 80, 50+50, 80+20), false, false, _cfgWindow, 19, true);
+
+		_gerenciadorHud->addScrollBar(true, rect<s32>(50,80,50+50,80+20), _cfgWindow, 20);
+		_gerenciadorHud->addStaticText(L"Anti-Aliasing", rect<s32>(50+60, 80, 50+80, 80+20), false, false, _cfgWindow, 21, true);
+
+		// Elementos GUI da janela de minimapa
+		IGUIButton *btnMiniMapa = _gerenciadorHud->addButton(rect<s32>(0,20,200,220), _mapWindow, 30);
+		btnMiniMapa->setIsPushButton(true);
+		//btnMiniMapa->setSprite(
+		btnMiniMapa->setPressedImage(_gerenciadorVideo->getTexture("recursos/texturas/minimapa.png"));
+		btnMiniMapa->setImage(_gerenciadorVideo->getTexture("recursos/texturas/louva_lider.jpg"));
+		//::IGUIToolBar *toolBar = _gerenciadorHud->addToolBar(0,-1);
+		//toolBar->setRelativePositionProportional(rect<f32>(1,1,1,1));
+		//toolBar->addButton(-1,L"teste",0, _gerenciadorVideo->getTexture("recursos/texturas/minimapa.png"),_gerenciadorVideo->getTexture("recursos/texturas/louva_lider.jpg"),false,true);
+
+		//::IGUIButton *botao1 = _gerenciadorHud->addButton();
 		
 
 
@@ -164,9 +195,48 @@ private:
 
 		if(_gerenciadorEventos->isKeyReleased(KEY_KEY_C))
 		{
+			// Mostrar | Esconder janela de configuração do jogo
 			_flags[CONFIGON] = !_flags[CONFIGON];
 			_cfgWindow->setVisible(_flags[CONFIGON]);
 		}
+
+        
+		if(_gerenciadorEventos->isKeyReleased(KEY_KEY_M))
+		{
+			// Mostrar | Esconder janela de minimapa
+			_flags[MAPAON] = !_flags[MAPAON];
+			_mapWindow->setVisible(_flags[MAPAON]);
+		}
+
+		if(_gerenciadorEventos->isKeyReleased(KEY_KEY_I))
+		{
+			// Mostrar | Esconder janela de inventário do jogador
+			_flags[INVENTARIOON] = !_flags[INVENTARIOON];
+			_invWindow->setVisible(_flags[INVENTARIOON]);
+		}
+
+		if(_gerenciadorEventos->isKeyReleased(KEY_KEY_S))
+		{
+			// Mostrar | Esconder janela de status do jogador
+			_flags[STATUSON] = !_flags[STATUSON];
+			_statWindow->setVisible(_flags[STATUSON]);
+		}
+
+		if(_gerenciadorEventos->isKeyReleased(KEY_KEY_E))
+		{
+			// Mostrar | Esconder janela de equipamentos do jogador
+			_flags[EQUIPON] = !_flags[EQUIPON];
+			_equipWindow->setVisible(_flags[EQUIPON]);
+		}
+
+		if(_gerenciadorEventos->isKeyReleased(KEY_KEY_A))
+		{
+			// Mostrar | Esconder janela de alertas ao jogador
+			_flags[ALERTON] = !_flags[ALERTON];
+			_alertWindow->setVisible(_flags[ALERTON]);
+		}
+
+
 /*
 		 
 	    if(_gerenciadorEventos->isKeyPressed(KEY_KEY_H))
