@@ -1,10 +1,7 @@
 #pragma once
-#include "commom.h"
 #include "CCoreServer.h"
-//#include "CDataBase.h"
-//#include "dreamSock.h"
-
-
+#include <stdlib.h>
+#include <vcclr.h>
 
 namespace WarBugsServer {
 
@@ -28,7 +25,7 @@ namespace WarBugsServer {
 	{
 	public:
 		// Variaveis do Jogo
-		static CDataBase	* _dataBase;
+		CDataBase			* _dataBase;
 		static CCoreServer	* _coreServer;
 
 
@@ -38,6 +35,7 @@ namespace WarBugsServer {
 			//
 			//TODO: Add the constructor code here
 			//
+			WarBugsLog::_log = logBox;
 			_dataBase = new CDataBase("localhost","warbugs","bd","bugsteam");
 			this->barStatusBD->Text = L"Status BD: "+( _dataBase->isConnected() ? "ON":"OFF");
 			_coreServer = new CCoreServer(_dataBase,30);
@@ -63,7 +61,6 @@ namespace WarBugsServer {
 	private: System::Windows::Forms::TabPage^  tabManutencaoBD;
 	private: System::Windows::Forms::StatusStrip^  barStatus;
 	protected: 
-
 
 
 	private: System::Windows::Forms::ToolStripStatusLabel^  barStatusJogo;
@@ -619,8 +616,26 @@ namespace WarBugsServer {
 	private: System::Void btConectar_Click(System::Object^  sender, System::EventArgs^  e) {
 			
 			_dataBase = NULL;
-			_dataBase = new CDataBase(toChar(txtHost->Text),toChar(txtBD->Text),toChar(txtLogin->Text),toChar(txtSenha->Text));
+			_dataBase = new CDataBase(toChar2(txtHost->Text),toChar2(txtBD->Text),toChar2(txtLogin->Text),toChar2(txtSenha->Text));
 		 }
+
+/*Transforma a porra do tipo string do windows em coisa de macho!*/
+	private : char * toChar2(System::String^ str)
+		{
+			char * target;
+
+			pin_ptr<const wchar_t> wch = PtrToStringChars( str );
+
+			size_t i;
+
+			int len = (( str->Length+1) * 2);
+
+			target = new char[ len ];
+						
+			wcstombs_s(&i, target, (size_t)len, wch, (size_t)len );
+
+			return target;
+		}
 
 private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  e) {
 			this->barStatusBD->Text = L"Status BD: "+( _dataBase->isConnected() ? "ON":"OFF");
@@ -628,7 +643,7 @@ private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  
 
 
 private: System::Void btExecutar_Click(System::Object^  sender, System::EventArgs^  e) {
-			 if(_dataBase->insertNow(toChar(txtSQL->Text)))
+			 if(_dataBase->insertNow(toChar2(txtSQL->Text)))
 			 {
 				 System::Windows::Forms::MessageBox::Show(L"OK, Feito!",L"Mensagem - OK");
 			 }
@@ -643,7 +658,7 @@ private: System::Void btConsultar_Click(System::Object^  sender, System::EventAr
 				unsigned int numRegs;
 				unsigned int indexCampos = 0, indexRegs = 0;
 				gridResultados->Columns->Clear();
-				if(_dataBase->selectNow(toChar(txtSQL->Text), numCampos, numRegs, dados))
+				if(_dataBase->selectNow(toChar2(txtSQL->Text), numCampos, numRegs, dados))
 				{
 
 					for(indexCampos = 0; indexCampos < numCampos; indexCampos++)
@@ -667,7 +682,7 @@ private: System::Void btConsultar_Click(System::Object^  sender, System::EventAr
 						unsigned int j = (numCampos*(indexRegs+1));
 						for(indexCampos = i; indexCampos < j; indexCampos++)
 						{
-							String ^ text = gcnew String(toChar(dados[indexCampos]->ToString()) != NULL ? toChar(dados[indexCampos]->ToString()): "NULL");
+							String ^ text = gcnew String(toChar2(dados[indexCampos]->ToString()) != NULL ? toChar2(dados[indexCampos]->ToString()): "NULL");
 							if(indexCampos >= numCampos)
 							{
 								gridResultados->Rows[indexRegs]->Cells[indexCampos-numCampos]->Value = text;

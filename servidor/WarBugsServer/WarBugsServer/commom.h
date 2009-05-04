@@ -2,25 +2,11 @@
 #define _COMMOM_H
 
 /*
-	Inclusão das classes de lógica do jogo
-*/
-#include <dreamSock.h>
-#include <dreamServer.h>
-#include <dreamClient.h>
-#include <dreamMessage.h>
-#include <CPersonagemJogador.h>
-#include <CJogador.h>
-#include <CCenario.h>
-#include <CTimer.cpp>
-#include <CInimigo.h>
-#include <CHabilidadesSecundarias.h>
-#include "CDataBase.h"
-#include <vcclr.h>
-
-
-/*
 	Variaveis que serão comuns no cliente e servidor
 **/
+
+#ifndef _WARBUGS_LOG_
+#define _WARBUGS_LOG_
 
 
 /* Para Funcionar o Log no server*/
@@ -31,6 +17,7 @@ public:
 };
 
 
+#endif
 
 /*Identificador de Mensagens*/
 enum TYPE_MESSAGE 
@@ -107,24 +94,6 @@ enum TYPE_MESSAGE
 	SELECT_PLAYER_FAIL
 };
 
-#define FRAMES_HISTORIC 64
 #define PORT 30003
-
-/*Transforma a porra do tipo string do windows em coisa de macho!*/
-char * toChar(System::String^ str)
-{
-	char * target;
-
-	pin_ptr<const wchar_t> wch = PtrToStringChars( str );
-
-	int len = (( str->Length+1) * 2);
-
-	target = new char[ len ];
-				
-	wcstombs( target, wch, len );
-
-	return target;
-}
-
 
 #endif

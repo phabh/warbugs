@@ -15,13 +15,10 @@
 
 #include <iostream>
 using namespace std;
+#include "Enumerators.h"
 #include "CWarBugObject.h"
 
-struct Ponto
-{
-	int x;
-	int y;
-};
+
 // -------------------------------------------------------------------------------------------------------------------
 class C3DObject abstract : public CWarBugObject
 {

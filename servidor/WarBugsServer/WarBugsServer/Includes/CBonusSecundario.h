@@ -11,7 +11,6 @@
 #define _CBONUSSECUNDARIO_H_
 
 #include "CHabilidadesSecundarias.h"
-#include "CBuff.h"
 #include "CBonus.h"
 
 class CBonusSecundario : public CBonus

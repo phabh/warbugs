@@ -10,21 +10,15 @@
 
 
 #ifndef _CBUFF_H_
-#define _CBUFF_H_
 
-#ifndef MAXSTATS
-#define MAXSTATS 5
-#endif
-#define FPS 8
 
-#include "Enumerators.h"
 #include "CWarBugObject.h"
 
 #ifndef _CPERSONAGEMJOGADOR_H_
-class CPersonagemJogador;
+#include "CPersonagemJogador.h"
 #endif
-//#include "CPersonagemJogador.h"
 
+#define _CBUFF_H_
 class CBuff : public CWarBugObject
 {
 private:
@@ -41,7 +35,7 @@ public:
 	CBuff *_next;
 
 	CBuff();
-	CBuff(TipoBuff tipo, int dur, int img, int efc, int val1, int val2, int val3);
+	CBuff(TipoBuff tipo, int dur, /*int img, int efc,*/ int val1 = 0, int val2 = 0, int val3 = 0);
 	TipoBuff getTipo();
 	int getTipoAsInt();
 	int getDuration();

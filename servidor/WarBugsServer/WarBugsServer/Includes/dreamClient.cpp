@@ -34,7 +34,7 @@ int dreamClient::initialize(char *localIP, char *remoteIP, int port)
 
 	// Save server's address information for later use
 	_serverPort = port;
-	strcpy(_serverIP, remoteIP);
+	strcpy_s(_serverIP, remoteIP);
 	//LogString("Server's information: IP address: %s, port: %d", _serverIP, _serverPort);
 
 	// Create client socket

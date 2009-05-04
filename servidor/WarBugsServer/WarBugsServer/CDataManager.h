@@ -1,34 +1,58 @@
+#ifndef _DATABASEMANAGER_H_
+#define _DATABASEMANAGER_H_
+
 /*
 	CDataManager
 	Esta classe terá 2 funções básicas:
 		- pegar os dados direto do banco de dados e retorna-los como objetos preenchidos
 		- salvar os dados no Banco de dados;
 */
-#pragma once
+
 
 #include "CDataBase.h"
-#include "CPersonagem.h"
 
-class CDataManger
+#pragma comment (lib,"Libs\\LWarBugsLib.lib")
+#pragma message ("WarBugs Library")
+
+#include <CPersonagem.h>
+#include <CItem.h>
+#include <CBolsa.h>
+#include <CBolsaList.h>
+#include <CCenario.h>
+#include <CPeopleList.h>
+#include <CJogador.h>
+
+class CDataManager
 {
 private:
-	CDataBase * _dataBase
+	CDataBase * _dataBase;
 
 public:
 	CDataManager(CDataBase * db);
 
 	//CONSULTAS
 	//Obter persoangens
-	CPersonagem getPersonagem(int id);
-	CPersonagem getPersonagem(int idJogador);
-	CPersonagem getPersonagem(int idTipoPersonagem, int idRaca, bool personagemBase);
+	CPersonagem			* getPersonagem(int id);
+	CPeopleList           getPersonagemJogador(int idJogador);
+	CPeopleList			  getPersonagem(int idTipoPersonagem, int idRaca, bool personagemBase);
+	CPeopleList			  getPersonagem(int idTipoPersonagem, int idRaca);
+	CPeopleList			  getPersonagem(int idTipoPersonagem, int idRaca, int idCenario);
 	
 	//Obter Itens
-	CItem getItem(int id);
-	CItem getItem(int Tipo);
+	CItem   * getItem(int id);
+	CWeapon * getWeaponEquiped(int idPersonagem);
+	CArmor  * getArmorEquiped(int idPersonagem);
 
 	//Obter Cenarios
-	CCenario getCenario(int id);
+	CCenario * getCenario(int id);
+	CCenario * getListCenario();
+
+	//Obter Bolsa
+	CBolsa      * getBolsa(int id);
+	CBolsa		  getBolsaPersonagem(int idPersonagem);
+	CBolsa		  getBolsaTipoItem(int Tipo);
+	CBolsaList  * getListBolsa(int idCenario);
+
 
 	//Obtem Jogador
 	CJogador getJogador(int id);
@@ -46,11 +70,9 @@ public:
 	//Personagem
 	void updatePersonagem(int id, float posX, float posZ);
 	void updatePersonagem(int id, int nivel, int xp);
-	void updatePersonagem(int id, float posX, float posZ);
-	void updatePersonagem(int id, float posX, float posZ);
-	void updatePersonagem(int id, float posX, float posZ);
-	void updatePersonagem(int id, float posX, float posZ);
-	void updatePersonagem(int id, float posX, float posZ);
-	
 
+	//Inserções
+	void insertPersonagem(CPersonagem * p1);
+	void insertPersonagem(CPeopleList p1);
 };
+#endif

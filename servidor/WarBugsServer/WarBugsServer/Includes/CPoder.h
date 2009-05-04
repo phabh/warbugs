@@ -2,36 +2,34 @@
 /*
 * Classe CPoder
 *
-* Versão: 0.01
-*
 * Autor: Eder Figueiredo
 *
 * Objetivo: Descrever os poderes de um personagem
 *
 */
+
 #ifndef _CPODER_H_
 #define _CPODER_H_
 
+#include "Enumerators.h"
 #include "CWarBugObject.h"
-//#include "CBuff.h"
-#include <string>
-using namespace std;
+#include "CBuff.h"
 
-class CBuff;
+#include "CPersonagem.h"
+
 
 class CPoder : public CWarBugObject
 {
 private:
-	string _nome;
-	string _descricao;
-	int _custoTC;
-	int _custoPP;
-	int _nivel;
-	int _dano;
-	CBuff * _statusCausado;
+	//Skills
+	static void berserkTornado(CPersonagemJogador *user, int level);
+	static void ariete(CPersonagemJogador *user, CPersonagem *target, int level);
+	static void strike(CPersonagemJogador *user, int level);
+	//RaceTypes
+	static void beetleSkills(CPersonagemJogador *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL);
+
 public:
-	CPoder();
-	void cast();
+	static void cast(CPersonagem *user, Raca userRace, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL);
 };
 
 #endif

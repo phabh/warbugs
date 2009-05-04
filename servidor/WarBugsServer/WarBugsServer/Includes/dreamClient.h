@@ -74,7 +74,7 @@ class dreamClient
 		void			  setIndex(int ind) {_index = ind;}
 
 		char		    * getName(void) {return _name;}
-		void			  setName(char *n) {strcpy(_name, n);}
+		void			  setName(char *n) {strcpy_s(_name, n);}
 
 		SOCKET			  getSocket(void) {return _socket;}
 		void		 	  setSocket(SOCKET sock) {_socket = sock;}
