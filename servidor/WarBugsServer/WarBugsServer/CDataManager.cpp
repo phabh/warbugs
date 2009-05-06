@@ -77,13 +77,10 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 				((CPersonagemJogador *)personagem)->setRace((Raca)dado[0]);
 
-				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDARMOR")]->ToString());
-				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDWEAPON")]->ToString());
-
 				CEquipamento * tempEquip = new CEquipamento();
 				
-				tempEquip->armadura = (CArmor  *)getItem(dado[0]);
-				tempEquip->arma     = (CWeapon *)getItem(dado[1]);
+				tempEquip->armadura = getArmorEquiped(personagem->getID());
+				tempEquip->arma     = getWeaponEquiped(personagem->getID());
 
 				((CPersonagemJogador *)personagem)->setEquip(tempEquip);
 
@@ -281,10 +278,20 @@ CPeopleList CDataManager::getPersonagemJogador(int idJogador)
 
 		CEquipamento * tempEquip = new CEquipamento();
 		
-		tempEquip->armadura = (CArmor  *)getItem(dado[0]);
-		tempEquip->arma     = (CWeapon *)getItem(dado[1]);
+		tempEquip->armadura = getArmorEquiped(personagem->getID());
+		tempEquip->arma     = getWeaponEquiped(personagem->getID());
 
 		((CPersonagemJogador *)personagem)->setEquip(tempEquip);
+
+
+		CBolsa tempBolsa;
+
+		tempBolsa = getBolsaPersonagem(personagem->getID());
+
+		for(int i = 0; i < tempBolsa.size(); i++)
+		{
+			((CPersonagemJogador *)personagem)->addItem(tempBolsa.getItem(
+		}
 
 		dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGNIVEL")]->ToString());
 
@@ -884,13 +891,10 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 					((CPersonagemJogador *)personagem)->setRace((Raca)dado[0]);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDARMOR")]->ToString());
-					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDWEAPON")]->ToString());
-
 					CEquipamento * tempEquip = new CEquipamento();
 					
-					tempEquip->armadura = (CArmor  *)getItem(dado[0]);
-					tempEquip->arma     = (CWeapon *)getItem(dado[1]);
+					tempEquip->armadura = getArmorEquiped(personagem->getID());
+					tempEquip->arma     = getWeaponEquiped(personagem->getID());
 
 					((CPersonagemJogador *)personagem)->setEquip(tempEquip);
 

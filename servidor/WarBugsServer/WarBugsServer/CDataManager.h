@@ -53,7 +53,6 @@ public:
 	CBolsa		  getBolsaTipoItem(int Tipo);
 	CBolsaList  * getListBolsa(int idCenario);
 
-
 	//Obtem Jogador
 	CJogador getJogador(int id);
 	CJogador getJogador(char * login);
