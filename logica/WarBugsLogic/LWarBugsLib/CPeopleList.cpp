@@ -46,6 +46,32 @@ void CPeopleList::addPersonagem(CPersonagem *personagem)
 	nodo = NULL;
 	delete nodo;
 }
+CPersonagem *CPeopleList::removePersonagemByPosition(int pospersonagem)
+{
+	SCharElemento *temp = _first;
+	pospersonagem = pospersonagem - 1;
+	while(pospersonagem > 0)
+	{
+		temp = temp->next;
+		pospersonagem = pospersonagem -1;
+	}
+	if(temp->prev != NULL)
+		(temp->prev)->next = temp->next;
+	else
+	{
+		_first = temp->next;
+		_first->next = (temp->next)->next;
+		_first->prev = NULL;
+	}
+
+	if(temp->next != NULL)
+		(temp->next)->prev = temp->prev;
+	else
+	{
+		(temp->prev)->next = NULL;
+	}
+	return(temp->valor);
+}
 CPersonagem *CPeopleList::removePersonagem(int IDpersonagem)
 {
 	SCharElemento *temp = _first;

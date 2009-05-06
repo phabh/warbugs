@@ -19,6 +19,7 @@ public:
 	bool isEmpty();
 	int size();
 	void addPersonagem(CPersonagem *personagem);
+	CPersonagem *removePersonagemByPosition(int pospersonagem);
 	CPersonagem *removePersonagem(int IDpersonagem);
 	CPersonagem *removePersonagem(CPersonagem *personagem);
 	CPersonagem *getPersonagem(int IDpersonagem);

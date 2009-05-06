@@ -19,7 +19,7 @@ public:
 	bool isEmpty();
 	int size();
 	void addBolsa(CBolsa *Bolsa);
-	//CBolsa *removeBolsa(int posBolsa);
+	CBolsa *removeBolsaByPosition(int posBolsa);
 	CBolsa *removeBolsa(int IDBolsa);
 	CBolsa *removeBolsa(CBolsa *Bolsa);
 	CBolsa *getBolsa(int IDBolsa);

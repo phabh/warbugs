@@ -45,7 +45,7 @@ void CBolsa::addItem(CItem *item)
 	nodo = NULL;
 	delete nodo;
 }
-/*CItem *CBolsa::removeItem(int posItem)
+CItem *CBolsa::removeItemByPosition(int posItem)
 {
 	SElemento *temp = _first;
 	posItem = posItem - 1;
@@ -69,8 +69,8 @@ void CBolsa::addItem(CItem *item)
 	{
 		(temp->prev)->next = NULL;
 	}
-	return(temp->item);
-}*/
+	return(temp->valor);
+}
 CItem *CBolsa::removeItem(int IDItem)
 {
 	SElemento *temp = _first;

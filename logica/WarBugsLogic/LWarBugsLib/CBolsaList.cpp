@@ -45,14 +45,14 @@ void CBolsaList::addBolsa(CBolsa *bolsa)
 	nodo = NULL;
 	delete nodo;
 }
-/*CBolsa *CBolsaList::removebolsa(int posbolsa)
+CBolsa *CBolsaList::removeBolsaByPosition(int posBolsa)
 {
 	SBagElemento *temp = _first;
-	posbolsa = posbolsa - 1;
-	while(posbolsa > 0)
+	posBolsa = posBolsa - 1;
+	while(posBolsa > 0)
 	{
 		temp = temp->next;
-		posbolsa = posbolsa -1;
+		posBolsa = posBolsa -1;
 	}
 	if(temp->prev != NULL)
 		(temp->prev)->next = temp->next;
@@ -69,8 +69,8 @@ void CBolsaList::addBolsa(CBolsa *bolsa)
 	{
 		(temp->prev)->next = NULL;
 	}
-	return(temp->bolsa);
-}*/
+	return(temp->valor);
+}
 CBolsa *CBolsaList::removeBolsa(int IDbolsa)
 {
 	SBagElemento *temp = _first;
