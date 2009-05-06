@@ -45,7 +45,7 @@ void CCenarioList::addCenario(CCenario *Cenario)
 	nodo = NULL;
 	delete nodo;
 }
-/*CCenario *CCenarioList::removeCenario(int posCenario)
+CCenario *CCenarioList::removeCenarioByPosition(int posCenario)
 {
 	SCenarioElemento *temp = _first;
 	posCenario = posCenario - 1;
@@ -69,8 +69,8 @@ void CCenarioList::addCenario(CCenario *Cenario)
 	{
 		(temp->prev)->next = NULL;
 	}
-	return(temp->Cenario);
-}*/
+	return(temp->valor);
+}
 CCenario *CCenarioList::removeCenario(int IDCenario)
 {
 	SCenarioElemento *temp = _first;

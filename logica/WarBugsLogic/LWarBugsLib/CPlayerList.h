@@ -19,7 +19,7 @@ public:
 	bool isEmpty();
 	int size();
 	void addJogador(CJogador *Jogador);
-	//CJogador *removeJogador(int posJogador);
+	CJogador *removeJogadorByPosition(int posJogador);
 	CJogador *removeJogador(int IDJogador);
 	CJogador *removeJogador(CJogador *Jogador);
 	CJogador *getJogador(int IDJogador);

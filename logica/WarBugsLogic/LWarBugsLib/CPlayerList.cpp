@@ -45,7 +45,7 @@ void CPlayerList::addJogador(CJogador *Jogador)
 	nodo = NULL;
 	delete nodo;
 }
-/*CJogador *CPlayerList::removeJogador(int posJogador)
+CJogador *CPlayerList::removeJogadorByPosition(int posJogador)
 {
 	SPlayerElemento *temp = _first;
 	posJogador = posJogador - 1;
@@ -69,8 +69,8 @@ void CPlayerList::addJogador(CJogador *Jogador)
 	{
 		(temp->prev)->next = NULL;
 	}
-	return(temp->Jogador);
-}*/
+	return(temp->valor);
+}
 CJogador *CPlayerList::removeJogador(int IDJogador)
 {
 	SPlayerElemento *temp = _first;
