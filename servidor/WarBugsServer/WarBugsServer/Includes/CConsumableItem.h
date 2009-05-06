@@ -20,8 +20,8 @@ private:
 	int _duracao;//duração caso seja temporario
 public:
 	CConsumableItem();
-	CConsumableItem(Atrib att, int valor, bool istemp, int dur);
-	CConsumableItem(CConsumableItem *item);
+	CConsumableItem(TypeItens nome, EstadoItem estado, int preco, bool isdropable, Atrib att, int valor, bool istemp, int dur);
+	//CConsumableItem(CConsumableItem *item);
 	//Getters e setters
 	Atrib getAtribute();
 	int getAtributeAsInt();

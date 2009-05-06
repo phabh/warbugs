@@ -23,11 +23,9 @@ private:
 
 public:
 	CArmor();
-	//Métodos da CObject
-	void initialize(CObjectCount *counter, Raca raca, int def, int dur, int nM);
-	TipoClasse getClass();
-	int getID();
+	CArmor(TypeItens nome, EstadoItem estado, int preco, bool isdropable, Raca raca, int def, int dur, int nM);
 	void useScroll(CScroll *&scroll);
+	Raca getRace();
 	int getDef();
 	int getDurability();
 	int getMagicLevel();
