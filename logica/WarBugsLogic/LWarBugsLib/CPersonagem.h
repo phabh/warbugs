@@ -46,11 +46,13 @@ public:
 	CBuff *getBuffs();
 	CHabilidades *getBaseStats();
 	CBonusPrimario *getBaseBonus();
+	CBolsa *getBolsa();
 	
 	void setBaseStats(CHabilidades *stats);
 	void setStats(CHabilidadesSecundarias *stats);
 	void setBaseBonus(CBonus *bonus);
 	void setBonus(CBonus *bonus);
+	void setBolsa(CBolsa *bolsa);
 	//Outros métodos
 	void move();
 	virtual void attack()=0;

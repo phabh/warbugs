@@ -44,6 +44,10 @@ CBonusPrimario *CPersonagem::getBaseBonus()
 {
 	return(bonusPrimario);
 }
+CBolsa *CPersonagem::getBolsa()
+{
+	return(inventario);
+}
 
 void CPersonagem::setStats(CHabilidadesSecundarias *stats)
 {
@@ -60,6 +64,10 @@ void CPersonagem::setBonus(CBonus *bonus)
 void CPersonagem::setBaseBonus(CBonus *bonus)
 {
 	bonusPrimario = (CBonusPrimario*)bonus;
+}
+void CPersonagem::setBolsa(CBolsa *bolsa)
+{
+	inventario = bolsa;
 }
 //Outros métodos
 void CPersonagem::move(){}

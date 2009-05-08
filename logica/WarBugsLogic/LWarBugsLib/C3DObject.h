@@ -35,6 +35,13 @@ public:
 	C3DObject(int x, int y, int modeloID = -1, int textura3DID = -1, int animacaoID = -1, int textura2DID = -1);
 	//Getters e Setters
 	Ponto *getPosition();
+	int getModel();
+	int get2DTexture();
+	int get3DTexture();
+
+	void setModel(int valor);
+	void set2DTexture(int valor);
+	void set3DTexture(int valor);
 	void setPosition(int x, int y);
 	void setPosition(Ponto *newPonto);
 	//Métodos matemáticos
