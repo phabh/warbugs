@@ -41,6 +41,32 @@ Ponto *C3DObject::getPosition()
 {
 	return(coordenada);
 }
+int C3DObject::getModel()
+{
+	return(modelo);
+}
+int C3DObject::get2DTexture()
+{
+	return(textura2D);
+}
+int C3DObject::get3DTexture()
+{
+	return(textura3D);
+}
+
+
+void C3DObject::setModel(int valor)
+{
+	modelo = valor;
+}
+void C3DObject::set2DTexture(int valor)
+{
+	textura2D = valor;
+}
+void C3DObject::set3DTexture(int valor)
+{
+	textura3D = valor;
+}
 void C3DObject::setPosition(int x, int y)
 {
 	coordenada->x = x;
