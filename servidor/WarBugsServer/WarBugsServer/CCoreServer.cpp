@@ -73,6 +73,19 @@ void CCoreServer::readPackets()
 						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
 						sockaddr enderecoIPJogador = player;
 
+						CJogador *  tempJogador = new CJogador();
+
+						//se fez login
+						if(_dataManager->doLogin(login,senha,tempJogador))
+						{
+							tempJogador->setSocketAddress(&enderecoIPJogador);
+							sendMessage(false,&enderecoIPJogador,(int)LOGIN);
+						}
+						else
+						{
+							sendMessage(false,&enderecoIPJogador,(int)LOGIN_FAIL);
+						}
+
 						break;
 					}
 				case REQUEST_PERSONAGENS:  //ID PESSOA
@@ -84,6 +97,17 @@ void CCoreServer::readPackets()
 						
 						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
 						sockaddr enderecoIPJogador = player;
+
+						CPeopleList * tempList = _dataManager->getPersonagemJogador(idJogador);
+
+						if(tempList != NULL)
+						{
+							sendMessage(false,&enderecoIPJogador,(int)SHOW_PERSONAGENS,tempList->size(),tempList);
+						}
+						else
+						{
+							sendMessage(false,&enderecoIPJogador,(int)SELECT_PLAYER_FAIL);
+						}
 
 						break;
 					}
@@ -97,6 +121,22 @@ void CCoreServer::readPackets()
 						
 						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
 						sockaddr enderecoIPJogador = player;
+
+						CPersonagemJogador * tempJogador = _dataManager->getPersonagem((int)JOGADOR,idRaca,true);
+
+						if(tempJogador == NULL)
+						{
+							sendMessage(false,enderecoIPJogador,(int)CREATE_PLAYER_FAIL);
+						}
+						else
+						{
+
+							tempJogador->setName(nome);
+
+							_cenarioList->addPlayer(tempJogador);
+						
+							_dataManager->insertPersonagem(tempJogador);
+						}
 
 						break;
 					}
@@ -123,6 +163,8 @@ void CCoreServer::readPackets()
 
 						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
 						sockaddr enderecoIPJogador = player;
+
+
 
 						break;
 					}
@@ -552,6 +594,50 @@ void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, CP
 	sendMessage(toAll, destino, &mes);
 	*/
 }
+
+/*
+	Manda os personagens que o jogador possui
+*/
+void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1, CPeopleList * p1)
+{
+	char data[1400];
+	dreamMessage mes;
+	mes.init(data,sizeof(data));
+
+	mes.writeByte(idMensagem);
+
+	mes.writeLong(i1);
+
+	for(int j = 0; j < i1; i++)
+	{
+		CPersonagemJogador * personagem = p1->getElementAt(i);
+
+		mes.writeLong(personagem->getID());
+		mes.writeString(personagem->getNome());
+		mes.writeLong(personagem->getLevel());
+
+		mes.writeLong(personagem->getAGI());
+		mes.writeLong(personagem->getDES());
+		mes.writeLong(personagem->getFOR());
+		mes.writeLong(personagem->getINS());
+		mes.writeLong(personagem->getRES());
+
+		mes.writeLong(personagem->getStats()->getAttackRate());
+		mes.writeLong(personagem->getStats()->getChargeTime());
+		mes.writeLong(personagem->getStats()->getDefense());
+		mes.writeLong(personagem->getStats()->getMeleeAttack());
+		mes.writeLong(personagem->getStats()->getMeleeDamage());
+		mes.writeLong(personagem->getStats()->getRangedAttack());
+		mes.writeLong(personagem->getStats()->getRangedDamage());
+
+		mes.writeLong(personagem->getModel());
+		mes.writeLong(personagem->get3DTexture());
+	}
+
+	sendMessage(toAll, destino, &mes);
+	
+}
+
 
 void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1, int i2, float f1, float f2)
 {

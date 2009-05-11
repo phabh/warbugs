@@ -41,6 +41,7 @@ class CCoreServer
 		void			sendMessage(bool toAll, sockaddr * destino, dreamMessage * mes);
 		void			sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1, float f1, float f2);
 		void			sendMessage(bool toAll, sockaddr * destino, int idMensagem, CPersonagem * p1);
+		void			sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1, CPeopleList * p1);
 		void			sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1, int i2, float f1, float f2);
 		void			sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10);
 		void			sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1);
