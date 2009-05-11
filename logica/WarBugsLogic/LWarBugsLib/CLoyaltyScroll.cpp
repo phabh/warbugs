@@ -19,7 +19,7 @@ CLoyaltyScroll::CLoyaltyScroll(TypeItens nome, EstadoItem estado, int preco, boo
 {
 	setNome(nome);
 	setEstado(estado);
-	setPreco(preco);
+	setPrice(preco);
 	setDropable(isdropable);
 	_bonus->setLoyaltyToBeetle(besouro);
 	_bonus->setLoyaltyToMantis(louvadeus);
