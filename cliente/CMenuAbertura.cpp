@@ -9,6 +9,13 @@ class CMenuAbertura : public CMenu
 private:
 
 	IVideoTexture *_video;
+
+	UINT ThreadReadPackets(LPVOID lParam)
+	{
+		while(_nextID == _myID)
+			cout << "\nLeu pacotes.\n";
+		return 0;
+	}
 	
 	void graphicsDrawAddOn() {}
 

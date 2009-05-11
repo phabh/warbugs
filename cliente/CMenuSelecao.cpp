@@ -13,6 +13,13 @@ private:
 
 	float _camRotation;
 	float _camCurrRotation;
+/*
+	UINT ThreadReadPackets(LPVOID lParam)
+	{
+		while(_nextID == _myID)
+			cout << "\nLeu pacotes.\n";
+		return 0;
+	}*/
 
 	void graphicsDrawAddOn(){}
 

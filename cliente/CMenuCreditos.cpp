@@ -11,6 +11,13 @@ private:
 
 	CHudFadingTextList _creditos;
 
+	UINT ThreadReadPackets(LPVOID lParam)
+	{
+		while(_nextID == _myID)
+			cout << "\nLeu pacotes.\n";
+		return 0;
+	}
+
 	void graphicsDrawAddOn(){}
 
 	void updateHuds()
