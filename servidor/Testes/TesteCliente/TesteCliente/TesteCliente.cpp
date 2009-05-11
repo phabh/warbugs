@@ -258,6 +258,7 @@ int main()
 			}
 
 			strcpy(memoria,mes._data);
+			mes.clear();
 		}	
 
 		cout<<"\n"<<"Recebido do Client: "<<tipoMes<<" - "<<memoria;
