@@ -28,6 +28,7 @@ using namespace irrklang;
 
 #pragma comment(lib, "Irrlicht.lib")
 #pragma comment(lib, "irrKlang.lib")
+#pragma comment(lib, "dsvt.lib")
 
 //-----------------------------------------------------------------------------------------
 // Constantes

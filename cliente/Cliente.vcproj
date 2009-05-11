@@ -122,7 +122,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\Irrlicht\include&quot;;&quot;$(ProjectDir)\IrrKlang\include&quot;;&quot;$(ProjectDir)\WarbugsClientLib&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\Irrlicht\include&quot;;&quot;$(ProjectDir)\IrrKlang\include&quot;;&quot;$(ProjectDir)\WarbugsClientLib&quot;;&quot;$(ProjectDir)\VideoTexture\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -141,10 +141,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="user32.lib"
+				AdditionalDependencies="user32.lib ole32.lib"
 				OutputFile="$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)\Irrlicht\lib&quot;;&quot;$(ProjectDir)\IrrKlang\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)\Irrlicht\lib&quot;;&quot;$(ProjectDir)\IrrKlang\lib&quot;;&quot;$(ProjectDir)\VideoTexture\lib\debug&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -313,6 +313,22 @@
 				</File>
 				<File
 					RelativePath=".\WarbugsClientLib\Setup.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="VideoTexture"
+				>
+				<File
+					RelativePath=".\VideoTexture\include\dsvt.h"
+					>
+				</File>
+				<File
+					RelativePath=".\VideoTexture\include\IVideoTexture.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\VideoTexture\include\IVideoTexture.h"
 					>
 				</File>
 			</Filter>
