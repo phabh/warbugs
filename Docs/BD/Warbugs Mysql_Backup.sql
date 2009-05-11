@@ -131,6 +131,8 @@ CREATE TABLE `itembase` (
   `ITIDTEXTURA` int(11) default NULL,
   `ITTIPOUSO` int(11) default NULL,
   `ITPRECO` int(11) default NULL,
+  `ITIDTIPOITEM` int(11) default NULL,
+  `ITIDHUD` int(11) default NULL,
   PRIMARY KEY  (`ITID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -235,6 +237,7 @@ CREATE TABLE `personagem` (
   `PGBONUSPOINTSPRIMARIAS` int(11) default '0',
   `PGBONUSPOINTSPODER` int(11) default '0',
   `PGISBASE` tinyint(1) default '0',
+  `PGIDHUD` int(11) default NULL,
   PRIMARY KEY  (`PGID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -328,6 +331,7 @@ CREATE TABLE `portal` (
   `PTDESTX` float default NULL,
   `PTDESTY` float default NULL,
   `PTIDCENARIODEST` int(11) default NULL,
+  `PTDIRECAO` int(11) default NULL,
   PRIMARY KEY  (`PTID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
