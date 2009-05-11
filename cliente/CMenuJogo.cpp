@@ -48,6 +48,13 @@ private:
 	position2d<s32> _miniMapaPos;
 	dimension2d<s32> _terrenoBoxDim;
 
+	UINT ThreadReadPackets(LPVOID lParam)
+	{
+		while(_nextID == _myID)
+			cout << "\nLeu pacotes.\n";
+		return 0;
+	}
+
 	void updateHuds()
 	{
 		_gerenciadorHud->clear();

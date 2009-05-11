@@ -27,14 +27,21 @@ protected:
 	char *_arquivoCena;
 	bool _flags[NUMFLAGSMENU];
 
+	CRITICAL_SECTION m_cs;// Objeto de Sessão Crítica
+
 	CToonShader *_toonShader;
 
-	virtual void updateHuds() = 0;
-	virtual void readCommands() = 0;
-	virtual void updateGraphics() = 0;
-	virtual void graphicsDrawAddOn() = 0;
+	void updateHuds();
+	void readCommands();
+	void updateGraphics();
+	void graphicsDrawAddOn();
+
+	
 	
 public:
+
+	static void ThreadReadPackets(LPVOID);
+	static void ThreadIrrlicht(LPVOID);
 
 	enum flagMenu {HUDCHANGED, OBJSELECTED, INVENTARIOON, CHATON, STATUSON, MAPAON, TRADEON, EQUIPON, SHOPON, BOLSAON, ALERTON, CONFIGON };
 
