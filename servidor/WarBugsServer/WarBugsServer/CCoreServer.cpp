@@ -3,21 +3,31 @@
 
 CCoreServer::CCoreServer(CDataBase *db, int fps)
 {
-	if(db != NULL)
+	if(db == NULL)
 		return;
 
 	_db = db;
+
+	_dataManager = new CDataManager(_db);
 
 	//seta os fps dos servidor
 	_fps = fps;
 
 	System::String^ texto = L"Inicializando o Server...";
 	WarBugsLog::_log->Items->Add(texto);
+
 	initialize();
+	initializeNetwork();
 }
 
 
-void CCoreServer::initialize(){}
+void CCoreServer::initialize()
+{
+	CCenarioList * listaCenarios;
+
+	listaCenarios = _dataManager->getListCenario();
+
+}
 
 void CCoreServer::initializeNetwork()
 {

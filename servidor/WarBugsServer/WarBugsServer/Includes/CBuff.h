@@ -14,8 +14,11 @@
 
 #include "CWarBugObject.h"
 
-#ifndef _CPERSONAGEMJOGADOR_H_
-#include "CPersonagemJogador.h"
+#ifndef _CPERSONAGEM_H_
+#include "CPersonagem.h"
+#ifndef _CPERSONAGEM_H_
+class CPersonagem;
+#endif
 #endif
 
 #define _CBUFF_H_
@@ -42,8 +45,8 @@ public:
 	void setDuration(int newDuration);
 	void addDuration(int newDuration);
 	void initialize(CObjectCount *counter);
-	void addBuff(CBuff * buff, CPersonagemJogador *alvo);
-	void remove(int index, CPersonagemJogador *alvo);
-	void execute(CPersonagemJogador *jogador);
+	void addBuff(CBuff * buff, CPersonagem *alvo);
+	void remove(int index, CPersonagem *alvo);
+	void execute(CPersonagem *jogador);
 };
 #endif

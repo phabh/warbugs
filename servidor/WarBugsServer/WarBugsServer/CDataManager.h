@@ -21,6 +21,7 @@
 #include <CCenario.h>
 #include <CPeopleList.h>
 #include <CJogador.h>
+#include <CCenarioList.h>
 
 class CDataManager
 {
@@ -45,7 +46,10 @@ public:
 
 	//Obter Cenarios
 	CCenario * getCenario(int id);
-	CCenario * getListCenario();
+	CCenarioList * getListCenario();
+
+	//Portal
+	CPortal * getPortal(int idCenario, Direcoes direcao);
 
 	//Obter Bolsa
 	CBolsa      * getBolsa(int id);

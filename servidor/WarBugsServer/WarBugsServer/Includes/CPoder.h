@@ -15,7 +15,7 @@
 #include "CWarBugObject.h"
 #include "CBuff.h"
 
-#include "CPersonagem.h"
+#include "CPersonagemJogador.h"
 
 
 class CPoder : public CWarBugObject
