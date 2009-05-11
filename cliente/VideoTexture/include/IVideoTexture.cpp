@@ -3,14 +3,10 @@
 #include "IVideoTexture.h"
 #include "dsvt.h"
 #include <irrlicht.h>
-//#include "CGerEventos.cpp"
-
 
 using namespace irr;
 using namespace video;
 using namespace dsvt;
-
-
 
 IVideoTexture::IVideoTexture()
 {
@@ -506,13 +502,6 @@ bool IVideoTexture::playCutscene( void )
 
     video::IVideoDriver *drv = m_device->getVideoDriver();
     core::rect<s32> viewport = drv->getViewPort();
-	//bool bQuit = false;
-
-	//CGerEventos *eventosVideo;
-	//eventosVideo = (CGerEventos*)m_device->getEventReceiver();
-
-	//if(eventosVideo->isKeyDown(KEY_ESCAPE))
-	//	bQuit = true;
 
     //Create event receiver
     class VideoEventReceiver : public irr::IEventReceiver
@@ -522,46 +511,13 @@ bool IVideoTexture::playCutscene( void )
 
             virtual bool OnEvent( const SEvent& event )
             {
-                if ( event.EventType == irr::EET_KEY_INPUT_EVENT &&
-                        event.KeyInput.Key == KEY_ESCAPE)
+				if ( event.EventType == irr::EET_KEY_INPUT_EVENT && event.KeyInput.Key == KEY_ESCAPE)
                     bQuit = true;
 
                 return false;
             }
-
-			//virtual ~IEventReceiver() {}
     };
-/*
-    //Get old Event receiver
-    irr::IEventReceiver *oldEvent = m_device->getEventReceiver();
-    VideoEventReceiver *myEventReceiver;
-    myEventReceiver->bQuit = false;
-    m_device->setEventReceiver( (IEventReceiver*)&myEventReceiver);
 
-    play();
-
-    bool bIrrlichtRun = true;
-
-    while( (bIrrlichtRun = m_device->run()) && !myEventReceiver->bQuit)
-    {
-        //update texture
-        update();
-
-        drv->beginScene(true,true,video::SColor(255,0,0,0));
-
-            drawBackground();
-
-        drv->endScene();
-
-        if( !isPlaying() )
-        {
-            myEventReceiver->bQuit = true;
-        }
-    }
-
-    // Set old event receiver
-    if( bIrrlichtRun )
-        m_device->setEventReceiver(oldEvent);*/
 
 	//Get old Event receiver
     irr::IEventReceiver *oldEvent = m_device->getEventReceiver();

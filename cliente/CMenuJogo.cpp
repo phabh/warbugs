@@ -14,7 +14,11 @@ class CMenuJogo : public CMenu
 private:
 
 
-	int _idPersonagem;
+	int _idPersonagem, _idInimigo;
+	ITriangleSelector* _selector;
+	ISceneNode *_nodoSelecionado;
+	vector3df _targetPosition;
+	bool _combate;
 
 	IGUIListBox *_chatText;
 	IGUIEditBox *_chatInput; 
@@ -161,9 +165,7 @@ private:
 	}
 
 	void readCommands()
-	{
-		//_timer->update();
-		
+	{		
 		temp = L"";
 		temp += (int)_gerenciadorVideo->getFPS();
 
@@ -185,7 +187,72 @@ private:
 					_nextID = CREDITOS;
 					return;
 				}
-			}		
+			}
+			else
+			{
+				// Não é clique de botão
+
+				_idInimigo = -1;
+				_nodoSelecionado = _gerenciadorCena->getSceneCollisionManager()->getSceneNodeFromScreenCoordinatesBB(_dispositivo->getCursorControl()->getPosition());
+
+				_idInimigo = _nodoSelecionado->getID();
+
+				if(_idInimigo > 0)
+				{
+					_combate = true;
+					_targetPosition = _nodoSelecionado->getPosition();
+					cout << "\nCombate TRUE.\n";
+					cout << "\nAlvo X: " << _targetPosition.X << "\nAlvo Y: " << _targetPosition.Y << "\nAlvo Z: " << _targetPosition.Z << endl;
+				}
+				else
+				{
+					_combate = false;
+					cout << "\nCombate FALSE.\n";
+
+					SMaterial material;
+					material.Lighting = false;
+
+					line3d<f32> line;
+					line.start = _gerenciadorCena->getActiveCamera()->getPosition();
+					line.end = line.start + (_gerenciadorCena->getActiveCamera()->getTarget() - line.start).normalize() * 1000.0f;
+
+					vector3df intersection;
+					triangle3df tri;
+
+					if (_gerenciadorCena->getSceneCollisionManager()->getCollisionPoint(line, _selector, intersection, tri))
+					{
+						//bill->setPosition(intersection);
+						_targetPosition = intersection;
+
+						_gerenciadorVideo->setTransform(ETS_WORLD, matrix4());
+						_gerenciadorVideo->setMaterial(material);
+						_gerenciadorVideo->draw3DTriangle(tri, SColor(0,255,0,0));
+					}
+					else
+						_targetPosition = _modelo[0]->getPosition();
+
+
+
+
+
+
+
+
+/*
+					const position2di clickPosition = _dispositivo->getCursorControl()->getPosition();
+					const line3df ray = _gerenciadorCena->getSceneCollisionManager()->getRayFromScreenCoordinates(clickPosition, _gerenciadorCena->getActiveCamera());
+
+					vector3df desiredPosition;
+					triangle3df outTriangle;
+
+					if(_gerenciadorCena->getSceneCollisionManager()->getCollisionPoint(ray, _selector, desiredPosition, outTriangle))
+						_targetPosition = desiredPosition;
+					else
+						_targetPosition = _modelo[0]->getPosition();*/
+
+					cout << "\nAlvo X: " << _targetPosition.X << "\nAlvo Y: " << _targetPosition.Y << "\nAlvo Z: " << _targetPosition.Z << endl;
+				}
+			}
 		}
 
 		if(_gerenciadorEventos->wheelMoved())
@@ -237,71 +304,8 @@ private:
 		}
 
 
-/*
-		 
-	    if(_gerenciadorEventos->isKeyPressed(KEY_KEY_H))
-		{
-			if(_flags[CHAT])
-			{
-				_chatWindow->setVisible(false);
-				_flags[CHAT] = false;
-			}
-			else
-			{
-				_chatWindow->setVisible(true);
-				_flags[CHAT] = true;
-			}
-		}
 
-		if(_gerenciadorEventos->isKeyPressed(KEY_KEY_I))
-		{
-			if(_flags[INVENTARIO])
-			{
-				_invWindow->setVisible(false);
-				_flags[INVENTARIO] = false;
-			}
-			else
-			{
-				_invWindow->setVisible(true);
-				_flags[INVENTARIO] = true;
-			}
-		}
-
-		if(_gerenciadorEventos->isKeyPressed(KEY_KEY_C))
-		{
-			if(_flags[CFG])
-			{
-				_cfgWindow->setVisible(false);
-				_flags[CFG] = false;
-			}
-			else
-			{
-				_cfgWindow->setVisible(true);
-				_flags[CFG] = true;
-			}
-		}
-
-		if(_gerenciadorEventos->isKeyPressed(KEY_KEY_T))
-		{
-			if(_flags[STATUS])
-			{
-				_statWindow->setVisible(false);
-				_flags[STATUS] = false;
-			}
-			else
-			{
-				_statWindow->setVisible(true);
-				_flags[STATUS] = true;
-			}
-		}
-
-*/
-
-
-
-
-
-		if(_gerenciadorEventos->isKeyDown(KEY_KEY_W))
+		if(_gerenciadorEventos->isKeyDown(::KEY_UP))
 		{
 			_modelo[0]->setPosition(_modelo[0]->getPosition() + 
 				                   vector3df(cos(((_direcao)*PI)/180)*_velocidade,
@@ -309,7 +313,7 @@ private:
 								   -sin(((_direcao)*PI)/180)*_velocidade));
 		}
 
-		if(_gerenciadorEventos->isKeyDown(KEY_KEY_S))
+		if(_gerenciadorEventos->isKeyDown(::KEY_DOWN))
 		{
 			_modelo[0]->setPosition(_modelo[0]->getPosition() + 
 				                    vector3df(cos(((_direcao+180)*PI)/180)*_velocidade,
@@ -317,13 +321,13 @@ private:
                                     -sin(((_direcao+180)*PI)/180)*_velocidade));
 		}
 
-		if(_gerenciadorEventos->isKeyDown(KEY_KEY_A))
+		if(_gerenciadorEventos->isKeyDown(::KEY_LEFT))
 		{
 		   _direcao-=1;
 		   _modelo[0]->setRotation(vector3df(0.f, _direcao, 0.f));
 		}
 
-		if(_gerenciadorEventos->isKeyDown(KEY_KEY_D))
+		if(_gerenciadorEventos->isKeyDown(::KEY_RIGHT))
 		{
 		   _direcao+=1;
 		   _modelo[0]->setRotation(vector3df(0.f, _direcao, 0.f));
@@ -369,8 +373,7 @@ public:
 
 		_myID = _nextID = JOGO;
 		_arquivoCena = "recursos/cenas/jogo.irr";
-		//_timer = new CTimer();
-		//_timer->initialize();
+
 		_nodoSelecionado = 0;
 		_idPersonagem = -1;
 		
@@ -428,8 +431,13 @@ public:
 		_modelo[0] = _gerenciadorCena->addAnimatedMeshSceneNode(_malha[0]);
 		_modelo[0]->setMaterialFlag(EMF_LIGHTING, false);
 		_modelo[0]->setMaterialTexture(0, _textura[0]);
-
 		_modelo[0]->setPosition(vector3df(990,_terreno->getHeight(990,980)+2,980));
+
+
+		_modelo[1] = _gerenciadorCena->addAnimatedMeshSceneNode(_malha[0],0,10);
+		_modelo[1]->setMaterialFlag(EMF_LIGHTING, false);
+		_modelo[1]->setMaterialTexture(0, _textura[0]);
+		_modelo[1]->setPosition(vector3df(950,_terreno->getHeight(950,980)+2,980));
 
 		ISceneNode* node = 0;
 		node = _gerenciadorCena->addLightSceneNode(0, vector3df(500,500,500), SColorf(1.0f, 0.6f, 0.7f, 1.0f), 1200.0f);
@@ -440,9 +448,11 @@ public:
         anim->drop();*/
 
         _modelo[0]->addShadowVolumeSceneNode(_malha[0],-1,true, 1000);
-        _gerenciadorCena->setShadowColor(SColor(150,0,0,0));
+		_modelo[1]->addShadowVolumeSceneNode(_malha[0],-1,true, 1000);
+        _gerenciadorCena->setShadowColor(SColor(200,0,0,0));
 
         _modelo[0]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+		_modelo[1]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 
 
 		_camera = _gerenciadorCena->addCameraSceneNode();
@@ -456,6 +466,17 @@ public:
 
 		s32 Width = _gerenciadorVideo->getViewPort().getWidth();
 		s32 Height = _gerenciadorVideo->getViewPort().getHeight();
+
+		ISceneNode *terreno = _gerenciadorCena->getSceneNodeFromType(ESNT_TERRAIN);
+		_selector = terreno->getTriangleSelector();
+        //terreno->setTriangleSelector(_selector);
+
+		ISceneNodeAnimator* anim = _gerenciadorCena->createCollisionResponseAnimator(
+			_selector, _modelo[0], vector3df(30,50,30),
+			vector3df(0,-10,0),
+			vector3df(0,50,0));
+		_modelo[0]->addAnimator(anim);
+		anim->drop();
 
 		return (true);
 	}

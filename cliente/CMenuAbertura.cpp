@@ -48,6 +48,7 @@ public:
 		_video->setVolume(100);
 		_video->playCutscene();
 		_video->drop();
+
 		_nextID = LOGIN;
 
 		return (true);

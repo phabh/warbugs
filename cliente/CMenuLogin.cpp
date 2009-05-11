@@ -11,8 +11,9 @@ private:
 
 	void updateHuds()
 	{
-
 		_gerenciadorHud->clear();
+		IGUIImage *img =_gerenciadorHud->addImage(rect<s32>(0, 0, _dispositivo->getVideoDriver()->getScreenSize().Width, _dispositivo->getVideoDriver()->getScreenSize().Height), 0, -1, L"");
+		img->setImage(_gerenciadorVideo->getTexture("recursos/texturas/huds/tx2d_bg_login.jpg"));
 		_gerenciadorHud->addEditBox(L"login", rect<s32>(300,500,400,520), true, 0, 10);
 		_gerenciadorHud->addEditBox(L"senha", rect<s32>(300,530,400,550), true, 0, 20);
 		_gerenciadorHud->addButton(rect<s32>(420,500,520,550), 0, 2, L"conectar");
@@ -20,8 +21,6 @@ private:
 
 	void readCommands()
 	{
-		//_timer->update();
-
 		if(_gerenciadorEventos->isKeyDown(KEY_ESCAPE))
 		{
 			_nextID = SAIDA;
@@ -43,7 +42,6 @@ private:
 
 	void updateGraphics()
 	{
-		//_timer->update();
 	}
 	
 
@@ -62,9 +60,8 @@ public:
 		_gerenciadorAudio->removeAllSoundSources();
 
 		_myID = _nextID = LOGIN;
-		_arquivoCena = "recursos/cenas/login.irr";
-		//_timer = new CTimer();
-		//_timer->initialize();
+		//_arquivoCena = "recursos/cenas/login.irr";
+
 
 		_dispositivo->setWindowCaption(L"Warbugs - BETA Version 0.1");
 
@@ -77,8 +74,8 @@ public:
 		_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
 
 		_gerenciadorCena->clear();
-		if(_arquivoCena)
-			_gerenciadorCena->loadScene(_arquivoCena);
+		//if(_arquivoCena)
+		//	_gerenciadorCena->loadScene(_arquivoCena);
 		
 		_skin = _gerenciadorHud->getSkin();
 		_font = _gerenciadorHud->getFont("recursos/fonts/font_georgia.png");
