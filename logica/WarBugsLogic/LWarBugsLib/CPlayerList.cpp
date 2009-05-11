@@ -55,21 +55,28 @@ CJogador *CPlayerList::removeJogadorByPosition(int posJogador)
 		posJogador = posJogador -1;
 	}
 	if(temp->prev != NULL)
+	{
 		(temp->prev)->next = temp->next;
+		return(temp->valor);
+	}
 	else
 	{
 		_first = temp->next;
 		_first->next = (temp->next)->next;
 		_first->prev = NULL;
+		return(temp->valor);
 	}
 
 	if(temp->next != NULL)
+	{
 		(temp->next)->prev = temp->prev;
+		return(temp->valor);
+	}
 	else
 	{
 		(temp->prev)->next = NULL;
+		return(temp->valor);
 	}
-	return(temp->valor);
 }
 CJogador *CPlayerList::removeJogador(int IDJogador)
 {
