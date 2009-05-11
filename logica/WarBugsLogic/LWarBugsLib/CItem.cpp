@@ -35,7 +35,7 @@ int CItem::getTipoAsInt()
 {
 	return((int)_tipo);
 }
-int CItem::getPreco()
+int CItem::getPrice()
 {
 	return(_preco);
 }
@@ -52,7 +52,7 @@ void CItem::setEstado(EstadoItem novoEstado)
 {
 	_estado = novoEstado;
 }
-void CItem::setPreco(int novoPreco)
+void CItem::setPrice(int novoPreco)
 {
 	_preco = novoPreco;
 }

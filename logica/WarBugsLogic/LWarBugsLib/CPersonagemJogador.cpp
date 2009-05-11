@@ -13,12 +13,19 @@
 
 CPersonagemJogador::CPersonagemJogador()
 {
+	setState(PARADO);
+	setMoney(0);
+	setBolsa(new CBolsa());
+	setStats(new CHabilidadesSecundarias());
+	setBonus(new CBonusSecundario());
+	setBaseStats(new CHabilidades());
+	setBaseBonus(new CBonusPrimario());
+	setBuffs(new CBuff());
 	_nivel = 1;
 	_experiencia = 0;
 	_xpToNextLv = 0;
 	_xpToPrevLv = 0;
 	_pontoDistribuir = 0;
-	_dinheiro = 0;
 	_lealdade = new CLealdade();
 	//_party = new irr::core::array<CPersonagemJogador*>();
 	//_friends = new irr::core::array<CPersonagemJogador*>();
@@ -34,26 +41,6 @@ CPersonagemJogador::CPersonagemJogador()
 char *CPersonagemJogador::getName()
 {
 	return(_nome);
-}
-int CPersonagemJogador::getFOR()
-{
-	return(habilidadesPrimarias->getFOR() + bonusPrimario->getTotalBonusOf(FOR));
-}
-int CPersonagemJogador::getDES()
-{
-	return(habilidadesPrimarias->getDES() + bonusPrimario->getTotalBonusOf(DES));
-}
-int CPersonagemJogador::getAGI()
-{
-	return(habilidadesPrimarias->getAGI() + bonusPrimario->getTotalBonusOf(AGI));
-}
-int CPersonagemJogador::getRES()
-{
-	return(habilidadesPrimarias->getRES() + bonusPrimario->getTotalBonusOf(RES));
-}
-int CPersonagemJogador::getINS()
-{
-	return(habilidadesPrimarias->getINS() + bonusPrimario->getTotalBonusOf(INS));
 }
 int CPersonagemJogador::getAttack()
 {
@@ -99,10 +86,6 @@ void CPersonagemJogador::setXPToPrev(int xp)
 void CPersonagemJogador::setPointsToDistribute(int points)
 {
 	_pontoDistribuir = points;
-}
-void CPersonagemJogador::setMoney(int value)
-{
-	_dinheiro = value;
 }
 void CPersonagemJogador::setEquip(CEquipamento *equip)
 {

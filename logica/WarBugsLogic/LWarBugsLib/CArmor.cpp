@@ -22,7 +22,7 @@ CArmor::CArmor(TypeItens nome, EstadoItem estado, int preco, bool isdropable, Ra
 {
 	setNome(nome);
 	setEstado(estado);
-	setPreco(preco);
+	setPrice(preco);
 	setDropable(isdropable);
 	_raca = raca;
 	_defesa = def;
@@ -43,6 +43,10 @@ void CArmor::useScroll(CScroll *&scroll)
 		delete scroll;
 		scroll = NULL;
 	}
+}
+Raca CArmor::getRace()
+{
+	return(_raca);
 }
 int CArmor::getDef()
 {

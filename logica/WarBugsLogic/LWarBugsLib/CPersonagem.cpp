@@ -15,6 +15,7 @@
 
 CPersonagem::CPersonagem()
 {
+	dinheiro = 0;
 	habilidadesPrimarias = new CHabilidades();
 	bonusPrimario = new CBonusPrimario();
 	inventario = new CBolsa();
@@ -23,7 +24,39 @@ CPersonagem::CPersonagem()
 	//poderes = new CPoder();
 	status = new CBuff();
 }
-//Getters e Setters
+//Getters
+int CPersonagem::getFOR()
+{
+	return(habilidadesPrimarias->getFOR() + bonusPrimario->getTotalBonusOf(FOR));
+}
+int CPersonagem::getDES()
+{
+	return(habilidadesPrimarias->getDES() + bonusPrimario->getTotalBonusOf(DES));
+}
+int CPersonagem::getAGI()
+{
+	return(habilidadesPrimarias->getAGI() + bonusPrimario->getTotalBonusOf(AGI));
+}
+int CPersonagem::getRES()
+{
+	return(habilidadesPrimarias->getRES() + bonusPrimario->getTotalBonusOf(RES));
+}
+int CPersonagem::getINS()
+{
+	return(habilidadesPrimarias->getINS() + bonusPrimario->getTotalBonusOf(INS));
+}
+EstadoPersonagem CPersonagem::getState()
+{
+	return(estado);
+}
+int CPersonagem::getMoney()
+{
+	return(dinheiro);
+}
+CBolsa *CPersonagem::getBolsa()
+{
+	return(inventario);
+}
 CHabilidadesSecundarias *CPersonagem::getStats()
 {
 	return(habilidadesSecundarias);
@@ -44,11 +77,19 @@ CBonusPrimario *CPersonagem::getBaseBonus()
 {
 	return(bonusPrimario);
 }
-CBolsa *CPersonagem::getBolsa()
+//Setters
+void CPersonagem::setState(EstadoPersonagem newState)
 {
-	return(inventario);
+	estado = newState;
 }
-
+void CPersonagem::setMoney(int value)
+{
+	dinheiro = value;
+}
+void CPersonagem::setBolsa(CBolsa *bolsa)
+{
+	inventario = bolsa;
+}
 void CPersonagem::setStats(CHabilidadesSecundarias *stats)
 {
 	habilidadesSecundarias = stats;
@@ -56,6 +97,10 @@ void CPersonagem::setStats(CHabilidadesSecundarias *stats)
 void CPersonagem::setBaseStats(CHabilidades *stats)
 {
 	habilidadesPrimarias = stats;
+}
+void CPersonagem::setBuffs(CBuff *buff)
+{
+	status = buff;
 }
 void CPersonagem::setBonus(CBonus *bonus)
 {
@@ -65,9 +110,10 @@ void CPersonagem::setBaseBonus(CBonus *bonus)
 {
 	bonusPrimario = (CBonusPrimario*)bonus;
 }
-void CPersonagem::setBolsa(CBolsa *bolsa)
+
+void CPersonagem::addMoney(int value)
 {
-	inventario = bolsa;
+	dinheiro = dinheiro + value;
 }
 //Outros métodos
 void CPersonagem::move(){}

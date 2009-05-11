@@ -26,7 +26,7 @@ CScroll::CScroll(TypeItens nome, EstadoItem estado, int preco, bool isdropable, 
 {
 	setNome(nome);
 	setEstado(estado);
-	setPreco(preco);
+	setPrice(preco);
 	setDropable(isdropable);
 	_bModificador = mod;
 	_bDanoMin = danM;

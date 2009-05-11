@@ -14,17 +14,17 @@
 #include "CBuff.h"
 
 CBuff::CBuff()
-	{
-		_duracao = 0;
-		_indiceImagem = -1;
-		_indiceEfeito = -1;
-		_badBuff = false;
-		_tipoBuff = NORMAL;
-		_valor1 = 0;
-		_valor2 = 0;
-		_valor3 = 0;
-		_next = NULL;
-	}
+{
+	_duracao = 0;
+	_indiceImagem = -1;
+	_indiceEfeito = -1;
+	_badBuff = false;
+	_tipoBuff = NORMAL;
+	_valor1 = 0;
+	_valor2 = 0;
+	_valor3 = 0;
+	_next = NULL;
+}
 CBuff::CBuff(TipoBuff tipo, int dur, /*int img, int efc,*/ int val1, int val2, int val3)
 {
 	_tipoBuff = tipo;
@@ -108,7 +108,7 @@ void CBuff::initialize(CObjectCount *counter)
 {
 	CWarBugObject::initialize(counter);
 }
-void CBuff::addBuff(CBuff * buff, CPersonagemJogador *alvo)
+void CBuff::addBuff(CBuff * buff, CPersonagem *alvo)
 {
 	int index = 0;
 	bool overwrite = false;
@@ -203,7 +203,7 @@ void CBuff::addBuff(CBuff * buff, CPersonagemJogador *alvo)
 	delete temp2;
 	return;
 }
-void CBuff::remove(int index, CPersonagemJogador *alvo)
+void CBuff::remove(int index, CPersonagem *alvo)
 {
 	CBuff *first;// = new CBuff();
 	CBuff *temp;// = new CBuff();
@@ -246,7 +246,7 @@ void CBuff::remove(int index, CPersonagemJogador *alvo)
 	delete temp;
 	return;
 }
-void CBuff::execute(CPersonagemJogador *jogador)
+void CBuff::execute(CPersonagem *jogador)
 {
 	int index = 0;
 	CBuff *temp = new CBuff();

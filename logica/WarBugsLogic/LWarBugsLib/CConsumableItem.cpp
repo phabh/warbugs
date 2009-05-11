@@ -22,7 +22,7 @@ CConsumableItem::CConsumableItem(TypeItens nome, EstadoItem estado, int preco, b
 {
 	setNome(nome);
 	setEstado(estado);
-	setPreco(preco);
+	setPrice(preco);
 	setDropable(isdropable);
 	_atributo = att;
 	_valor = valor;

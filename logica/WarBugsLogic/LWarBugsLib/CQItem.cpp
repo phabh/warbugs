@@ -14,7 +14,7 @@
 CQItem::CQItem()
 {
 	setEstado(USADO);
-	setPreco(0);
+	setPrice(0);
 	setDropable(false);
 	_quest = NULL;
 }
@@ -22,7 +22,7 @@ CQItem::CQItem(TypeItens nome, EstadoItem estado, int preco, bool isdropable, CQ
 {
 	setNome(nome);
 	setEstado(estado);
-	setPreco(preco);
+	setPrice(preco);
 	setDropable(isdropable);
 	_quest = quest;
 }
