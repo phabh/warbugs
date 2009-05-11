@@ -32,12 +32,12 @@ public:
 	int getEstadoAsInt();
 	TipoItem getTipo();
 	int getTipoAsInt();
-	int getPreco();
+	int getPrice();
 	bool isDropable();
 	//CPersonagem getOwner(){}
 	void setNome(TypeItens novoNome);
 	void setEstado(EstadoItem novoEstado);
-	void setPreco(int novoPreco);
+	void setPrice(int novoPreco);
 	void setDropable(bool isdropable);
 	//void setOwner(CPersonagem *newOwner){}
 	//Métodos de manipulação de itens

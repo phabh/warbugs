@@ -1,12 +1,16 @@
 #include "CDataManager.h"
 #include "FunctionsCommom.h"
 #include "commom.h"
+#include <Enumerators.h>
 
 #include <CJogador.h>
 #include <CConsumableItem.h>
 #include <CQItem.h>
 #include <CLoyaltyScroll.h>
+#include <CArmor.h>
+#include <CWeapon.h>
 #include <CCenario.h>
+#include <CCenarioList.h>
 
 CDataManager::CDataManager(CDataBase * db)
 {
@@ -38,7 +42,7 @@ CPersonagem * CDataManager::getPersonagem(int id)
 		return NULL;	
 	}
 
-	for(int i = 0; i < numCampos; i++)
+	for(int i = 0; i < (int)numCampos; i++)
 	{
 		nomeCampos->Add(dados[0]);
 		dados->RemoveAt(0);
@@ -55,7 +59,7 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 	switch(tipoPersonagem)
 	{
-		case 0: //Jogador
+			case JOGADOR: //Jogador
 			{
 				personagem = new CPersonagemJogador();
 				
@@ -84,6 +88,12 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 				((CPersonagemJogador *)personagem)->setEquip(tempEquip);
 
+				CBolsa tempBolsa;
+
+				tempBolsa = getBolsaPersonagem(personagem->getID());
+
+				((CPersonagemJogador *)personagem)->setBolsa(&tempBolsa);
+
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGNIVEL")]->ToString());
 
 				((CPersonagemJogador *)personagem)->setLevel(dado[0]);
@@ -111,8 +121,8 @@ CPersonagem * CDataManager::getPersonagem(int id)
 				//FICA PRA DEPOIS
 				((CPersonagemJogador *)personagem)->setPlayer(-1);
 
-				float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-				float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+				float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+				float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
 
 				((CPersonagemJogador *)personagem)->setPosition(posX, posZ);
 
@@ -157,9 +167,24 @@ CPersonagem * CDataManager::getPersonagem(int id)
 				((CPersonagemJogador *)personagem)->getStats()->setRangedAttack(dado[9]);
 				((CPersonagemJogador *)personagem)->getStats()->setRangedDamage(dado[10]);
 
+				//Colocar a bolsa de itens para o personagem
+
+
 				break;
 			}
-		case 1: //NPC
+		case LIDER:
+			{
+				personagem = NULL;
+				int race = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+				if(race == FORMIGA)
+				{
+					//monta o TanDan
+				}
+				break;
+			}
+		case MAE: //NPC
+		case FILHOTE: //NPC
 			{
 				personagem = NULL;
 				/*
@@ -176,7 +201,7 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 				break;
 			}
-		case 2: //Vendedor
+		case VENDEDOR: //Vendedor
 			{
 				personagem = NULL;
 /*				personagem = new CVendedor();
@@ -192,9 +217,20 @@ CPersonagem * CDataManager::getPersonagem(int id)
 */
 				break;
 			}
-		case 3: //Inimigo
+		case SOLDADO: //Inimigo
 			{
 				personagem = NULL;
+				int race = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+				if(race != BESOURO && race != ARANHA && race != ESCORPIAO && race != LOUVADEUS && race != VESPA)
+				{
+					//se for inimigo
+				}
+				else
+				{
+					//se for amigo
+				}
+
 				/*
 				personagem = new CInimigo();
 				
@@ -241,7 +277,7 @@ CPeopleList CDataManager::getPersonagemJogador(int idJogador)
 		return Lista;	
 	}
 
-	for(int i = 0; i < numCampos; i++)
+	for(int i = 0; i < (int)numCampos; i++)
 	{
 		nomeCampos->Add(dados[0]);
 		dados->RemoveAt(0);
@@ -251,7 +287,7 @@ CPeopleList CDataManager::getPersonagemJogador(int idJogador)
 
 	CPersonagem * personagem;
 
-	for(int i = 0; i < numRegs; i++)
+	for(int i = 0; i < (int)numRegs; i++)
 	{
 		personagem = new CPersonagemJogador();
 		
@@ -288,10 +324,7 @@ CPeopleList CDataManager::getPersonagemJogador(int idJogador)
 
 		tempBolsa = getBolsaPersonagem(personagem->getID());
 
-		for(int i = 0; i < tempBolsa.size(); i++)
-		{
-			((CPersonagemJogador *)personagem)->addItem(tempBolsa.getItem(
-		}
+		((CPersonagemJogador *)personagem)->setBolsa(&tempBolsa);
 
 		dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGNIVEL")]->ToString());
 
@@ -320,8 +353,8 @@ CPeopleList CDataManager::getPersonagemJogador(int idJogador)
 		//FICA PRA DEPOIS
 		((CPersonagemJogador *)personagem)->setPlayer(idJogador);
 
-		float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-		float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+		float posX = (float) System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+		float posZ = (float) System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
 
 		((CPersonagemJogador *)personagem)->setPosition(posX, posZ);
 
@@ -368,7 +401,7 @@ CPeopleList CDataManager::getPersonagemJogador(int idJogador)
 
 		Lista.addPersonagem(personagem);
 
-		for(int i = 0; i < numCampos; i++)
+		for(int i = 0; i < (int)numCampos; i++)
 		{
 			dados->RemoveAt(0);
 		}
@@ -395,7 +428,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 	System::String ^ query;
 	System::String ^ complemento;
 
-	if(idRaca != TODAS && idRaca != NENHUMA)
+	if(idRaca != ALLRACE && idRaca != NONERACE)
 	{
 		complemento = L"P.PGRACA = "+idRaca+" AND ";
 	}
@@ -416,7 +449,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 		return Lista;	
 	}
 
-	for(int i = 0; i < numCampos; i++)
+	for(int i = 0; i < (int)numCampos; i++)
 	{
 		nomeCampos->Add(dados[0]);
 		dados->RemoveAt(0);
@@ -425,7 +458,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 	int dado[15];
 
 
-	for(int i = 0; i < numRegs; i++)
+	for(int i = 0; i < (int)numRegs; i++)
 	{
 		int tipoPersonagem = System::Int32::Parse(dados[nomeCampos->IndexOf("PGTIPOPERSONAGEM")]->ToString());
 
@@ -434,7 +467,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 		switch(tipoPersonagem)
 		{
-			case 0: //Jogador
+				case JOGADOR: 
 				{
 					personagem = new CPersonagemJogador();
 					
@@ -466,6 +499,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 					((CPersonagemJogador *)personagem)->setEquip(tempEquip);
 
+					CBolsa tempBolsa;
+
+					tempBolsa = getBolsaPersonagem(personagem->getID());
+
+					((CPersonagemJogador *)personagem)->setBolsa(&tempBolsa);
+
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGNIVEL")]->ToString());
 
 					((CPersonagemJogador *)personagem)->setLevel(dado[0]);
@@ -493,8 +532,8 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 					//FICA PRA DEPOIS
 					((CPersonagemJogador *)personagem)->setPlayer(-1);
 
-					float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-					float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+					float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+					float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
 
 					((CPersonagemJogador *)personagem)->setPosition(posX, posZ);
 
@@ -541,7 +580,18 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 					break;
 				}
-			case 1: //NPC
+			case LIDER: //NPC
+				{
+					personagem = NULL;
+					int race = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+					
+					if(race == FORMIGA)
+					{
+						//monta o TanDan
+					}
+				}
+			case MAE: //NPC
+			case FILHOTE: //NPC
 				{
 					personagem = NULL;
 /*					personagem = new CNPC();
@@ -557,7 +607,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 */
 					break;
 				}
-			case 2: //Vendedor
+			case VENDEDOR: //Vendedor
 				{
 					personagem = NULL;
 					/*				personagem = new CVendedor();
@@ -573,9 +623,19 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 	*/
 					break;
 				}
-			case 3: //Inimigo
+			case SOLDADO: //Inimigo
 				{
 					personagem = NULL;
+					int race = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+					if(race != BESOURO && race != ARANHA && race != ESCORPIAO && race != LOUVADEUS && race != VESPA)
+					{
+						//se for inimigo
+					}
+					else
+					{
+						//se for amigo
+					}
 					/*
 					personagem = new CInimigo();
 					
@@ -613,7 +673,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 	unsigned int numCampos = 0;
 	System::String ^ query;
 	System::String ^ complemento;
-	if(idRaca != TODAS && idRaca != NENHUMA)
+	if(idRaca != ALLRACE && idRaca != NONERACE)
 	{
 		complemento = L"P.PGRACA = "+idRaca+" AND ";
 	}
@@ -635,7 +695,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 		return Lista;	
 	}
 
-	for(int i = 0; i < numCampos; i++)
+	for(int i = 0; i < (int)numCampos; i++)
 	{
 		nomeCampos->Add(dados[0]);
 		dados->RemoveAt(0);
@@ -644,7 +704,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 	int dado[15];
 
 
-	for(int i = 0; i < numRegs; i++)
+	for(int i = 0; i < (int)numRegs; i++)
 	{
 		int tipoPersonagem = System::Int32::Parse(dados[nomeCampos->IndexOf("PGTIPOPERSONAGEM")]->ToString());
 
@@ -653,7 +713,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 		switch(tipoPersonagem)
 		{
-			case 0: //Jogador
+				case JOGADOR: //Jogador
 				{
 					personagem = new CPersonagemJogador();
 					
@@ -685,6 +745,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 					((CPersonagemJogador *)personagem)->setEquip(tempEquip);
 
+					CBolsa tempBolsa;
+
+					tempBolsa = getBolsaPersonagem(personagem->getID());
+
+					((CPersonagemJogador *)personagem)->setBolsa(&tempBolsa);
+
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGNIVEL")]->ToString());
 
 					((CPersonagemJogador *)personagem)->setLevel(dado[0]);
@@ -712,8 +778,8 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 					//FICA PRA DEPOIS
 					((CPersonagemJogador *)personagem)->setPlayer(-1);
 
-					float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-					float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+					float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+					float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
 
 					((CPersonagemJogador *)personagem)->setPosition(posX, posZ);
 
@@ -760,7 +826,18 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 					break;
 				}
-			case 1: //NPC
+				case LIDER: //NPC
+				{
+					int race = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+					if(race == FORMIGA)
+					{
+						//monta o inimigo
+					}
+					personagem = NULL;
+					break;
+				}
+				case FILHOTE: //NPC
+				case MAE: //NPC
 				{
 					personagem = NULL;
 					/*
@@ -777,7 +854,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 */
 					break;
 				}
-			case 2: //Vendedor
+				case VENDEDOR: //Vendedor
 				{
 					personagem = NULL;
 					/*
@@ -792,10 +869,19 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 	*/
 					break;
 				}
-			case 3: //Inimigo
+				case SOLDADO: //Inimigo
 				{
-					
 					personagem = NULL;
+					int race = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+					if(race != BESOURO && race != ARANHA && race != ESCORPIAO && race != LOUVADEUS && race != VESPA)
+					{
+						//se for inimigo
+					}
+					else
+					{
+						//se for amigo
+					}
 					/*
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
@@ -831,7 +917,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 	unsigned int numCampos = 0;
 	System::String ^ query;
 	System::String ^ complemento;
-	if(idRaca != TODAS && idRaca != NENHUMA)
+	if(idRaca != ALLRACE && idRaca != NONERACE)
 	{
 		complemento = L"P.PGRACA = "+idRaca+" AND ";
 	}
@@ -851,7 +937,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 		return Lista;	
 	}
 
-	for(int i = 0; i < numCampos; i++)
+	for(int i = 0; i < (int)numCampos; i++)
 	{
 		nomeCampos->Add(dados[0]);
 		dados->RemoveAt(0);
@@ -860,7 +946,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 	int dado[15];
 
 
-	for(int i = 0; i < numRegs; i++)
+	for(int i = 0; i < (int)numRegs; i++)
 	{
 		int tipoPersonagem = System::Int32::Parse(dados[nomeCampos->IndexOf("PGTIPOPERSONAGEM")]->ToString());
 
@@ -869,7 +955,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 		switch(tipoPersonagem)
 		{
-			case 0: //Jogador
+			case JOGADOR: //Jogador
 				{
 					personagem = new CPersonagemJogador();
 					
@@ -898,6 +984,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 					((CPersonagemJogador *)personagem)->setEquip(tempEquip);
 
+					CBolsa tempBolsa;
+
+					tempBolsa = getBolsaPersonagem(personagem->getID());
+
+					((CPersonagemJogador *)personagem)->setBolsa(&tempBolsa);
+
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGNIVEL")]->ToString());
 
 					((CPersonagemJogador *)personagem)->setLevel(dado[0]);
@@ -925,8 +1017,8 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 					//FICA PRA DEPOIS
 					((CPersonagemJogador *)personagem)->setPlayer(-1);
 
-					float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-					float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+					float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+					float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
 
 					((CPersonagemJogador *)personagem)->setPosition(posX, posZ);
 
@@ -973,7 +1065,21 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 					break;
 				}
-			case 1: //NPC
+			case LIDER: //NPC
+				{
+					personagem = NULL;
+
+					int race = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+					if(race == FORMIGA)
+					{
+						//monta o TANDAN
+					}
+
+					break;
+				}
+			case FILHOTE: //NPC
+			case MAE: //NPC
 				{
 					personagem = NULL;
 /*
@@ -990,7 +1096,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 */
 					break;
 				}
-			case 2: //Vendedor
+			case VENDEDOR: //Vendedor
 				{
 					personagem = NULL;
 					/*
@@ -1005,10 +1111,20 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 	*/
 					break;
 				}
-			case 3: //Inimigo
+			case SOLDADO: //Inimigo
 				{
 					
 					personagem = NULL;
+					int race = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+					if(race != BESOURO && race != ARANHA && race != ESCORPIAO && race != LOUVADEUS && race != VESPA)
+					{
+						//se for inimigo
+					}
+					else
+					{
+						//se for amigo
+					}
 					/*
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
@@ -1056,7 +1172,7 @@ CItem * CDataManager::getItem(int id)
 		return NULL;	
 	}
 
-	for(int i = 0; i < numCampos; i++)
+	for(int i = 0; i < (int)numCampos; i++)
 	{
 		nomeCampos->Add(dados[0]);
 		dados->RemoveAt(0);
@@ -1075,27 +1191,33 @@ CItem * CDataManager::getItem(int id)
 				int tipoUso = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITTIPOUSO")]->ToString());
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITVALOR")]->ToString());
-				bool b1 = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITISTEMP")]->ToString());
+				bool b1 = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITISTEMP")]->ToString());
+				bool b2 = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDURACAO")]->ToString());
+				dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+				dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-				item = new CConsumableItem((Atrib)tipoUso,dado[0],b1,dado[1]);
+				item = new CConsumableItem((TypeItens)dado[2],NAMOCHILA,dado[3],b2,(Atrib)tipoUso,dado[0],b1,dado[1]);
 
-
+/*
 				string str;
 				str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
-				((CConsumableItem *)item)->setDescricao(str);
-
-				b1 = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
-				((CConsumableItem *)item)->setDropable(b1);
+				((CConsumableItem *)item)->setDescricao(str);*/
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
 				((CConsumableItem *)item)->setID(dado[0]);
+/*
+				str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+				((CConsumableItem *)item)->setNome(str);*/
 
-				str = toChar(dados[nomeCampos->IndexOf(L"nome")]->ToString());
-				((CConsumableItem *)item)->setNome(str);
 
-				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
-				((CConsumableItem *)item)->setPreco(dado[0]);
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+				dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+				item->set2DTexture(dado[2]);
+				item->set3DTexture(dado[1]);
+				item->setModel(dado[0]);
 
 				/*
 				switch(tipoUso)
@@ -1175,118 +1297,176 @@ CItem * CDataManager::getItem(int id)
 		case ARMA: 
 			{
 
-				item = new CWeapon();
+				dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+				dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
+				bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
-				//((CWeapon *)item)->initialize(
+				dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITRACA")]->ToString());
+				dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITMODIFICADOR")]->ToString());
+				dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDANOMAX")]->ToString());
+				dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDANOMIN")]->ToString());
+				dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITVELOCIDADE")]->ToString());
+				dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITALCANCE")]->ToString());
+				dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDURABILIDADE")]->ToString());
+				dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITNIVELMAGICO")]->ToString());
 
-
+				item = new CWeapon((TypeItens)dado[0],NAMOCHILA,dado[1],b2,(Raca)dado[2],dado[3],dado[5],dado[4],dado[6],dado[7],dado[8],dado[9]);
+/*
 				string str;
 				str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
-				((CWeapon *)item)->setDescricao(str);
-
-				bool b1 = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
-				((CWeapon *)item)->setDropable(b1);
+				((CWeapon *)item)->setDescricao(str);*/
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
 				((CWeapon *)item)->setID(dado[0]);
+/*
+				str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+				((CWeapon *)item)->setNome(str);*/
 
-				str = toChar(dados[nomeCampos->IndexOf(L"nome")]->ToString());
-				((CWeapon *)item)->setNome(str);
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+				dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
 
-				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
-				((CWeapon *)item)->setPreco(dado[0]);
+				item->set2DTexture(dado[2]);
+				item->set3DTexture(dado[1]);
+				item->setModel(dado[0]);
 
 				break;
 			}
 		case ARMADURA: 
 			{
+				dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+				dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-				item = new CArmor();
+				bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
-				string str;
+				dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITRACA")]->ToString());
+				dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDEFESA")]->ToString());
+				dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDURABILIDADE")]->ToString());
+				dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITNIVELMAGICO")]->ToString());
+
+				item = new CArmor((TypeItens)dado[0],NAMOCHILA,dado[1],b2,(Raca)dado[2],dado[3],dado[4],dado[5]);
+
+				/*string str;
 				str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
-				((CArmor *)item)->setDescricao(str);
-
-				bool b1 = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
-				((CArmor *)item)->setDropable(b1);
+				((CArmor *)item)->setDescricao(str);*/
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
 				((CArmor *)item)->setID(dado[0]);
 
-				str = toChar(dados[nomeCampos->IndexOf(L"nome")]->ToString());
-				((CArmor *)item)->setNome(str);
+				/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+				((CArmor *)item)->setNome(str);*/
 
-				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
-				((CArmor *)item)->setPreco(dado[0]);
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+				dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+				item->set2DTexture(dado[2]);
+				item->set3DTexture(dado[1]);
+				item->setModel(dado[0]);
 
 				break;
 			}
 		case QUEST: 
 			{
-				item = new CQItem();
 
-				string str;
+				dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+				dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
+
+				bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+
+				item = new CQItem((TypeItens) dado[0],NAMOCHILA,dado[1],b2,NULL);
+
+				/*string str;
 				str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
-				((CQItem *)item)->setDescricao(str);
-
-				bool b1 = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
-				((CQItem *)item)->setDropable(b1);
+				((CQItem *)item)->setDescricao(str);*/
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
 				((CQItem *)item)->setID(dado[0]);
 
-				str = toChar(dados[nomeCampos->IndexOf(L"nome")]->ToString());
-				((CQItem *)item)->setNome(str);
+				/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+				((CQItem *)item)->setNome(str);*/
 
-				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
-				((CQItem *)item)->setPreco(dado[0]);
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+				dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+				item->set2DTexture(dado[2]);
+				item->set3DTexture(dado[1]);
+				item->setModel(dado[0]);
 
 				break;
 			}
 		case SCROLL: 
 			{
+
+				dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+				dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
+
+				bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+
+				dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITMODIFICADOR")]->ToString());
+				dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDANOMAX")]->ToString());
+				dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDANOMIN")]->ToString());
+				dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITVELOCIDADE")]->ToString());
+				dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITALCANCE")]->ToString());
+				dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDEFESA")]->ToString());
+				dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDURABILIDADE")]->ToString());
 				
-				item = new CScroll();
+				item = new CScroll((TypeItens)dado[0],NAMOCHILA,dado[1],b2,dado[2],dado[4],dado[3],dado[5],dado[6],dado[7],dado[8]);
 
-				string str;
+				/*string str;
 				str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
-				((CScroll *)item)->setDescricao(str);
-
-				bool b1 = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
-				((CScroll *)item)->setDropable(b1);
+				((CScroll *)item)->setDescricao(str);*/
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
 				((CScroll *)item)->setID(dado[0]);
 
-				str = toChar(dados[nomeCampos->IndexOf(L"nome")]->ToString());
-				((CScroll *)item)->setNome(str);
+				/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+				((CScroll *)item)->setNome(str);*/
 
-				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
-				((CScroll *)item)->setPreco(dado[0]);
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+				dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+				item->set2DTexture(dado[2]);
+				item->set3DTexture(dado[1]);
+				item->setModel(dado[0]);
 
 				break;
 			}
 		case LSCROLL: 
 			{
+				dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+				dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-				item = new CLoyaltyScroll();
+				bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
-				string str;
+				dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALARANHA")]->ToString());
+				dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALBESOURO")]->ToString());
+				dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALLOUVA")]->ToString());
+				dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALESCORPIAO")]->ToString());
+				dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALVESPA")]->ToString());
+
+				item = new CLoyaltyScroll((TypeItens)dado[0], NAMOCHILA,dado[1],b2,dado[2],dado[3],dado[4],dado[5],dado[6]);
+
+				/*string str;
 				str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
-				((CLoyaltyScroll *)item)->setDescricao(str);
-
-				bool b1 = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
-				((CLoyaltyScroll *)item)->setDropable(b1);
+				((CLoyaltyScroll *)item)->setDescricao(str);*/
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
 				((CLoyaltyScroll *)item)->setID(dado[0]);
 
-				str = toChar(dados[nomeCampos->IndexOf(L"nome")]->ToString());
-				((CLoyaltyScroll *)item)->setNome(str);
+				/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+				((CLoyaltyScroll *)item)->setNome(str);*/
 
-				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
-				((CLoyaltyScroll *)item)->setPreco(dado[0]);
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+				dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+				item->set2DTexture(dado[2]);
+				item->set3DTexture(dado[1]);
+				item->setModel(dado[0]);
 
 				break;
 			}
@@ -1318,8 +1498,8 @@ CWeapon * CDataManager::getWeaponEquiped(int idPersonagem)
 	System::String ^ query;
 
 	query = L"SELECT IR.* FROM ITEM_RELACIONAL IR, PERSONAGEM P WHERE"
-		    +"IR.PGID = P.PGID AND P.PGIDARMOR = IR.ITID AND"
-			+"P.PGID = "+idPersoangem;
+		    +"IR.PGID = P.PGID AND P.PGIDWEAPON = IR.ITID AND"
+			+"P.PGID = "+idPersonagem;
 
 	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
 
@@ -1330,7 +1510,7 @@ CWeapon * CDataManager::getWeaponEquiped(int idPersonagem)
 		return NULL;	
 	}
 
-	for(int i = 0; i < numCampos; i++)
+	for(int i = 0; i < (int)numCampos; i++)
 	{
 		nomeCampos->Add(dados[0]);
 		dados->RemoveAt(0);
@@ -1362,12 +1542,28 @@ CWeapon * CDataManager::getWeaponEquiped(int idPersonagem)
 
 	arma = (CWeapon *)getItem(dado[0]);
 
-	dado[10] += arma->getPreco();
-	
-	CWeapon * armaResposta = new CWeapon();
+	dado[10] += arma->getPrice();
 
+	CWeapon * armaResposta = new CWeapon(arma->getNome(),
+										 arma->getEstado(),
+										 dado[10],
+										 arma->isDropable(),
+										 arma->getRace(),
+										 arma->getMod()+dado[3],
+										 arma->getMinDamage()+dado[4],
+										 arma->getMaxDamage()+dado[5],
+										 arma->getRange()+dado[6],
+										 arma->getSpeed()+dado[7],
+										 arma->getDurability()+dado[8],
+										 arma->getMagicLevel()
+										 );
 
-	return arma;
+	armaResposta->setID(arma->getID());
+	armaResposta->set2DTexture(arma->get2DTexture());
+	armaResposta->set3DTexture(arma->get3DTexture());
+	armaResposta->setModel(arma->getModel());
+
+	return armaResposta;
 }
 /*
 	Obtem a armadura que o personagem está equipado
@@ -1375,7 +1571,72 @@ CWeapon * CDataManager::getWeaponEquiped(int idPersonagem)
 	@return -> armadura
 */
 CArmor * CDataManager::getArmorEquiped(int idPersonagem)
-{}
+{
+	CArmor * armadura;
+	TDadosBD ^ dados      = gcnew TDadosBD();
+	TDadosBD ^ nomeCampos = gcnew TDadosBD();
+	unsigned int numRegs   = 0;
+	unsigned int numCampos = 0;
+	System::String ^ query;
+
+	query = L"SELECT IR.* FROM ITEM_RELACIONAL IR, PERSONAGEM P WHERE"
+		    +"IR.PGID = P.PGID AND P.PGIDARMOR = IR.ITID AND"
+			+"P.PGID = "+idPersonagem;
+
+	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
+
+	if(numRegs == 0 || numCampos == 0)
+	{
+		System::String ^texto = L"Não foi encontrado";
+		WarBugsLog::_log->Items->Add(texto);		
+		return NULL;	
+	}
+
+	for(int i = 0; i < (int)numCampos; i++)
+	{
+		nomeCampos->Add(dados[0]);
+		dados->RemoveAt(0);
+	}
+
+	int dado[15];
+
+	dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
+	dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+	dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"BSID")]->ToString());
+	dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"IRVALBONUS1")]->ToString());
+	dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"IRVALBONUS2")]->ToString());
+	dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"IRVALBONUS3")]->ToString());
+	dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"IRVALBONUS4")]->ToString());
+	dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"IRVALBONUS5")]->ToString());
+	dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"IRVALBONUS6")]->ToString());
+	dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"IRVALBONUS7")]->ToString());
+	dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"IRPRECO")]->ToString());
+
+
+	/*
+	defesa
+	durabilidade
+	*/
+
+	armadura = (CArmor *)getItem(dado[0]);
+
+	CArmor * armaduraResposta = new CArmor(armadura->getNome(),
+										 armadura->getEstado(),
+										 armadura->getPrice()+dado[10],
+										 armadura->isDropable(),
+										 armadura->getRace(),
+										 armadura->getDef()+dado[3],
+										 armadura->getDurability()+dado[4],
+										 armadura->getMagicLevel()
+										 );
+
+	armaduraResposta->setID(armadura->getID());
+	armaduraResposta->set2DTexture(armadura->get2DTexture());
+	armaduraResposta->set3DTexture(armadura->get3DTexture());
+	armaduraResposta->setModel(armadura->getModel());
+
+	return armaduraResposta;
+}
 
 //Obter Cenarios
 /*
@@ -1405,7 +1666,7 @@ CCenario * CDataManager::getCenario(int id)
 		return NULL;	
 	}
 
-	for(int i = 0; i < numCampos; i++)
+	for(int i = 0; i < (int)numCampos; i++)
 	{
 		nomeCampos->Add(dados[0]);
 		dados->RemoveAt(0);
@@ -1418,10 +1679,10 @@ CCenario * CDataManager::getCenario(int id)
 	return cenario;
 }
 
-CCenario * CDataManager::getListCenario()
+CCenarioList * CDataManager::getListCenario()
 {
-	CCenario * cenario;
-	
+	CCenarioList * listCenario;
+
 	TDadosBD ^ dados      = gcnew TDadosBD();
 	TDadosBD ^ nomeCampos = gcnew TDadosBD();
 	unsigned int numRegs   = 0;
@@ -1435,22 +1696,43 @@ CCenario * CDataManager::getListCenario()
 
 	if(numRegs == 0 || numCampos == 0)
 	{
-		System::String ^texto = L"Não foi encontrado nenhum Personagem com este id = ";
+		System::String ^texto = L"Não foi encontrado nenhum Cenário!";
 		WarBugsLog::_log->Items->Add(texto);		
 		return NULL;	
 	}
 
-	for(int i = 0; i < numCampos; i++)
+	for(int i = 0; i < (int)numCampos; i++)
 	{
 		nomeCampos->Add(dados[0]);
 		dados->RemoveAt(0);
 	}	
 
-	int i = System::Int32::Parse(dados[nomeCampos->IndexOf(L"CNID")]->ToString());
+	CCenario * cenarioTemp;
+	
+	for(int i = 0; i < (int)numRegs; i++)
+	{
 
-	cenario = new CCenario(i,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+		int idcenario = System::Int32::Parse(dados[nomeCampos->IndexOf(L"CNID")]->ToString());
+		CPeopleList * listaInimigos = &getPersonagem( SOLDADO, ALLRACE, idcenario);
+		CBolsaList * listaBolsas    = getListBolsa(idcenario);
+		CPortal * portalSul         = getPortal(idcenario,SUL);
+		CPortal * portalNorte		= getPortal(idcenario,NORTE);
+		CPortal * portalOeste		= getPortal(idcenario,OESTE);
+		CPortal * portalLeste		= getPortal(idcenario,LESTE);
 
-	return cenario;
+		cenarioTemp = new CCenario(i,NULL , listaInimigos, NULL, listaBolsas, portalNorte, portalSul, portalOeste, portalLeste);
+
+		listCenario->addCenario(cenarioTemp);
+
+		for(int j = 0; j < (int)numCampos; j++)
+		{
+			dados->RemoveAt(0);
+		}		
+		
+	}
+	
+
+	return listCenario;
 }
 
 //Obter Bolsa
@@ -1460,10 +1742,282 @@ CBolsa * CDataManager::getBolsa(int id)
 
 	return bolsa;
 }
-
+/*
+	Obtem os itens que o personagem estava no inventário(os equipados não)
+	@param idPersonagem -> o id do personagem
+	@return -> inventário do personagem
+*/
 CBolsa CDataManager::getBolsaPersonagem(int idPersonagem)
 {
 	CBolsa bolsa;
+
+	TDadosBD ^ dados      = gcnew TDadosBD();
+	TDadosBD ^ nomeCampos = gcnew TDadosBD();
+	unsigned int numRegs   = 0;
+	unsigned int numCampos = 0;
+	System::String ^ query;
+
+	query = L"SELECT I.*, IR.IRVALBONUS1,IR.IRPRECO,IR.IRVALBONUS2,IR.IRVALBONUS3,IR.IRVALBONUS4,"
+            +"IR.IRVALBONUS5,IR.IRVALBONUS6,IR.IRVALBONUS7 "
+			+"FROM ITEMBASE I, ITEM_RELACIONAL IR, PERSONAGEM P "
+			+"WHERE "
+			+" I.ITID = IR.ITID AND IR.PGID =  P.PGID AND IR.ITID <> P.PGIDARMOR AND IR.ITID <> P.PGIDWEAPON"
+			+"AND IR.PGID = "+idPersonagem;
+
+	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
+
+
+	if(numRegs == 0 || numCampos == 0)
+	{
+		System::String ^texto = L"Não foi encontrado nenhum Personagem com este id = "+idPersonagem;
+		WarBugsLog::_log->Items->Add(texto);		
+		return bolsa;	
+	}
+
+	for(int i = 0; i < (int)numCampos; i++)
+	{
+		nomeCampos->Add(dados[0]);
+		dados->RemoveAt(0);
+	}	
+
+	for(int i = 0; i < (int)numRegs; i++)
+	{
+
+		CItem * item;
+		
+		int dado[15];
+
+		int tipoItem = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITTIPO")]->ToString());
+
+
+		switch((TipoItem)tipoItem)
+		{
+			case USO:
+				{
+					int tipoUso = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITTIPOUSO")]->ToString());
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITVALOR")]->ToString());
+					bool b1 = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITISTEMP")]->ToString());
+					bool b2 = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDURACAO")]->ToString());
+					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+					dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
+
+					item = new CConsumableItem((TypeItens)dado[2],NAMOCHILA,dado[3],b2,(Atrib)tipoUso,dado[0],b1,dado[1]);
+
+
+					/*string str;
+					str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
+					((CConsumableItem *)item)->setDescricao(str);*/
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
+					((CConsumableItem *)item)->setID(dado[0]);
+
+					/*
+					str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+					((CConsumableItem *)item)->setNome(str);*/
+
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+					item->set2DTexture(dado[2]);
+					item->set3DTexture(dado[1]);
+					item->setModel(dado[0]);
+
+					
+
+
+					break;
+				}
+			case ARMA: 
+				{
+
+					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
+
+					bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+
+					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITRACA")]->ToString());
+					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITMODIFICADOR")]->ToString());
+					dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDANOMAX")]->ToString());
+					dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDANOMIN")]->ToString());
+					dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITVELOCIDADE")]->ToString());
+					dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITALCANCE")]->ToString());
+					dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDURABILIDADE")]->ToString());
+					dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITNIVELMAGICO")]->ToString());
+
+					item = new CWeapon((TypeItens)dado[0],NAMOCHILA,dado[1],b2,(Raca)dado[2],dado[3],dado[5],dado[4],dado[6],dado[7],dado[8],dado[9]);
+
+					/*string str;
+					str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
+					((CWeapon *)item)->setDescricao(str);*/
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
+					((CWeapon *)item)->setID(dado[0]);
+
+					/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+					((CWeapon *)item)->setNome(str);*/
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+					item->set2DTexture(dado[2]);
+					item->set3DTexture(dado[1]);
+					item->setModel(dado[0]);
+
+					break;
+				}
+			case ARMADURA: 
+				{
+					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
+
+					bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+
+					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITRACA")]->ToString());
+					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDEFESA")]->ToString());
+					dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDURABILIDADE")]->ToString());
+					dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITNIVELMAGICO")]->ToString());
+
+					item = new CArmor((TypeItens)dado[0],NAMOCHILA,dado[1],b2,(Raca)dado[2],dado[3],dado[4],dado[5]);
+
+					/*string str;
+					str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
+					((CArmor *)item)->setDescricao(str);*/
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
+					((CArmor *)item)->setID(dado[0]);
+
+					/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+					((CArmor *)item)->setNome(str);*/
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+					item->set2DTexture(dado[2]);
+					item->set3DTexture(dado[1]);
+					item->setModel(dado[0]);
+
+					break;
+				}
+			case QUEST: 
+				{
+
+					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
+
+					bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+
+					item = new CQItem((TypeItens) dado[0],NAMOCHILA,dado[1],b2,NULL);
+
+					/*string str;
+					str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
+					((CQItem *)item)->setDescricao(str);*/
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
+					((CQItem *)item)->setID(dado[0]);
+
+					/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+					((CQItem *)item)->setNome(str);*/
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+					item->set2DTexture(dado[2]);
+					item->set3DTexture(dado[1]);
+					item->setModel(dado[0]);
+
+					break;
+				}
+			case SCROLL: 
+				{
+
+					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
+
+					bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+
+					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITMODIFICADOR")]->ToString());
+					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDANOMAX")]->ToString());
+					dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDANOMIN")]->ToString());
+					dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITVELOCIDADE")]->ToString());
+					dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITALCANCE")]->ToString());
+					dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDEFESA")]->ToString());
+					dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDURABILIDADE")]->ToString());
+					
+					item = new CScroll((TypeItens)dado[0],NAMOCHILA,dado[1],b2,dado[2],dado[4],dado[3],dado[5],dado[6],dado[7],dado[8]);
+
+					/*string str;
+					str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
+					((CScroll *)item)->setDescricao(str);*/
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
+					((CScroll *)item)->setID(dado[0]);
+
+					/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+					((CScroll *)item)->setNome(str);*/
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+					item->set2DTexture(dado[2]);
+					item->set3DTexture(dado[1]);
+					item->setModel(dado[0]);
+
+					break;
+				}
+			case LSCROLL: 
+				{
+					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
+
+					bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+
+					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALARANHA")]->ToString());
+					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALBESOURO")]->ToString());
+					dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALLOUVA")]->ToString());
+					dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALESCORPIAO")]->ToString());
+					dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALVESPA")]->ToString());
+
+					item = new CLoyaltyScroll((TypeItens)dado[0], NAMOCHILA,dado[1],b2,dado[2],dado[3],dado[4],dado[5],dado[6]);
+
+					/*string str;
+					str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
+					((CLoyaltyScroll *)item)->setDescricao(str);*/
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
+					((CLoyaltyScroll *)item)->setID(dado[0]);
+
+					/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+					((CLoyaltyScroll *)item)->setNome(str);*/
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+					item->set2DTexture(dado[2]);
+					item->set3DTexture(dado[1]);
+					item->setModel(dado[0]);
+
+					break;
+				}
+
+		}
+
+		bolsa.addItem(item);
+
+		for(int i = 0; i < (int)numCampos; i++)
+		{
+			dados->RemoveAt(0);
+		}
+	}
+
 
 	return bolsa;
 }
@@ -1475,11 +2029,310 @@ CBolsa CDataManager::getBolsaTipoItem(int Tipo)
 	return bolsa;
 }
 
+/*
+	Obtem as bolsas com os itens que estiverem no cenário
+	@param idCenario -> o cenário que será pego as bolsas
+	@return -> lista de bolsas do cenário
+*/
 CBolsaList * CDataManager::getListBolsa(int idCenario)
 {
-	CBolsaList * bolsa;
+	CBolsaList * listaBolsa;
 
-	return bolsa;
+	TDadosBD ^ dados      = gcnew TDadosBD();
+	TDadosBD ^ nomeCampos = gcnew TDadosBD();
+	unsigned int numRegs   = 0;
+	unsigned int numCampos = 0;
+	System::String ^ query;
+
+	query = L"SELECT I.*, IR.IRVALBONUS1,IR.IRPRECO,IR.IRVALBONUS2,IR.IRVALBONUS3,IR.IRVALBONUS4,"
+            +"IR.IRVALBONUS5,IR.IRVALBONUS6,IR.IRVALBONUS7,B.BSID,B.BSX,B.BSY,B.BSZ "
+			+"FROM ITEMBASE I, ITEM_RELACIONAL IR, BOLSA B "
+			+"WHERE "
+			+"I.ITID = IR.ITID AND IR.BSID =  B.BSID AND B.CNID = "+idCenario+" "
+			+"ORDER BY B.BSID";
+
+	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
+
+
+	if(numRegs == 0 || numCampos == 0)
+	{
+		System::String ^texto = L"Não foi encontrado";
+		WarBugsLog::_log->Items->Add(texto);		
+		return NULL;	
+	}
+
+	for(int i = 0; i < (int)numCampos; i++)
+	{
+		nomeCampos->Add(dados[0]);
+		dados->RemoveAt(0);
+	}	
+
+	for(int i = 0; i < (int)numRegs; i++)
+	{
+		CBolsa bolsa;
+
+		int idBolsa = System::Int32::Parse(dados[nomeCampos->IndexOf(L"BSID")]->ToString());
+		int idBolsaAnterior = System::Int32::Parse(dados[nomeCampos->IndexOf(L"BSID")]->ToString());
+
+		bolsa.setID(idBolsa);
+
+		while(idBolsa == idBolsaAnterior)
+		{
+
+			CItem * item;
+			int dado[15];
+			int tipoItem = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITTIPO")]->ToString());
+
+			switch((TipoItem)tipoItem)
+			{
+				case USO:
+					{
+						int tipoUso = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITTIPOUSO")]->ToString());
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITVALOR")]->ToString());
+						bool b1 = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITISTEMP")]->ToString());
+						bool b2 = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+						dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDURACAO")]->ToString());
+						dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+						dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
+
+						item = new CConsumableItem((TypeItens)dado[2],NAMOCHILA,dado[3],b2,(Atrib)tipoUso,dado[0],b1,dado[1]);
+
+
+						/*string str;
+						str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
+						((CConsumableItem *)item)->setDescricao(str);*/
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
+						((CConsumableItem *)item)->setID(dado[0]);
+
+						/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+						((CConsumableItem *)item)->setNome(str);*/
+
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+						dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+						dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+						item->set2DTexture(dado[2]);
+						item->set3DTexture(dado[1]);
+						item->setModel(dado[0]);
+
+						
+
+
+						break;
+					}
+				case ARMA: 
+					{
+
+						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
+
+						bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+
+						dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITRACA")]->ToString());
+						dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITMODIFICADOR")]->ToString());
+						dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDANOMAX")]->ToString());
+						dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDANOMIN")]->ToString());
+						dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITVELOCIDADE")]->ToString());
+						dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITALCANCE")]->ToString());
+						dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDURABILIDADE")]->ToString());
+						dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITNIVELMAGICO")]->ToString());
+
+						item = new CWeapon((TypeItens)dado[0],NAMOCHILA,dado[1],b2,(Raca)dado[2],dado[3],dado[5],dado[4],dado[6],dado[7],dado[8],dado[9]);
+
+						/*string str;
+						str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
+						((CWeapon *)item)->setDescricao(str);*/
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
+						((CWeapon *)item)->setID(dado[0]);
+
+						/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+						((CWeapon *)item)->setNome(str);*/
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+						dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+						dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+						item->set2DTexture(dado[2]);
+						item->set3DTexture(dado[1]);
+						item->setModel(dado[0]);
+
+						break;
+					}
+				case ARMADURA: 
+					{
+						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
+
+						bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+
+						dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITRACA")]->ToString());
+						dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDEFESA")]->ToString());
+						dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDURABILIDADE")]->ToString());
+						dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITNIVELMAGICO")]->ToString());
+
+						item = new CArmor((TypeItens)dado[0],NAMOCHILA,dado[1],b2,(Raca)dado[2],dado[3],dado[4],dado[5]);
+
+						/*string str;
+						str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
+						((CArmor *)item)->setDescricao(str);*/
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
+						((CArmor *)item)->setID(dado[0]);
+
+						/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+						((CArmor *)item)->setNome(str);*/
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+						dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+						dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+						item->set2DTexture(dado[2]);
+						item->set3DTexture(dado[1]);
+						item->setModel(dado[0]);
+
+						break;
+					}
+				case QUEST: 
+					{
+
+						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
+
+						bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+
+						item = new CQItem((TypeItens) dado[0],NAMOCHILA,dado[1],b2,NULL);
+
+						/*string str;
+						str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
+						((CQItem *)item)->setDescricao(str);*/
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
+						((CQItem *)item)->setID(dado[0]);
+
+						/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+						((CQItem *)item)->setNome(str);*/
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+						dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+						dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+						item->set2DTexture(dado[2]);
+						item->set3DTexture(dado[1]);
+						item->setModel(dado[0]);
+
+						break;
+					}
+				case SCROLL: 
+					{
+
+						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
+
+						bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+
+						dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITMODIFICADOR")]->ToString());
+						dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDANOMAX")]->ToString());
+						dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDANOMIN")]->ToString());
+						dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITVELOCIDADE")]->ToString());
+						dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITALCANCE")]->ToString());
+						dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDEFESA")]->ToString());
+						dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDURABILIDADE")]->ToString());
+						
+						item = new CScroll((TypeItens)dado[0],NAMOCHILA,dado[1],b2,dado[2],dado[4],dado[3],dado[5],dado[6],dado[7],dado[8]);
+
+						/*string str;
+						str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
+						((CScroll *)item)->setDescricao(str);*/
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
+						((CScroll *)item)->setID(dado[0]);
+
+						/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+						((CScroll *)item)->setNome(str);*/
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+						dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+						dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+						item->set2DTexture(dado[2]);
+						item->set3DTexture(dado[1]);
+						item->setModel(dado[0]);
+
+						break;
+					}
+				case LSCROLL: 
+					{
+						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
+						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
+
+						bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+
+						dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALARANHA")]->ToString());
+						dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALBESOURO")]->ToString());
+						dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALLOUVA")]->ToString());
+						dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALESCORPIAO")]->ToString());
+						dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALVESPA")]->ToString());
+
+						item = new CLoyaltyScroll((TypeItens)dado[0], NAMOCHILA,dado[1],b2,dado[2],dado[3],dado[4],dado[5],dado[6]);
+
+						/*string str;
+						str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
+						((CLoyaltyScroll *)item)->setDescricao(str);*/
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
+						((CLoyaltyScroll *)item)->setID(dado[0]);
+
+						/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
+						((CLoyaltyScroll *)item)->setNome(str);*/
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
+						dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
+						dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDHUD")]->ToString());
+
+						item->set2DTexture(dado[2]);
+						item->set3DTexture(dado[1]);
+						item->setModel(dado[0]);
+
+						break;
+					}
+
+			}
+
+			dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"BSX")]->ToString());
+			dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"BSY")]->ToString());
+			dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"BSZ")]->ToString());
+
+			bolsa.setPosition(dado[0],dado[2]);
+
+			bolsa.addItem(item);
+
+			for(int j = 0; j < (int)numCampos; j++)
+			{
+				dados->RemoveAt(0);
+			}
+
+			//se for o ultimo registro ele não terá dados para retornar dentro de dados
+			if(i < (int) (numRegs-1))
+			{
+				idBolsaAnterior = System::Int32::Parse(dados[nomeCampos->IndexOf(L"BSID")]->ToString());
+			}
+			else
+			{
+				idBolsaAnterior = -1;
+			}
+
+		}//fim while
+
+		listaBolsa->addBolsa(&bolsa);
+
+	}//fim for
+
+
+	return listaBolsa;
 }
 
 
@@ -1495,13 +2348,120 @@ CJogador CDataManager::getJogador(char * login)
 {
 	CJogador jogador;
 
+	TDadosBD ^ dados      = gcnew TDadosBD();
+	TDadosBD ^ nomeCampos = gcnew TDadosBD();
+	unsigned int numRegs   = 0;
+	unsigned int numCampos = 0;
+	System::String ^ query;
+	System::String ^ temp = gcnew System::String(login);
+
+	query = L"SELECT * FROM JOGADOR WHERE JDLOGIN = \""+temp+"\"";
+
+	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
+
+
+	if(numRegs == 0 || numCampos == 0)
+	{
+		System::String ^texto = L"Não foi encontrado";
+		WarBugsLog::_log->Items->Add(texto);		
+		jogador.setID(-1);
+		return jogador;	
+	}
+
+	for(int i = 0; i < numCampos; i++)
+	{
+		nomeCampos->Add(dados[0]);
+		dados->RemoveAt(0);
+	}
+
+	jogador.setID(System::Int32::Parse(dados[nomeCampos->IndexOf(L"JDID")]->ToString()));
+	jogador.setBirthdate(toChar(dados[nomeCampos->IndexOf(L"JDDATANASC")]->ToString()));
+	jogador.setEmail(toChar(dados[nomeCampos->IndexOf(L"JDEMAIL")]->ToString()));
+	jogador.setPassword(toChar(dados[nomeCampos->IndexOf(L"JDSENHA")]->ToString()));
+	jogador.setName(toChar(dados[nomeCampos->IndexOf(L"JDNOME")]->ToString()));
+	jogador.setLogin(toChar(dados[nomeCampos->IndexOf(L"JDLOGIN")]->ToString()));
+
 	return jogador;
 }
 	
+
+/*
+	Obtem o portal do cenário passado e da direção passada
+	@param idCenario -> id do cenário
+	@param direcao -> direcao
+	@return -> o portal
+*/
+CPortal * CDataManager::getPortal(int idCenario, Direcoes direcao)
+{
+	CPortal * portal;
+
+	TDadosBD ^ dados      = gcnew TDadosBD();
+	TDadosBD ^ nomeCampos = gcnew TDadosBD();
+	unsigned int numRegs   = 0;
+	unsigned int numCampos = 0;
+	System::String ^ query;
+	int tempInt = (int)direcao;
+
+	query = L"SELECT P.* FROM PORTAL P, PORTAL_CENARIO PC "
+			+"WHERE P.PTID = PC.PTID AND "
+			+"P.PTDIRECAO = "+tempInt
+			+" AND PC.CNID = "+idCenario;
+
+	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
+
+	if(numRegs == 0 || numCampos == 0)
+	{
+		System::String ^texto = L"Não foi encontrado";
+		WarBugsLog::_log->Items->Add(texto);		
+		return portal;	
+	}
+
+	for(int i = 0; i < numCampos; i++)
+	{
+		nomeCampos->Add(dados[0]);
+		dados->RemoveAt(0);
+	}
+
+	portal = new CPortal(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PTID")]->ToString()),
+						 System::Int32::Parse(dados[nomeCampos->IndexOf(L"PTIDCENARIODEST")]->ToString()),
+						 System::Double::Parse(dados[nomeCampos->IndexOf(L"PTDESTX")]->ToString()),
+					     System::Double::Parse(dados[nomeCampos->IndexOf(L"PTDESTZ")]->ToString()));
+
+
+	portal->setPosition(System::Double::Parse(dados[nomeCampos->IndexOf(L"PTLOCX")]->ToString()),
+					   System::Double::Parse(dados[nomeCampos->IndexOf(L"PTLOCZ")]->ToString()));
+
+
+
+	return portal;
+}
+
+
 //Login
+/*
+	processa as informações de login e verifica se o usuário e senha passados são válidos
+	@param login -> login do usuário
+	@param senha -> senha do usuário
+	@param jogador -> o objeto jogador que será retornado caso as informações estejam corretas
+	@retun -> se usuario e senha são válidos retorna true
+*/
 bool  CDataManager::doLogin(char * login, char * senha, CJogador * jogador)
 {
-	bool result;
+	bool result = false;
+
+	CJogador j;
+	jogador = NULL;
+
+	j = getJogador(login);
+
+	if(j.getID() != -1)
+	{
+		if( strcmp(login,j.getLogin()) == 0 && strcmp(senha,j.getPassword()) == 0)
+		{
+			jogador = &j;
+			result = true;
+		}
+	}
 
 	return result;
 }

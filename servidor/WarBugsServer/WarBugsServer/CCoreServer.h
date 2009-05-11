@@ -7,12 +7,14 @@
 #include "CDataBase.h"
 #include <CPersonagemJogador.h>
 #include <CJogador.h>
+#include "CDataManager.h"
 
 class CCoreServer
 {
 				CCenario		* _cenarioList;
 				dreamServer     * _networkServer;
 				CDataBase       * _db;
+				CDataManager    * _dataManager;
 				
 				CPersonagemJogador * _limbo;
 				CJogador        * _playersList;

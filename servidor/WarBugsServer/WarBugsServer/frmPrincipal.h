@@ -26,7 +26,7 @@ namespace WarBugsServer {
 	public:
 		// Variaveis do Jogo
 		CDataBase			* _dataBase;
-		static CCoreServer	* _coreServer;
+		CCoreServer			* _coreServer;
 
 
 		frmPrincipal(void)
