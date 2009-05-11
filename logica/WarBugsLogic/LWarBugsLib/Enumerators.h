@@ -3,7 +3,7 @@
 #define _ENUMS
 // ------------------------------------------------------------------------------------------------------------
 //Enumerador para retornar o tipo da classe
-enum TipoClasse
+enum TipoClasse	
 {
 	COBJECT,
 	C3DOBJECT,
@@ -115,7 +115,7 @@ enum TypeItens
 	I_METRALHADORA, 
 	I_MARTELO_CONAN, 
 	I_KATANA, 
-	I_LANÇADOR_DARDOS, 
+	I_LANCADOR_DARDOS, 
 	I_MACHADO, 
 	I_PALITO_FOSFORO, 
 	I_VASSOURA, 
@@ -129,7 +129,7 @@ enum TypeItens
 	I_ELMO_BARBARO, 
 	I_OCULOS_ESCUROS, 
 	I_GORRO, 
-	I_CACETETE, 
+	I_CHACHI, 
 	I_CHAPEU_PALHA, 
 	I_OCULOS_AVIADOR, 
 	I_MASCARA_GAS, 
@@ -141,7 +141,7 @@ enum TypeItens
 	I_ASA_LIBELULA, 
 	I_PERFUME_PERCEVEJO, 
 	I_MEL_ABELHA, 
-	I_PATA_BARBEIRO, 
+	I_TESOURA_BARBEIRO, 
 	I_RABO_CALANGO, 
 	I_OVO_LAGARTIXA, 
 	I_LINGUA_SAPO, 
