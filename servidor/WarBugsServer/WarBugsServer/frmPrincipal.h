@@ -639,6 +639,22 @@ namespace WarBugsServer {
 
 private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  e) {
 			this->barStatusBD->Text = L"Status BD: "+( _dataBase->isConnected() ? "ON":"OFF");
+
+			//atualização da aba de Jogadores On Line
+			for(int i = 0; i < _coreServer->getPlayers()->size(); i++)
+			{
+				//primeira coluna
+				gridJogadores->Rows[i]->Cells[0]->Value = i;
+
+				gridJogadores->Rows[i]->Cells[1]->Value = _coreServer->getPlayers()->getElementAt(i)->getID();
+
+				gridJogadores->Rows[i]->Cells[2]->Value = toChar2(_coreServer->getPlayers()->getElementAt(i)->getName());
+
+				gridJogadores->Rows[i]->Cells[3]->Value = toChar2(_coreServer->getPlayers()->getElementAt(i)->getChar()->getName());
+
+				gridJogadores->Rows[i]->Cells[4]->Value = toChar2(_coreServer->getPlayers()->getElementAt(i)->getChar()->getCenario()->getName());
+
+			}
 		 }
 
 
@@ -663,34 +679,23 @@ private: System::Void btConsultar_Click(System::Object^  sender, System::EventAr
 
 					for(indexCampos = 0; indexCampos < numCampos; indexCampos++)
 					{
-						String ^ text = dados[indexCampos]->ToString();
-	//					String ^ text = ""+indexCampos;
+						String ^ text = dados[0]->ToString();
 						gridResultados->Columns->Add(L"_"+text,L""+text);
-					}
-
-					for(indexCampos = 0; indexCampos < numCampos; indexCampos++)
 						dados->RemoveAt(0);
+					}
 
 					gridResultados->Rows->Add(numRegs);
 
 
-
-
 					while (numRegs > indexRegs)
 					{
-						unsigned int i = (indexRegs*numCampos);
-						unsigned int j = (numCampos*(indexRegs+1));
-						for(indexCampos = i; indexCampos < j; indexCampos++)
+						for(indexCampos = 0; indexCampos < numCampos; indexCampos++)
 						{
-							String ^ text = gcnew String(toChar2(dados[indexCampos]->ToString()) != NULL ? toChar2(dados[indexCampos]->ToString()): "NULL");
-							if(indexCampos >= numCampos)
-							{
-								gridResultados->Rows[indexRegs]->Cells[indexCampos-numCampos]->Value = text;
-							}else
-							{
-								gridResultados->Rows[indexRegs]->Cells[indexCampos]->Value = text;
-							}
+							String ^ text = gcnew String(toChar2(dados[0]->ToString()) != NULL ? toChar2(dados[0]->ToString()): "NULL");
+							gridResultados->Rows[indexRegs]->Cells[indexCampos]->Value = text;
+							dados->RemoveAt(0);
 						}
+
 						indexRegs++;
 					} 			
 				}

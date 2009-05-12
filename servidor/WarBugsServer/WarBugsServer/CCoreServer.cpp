@@ -23,10 +23,10 @@ CCoreServer::CCoreServer(CDataBase *db, int fps)
 
 void CCoreServer::initialize()
 {
-	CCenarioList * listaCenarios;
+	_playersList = new CPeopleList();
 
-	listaCenarios = _dataManager->getListCenario();
 
+	_cenarioList = _dataManager->getListCenario();
 }
 
 void CCoreServer::initializeNetwork()
@@ -36,6 +36,11 @@ void CCoreServer::initializeNetwork()
 
 	_networkServer->initialize("",PORT);
 
+}
+
+CPeopleList * CCoreServer::getPlayers()
+{
+	return _playersList;
 }
 
 
@@ -80,6 +85,7 @@ void CCoreServer::readPackets()
 						{
 							tempJogador->setSocketAddress(&enderecoIPJogador);
 							sendMessage(false,&enderecoIPJogador,(int)LOGIN);
+							//adiciona o jogador a sua lista
 						}
 						else
 						{
@@ -106,7 +112,7 @@ void CCoreServer::readPackets()
 						}
 						else
 						{
-							sendMessage(false,&enderecoIPJogador,(int)SELECT_PLAYER_FAIL);
+							sendMessage(false,&enderecoIPJogador,(int)SHOW_PERSONAGENS,0);
 						}
 
 						break;
@@ -116,8 +122,9 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idRaca = mesRecebida.readLong();
-						char * nome   = mesRecebida.readString();
+						int    idJogador = mesRecebida.readLong();
+						int    idRaca	 = mesRecebida.readLong();
+						char * nome		 = mesRecebida.readString();
 						
 						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
 						sockaddr enderecoIPJogador = player;
@@ -130,12 +137,17 @@ void CCoreServer::readPackets()
 						}
 						else
 						{
-
 							tempJogador->setName(nome);
 
 							_cenarioList->addPlayer(tempJogador);
-						
+
+							_playersList->
+
 							_dataManager->insertPersonagem(tempJogador);
+
+							
+
+							//insert em personagens do novo personagem e insert em personagem_jogador da vinculação de 1 com o outro;
 						}
 
 						break;
