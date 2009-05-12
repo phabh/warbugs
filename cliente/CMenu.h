@@ -26,26 +26,25 @@ protected:
 	CArquivoConfig *_gameCfg;
 	char *_arquivoCena;
 	bool _flags[NUMFLAGSMENU];
+	bool _temPacote;
 
-	CRITICAL_SECTION m_cs;// Objeto de Sessão Crítica
+	//CRITICAL_SECTION m_cs;// Objeto de Sessão Crítica
 
 	CToonShader *_toonShader;
 
-	void updateHuds();
-	void readCommands();
-	void updateGraphics();
-	void graphicsDrawAddOn();
+	virtual void updateHuds() = 0;
+	virtual void readCommands() = 0;
+	virtual void updateGraphics() = 0;
+	virtual void graphicsDrawAddOn() = 0;
 
-	
-	
 public:
 
-	static void ThreadReadPackets(LPVOID);
-	static void ThreadIrrlicht(LPVOID);
+	//static void ThreadReadPackets(LPVOID);
+	//static void ThreadIrrlicht(LPVOID);
 
 	enum flagMenu {HUDCHANGED, OBJSELECTED, INVENTARIOON, CHATON, STATUSON, MAPAON, TRADEON, EQUIPON, SHOPON, BOLSAON, ALERTON, CONFIGON };
 
 	CMenu(){}
 	virtual bool start(IrrlichtDevice *grafico, ISoundEngine *audio) = 0;
-	menuID run();
+	virtual menuID run() = 0;
 };

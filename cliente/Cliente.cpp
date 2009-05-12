@@ -56,17 +56,16 @@ int main()
 	}
 
 
-	int estagio = 0;
+	int estagio = 0; // estágio de loading
 
 	CGameData *_gameData= new CGameData();
 	_gameData->start(dispositivoGrafico);
 
-	while(estagio < 6)
+	while(estagio < 6) // Carrega elementos do jogo
 	{
 		_gameData->loadGameData(estagio);
 	    estagio++;
 	}
-
 
 
 	while(nextMenu != SAIDA && nextMenu != ERRO)
