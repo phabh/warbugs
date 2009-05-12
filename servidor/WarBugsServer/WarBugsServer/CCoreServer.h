@@ -11,13 +11,12 @@
 
 class CCoreServer
 {
-				CCenario		* _cenarioList;
+				CCenarioList	* _cenarioList;
 				dreamServer     * _networkServer;
 				CDataBase       * _db;
 				CDataManager    * _dataManager;
 				
-				CPersonagemJogador * _limbo;
-				CJogador        * _playersList;
+				     * _playersList;
 
 				int               _fps;
 //				CTimer            _time;
@@ -32,6 +31,9 @@ class CCoreServer
 		void			initializeNetwork();			//inicializará a parte de conexão do servidor
 
 		void			readPackets();
+
+		CPeopleList   * getPlayers();
+
 
 		void            addPlayer(CJogador * jogador);
 		void			removePlayer(int idJogador);

@@ -48,6 +48,7 @@ int dreamServer::initialize(char *localIP, int serverPort)
 	_port = serverPort;
 
 	// Create server socket
+	//_socket = dreamSock_OpenUDPSocket(localIP, _port);
 	_socket = dreamSock_OpenUDPSocket(localIP, _port);
 
 	if(_socket == DREAMSOCK_INVALID_SOCKET)
