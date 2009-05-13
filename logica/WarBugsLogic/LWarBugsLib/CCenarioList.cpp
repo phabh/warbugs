@@ -158,6 +158,17 @@ CCenario *CCenarioList::getCenario(int IDCenario)
 	delete temp;
 	return(NULL);
 }
+CCenario *CCenarioList::getElementAt(int index)
+{
+	SCenarioElemento *temp = _first;
+	index = index - 1;
+	while(index > 0)
+	{
+		temp = temp->next;
+		index = index - 1;
+	}
+	return(temp->valor);
+}
 bool CCenarioList::haveCenario(CCenario *Cenario)
 {
 	SCenarioElemento *temp = _first;

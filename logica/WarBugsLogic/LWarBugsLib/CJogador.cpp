@@ -27,6 +27,10 @@ sockaddr *CJogador::getSocketAddress()
 {
 	return(_socket);
 }
+CPersonagemJogador *CJogador::getCharacter()
+{
+	return(_personagem);
+}
 void CJogador::setName(char *value)
 {
 	if(sizeof(_nome) >= strlen(value))
@@ -65,4 +69,8 @@ void CJogador::setPassword(char *value)
 void CJogador::setSocketAddress(sockaddr *socket)
 {
 	_socket = socket;
+}
+void CJogador::setCharacter(CPersonagemJogador *personagem)
+{
+	_personagem = personagem;
 }

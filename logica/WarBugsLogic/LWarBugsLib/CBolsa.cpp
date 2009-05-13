@@ -158,6 +158,17 @@ CItem *CBolsa::getItem(int IDItem)
 	delete temp;
 	return(NULL);
 }
+CItem *CBolsa::getElementAt(int index)
+{
+	SElemento *temp = _first;
+	index = index - 1;
+	while(index > 0)
+	{
+		temp = temp->next;
+		index = index - 1;
+	}
+	return(temp->valor);
+}
 bool CBolsa::haveItem(CItem *item)
 {
 	SElemento *temp = _first;
