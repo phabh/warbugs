@@ -23,6 +23,7 @@ public:
 	CItem *removeItem(int IDItem);
 	CItem *removeItem(CItem *item);
 	CItem *getItem(int IDItem);
+	CItem *getElementAt(int index);
 
 	bool haveItem(CItem *item);
 };

@@ -23,6 +23,7 @@ public:
 	CCenario *removeCenario(int IDCenario);
 	CCenario *removeCenario(CCenario *Cenario);
 	CCenario *getCenario(int IDCenario);
+	CCenario *getElementAt(int index);
 
 	bool haveCenario(CCenario *Cenario);
 };

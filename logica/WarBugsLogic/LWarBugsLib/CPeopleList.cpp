@@ -160,6 +160,17 @@ CPersonagem *CPeopleList::getPersonagem(int IDpersonagem)
 	}
 	return(NULL);
 }
+CPersonagem *CPeopleList::getElementAt(int index)
+{
+	SCharElemento *temp = _first;
+	index = index - 1;
+	while(index > 0)
+	{
+		temp = temp->next;
+		index = index - 1;
+	}
+	return(temp->valor);
+}
 bool CPeopleList::havePersonagem(CPersonagem *personagem)
 {
 	SCharElemento *temp = _first;

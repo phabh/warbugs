@@ -6,6 +6,7 @@
 #include <iostream>
 using namespace std;
 #include "CWarBugObject.h"
+#include "CPersonagemJogador.h"
 
 class CJogador : public CWarBugObject
 {
@@ -16,6 +17,7 @@ private:
 	char _login[15];
 	char _senha[15];
 	sockaddr *_socket;
+	CPersonagemJogador *_personagem;
 
 public:
 
@@ -26,10 +28,13 @@ public:
 	char *getLogin();
 	char *getPassword();
 	sockaddr *getSocketAddress();
+	CPersonagemJogador *getCharacter();
+
 	void setName(char *value);
 	void setBirthdate(char *value);
 	void setEmail(char *value);
 	void setLogin(char *value);
 	void setPassword(char *value);
 	void setSocketAddress(sockaddr *socket);
+	void setCharacter(CPersonagemJogador *personagem);
 };

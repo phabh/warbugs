@@ -158,6 +158,17 @@ CBolsa *CBolsaList::getBolsa(int IDbolsa)
 	delete temp;
 	return(NULL);
 }
+CBolsa *CBolsaList::getElementAt(int index)
+{
+	SBagElemento *temp = _first;
+	index = index - 1;
+	while(index > 0)
+	{
+		temp = temp->next;
+		index = index - 1;
+	}
+	return(temp->valor);
+}
 bool CBolsaList::haveBolsa(CBolsa *bolsa)
 {
 	SBagElemento *temp = _first;

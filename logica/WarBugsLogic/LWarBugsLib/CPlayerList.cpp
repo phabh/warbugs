@@ -158,6 +158,17 @@ CJogador *CPlayerList::getJogador(int IDJogador)
 	delete temp;
 	return(NULL);
 }
+CJogador *CPlayerList::getElementAt(int index)
+{
+	SPlayerElemento *temp = _first;
+	index = index - 1;
+	while(index > 0)
+	{
+		temp = temp->next;
+		index = index - 1;
+	}
+	return(temp->valor);
+}
 bool CPlayerList::haveJogador(CJogador *Jogador)
 {
 	SPlayerElemento *temp = _first;
