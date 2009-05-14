@@ -24,7 +24,6 @@ CPersonagemJogador::CPersonagemJogador()
 	_nivel = 1;
 	_experiencia = 0;
 	_xpToNextLv = 0;
-	_xpToPrevLv = 0;
 	_pontoDistribuir = 0;
 	_lealdade = new CLealdade();
 	//_party = new irr::core::array<CPersonagemJogador*>();
@@ -41,6 +40,18 @@ CPersonagemJogador::CPersonagemJogador()
 char *CPersonagemJogador::getName()
 {
 	return(_nome);
+}
+int CPersonagemJogador::getLevel()
+{
+	return(_nivel);
+}
+int CPersonagemJogador::getXP()
+{
+	return(_experiencia);
+}
+int CPersonagemJogador::getMaxXP()
+{
+	return(_xpToNextLv);
 }
 int CPersonagemJogador::getAttack()
 {
@@ -78,10 +89,6 @@ void CPersonagemJogador::setXP(int xp)
 void CPersonagemJogador::setXPToNextLv(int xp)
 {
 	_xpToNextLv = xp;
-}
-void CPersonagemJogador::setXPToPrev(int xp)
-{
-	_xpToPrevLv = xp;
 }
 void CPersonagemJogador::setPointsToDistribute(int points)
 {
@@ -442,14 +449,10 @@ bool CPersonagemJogador::haveLevelUp()
 }
 bool CPersonagemJogador::haveLevelDown()
 {
-	if(_experiencia < _xpToPrevLv)
+	if(_experiencia < 0)
 	{
 		_nivel = _nivel - 1;
-		habilidadesPrimarias->addFOR(-1);
-		habilidadesPrimarias->addDES(-1);
-		habilidadesPrimarias->addAGI(-1);
-		habilidadesPrimarias->addRES(-1);
-		habilidadesPrimarias->addINS(-1);
+		 _pontoDistribuir = _pontoDistribuir - 5;
 		updateXP();
 		return(true);
 	}
