@@ -23,6 +23,7 @@ public:
 	CBolsa *removeBolsa(int IDBolsa);
 	CBolsa *removeBolsa(CBolsa *Bolsa);
 	CBolsa *getBolsa(int IDBolsa);
+	CBolsa *getElementAt(int index);
 
 	bool haveBolsa(CBolsa *Bolsa);
 };

@@ -640,19 +640,21 @@ namespace WarBugsServer {
 private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  e) {
 			this->barStatusBD->Text = L"Status BD: "+( _dataBase->isConnected() ? "ON":"OFF");
 
+			_coreServer->readPackets();
+
 			//atualização da aba de Jogadores On Line
 			for(int i = 0; i < _coreServer->getPlayers()->size(); i++)
 			{
 				//primeira coluna
 				gridJogadores->Rows[i]->Cells[0]->Value = i;
 
-				gridJogadores->Rows[i]->Cells[1]->Value = _coreServer->getPlayers()->getElementAt(i)->getID();
+				//gridJogadores->Rows[i]->Cells[1]->Value = _coreServer->getPlayers()->getElementAt(i)->getID();
 
-				gridJogadores->Rows[i]->Cells[2]->Value = toChar2(_coreServer->getPlayers()->getElementAt(i)->getName());
+				//gridJogadores->Rows[i]->Cells[2]->Value = gcnew String(" "+_coreServer->getPlayers()->getElementAt(i)->getName());
 
-				gridJogadores->Rows[i]->Cells[3]->Value = toChar2(_coreServer->getPlayers()->getElementAt(i)->getChar()->getName());
+				//gridJogadores->Rows[i]->Cells[3]->Value = gcnew String(" "+_coreServer->getPlayers()->getElementAt(i)->getCharacter()->getName());
 
-				gridJogadores->Rows[i]->Cells[4]->Value = toChar2(_coreServer->getPlayers()->getElementAt(i)->getChar()->getCenario()->getName());
+				//gridJogadores->Rows[i]->Cells[4]->Value = gcnew String(" "+_coreServer->getPlayers()->getElementAt(i)->getScene()->getID());
 
 			}
 		 }

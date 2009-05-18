@@ -40,7 +40,6 @@ class CPersonagemJogador : public CPersonagem
 	int _nivel;
 	int _experiencia;
 	int _xpToNextLv;
-	int _xpToPrevLv;
 	int _pontoDistribuir;
 	CEquipamento *_equip;
 	//CBuff *_status;
@@ -60,7 +59,9 @@ public:
 	CPersonagemJogador();
 	//Getters
 	char *getName();
-	
+	int getLevel();
+	int getXP();
+	int getMaxXP();
 	int getAttack();
 	int getDamage();
 	
@@ -70,7 +71,6 @@ public:
 	void setLevel(int level);
 	void setXP(int xp);
 	void setXPToNextLv(int xp);
-	void setXPToPrev(int xp);
 	void setPointsToDistribute(int points);
 	void setEquip(CEquipamento *equip);
 	//void setStatus(CBuff *status);
