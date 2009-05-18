@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IVideoTexture.h"
+#include "CVideoTexture.h"
 #include "dsvt.h"
 #include <irrlicht.h>
 
@@ -8,7 +8,7 @@ using namespace irr;
 using namespace video;
 using namespace dsvt;
 
-IVideoTexture::IVideoTexture()
+CVideoTexture::CVideoTexture()
 {
     m_device = 0;
 
@@ -25,7 +25,7 @@ IVideoTexture::IVideoTexture()
     m_copy_buffer_size = 0;
 }
 
-IVideoTexture::IVideoTexture( IrrlichtDevice *device,ITexture *texture)
+CVideoTexture::CVideoTexture( IrrlichtDevice *device,ITexture *texture)
 {
     m_device = device;
 
@@ -43,7 +43,7 @@ IVideoTexture::IVideoTexture( IrrlichtDevice *device,ITexture *texture)
 }
 
 
-IVideoTexture::IVideoTexture( IrrlichtDevice *device, const char* file, bool& bSuccess)
+CVideoTexture::CVideoTexture( IrrlichtDevice *device, const char* file, bool& bSuccess)
 {
     m_device = device;
 
@@ -215,7 +215,7 @@ IVideoTexture::IVideoTexture( IrrlichtDevice *device, const char* file, bool& bS
 }
 
 
-IVideoTexture::IVideoTexture( IrrlichtDevice *device, dsvt::ICaptureDevice *cap ,bool& bSuccess)
+CVideoTexture::CVideoTexture( IrrlichtDevice *device, dsvt::ICaptureDevice *cap, bool& bSuccess)
 {
     m_device = device;
 
@@ -386,7 +386,7 @@ IVideoTexture::IVideoTexture( IrrlichtDevice *device, dsvt::ICaptureDevice *cap 
     }
 }
 
-IVideoTexture::~IVideoTexture()
+CVideoTexture::~CVideoTexture()
 {
     if( m_dshow_player )
         m_dshow_player->drop();
@@ -402,7 +402,7 @@ IVideoTexture::~IVideoTexture()
 
 
 // Create irrlicht video texture
-/*irr::video::*/IVideoTexture* /*irr::video::*/IVideoTexture::createVideoTexture( IrrlichtDevice *device ,const char* file)
+CVideoTexture* CVideoTexture::createVideoTexture( IrrlichtDevice *device, const char* file)
 {
     if( !device)
     {
@@ -423,12 +423,12 @@ IVideoTexture::~IVideoTexture()
     // first try to get static texture
     ITexture *stTex = driver->getTexture( file );
 
-    IVideoTexture *tmpTexture = 0;
+    CVideoTexture *tmpTexture = 0;
 
     // Static texture loaded successfully
     if( stTex )
     {
-        tmpTexture = new IVideoTexture(device, stTex);
+        tmpTexture = new CVideoTexture(device, stTex);
 
         if( !tmpTexture )
             return 0;
@@ -445,7 +445,7 @@ IVideoTexture::~IVideoTexture()
         }
 
         bool bSuccess = true;
-        tmpTexture = new IVideoTexture(device, file,bSuccess);
+        tmpTexture = new CVideoTexture(device, file,bSuccess);
 
         if( !bSuccess )
         {
@@ -461,7 +461,7 @@ IVideoTexture::~IVideoTexture()
 
 
 
-IVideoTexture* IVideoTexture::createCaptureTexture( IrrlichtDevice *device , dsvt::ICaptureDevice *cap )
+CVideoTexture* CVideoTexture::createCaptureTexture( IrrlichtDevice *device , dsvt::ICaptureDevice *cap )
 {
     if( !device)
     {
@@ -476,8 +476,8 @@ IVideoTexture* IVideoTexture::createCaptureTexture( IrrlichtDevice *device , dsv
     }
 
     bool bSuccess = true;
-    IVideoTexture *tmpTexture = 0;
-    tmpTexture = new IVideoTexture(device, cap ,bSuccess);
+    CVideoTexture *tmpTexture = 0;
+    tmpTexture = new CVideoTexture(device, cap ,bSuccess);
 
     if( !bSuccess )
     {
@@ -492,7 +492,7 @@ IVideoTexture* IVideoTexture::createCaptureTexture( IrrlichtDevice *device , dsv
 
 
 
-bool IVideoTexture::playCutscene( void )
+bool CVideoTexture::playCutscene( void )
 {
     stop();
     setPosition(0);
@@ -556,7 +556,7 @@ bool IVideoTexture::playCutscene( void )
 }
 
 
-bool IVideoTexture::drawBackground( )
+bool CVideoTexture::drawBackground( )
 {
     IVideoDriver *drv = m_device->getVideoDriver();
     //core::rect<s32> tsize = drv->getViewPort();
@@ -570,15 +570,15 @@ bool IVideoTexture::drawBackground( )
 }
 
 
-ITexture *IVideoTexture::getTexture()
+ITexture *CVideoTexture::getTexture()
 {
     return m_pTempTexture;
 }
 
 
-void IVideoTexture::RGB_32_To_A8R8G8B8( SFrameData& data )
+void CVideoTexture::RGB_32_To_A8R8G8B8( SFrameData& data )
 {
-    IVideoTexture *texBase = reinterpret_cast<IVideoTexture*>(data.userData);
+    CVideoTexture *texBase = reinterpret_cast<CVideoTexture*>(data.userData);
     if( !texBase )
         return;
 
@@ -599,12 +599,12 @@ void IVideoTexture::RGB_32_To_A8R8G8B8( SFrameData& data )
     video_buffer += pitch;
     s32 *old_vbuffer = video_buffer;
 
-    for( u32 i=0;i<data.iHeight;i++)
+    for( u32 i=0;i<(u32)data.iHeight;i++)
     {
         video_buffer -= data.iWidth;
         old_vbuffer = video_buffer;
 
-        for( u32 x=0;x<data.iWidth;x++)
+        for( u32 x=0;x<(u32)data.iWidth;x++)
         {
             *texture_buffer = *video_buffer;
             texture_buffer++;
@@ -617,9 +617,9 @@ void IVideoTexture::RGB_32_To_A8R8G8B8( SFrameData& data )
     tex->unlock();
 }
 
-void IVideoTexture::RGB_32_To_A1R5G5B5(dsvt::SFrameData& data)
+void CVideoTexture::RGB_32_To_A1R5G5B5(dsvt::SFrameData& data)
 {
-    IVideoTexture *texBase = reinterpret_cast<IVideoTexture*>(data.userData);
+    CVideoTexture *texBase = reinterpret_cast<CVideoTexture*>(data.userData);
     if( !texBase )
         return;
 
@@ -661,9 +661,9 @@ void IVideoTexture::RGB_32_To_A1R5G5B5(dsvt::SFrameData& data)
     tex->unlock();
 }
 
-void IVideoTexture::RGB_32_To_R5G6B5(dsvt::SFrameData& data)
+void CVideoTexture::RGB_32_To_R5G6B5(dsvt::SFrameData& data)
 {
-    IVideoTexture *texBase = reinterpret_cast<IVideoTexture*>(data.userData);
+    CVideoTexture *texBase = reinterpret_cast<CVideoTexture*>(data.userData);
     if( !texBase )
         return;
 
@@ -704,9 +704,9 @@ void IVideoTexture::RGB_32_To_R5G6B5(dsvt::SFrameData& data)
     tex->unlock();
 }
 
-void IVideoTexture::RGB_32_To_R8G8B8(dsvt::SFrameData& data)
+void CVideoTexture::RGB_32_To_R8G8B8(dsvt::SFrameData& data)
 {
-    IVideoTexture *texBase = reinterpret_cast<IVideoTexture*>(data.userData);
+    CVideoTexture *texBase = reinterpret_cast<CVideoTexture*>(data.userData);
     if( !texBase )
         return;
 
@@ -748,9 +748,9 @@ void IVideoTexture::RGB_32_To_R8G8B8(dsvt::SFrameData& data)
     tex->unlock();
 }
 
-void IVideoTexture::RGB_24_To_A8R8G8B8(dsvt::SFrameData& data)
+void CVideoTexture::RGB_24_To_A8R8G8B8(dsvt::SFrameData& data)
 {
-    IVideoTexture *texBase = reinterpret_cast<IVideoTexture*>(data.userData);
+    CVideoTexture *texBase = reinterpret_cast<CVideoTexture*>(data.userData);
     if( !texBase )
         return;
 
@@ -795,14 +795,14 @@ void IVideoTexture::RGB_24_To_A8R8G8B8(dsvt::SFrameData& data)
     tex->unlock();
 }
 
-void IVideoTexture::RGB_24_To_A1R5G5B5(dsvt::SFrameData& data)
+void CVideoTexture::RGB_24_To_A1R5G5B5(dsvt::SFrameData& data)
 {
     printf( "24to16\n");
 }
 
-void IVideoTexture::RGB_24_To_R5G6B5(dsvt::SFrameData& data)
+void CVideoTexture::RGB_24_To_R5G6B5(dsvt::SFrameData& data)
 {
-    IVideoTexture *texBase = reinterpret_cast<IVideoTexture*>(data.userData);
+    CVideoTexture *texBase = reinterpret_cast<CVideoTexture*>(data.userData);
     if( !texBase )
         return;
 
@@ -844,9 +844,9 @@ void IVideoTexture::RGB_24_To_R5G6B5(dsvt::SFrameData& data)
     tex->unlock();
 }
 
-void IVideoTexture::RGB_24_To_R8G8B8(dsvt::SFrameData& data)
+void CVideoTexture::RGB_24_To_R8G8B8(dsvt::SFrameData& data)
 {
-    IVideoTexture *texBase = reinterpret_cast<IVideoTexture*>(data.userData);
+    CVideoTexture *texBase = reinterpret_cast<CVideoTexture*>(data.userData);
     if( !texBase )
         return;
 
@@ -885,9 +885,9 @@ void IVideoTexture::RGB_24_To_R8G8B8(dsvt::SFrameData& data)
     tex->unlock();
 }
 
-void IVideoTexture::RGB_565_To_A8R8G8B8(dsvt::SFrameData& data)
+void CVideoTexture::RGB_565_To_A8R8G8B8(dsvt::SFrameData& data)
 {
-    IVideoTexture *texBase = reinterpret_cast<IVideoTexture*>(data.userData);
+    CVideoTexture *texBase = reinterpret_cast<CVideoTexture*>(data.userData);
     if( !texBase )
         return;
 
@@ -930,57 +930,57 @@ void IVideoTexture::RGB_565_To_A8R8G8B8(dsvt::SFrameData& data)
     tex->unlock();
 }
 
-void IVideoTexture::RGB_565_To_A1R5G5B5(dsvt::SFrameData& data)
+void CVideoTexture::RGB_565_To_A1R5G5B5(dsvt::SFrameData& data)
 {
     printf( "16to16\n");
 }
 
-void IVideoTexture::RGB_565_To_R5G6B5(dsvt::SFrameData& data)
+void CVideoTexture::RGB_565_To_R5G6B5(dsvt::SFrameData& data)
 {
     printf( "16to16\n");
 }
 
-void IVideoTexture::RGB_565_To_R8G8B8(dsvt::SFrameData& data)
+void CVideoTexture::RGB_565_To_R8G8B8(dsvt::SFrameData& data)
 {
     printf( "16to24\n");
 }
 
-void IVideoTexture::RGB_555_To_A8R8G8B8(dsvt::SFrameData& data)
+void CVideoTexture::RGB_555_To_A8R8G8B8(dsvt::SFrameData& data)
 {
     printf( "16to32\n");
 }
 
-void IVideoTexture::RGB_555_To_A1R5G5B5(dsvt::SFrameData& data)
+void CVideoTexture::RGB_555_To_A1R5G5B5(dsvt::SFrameData& data)
 {
     printf( "16to16\n");
 }
 
-void IVideoTexture::RGB_555_To_R5G6B5(dsvt::SFrameData& data)
+void CVideoTexture::RGB_555_To_R5G6B5(dsvt::SFrameData& data)
 {
     printf( "16to16\n");
 }
 
-void IVideoTexture::RGB_555_To_R8G8B8(dsvt::SFrameData& data)
+void CVideoTexture::RGB_555_To_R8G8B8(dsvt::SFrameData& data)
 {
     printf( "16to24\n");
 }
 
-void IVideoTexture::RGB_8_To_A8R8G8B8(dsvt::SFrameData& data)
+void CVideoTexture::RGB_8_To_A8R8G8B8(dsvt::SFrameData& data)
 {
     printf( "8to32\n");
 }
 
-void IVideoTexture::RGB_8_To_A1R5G5B5(dsvt::SFrameData& data)
+void CVideoTexture::RGB_8_To_A1R5G5B5(dsvt::SFrameData& data)
 {
     printf( "8to16\n");
 }
 
-void IVideoTexture::RGB_8_To_R5G6B5(dsvt::SFrameData& data)
+void CVideoTexture::RGB_8_To_R5G6B5(dsvt::SFrameData& data)
 {
     printf( "8to16\n");
 }
 
-void IVideoTexture::RGB_8_To_R8G8B8(dsvt::SFrameData& data)
+void CVideoTexture::RGB_8_To_R8G8B8(dsvt::SFrameData& data)
 {
     printf( "8to24\n");
 }

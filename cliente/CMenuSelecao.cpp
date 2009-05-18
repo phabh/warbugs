@@ -13,13 +13,6 @@ private:
 
 	float _camRotation;
 	float _camCurrRotation;
-/*
-	UINT ThreadReadPackets(LPVOID lParam)
-	{
-		while(_nextID == _myID)
-			cout << "\nLeu pacotes.\n";
-		return 0;
-	}*/
 
 	void graphicsDrawAddOn(){}
 
@@ -43,7 +36,6 @@ private:
 
 	void readCommands()
 	{
-//		_timer->update();
 
 		if(_gerenciadorEventos->isKeyDown(KEY_ESCAPE))
 		{
@@ -112,8 +104,6 @@ private:
 
 	void updateGraphics()
 	{
-		//_timer->update();
-
 		float delta = fabs(_camRotation - _camCurrRotation);
 
 		if(	_camRotation != _camCurrRotation )
@@ -153,8 +143,7 @@ public:
 
 		_myID = _nextID = SELECAOPERSONAGEM;
 		_arquivoCena = "recursos/cenas/selecao.irr";
-		//_timer = new CTimer();
-		//_timer->initialize();
+
 		_nodoSelecionado = 0;
 		_idPersonagem = -1;
 		_flags[OBJSELECTED] = false;
@@ -190,77 +179,5 @@ public:
 		_camCurrRotation = 0;
 
 		return (true);
-	}
-/*
-	menuID run()
-	{
-
-		updateHuds();
-
-
-		while(_dispositivo->run())
-		{
-			if (_dispositivo->isWindowActive())
-			{
-				_gerenciadorEventos->endEventProcess(); // Desativa a escuta de eventos para desenhar.
-			
-				_gerenciadorVideo->beginScene(true, true, SColor(255, 0, 0, 0));
-				_gerenciadorCena->drawAll(); 
-				_gerenciadorHud->drawAll();
-				_gerenciadorVideo->endScene();
-
-				readCommands();
-
-				updateGraphics();
-
-				if(_flags[HUDCHANGED])
-					updateHuds();
-
-				_gerenciadorEventos->startEventProcess(); // Ativa a escuta de eventos.
-
-				if(_nextID != _myID)
-					return _nextID;
-			}
-		}
-
-		_gerenciadorAudio->stopAllSounds();
-		return _myID;
-	}*/
-
-	menuID run()
-	{
-		updateHuds();
-
-		while(_dispositivo->run())
-		{
-			if (_dispositivo->isWindowActive())
-			{
-				_gerenciadorEventos->endEventProcess(); // Desativa a escuta de eventos para desenhar.
-			
-				_gerenciadorVideo->beginScene(true, true, SColor(255, 0, 0, 0));
-					_gerenciadorCena->drawAll(); 
-					_gerenciadorHud->drawAll();
-					graphicsDrawAddOn();
-				_gerenciadorVideo->endScene();
-
-				readCommands();
-
-				updateGraphics();
-
-				if(_flags[HUDCHANGED])
-					updateHuds();
-
-				if(_nextID != _myID)
-				{
-					break;
-					//return _nextID;
-				}
-
-				_gerenciadorEventos->startEventProcess(); // Ativa a escuta de eventos.
-			}
-		}
-
-		_gerenciadorAudio->stopAllSounds();
-		return _nextID;
 	}
 };

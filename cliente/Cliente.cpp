@@ -2,6 +2,7 @@
 
 #include "Setup.h"
 #include "CGameData.cpp"
+#include "CNetwork.h"
 #include "CMenu.h"
 #include "CMenuAbertura.cpp"
 #include "CMenuLogin.cpp"

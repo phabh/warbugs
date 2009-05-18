@@ -11,13 +11,6 @@ private:
 
 	CHudFadingTextList _creditos;
 
-	UINT ThreadReadPackets(LPVOID lParam)
-	{
-		while(_nextID == _myID)
-			cout << "\nLeu pacotes.\n";
-		return 0;
-	}
-
 	void graphicsDrawAddOn(){}
 
 	void updateHuds()
@@ -103,42 +96,5 @@ public:
 		_flags[HUDCHANGED] = false;
 
 		return (true);
-	}
-
-	menuID run()
-	{
-		updateHuds();
-
-		while(_dispositivo->run())
-		{
-			if (_dispositivo->isWindowActive())
-			{
-				_gerenciadorEventos->endEventProcess(); // Desativa a escuta de eventos para desenhar.
-			
-				_gerenciadorVideo->beginScene(true, true, SColor(255, 0, 0, 0));
-					_gerenciadorCena->drawAll(); 
-					_gerenciadorHud->drawAll();
-					graphicsDrawAddOn();
-				_gerenciadorVideo->endScene();
-
-				readCommands();
-
-				updateGraphics();
-
-				if(_flags[HUDCHANGED])
-					updateHuds();
-
-				if(_nextID != _myID)
-				{
-					break;
-					//return _nextID;
-				}
-
-				_gerenciadorEventos->startEventProcess(); // Ativa a escuta de eventos.
-			}
-		}
-
-		_gerenciadorAudio->stopAllSounds();
-		return _nextID;
 	}
 };
