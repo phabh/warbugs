@@ -1,17 +1,23 @@
+/*
+	Classse para serializar dados para envio e recebimento via socket
+	Baseada na classe dreamMessage.h do livro Programming Multiplayer Games
+	@autor Paulo
+*/
+
 #pragma once
 
 class CBugMessage
 {
 	private:
-		bool _overFlow;
-		int  _maxSize;
-		int  _size;
-		int  _readCount;
+		bool _overFlow;							// verifica se ouve estouro de memória
+		int  _maxSize;							// tamanho máximo
+		int  _size;                             // tamanho corrente
+		int  _readCount;                        // posicao de leitura
 
-		char *getNewPoint(int length);
+		char *getNewPoint(int length);          
 
 	public:
-		char  * _data;
+		char  * _data;							// vetor com os dados
 
 		void    init(char *d, int length);
 
