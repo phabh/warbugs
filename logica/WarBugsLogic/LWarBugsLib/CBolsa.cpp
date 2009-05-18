@@ -2,11 +2,12 @@
 
 CBolsa::CBolsa(void)
 {
-	_first = NULL;
+	_first = new SElemento();
 	_size = 0;
 }
 CBolsa::CBolsa(CItem *item)
 {
+	_first = new SElemento();
 	_first->valor = item;
 	_first->next = NULL;
 	_first->prev = NULL;
@@ -14,7 +15,7 @@ CBolsa::CBolsa(CItem *item)
 }
 bool CBolsa::isEmpty()
 {
-	return(_first == NULL);
+	return(_size == 0);
 }
 int CBolsa::size()
 {
