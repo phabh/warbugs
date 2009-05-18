@@ -24,6 +24,7 @@ public:
 	CNPC();
 	void speak(CPersonagemJogador *alvo);
 	void giveQuest (CPersonagemJogador *alvo);
+	void update();
 };
 
 #endif

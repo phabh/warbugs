@@ -1681,7 +1681,7 @@ CCenario * CDataManager::getCenario(int id)
 
 CCenarioList * CDataManager::getListCenario()
 {
-	CCenarioList * listCenario;
+	CCenarioList * listCenario = new CCenarioList();
 
 	TDadosBD ^ dados      = gcnew TDadosBD();
 	TDadosBD ^ nomeCampos = gcnew TDadosBD();
@@ -1713,14 +1713,16 @@ CCenarioList * CDataManager::getListCenario()
 	{
 
 		int idcenario = System::Int32::Parse(dados[nomeCampos->IndexOf(L"CNID")]->ToString());
-		CPeopleList * listaInimigos = &getPersonagem( SOLDADO, ALLRACE, idcenario);
-		CBolsaList * listaBolsas    = getListBolsa(idcenario);
-		CPortal * portalSul         = getPortal(idcenario,SUL);
-		CPortal * portalNorte		= getPortal(idcenario,NORTE);
-		CPortal * portalOeste		= getPortal(idcenario,OESTE);
-		CPortal * portalLeste		= getPortal(idcenario,LESTE);
+		CPeopleList * listaInimigos   = &getPersonagem( SOLDADO, ALLRACE, idcenario);
+		CPeopleList * listaPersonagem = new CPeopleList();
+		CPeopleList * listaNPC		  = new CPeopleList();
+		CBolsaList * listaBolsas      = getListBolsa(idcenario);
+		CPortal * portalSul           = getPortal(idcenario,SUL);
+		CPortal * portalNorte		  = getPortal(idcenario,NORTE);
+		CPortal * portalOeste		  = getPortal(idcenario,OESTE);
+		CPortal * portalLeste		  = getPortal(idcenario,LESTE);
 
-		cenarioTemp = new CCenario(i,NULL , listaInimigos, NULL, listaBolsas, portalNorte, portalSul, portalOeste, portalLeste);
+		cenarioTemp = new CCenario(idcenario, listaPersonagem, listaInimigos, listaNPC, listaBolsas, portalNorte, portalSul, portalOeste, portalLeste);
 
 		listCenario->addCenario(cenarioTemp);
 
@@ -2327,7 +2329,7 @@ CBolsaList * CDataManager::getListBolsa(int idCenario)
 
 		}//fim while
 
-		listaBolsa->addBolsa(&bolsa);
+		listaBolsa->addBag(&bolsa);
 
 	}//fim for
 

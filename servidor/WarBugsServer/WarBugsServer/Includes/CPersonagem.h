@@ -9,6 +9,7 @@
 */
 #ifndef _CPERSONAGEM_H_
 
+#include <math.h>
 //#include "CHabilidadesSecundarias.h"
 	//#include "CWarBugObject.h"
 	//#include "CEquipamento.h"
@@ -31,6 +32,8 @@ class CBuff;
 // ------------------------------------------------------------------------------------------------------------
 class CPersonagem : public C3DObject{
 protected:
+	float direcao;
+	Ponto *destino;
 	EstadoPersonagem estado;
 	//Tempo de respawn
 	int dinheiro;
@@ -45,6 +48,8 @@ public:
 
 	CPersonagem();
 	//Getters e Setters
+	float getDirection();
+	float getMoveSpeed();
 	int getFOR();
 	int getDES();
 	int getAGI();
@@ -59,6 +64,7 @@ public:
 	CHabilidades *getBaseStats();
 	CBonusPrimario *getBaseBonus();
 	
+	void setDirection(float direction);
 	void setState(EstadoPersonagem newState);
 	void setMoney(int value);
 	void setBolsa(CBolsa *bolsa);
@@ -76,6 +82,5 @@ public:
 	void die();
 	virtual void useItem(CItem *item)=0;
 	//void useSkill(CPoder *skill);
-
 };
 #endif

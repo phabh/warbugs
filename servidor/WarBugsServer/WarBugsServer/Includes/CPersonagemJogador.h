@@ -54,6 +54,14 @@ class CPersonagemJogador : public CPersonagem
 	int _dano;
 	int _range;
 	int _speed;
+
+	bool _tradeOn;// = false;
+	bool _tradeConfirmation;// = false;
+	int _idTrader;// = -1;
+	int _idItemTrade;// = -1;
+	int _idMoneyTrade;// = -1;
+
+
 public:
 
 	CPersonagemJogador();
@@ -64,6 +72,11 @@ public:
 	int getMaxXP();
 	int getAttack();
 	int getDamage();
+	bool isTradeOn();
+	bool isTradeConfirmated();
+	int getIDTrader();
+	int getIDItemTrade();
+	int getIDMoneyTrade();
 	
 	//Setters
 	void setName(char *name);
@@ -84,6 +97,11 @@ public:
 	void setDamage(int dano);
 	void setRange(int range);
 	void setSpeed(int speed);
+	void setTradeOn(bool value);
+	void setTradeConfirmated(bool value);
+	void setIDTrader(int value);
+	void setIDItemTrade(int value);
+	void setIDMoneyTrade(int value);
 	//Outros Métodos
 	//Manipulação de itens
 	int haveItem(CItem * item);
@@ -119,5 +137,7 @@ public:
 	bool haveLevelUp();
 	bool haveLevelDown();
 	void distibutePoints(int points, int atribute);
+
+	void update();
 };
 #endif

@@ -15,16 +15,16 @@ public:
 
 	CPortal();
 	CPortal(int ID, int cenarioID, Ponto *posicao);
-	CPortal(int ID, int cenarioID, int x, int y);
+	CPortal(int ID, int cenarioID, float x, float z);
 	CPortal(CPortal *base);
 	int getID();
 	int getDestiny();
 	Ponto *getDestinyPoint();
-	int getDestinyX();
-	int getDestinyY();
+	float getDestinyX();
+	float getDestinyZ();
 	void setID(int value);
 	void setDestiny(int value);
-	void setDestinyPoint(int x, int y);
-	void setDestinyX(int value);
-	void setDestinyY(int value);
+	void setDestinyPoint(float x, float z);
+	void setDestinyX(float value);
+	void setDestinyZ(float value);
 };
