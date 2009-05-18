@@ -7,6 +7,7 @@
 #include <windows.h>
 #include <iostream>
 #include <fstream>
+#include <stdlib.h>
 #include <string.h>
 #include "irrlicht.h"
 #include "irrklang.h"
@@ -58,6 +59,8 @@ const int NUM3DITENS = 26; // Número de itens 3D no jogo
 const int NUM3DPERS = 44; // Número de personagens 3D no jogo
 const int NUM2DOBJS = 38; // Número de objetos 2D no jogo
 const int NUMMENUHUDS = 3; // Número de huds nos menus
+
+const int PACKAGESIZE = 1400;
 
 
 //-----------------------------------------------------------------------------------------
