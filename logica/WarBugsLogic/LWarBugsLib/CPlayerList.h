@@ -19,9 +19,9 @@ public:
 	bool isEmpty();
 	int size();
 	void addJogador(CJogador *Jogador);
-	CJogador *removeJogadorByPosition(int posJogador);
-	CJogador *removeJogador(int IDJogador);
-	CJogador *removeJogador(CJogador *Jogador);
+	CJogador *removeJogadorByPosition(int pos);
+	CJogador *removeJogador(int ID);
+	//CJogador *removeJogador(CJogador *Jogador);
 	CJogador *getJogador(int IDJogador);
 	CJogador *getElementAt(int index);
 

@@ -29,6 +29,7 @@ void CCenarioList::addCenario(CCenario *Cenario)
 	if(isEmpty())
 	{
 		_first = nodo;
+		_size = 1;
 	}
 	else
 	{
@@ -39,51 +40,62 @@ void CCenarioList::addCenario(CCenario *Cenario)
 		}
 		temp->next = nodo;
 		nodo->prev = temp;
+		_size = _size + 1;
 		temp = NULL;
 		delete temp;
 	}
 	nodo = NULL;
 	delete nodo;
 }
-CCenario *CCenarioList::removeCenarioByPosition(int posCenario)
+CCenario *CCenarioList::removeCenarioByPosition(int pos)
 {
 	SCenarioElemento *temp = _first;
-	posCenario = posCenario - 1;
-	while(posCenario > 0)
+	if(pos < size())
 	{
-		temp = temp->next;
-		posCenario = posCenario -1;
-	}
-	if(temp->prev != NULL)
-	{
-		(temp->prev)->next = temp->next;
-		return(temp->valor);
-	}
-	else
-	{
-		_first = temp->next;
-		_first->next = (temp->next)->next;
-		_first->prev = NULL;
-		return(temp->valor);
-	}
+		while(pos > 0)
+		{
+			temp = temp->next;
+			pos = pos -1;
+		}
+		if(temp->prev != NULL)
+		{
+			(temp->prev)->next = temp->next;
+			_size = _size - 1;
+			return(temp->valor);
+		}
+		else
+		{
+			_first = temp->next;
+			_first->next = (temp->next)->next;
+			_first->prev = NULL;
+			_size = _size - 1;
+			return(temp->valor);
+		}
 
-	if(temp->next != NULL)
-	{
-		(temp->next)->prev = temp->prev;
-		return(temp->valor);
+		if(temp->next != NULL)
+		{
+			(temp->next)->prev = temp->prev;
+			_size = _size - 1;
+			return(temp->valor);
+		}
+		else
+		{
+			(temp->prev)->next = NULL;
+			_size = _size - 1;
+			return(temp->valor);
+		}
 	}
 	else
 	{
-		(temp->prev)->next = NULL;
-		return(temp->valor);
+		return(NULL);
 	}
 }
-CCenario *CCenarioList::removeCenario(int IDCenario)
+CCenario *CCenarioList::removeCenario(int ID)
 {
 	SCenarioElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if((temp->valor)->getID() == IDCenario)
+		if((temp->valor)->getID() == ID)
 		{
 			if(temp->prev != NULL)
 				(temp->prev)->next = temp->next;
@@ -100,14 +112,19 @@ CCenario *CCenarioList::removeCenario(int IDCenario)
 			{
 				(temp->prev)->next = NULL;
 			}
+			_size = _size - 1;
 			return(temp->valor);
+		}
+		else
+		{
+			temp = temp->next;
 		}
 	}
 	temp = NULL;
 	delete temp;
 	return(NULL);
 }
-CCenario *CCenarioList::removeCenario(CCenario *Cenario)
+/*CCenario *CCenarioList::removeCenario(CCenario *Cenario)
 {
 	SCenarioElemento *temp = _first;
 	while(temp->next != NULL)
@@ -139,7 +156,7 @@ CCenario *CCenarioList::removeCenario(CCenario *Cenario)
 	temp = NULL;
 	delete temp;
 	return(NULL);
-}
+}*/
 CCenario *CCenarioList::getCenario(int IDCenario)
 {
 	SCenarioElemento *temp = _first;
@@ -190,3 +207,10 @@ bool CCenarioList::haveCenario(CCenario *Cenario)
 	return(false);
 }
 
+void CCenarioList::update()
+{
+	for(int i = 0; i < size(); i=i+1)
+	{
+		getElementAt(i)->update();
+	}
+}

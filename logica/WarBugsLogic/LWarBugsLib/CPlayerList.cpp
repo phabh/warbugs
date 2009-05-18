@@ -29,6 +29,7 @@ void CPlayerList::addJogador(CJogador *Jogador)
 	if(isEmpty())
 	{
 		_first = nodo;
+		_size = 1;
 	}
 	else
 	{
@@ -39,51 +40,63 @@ void CPlayerList::addJogador(CJogador *Jogador)
 		}
 		temp->next = nodo;
 		nodo->prev = temp;
+		_size = _size + 1;
 		temp = NULL;
 		delete temp;
 	}
 	nodo = NULL;
 	delete nodo;
 }
-CJogador *CPlayerList::removeJogadorByPosition(int posJogador)
+CJogador *CPlayerList::removeJogadorByPosition(int pos)
 {
 	SPlayerElemento *temp = _first;
-	posJogador = posJogador - 1;
-	while(posJogador > 0)
+	if(pos < size())
 	{
-		temp = temp->next;
-		posJogador = posJogador -1;
-	}
-	if(temp->prev != NULL)
-	{
-		(temp->prev)->next = temp->next;
-		return(temp->valor);
-	}
-	else
-	{
-		_first = temp->next;
-		_first->next = (temp->next)->next;
-		_first->prev = NULL;
-		return(temp->valor);
-	}
+		pos = pos - 1;
+		while(pos > 0)
+		{
+			temp = temp->next;
+			pos = pos -1;
+		}
+		if(temp->prev != NULL)
+		{
+			(temp->prev)->next = temp->next;
+			_size = _size - 1;
+			return(temp->valor);
+		}
+		else
+		{
+			_first = temp->next;
+			_first->next = (temp->next)->next;
+			_first->prev = NULL;
+			_size = _size - 1;
+			return(temp->valor);
+		}
 
-	if(temp->next != NULL)
-	{
-		(temp->next)->prev = temp->prev;
-		return(temp->valor);
+		if(temp->next != NULL)
+		{
+			(temp->next)->prev = temp->prev;
+			_size = _size - 1;
+			return(temp->valor);
+		}
+		else
+		{
+			(temp->prev)->next = NULL;
+			_size = _size - 1;
+			return(temp->valor);
+		}
 	}
 	else
 	{
-		(temp->prev)->next = NULL;
-		return(temp->valor);
+		return(NULL);
 	}
 }
-CJogador *CPlayerList::removeJogador(int IDJogador)
+CJogador *CPlayerList::removeJogador(int ID)
 {
 	SPlayerElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if((temp->valor)->getID() == IDJogador)
+		if((temp->valor)->getID() == ID)
 		{
 			if(temp->prev != NULL)
 				(temp->prev)->next = temp->next;
@@ -100,14 +113,19 @@ CJogador *CPlayerList::removeJogador(int IDJogador)
 			{
 				(temp->prev)->next = NULL;
 			}
+			_size = _size - 1;
 			return(temp->valor);
+		}
+		else
+		{
+			temp = temp->next;
 		}
 	}
 	temp = NULL;
 	delete temp;
 	return(NULL);
 }
-CJogador *CPlayerList::removeJogador(CJogador *Jogador)
+/*CJogador *CPlayerList::removeJogador(CJogador *Jogador)
 {
 	SPlayerElemento *temp = _first;
 	while(temp->next != NULL)
@@ -139,7 +157,7 @@ CJogador *CPlayerList::removeJogador(CJogador *Jogador)
 	temp = NULL;
 	delete temp;
 	return(NULL);
-}
+}*/
 CJogador *CPlayerList::getJogador(int IDJogador)
 {
 	SPlayerElemento *temp = _first;

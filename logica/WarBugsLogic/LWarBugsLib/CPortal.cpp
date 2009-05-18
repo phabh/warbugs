@@ -12,12 +12,12 @@ CPortal::CPortal(int ID, int cenarioID, Ponto *posicao)
 	_cenarioDestino = cenarioID;
 	_posicaoDestino = posicao;
 }
-CPortal::CPortal(int ID, int cenarioID, int x, int y)
+CPortal::CPortal(int ID, int cenarioID, float x, float z)
 {
 	_ID = ID;
 	_cenarioDestino = cenarioID;
 	_posicaoDestino->x = x;
-	_posicaoDestino->y = y;
+	_posicaoDestino->z = z;
 }
 CPortal::CPortal(CPortal *base)
 {
@@ -37,13 +37,13 @@ Ponto *CPortal::getDestinyPoint()
 {
 	return(_posicaoDestino);
 }
-int CPortal::getDestinyX()
+float CPortal::getDestinyX()
 {
 	return(_posicaoDestino->x);
 }
-int CPortal::getDestinyY()
+float CPortal::getDestinyZ()
 {
-	return(_posicaoDestino->y);
+	return(_posicaoDestino->z);
 }
 void CPortal::setID(int value)
 {
@@ -53,16 +53,16 @@ void CPortal::setDestiny(int value)
 {
 	_cenarioDestino = value;
 }
-void CPortal::setDestinyPoint(int x, int y)
+void CPortal::setDestinyPoint(float x, float z)
 {
 	_posicaoDestino->x = x;
-	_posicaoDestino->y = y;
+	_posicaoDestino->z = z;
 }
-void CPortal::setDestinyX(int value)
+void CPortal::setDestinyX(float value)
 {
 	_posicaoDestino->x = value;
 }
-void CPortal::setDestinyY(int value)
+void CPortal::setDestinyZ(float value)
 {
-	_posicaoDestino->y = value;
+	_posicaoDestino->z = value;
 }

@@ -13,5 +13,6 @@
 
 CNPC::CNPC(){}
 void CNPC::speak(CPersonagemJogador *alvo){}
-void CNPC::giveQuest (CPersonagemJogador *alvo){}
+void CNPC::giveQuest(CPersonagemJogador *alvo){}
+void CNPC::update(){}
 #endif

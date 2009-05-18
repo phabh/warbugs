@@ -19,7 +19,7 @@ public:
 	bool isEmpty();
 	int size();
 	void addItem(CItem *item);
-	CItem *removeItemByPosition(int posItem);
+	CItem *removeItemByPosition(int pos);
 	CItem *removeItem(int IDItem);
 	CItem *removeItem(CItem *item);
 	CItem *getItem(int IDItem);

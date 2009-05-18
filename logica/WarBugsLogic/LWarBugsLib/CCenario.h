@@ -33,6 +33,10 @@ public:
 	CInimigo *getMonster(int idInimigo);
 	CNPC *getNpc(int idNpc);
 	CBolsa *getBag(int idBag);
+	CPersonagemJogador *getPlayerAt(int idJogador);
+	CInimigo *getMonsterAt(int idInimigo);
+	CNPC *getNpcAt(int idNpc);
+	CBolsa *getBagAt(int idBag);
 	CPortal *getExit(Direcoes idPortal);
 
 	void setExit(CPortal *newExit, Direcoes idPortal);
@@ -40,8 +44,11 @@ public:
 	void addPlayer(CPersonagem *jogador);
 	void addMonster(CPersonagem *inimigo);
 	void addNpc(CPersonagem *npc);
+	void addBag(CBolsa *bolsa);
 
 	CPersonagemJogador *removePlayer(int idJogador);
 	CInimigo *removeMonster(int idInimigo);
 	CNPC *removeNPC(int idNPC);
+
+	void update();
 };

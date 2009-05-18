@@ -31,6 +31,7 @@ int CCenario::itemCount()
 {
 	return(_itens->size());
 }
+//
 CPersonagemJogador *CCenario::getPlayer(int idJogador)
 {
 	return((CPersonagemJogador*)_jogadores->getPersonagem(idJogador));
@@ -47,7 +48,22 @@ CBolsa *CCenario::getBag(int idBag)
 {
 	return (_itens->getBolsa(idBag));
 }
-	
+CPersonagemJogador *CCenario::getPlayerAt(int pos)
+{
+	return((CPersonagemJogador*)_jogadores->getElementAt(pos));
+}
+CInimigo *CCenario::getMonsterAt(int pos)
+{
+	return((CInimigo*)_inimigos->getElementAt(pos));
+}
+CNPC *CCenario::getNpcAt(int pos)
+{
+	return((CNPC*)_npcs->getElementAt(pos));
+}
+CBolsa *CCenario::getBagAt(int pos)
+{
+	return (_itens->getElementAt(pos));
+}
 CPortal *CCenario::getExit(Direcoes idPortal)
 {
 	switch(idPortal)
@@ -63,6 +79,8 @@ CPortal *CCenario::getExit(Direcoes idPortal)
 	}
 	return(NULL);
 }
+
+//
 void CCenario::setExit(CPortal *newExit, Direcoes idPortal)
 {
 	switch(idPortal)
@@ -81,6 +99,7 @@ void CCenario::setExit(CPortal *newExit, Direcoes idPortal)
 		break;
 	}
 }
+//
 void CCenario::addPlayer(CPersonagem *jogador)
 {
 	_jogadores->addPersonagem(jogador);
@@ -93,6 +112,11 @@ void CCenario::addNpc(CPersonagem *npc)
 {
 	_npcs->addPersonagem(npc);
 }
+void CCenario::addBag(CBolsa *bolsa)
+{
+	_itens->addBag(bolsa);
+}
+//
 CPersonagemJogador *CCenario::removePlayer(int idJogador)
 {
 	return((CPersonagemJogador*)_jogadores->removePersonagem(idJogador));
@@ -104,4 +128,14 @@ CInimigo *CCenario::removeMonster(int idInimigo)
 CNPC *CCenario::removeNPC(int idNPC)
 {
 	return((CNPC*)_npcs->removePersonagem(idNPC));
+}
+
+void CCenario::update()
+{
+	for(int i = 0; i < max(_jogadores->size() , max(_inimigos->size(), _npcs->size())); i=i+1)
+	{
+		if(i < _inimigos->size())	getMonsterAt(i)->update();
+		if(i < _jogadores->size())  getPlayerAt(i)->update();
+		if(i < _npcs->size())		getNpcAt(i)->update();
+	}
 }
