@@ -19,11 +19,11 @@ public:
 	bool isEmpty();
 	int size();
 	void addItem(CItem *item);
-	CItem *removeItemByPosition(int posItem);
-	CItem *removeItem(int IDItem);
-	CItem *removeItem(CItem *item);
+	CItem *removeItemByPosition(int pos);
+	CItem *removeItem(int ID);
+	//CItem *removeItem(CItem *item);
 	CItem *getItem(int IDItem);
 	CItem *getElementAt(int index);
 
-	bool haveItem(CItem *item);
+	bool haveItem(int ID);
 };

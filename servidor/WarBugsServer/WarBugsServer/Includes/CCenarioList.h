@@ -19,12 +19,14 @@ public:
 	bool isEmpty();
 	int size();
 	void addCenario(CCenario *Cenario);
-	CCenario *removeCenarioByPosition(int posCenario);
-	CCenario *removeCenario(int IDCenario);
-	CCenario *removeCenario(CCenario *Cenario);
+	CCenario *removeCenarioByPosition(int pos);
+	CCenario *removeCenario(int ID);
+	//CCenario *removeCenario(CCenario *Cenario);
 	CCenario *getCenario(int IDCenario);
 	CCenario *getElementAt(int index);
 
-	bool haveCenario(CCenario *Cenario);
+	bool haveCenario(int ID);
+
+	void update();
 };
 

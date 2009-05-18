@@ -226,10 +226,6 @@
 				>
 			</File>
 			<Filter
-				Name="BugNet"
-				>
-			</Filter>
-			<Filter
 				Name="Warbugs"
 				>
 				<File

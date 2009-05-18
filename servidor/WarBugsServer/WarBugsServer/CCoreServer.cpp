@@ -43,9 +43,8 @@ CPlayerList * CCoreServer::getPlayers()
 void CCoreServer::readPackets()
 {
 	char data[1400];
-
-	CBugMessage * mesRecebida = new CBugMessage();
-	mesRecebida->init(data,sizeof(data));
+	CBugMessage mesRecebida;// = new CBugMessage();
+	mesRecebida.init(data,sizeof(data));
 
 	int tipoMensagem;
 
@@ -64,12 +63,13 @@ void CCoreServer::readPackets()
 
 	for(int indexJogador = 0; indexJogador < _playersList->size(); indexJogador++)
 	{
+
 		//recebe a mensagem do socket 
-		mesRecebida = _playersList->getElementAt(indexJogador)->getSocket()->ReceiveLine();
+		_playersList->getElementAt(indexJogador)->getSocket()->ReceiveLine(mesRecebida);
+		tipoMensagem = 0;
 
-		mesRecebida->beginReading();
-
-		tipoMensagem = mesRecebida->readByte();	
+		mesRecebida.beginReading();
+		tipoMensagem = mesRecebida.readByte();	
 		
 
 		switch(tipoMensagem)
@@ -77,11 +77,14 @@ void CCoreServer::readPackets()
 		
 				case LOGIN_REQUEST: //LOGIN, SENHA
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						char * login = mesRecebida->readString();
-						char * senha = mesRecebida->readString();
+						char login[15];
+						char senha[15];
+
+						strcpy(login,mesRecebida.readString());
+						strcpy(senha,mesRecebida.readString());
 						
 						CJogador *  tempJogador = new CJogador();
 
@@ -102,10 +105,10 @@ void CCoreServer::readPackets()
 					}
 				case REQUEST_PERSONAGENS:  //ID PESSOA
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int idJogador = mesRecebida->readLong();
+						int idJogador = mesRecebida.readLong();
 						
 						CPeopleList * tempList = &_dataManager->getPersonagemJogador(idJogador);
 
@@ -122,12 +125,12 @@ void CCoreServer::readPackets()
 					}
 				case CREATE_PERSONAGEM: //ID RACA, NOME
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idJogador = mesRecebida->readLong();
-						int    idRaca	 = mesRecebida->readLong();
-						char * nome		 = mesRecebida->readString();
+						int    idJogador = mesRecebida.readLong();
+						int    idRaca	 = mesRecebida.readLong();
+						char * nome		 = mesRecebida.readString();
 						
 						CPeopleList * tempList = &_dataManager->getPersonagem((int)JOGADOR,idRaca,true);
 
@@ -152,21 +155,21 @@ void CCoreServer::readPackets()
 					}
 				case PLAY: //ID PERSONAGEM
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida->readLong();		
+						int    idPersonagem = mesRecebida.readLong();		
 
 						break;
 					}
 				case SEND_POSITION: //ID PERSONAGEM, POSICAO X, POSICAO Z
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida->readLong();
-						float  posX = mesRecebida->readFloat();
-						float  posZ = mesRecebida->readFloat();
+						int    idPersonagem = mesRecebida.readLong();
+						float  posX = mesRecebida.readFloat();
+						float  posZ = mesRecebida.readFloat();
 
 						_playersList->getElementAt(indexJogador)->getCharacter()->setPosition(posX,posZ);
 
@@ -174,11 +177,11 @@ void CCoreServer::readPackets()
 					}
 				case SEND_ESTADO: //IDPERSONAGEM, ESTADO
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida->readLong();
-						int    estado       = mesRecebida->readLong();
+						int    idPersonagem = mesRecebida.readLong();
+						int    estado       = mesRecebida.readLong();
 
 						_playersList->getElementAt(indexJogador)->getCharacter()->setState((EstadoPersonagem)estado);
 
@@ -186,14 +189,14 @@ void CCoreServer::readPackets()
 					}
 				case SEND_ATACK: //ID PERSONAGEM, ID ALVO, ID ATAQUE, POSICAO X E POSICAO Z ALVO CHÃO //PODE SER PODER OU ATAQUE NORMAL
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida->readLong();
-						int    idAlvo       = mesRecebida->readLong();
-						int    idAtaque     = mesRecebida->readLong();
-						float  posX         = mesRecebida->readFloat();
-						float  posZ         = mesRecebida->readFloat();
+						int    idPersonagem = mesRecebida.readLong();
+						int    idAlvo       = mesRecebida.readLong();
+						int    idAtaque     = mesRecebida.readLong();
+						float  posX         = mesRecebida.readFloat();
+						float  posZ         = mesRecebida.readFloat();
 
 						CPersonagem * tempPersonagem = _playersList->getElementAt(indexJogador)->getScene()->getPlayer(idAlvo);
 						
@@ -214,12 +217,12 @@ void CCoreServer::readPackets()
 					}
 				case SEND_ITEM:  //ID PERSONAGEM, ID ITEM, DINHEIRO
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida->readLong();
-						int    idItem       = mesRecebida->readLong();
-						int    dinheiro     = mesRecebida->readLong();
+						int    idPersonagem = mesRecebida.readLong();
+						int    idItem       = mesRecebida.readLong();
+						int    dinheiro     = mesRecebida.readLong();
 
 						
 
@@ -227,11 +230,11 @@ void CCoreServer::readPackets()
 					}
 				case USE_ITEM: //IDPERSONAGEM, IDITEM
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida->readLong();
-						int    idItem       = mesRecebida->readLong();
+						int    idPersonagem = mesRecebida.readLong();
+						int    idItem       = mesRecebida.readLong();
 
 						CItem * tempItem = _playersList->getElementAt(indexJogador)->getCharacter()->getBolsa()->getItem(idItem);
 
@@ -241,11 +244,11 @@ void CCoreServer::readPackets()
 					}
 				case DROP_ITEM: //IDPERSONAGEM, IDITEM
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida->readLong();
-						int    idItem       = mesRecebida->readLong();
+						int    idPersonagem = mesRecebida.readLong();
+						int    idItem       = mesRecebida.readLong();
 
 						CItem * tempItem = _playersList->getElementAt(indexJogador)->getCharacter()->getBolsa()->getItem(idItem);
 						CBolsa * tempBolsa = new CBolsa();
@@ -257,11 +260,11 @@ void CCoreServer::readPackets()
 					}
 				case OPEN_BOLSA: //ID PERSONAGEM, ID BOLSA
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida->readLong();
-						int    idBolsa		= mesRecebida->readLong();
+						int    idPersonagem	= mesRecebida.readLong();
+						int    idBolsa		= mesRecebida.readLong();
 
 						_playersList->getElementAt(indexJogador)->getScene()->getBag(idBolsa);
 
@@ -269,169 +272,169 @@ void CCoreServer::readPackets()
 					}
 				case CLOSE_BOLSA: //ID BOLSA
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idBolsa		= mesRecebida->readLong();
+						int    idBolsa		= mesRecebida.readLong();
 
 
 						break;
 					}
 				case GET_ITEM_BOLSA: //ID PERSONAGEM, ID BOLSA, ID ITEM
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida->readLong();
-						int    idBolsa		= mesRecebida->readLong();
-						int    idItem		= mesRecebida->readLong();
+						int    idPersonagem	= mesRecebida.readLong();
+						int    idBolsa		= mesRecebida.readLong();
+						int    idItem		= mesRecebida.readLong();
 
 
 						break;
 					}
 				case INSERT_ITEM_BOLSA: //ID BOLSA, ID ITEM
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idBolsa		= mesRecebida->readLong();
-						int    idItem		= mesRecebida->readLong();
+						int    idBolsa		= mesRecebida.readLong();
+						int    idItem		= mesRecebida.readLong();
 
 
 						break;
 					}
 				case EQUIP_ITEM: //ID PERSONAGEM, ID ARMA, ID ARMADURA
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida->readLong();
-						int    idArma		= mesRecebida->readLong();
-						int    idArmadura	= mesRecebida->readLong();
+						int    idPersonagem	= mesRecebida.readLong();
+						int    idArma		= mesRecebida.readLong();
+						int    idArmadura	= mesRecebida.readLong();
 
 
 						break;
 					}
 				case SET_TARGET: //ID PERSONAGEM, ID ALVO
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida->readLong();
-						int    idAlvo		= mesRecebida->readLong();
+						int    idPersonagem	= mesRecebida.readLong();
+						int    idAlvo		= mesRecebida.readLong();
 
 
 						break;
 					}
 				case SEND_MESSAGE: //ID DESTINO, MENSAGEM
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
 						//-1 para todos
-						int    idPersonagem	= mesRecebida->readLong();
-						char * mensagem     = mesRecebida->readString();
+						int    idPersonagem	= mesRecebida.readLong();
+						char * mensagem     = mesRecebida.readString();
 
 
 						break;
 					}
 				case START_SHOT: //ID PERSONAGEM, ID ALVO, IDSHOT, POSICAO X E POSICAO Z INICIAL
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida->readLong();
-						int    idAlvo		= mesRecebida->readLong();
-						int    idShot		= mesRecebida->readLong();
-						float  posX			= mesRecebida->readFloat();
-						float  posZ			= mesRecebida->readFloat();
+						int    idPersonagem	= mesRecebida.readLong();
+						int    idAlvo		= mesRecebida.readLong();
+						int    idShot		= mesRecebida.readLong();
+						float  posX			= mesRecebida.readFloat();
+						float  posZ			= mesRecebida.readFloat();
 
 
 						break;
 					}
 				case REQUEST_FULL_STATUS: //ID PERSONAGEM
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida->readLong();
+						int    idPersonagem	= mesRecebida.readLong();
 
 
 						break;
 					}
 				case SEND_BONUS_POINTS: //ID PERSONAGEM,VETOR EM ORDEM ALFABETICA COM QTD PONTOS DA HABILIDADE PRIMARIA USADA E A QUANTIDADE DE PONTOS DE SKILL(PODER)[PODER1,PODER2,PODER3]
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida->readLong();
-						int    agilidade	= mesRecebida->readLong();
-						int    destreza		= mesRecebida->readLong();
-						int    forca		= mesRecebida->readLong();
-						int    instinto		= mesRecebida->readLong();
-						int    resistencia  = mesRecebida->readLong();
-						int    poder1		= mesRecebida->readLong();
-						int    poder2		= mesRecebida->readLong();
-						int    poder3		= mesRecebida->readLong();
+						int    idPersonagem	= mesRecebida.readLong();
+						int    agilidade	= mesRecebida.readLong();
+						int    destreza		= mesRecebida.readLong();
+						int    forca		= mesRecebida.readLong();
+						int    instinto		= mesRecebida.readLong();
+						int    resistencia  = mesRecebida.readLong();
+						int    poder1		= mesRecebida.readLong();
+						int    poder2		= mesRecebida.readLong();
+						int    poder3		= mesRecebida.readLong();
 
 
 						break;
 					}
 				case ACCEPT_QUEST: // ID PERSONAGEM, ID QUEST
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida->readLong();
-						int    idQuest		= mesRecebida->readLong();
+						int    idPersonagem	= mesRecebida.readLong();
+						int    idQuest		= mesRecebida.readLong();
 
 
 						break;
 					}
 				case START_SHOP: //ID PERSONAGEM, ID NPC VENDEDOR
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida->readLong();
-						int    idNPC		= mesRecebida->readLong();
+						int    idPersonagem	= mesRecebida.readLong();
+						int    idNPC		= mesRecebida.readLong();
 
 
 						break;
 					}
 				case BUY_ITEM: //IDPERSONAGEM, IDNPC VENDEDOR, ID ITEM
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida->readLong();
-						int    idNPC		= mesRecebida->readLong();
-						int    idItem		= mesRecebida->readLong();
+						int    idPersonagem	= mesRecebida.readLong();
+						int    idNPC		= mesRecebida.readLong();
+						int    idItem		= mesRecebida.readLong();
 
 
 						break;
 					}
 				case REQUEST_PRICE_ITEM: //ID PERSONAGEM, ID NPCVENDEDOR, ID ITEM
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida->readLong();
-						int    idNPC		= mesRecebida->readLong();
-						int    idItem		= mesRecebida->readLong();
+						int    idPersonagem	= mesRecebida.readLong();
+						int    idNPC		= mesRecebida.readLong();
+						int    idItem		= mesRecebida.readLong();
 
 
 						break;
 					}
 				case SELL_ITEM: //IDPERSOANGEM, ID NPCVENDEDOR, ID ITEM, PRECO
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida->readLong();
-						int    idNPC		= mesRecebida->readLong();
-						int    idItem		= mesRecebida->readLong();
-						int    preco		= mesRecebida->readLong();
+						int    idPersonagem	= mesRecebida.readLong();
+						int    idNPC		= mesRecebida.readLong();
+						int    idItem		= mesRecebida.readLong();
+						int    preco		= mesRecebida.readLong();
 
 						
 						
@@ -439,11 +442,11 @@ void CCoreServer::readPackets()
 					}	
 				case TRADE_REQUEST: //ID PERSONAGEM, ID FREGUES
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
-						int idPersonagem1 = mesRecebida->readLong();
-						int idPersonagem2 = mesRecebida->readLong();
+						int idPersonagem1 = mesRecebida.readLong();
+						int idPersonagem2 = mesRecebida.readLong();
 						
 						//CPersonagemJogador * tempPers = _playersList->getElementAt(indexJogador)->getScene()->
 
@@ -454,43 +457,43 @@ void CCoreServer::readPackets()
 					}
 				case TRADE_REQUEST_ACCEPTED: //ID PERSONAGEM, ID FREGUES
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
 						break;
 					}
 				case TRADE_REQUEST_REFUSED: //ID PERSONAGEM, ID FREGUES
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
 						break;
 					}
 				case TRADE_CHANGED: //ID PERSONAGEM, ID FREGUES, idItemPersonagem, idItemFregues, qtdDinheiroPersonagem, qtdDinheiroFregues
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
 						break;
 					}
 				case TRADE_ACCEPTED: //ID PERSONAGEM
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
 						break;
 					}
 				case TRADE_REFUSED: //ID PERSONAGEM, ID FREGUES
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
 						break;
 					}
 				case TRADE_CONCLUDE: //ID PERSONAGEM, ID FREGUES
 					{
-						mesRecebida->beginReading();
-						mesRecebida->readByte();
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
 
 						break;
 					}		
