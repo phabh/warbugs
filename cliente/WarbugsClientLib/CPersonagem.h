@@ -77,6 +77,7 @@ class CPersonagem
 	
 	public:
 
+	CPersonagem();
 
 	void abrirBolsa(int idBolsa);
 	void aceitarQuest(int idQuest, int objetivo[]);

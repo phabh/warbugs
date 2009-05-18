@@ -2,6 +2,7 @@
 
 #include "Irrlicht.h"
 #include "Setup.h"
+#include "CDoubleList.h"
 #include "CPersonagem.h"
 
 struct SPortal 
@@ -16,7 +17,10 @@ class CCenario
 	private:
  
 	bool _mapa[MAPMAXLIN][MAPMAXCOL];
-	CPersonagem _listaPersonagens;
+
+	typedef CDoubleList<CPersonagem> CListaPersonagem;
+	CListaPersonagem  *_listaPersonagens;
+	
 	long _horario;
 	int _id;
 	int _luaCorrente;
@@ -26,6 +30,7 @@ class CCenario
 	 
 	public:
 	
+	CCenario();
 	void addBolsa(int idBolsa, int posX, int posZ);
 	void addPersonagem(CPersonagem personagem);
 	void atualizar();

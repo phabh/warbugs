@@ -130,11 +130,13 @@ public:
 
 	CMenuSelecao(){}
 	
-	bool start(IrrlichtDevice *grafico, ISoundEngine *audio)
+	bool start(IrrlichtDevice *grafico, ISoundEngine *audio, CGameData *gameData)
 	{
 
 		_gameCfg = new CArquivoConfig();
 		TypeCfg cfg = _gameCfg->loadConfig();
+
+		_gameData = gameData;
 
 	    _dispositivo = grafico;
 		_gerenciadorEventos = (CGerEventos*)_dispositivo->getEventReceiver();

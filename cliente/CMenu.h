@@ -4,7 +4,7 @@
 #include "CArquivoConfig.cpp"
 #include "CGerEventos.cpp"
 #include "CToonShader.cpp"
-#include "CNetwork.h"
+#include "CGameData.h"
 
 class CMenu
 {
@@ -29,6 +29,8 @@ protected:
 	bool _flags[NUMFLAGSMENU];
 	bool _temPacote;
 
+	CGameData *_gameData;
+
 	CToonShader *_toonShader;
 
 	virtual void updateHuds() = 0;
@@ -41,6 +43,6 @@ public:
 	enum flagMenu {HUDCHANGED, OBJSELECTED, INVENTARIOON, CHATON, STATUSON, MAPAON, TRADEON, EQUIPON, SHOPON, BOLSAON, ALERTON, CONFIGON };
 
 	CMenu(){}
-	virtual bool start(IrrlichtDevice *grafico, ISoundEngine *audio) = 0;
+	virtual bool start(IrrlichtDevice *grafico, ISoundEngine *audio, CGameData *gameData) = 0;
 	menuID run();
 };
