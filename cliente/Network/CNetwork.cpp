@@ -4,7 +4,7 @@ CNetwork::CNetwork()
 {
 }
 
-void CNetwork::conectar(const string& host, int port)
+void CNetwork::conectar(const std::string& host, int port)
 {
 	gameNetClient = new CBugSocketClient(host, port);
 
@@ -12,9 +12,9 @@ void CNetwork::conectar(const string& host, int port)
 	msgToReceive.init(dataReceive, PACKAGESIZE);
 }
 
-void CNetwork::enviarPacote(char *string)
+void CNetwork::enviarPacote(char *s)
 {
-	msgToSend.writeString(string);
+	msgToSend.writeString(s);
 	gameNetClient->SendLine(msgToSend);
 }
 

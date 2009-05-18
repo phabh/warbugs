@@ -18,7 +18,7 @@ private:
 public:
 
 	CNetwork();
-	void conectar(const string& host, int port);
-	void enviarPacote(char *string);
+	void conectar(const std::string& host, int port);
+	void enviarPacote(char *s);
 	CBugMessage *receberPacote();
 };

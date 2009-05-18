@@ -316,11 +316,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\CNetwork.cpp"
+					RelativePath=".\Network\CNetwork.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\CNetwork.h"
+					RelativePath=".\Network\CNetwork.h"
 					>
 				</File>
 			</Filter>

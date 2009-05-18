@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------------------
 // Includes genéricos
 
+#include <WinSock2.h> // Sempre antes do Windows.h
 #include <windows.h>
 #include <iostream>
 #include <fstream>
