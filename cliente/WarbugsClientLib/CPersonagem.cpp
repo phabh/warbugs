@@ -2,6 +2,11 @@
 
 #include "CPersonagem.h"
 
+
+CPersonagem::CPersonagem()
+{
+}
+
 void CPersonagem::abrirBolsa(int idBolsa)
 {
 }

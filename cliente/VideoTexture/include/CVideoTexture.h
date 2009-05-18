@@ -3,7 +3,7 @@
 //!  class CVideoTexture
 /*!
 \Biblioteca para inserir texturas de vídeo na engine Irrlicht 1.5.
-\Utiliza a biblioteca DSVT.H criada por Vi-Wer.
+\Link com a biblioteca DSVT.H criada por Vi-Wer.
 \Autor: Eduardo Fantini
 */
 

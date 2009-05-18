@@ -2,6 +2,11 @@
 
 #include "CCenario.h"
 
+CCenario::CCenario()
+{
+	_listaPersonagens = new CListaPersonagem();
+}
+
 void CCenario::addBolsa(int idBolsa, int posX, int posZ)
 {
 	// Inclui uma bolsa no cenário do cliente

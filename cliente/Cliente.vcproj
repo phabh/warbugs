@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="Cliente"
 	ProjectGUID="{828E4CB9-AB7C-4054-908B-E27EEC208C68}"
 	RootNamespace="Aula_1"
@@ -252,7 +252,7 @@
 				Name="WarbugsClientLib"
 				>
 				<File
-					RelativePath=".\Caminhos.h"
+					RelativePath=".\WarbugsClientLib\Caminhos.h"
 					>
 				</File>
 				<File
@@ -264,7 +264,15 @@
 					>
 				</File>
 				<File
-					RelativePath=".\CGameData.cpp"
+					RelativePath=".\WarbugsClientLib\CDoubleList.h"
+					>
+				</File>
+				<File
+					RelativePath=".\WarbugsClientLib\CGameData.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WarbugsClientLib\CGameData.h"
 					>
 				</File>
 				<File
@@ -313,14 +321,6 @@
 				</File>
 				<File
 					RelativePath=".\Network\CBugSocket.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Network\CNetwork.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Network\CNetwork.h"
 					>
 				</File>
 			</Filter>

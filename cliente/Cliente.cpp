@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Setup.h"
-#include "CGameData.cpp"
-#include "CNetwork.h"
 #include "CMenu.h"
 #include "CMenuAbertura.cpp"
 #include "CMenuLogin.cpp"
@@ -14,6 +12,7 @@
 int main()
 {
 	CMenu *menuCorrente;
+	//CGameData *gameData;
 
 	IrrlichtDevice *dispositivoGrafico; 
 	ISoundEngine *dispositivoAudio;
@@ -41,7 +40,6 @@ int main()
 									cfg.parametrosVideo.Vsync, 									
 									&gerenciadorEventos);
 
-
 	if(!dispositivoGrafico)
 	{
 		cout << "\nERRO 0x00: Falha ao inicializar o dispositivo grafico.";
@@ -56,18 +54,17 @@ int main()
 		nextMenu = SAIDA;
 	}
 
-
 	int estagio = 0; // estágio de loading
 
-	CGameData *_gameData= new CGameData();
-	_gameData->start(dispositivoGrafico);
+
+	CGameData *gameData= new CGameData();
+	gameData->start(dispositivoGrafico);
 
 	while(estagio < 6) // Carrega elementos do jogo
 	{
-		_gameData->loadGameData(estagio);
+		gameData->loadGameData(estagio);
 	    estagio++;
 	}
-
 
 	while(nextMenu != SAIDA && nextMenu != ERRO)
 	{
@@ -78,39 +75,39 @@ int main()
 			case ABERTURA:
 
 				menuCorrente = new CMenuAbertura();
-				if( ((CMenuAbertura*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio))
+				if( ((CMenuAbertura*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio, gameData))
 					nextMenu = ((CMenuAbertura*)menuCorrente)->run();
 				break;
 
 			case LOGIN:
 
 				menuCorrente = new CMenuLogin();
-				if( ((CMenuLogin*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio))
+				if( ((CMenuLogin*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio, gameData))
 					nextMenu = ((CMenuLogin*)menuCorrente)->run();
 				break;
 
 			case SELECAOPERSONAGEM:
 
 				menuCorrente = new CMenuSelecao();
-				if( ((CMenuSelecao*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio))
+				if( ((CMenuSelecao*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio, gameData))
 					nextMenu = ((CMenuSelecao*)menuCorrente)->run();
 				break;
 
 			case CRIACAOPERSONAGEM:
 				menuCorrente = new CMenuCriacao();
-				if( ((CMenuCriacao*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio))
+				if( ((CMenuCriacao*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio, gameData))
 					nextMenu = ((CMenuCriacao*)menuCorrente)->run();
 				break;
 
 			case JOGO:
 				menuCorrente = new CMenuJogo();
-				if( ((CMenuJogo*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio))
+				if( ((CMenuJogo*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio, gameData))
 					nextMenu = ((CMenuJogo*)menuCorrente)->run();
 				break;
 
 			case CREDITOS:
 				menuCorrente = new CMenuCreditos();
-				if( ((CMenuCreditos*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio))
+				if( ((CMenuCreditos*)menuCorrente)->start(dispositivoGrafico, dispositivoAudio, gameData))
 					nextMenu = ((CMenuCreditos*)menuCorrente)->run();
 				break;
 
