@@ -23,6 +23,7 @@ public:
 	CPersonagem *removePersonagem(int IDpersonagem);
 	CPersonagem *removePersonagem(CPersonagem *personagem);
 	CPersonagem *getPersonagem(int IDpersonagem);
+	CPersonagem *getElementAt(int index);
 
 	bool havePersonagem(CPersonagem *personagem);
 };

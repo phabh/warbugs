@@ -23,7 +23,7 @@ CCoreServer::CCoreServer(CDataBase *db, int fps)
 
 void CCoreServer::initialize()
 {
-	_playersList = new CPeopleList();
+	_playersList = new CPlayerList();
 
 
 	_cenarioList = _dataManager->getListCenario();
@@ -31,14 +31,10 @@ void CCoreServer::initialize()
 
 void CCoreServer::initializeNetwork()
 {
-	
-	_networkServer = new dreamServer();
-
-	_networkServer->initialize("",PORT);
-
+	_networkServer = new CBugSocketServer(PORT, NUMCONNECTIONS, NonBlockingSocket);
 }
 
-CPeopleList * CCoreServer::getPlayers()
+CPlayerList * CCoreServer::getPlayers()
 {
 	return _playersList;
 }
@@ -48,20 +44,32 @@ void CCoreServer::readPackets()
 {
 	char data[1400];
 
-	dreamMessage mesRecebida;
-	mesRecebida.init(data,sizeof(data));
-
-	sockaddr     player;
+	CBugMessage * mesRecebida = new CBugMessage();
+	mesRecebida->init(data,sizeof(data));
 
 	int tipoMensagem;
 
-	int retorno;
+	CBugSocket * newConnection = _networkServer->Accept();
 
-	while(retorno = _networkServer->getPacket(mesRecebida._data, &player) != 0)
+	if(newConnection != NULL)
 	{
-		mesRecebida.beginReading();
+		if(_playersList->size() < NUMCONNECTIONS)
+		{
+			CJogador * newJogador = new CJogador();
+			newJogador->setSocket(newConnection);
+			_playersList->addJogador(newJogador);
+		}
+		
+	}
 
-		tipoMensagem = mesRecebida.readByte();	
+	for(int indexJogador = 0; indexJogador < _playersList->size(); indexJogador++)
+	{
+		//recebe a mensagem do socket 
+		mesRecebida = _playersList->getElementAt(indexJogador)->getSocket()->ReceiveLine();
+
+		mesRecebida->beginReading();
+
+		tipoMensagem = mesRecebida->readByte();	
 		
 
 		switch(tipoMensagem)
@@ -69,486 +77,454 @@ void CCoreServer::readPackets()
 		
 				case LOGIN_REQUEST: //LOGIN, SENHA
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						char * login = mesRecebida.readString();
-						char * senha = mesRecebida.readString();
+						char * login = mesRecebida->readString();
+						char * senha = mesRecebida->readString();
 						
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
-
 						CJogador *  tempJogador = new CJogador();
 
 						//se fez login
 						if(_dataManager->doLogin(login,senha,tempJogador))
 						{
-							tempJogador->setSocketAddress(&enderecoIPJogador);
-							sendMessage(false,&enderecoIPJogador,(int)LOGIN);
-							//adiciona o jogador a sua lista
+							sendMessage(false,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN);
+							tempJogador->setSocket(_playersList->getElementAt(indexJogador)->getSocket());
+							_playersList->removeJogadorByPosition(indexJogador);
+							_playersList->addJogador(tempJogador);
 						}
 						else
 						{
-							sendMessage(false,&enderecoIPJogador,(int)LOGIN_FAIL);
+							sendMessage(false,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN_FAIL);
 						}
 
 						break;
 					}
 				case REQUEST_PERSONAGENS:  //ID PESSOA
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int idJogador = mesRecebida.readLong();
+						int idJogador = mesRecebida->readLong();
 						
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
-
-						CPeopleList * tempList = _dataManager->getPersonagemJogador(idJogador);
+						CPeopleList * tempList = &_dataManager->getPersonagemJogador(idJogador);
 
 						if(tempList != NULL)
 						{
-							sendMessage(false,&enderecoIPJogador,(int)SHOW_PERSONAGENS,tempList->size(),tempList);
+							sendMessage(false,_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOW_PERSONAGENS,tempList->size(),tempList);
 						}
 						else
 						{
-							sendMessage(false,&enderecoIPJogador,(int)SHOW_PERSONAGENS,0);
+							sendMessage(false,_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOW_PERSONAGENS,0);
 						}
 
 						break;
 					}
 				case CREATE_PERSONAGEM: //ID RACA, NOME
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idJogador = mesRecebida.readLong();
-						int    idRaca	 = mesRecebida.readLong();
-						char * nome		 = mesRecebida.readString();
+						int    idJogador = mesRecebida->readLong();
+						int    idRaca	 = mesRecebida->readLong();
+						char * nome		 = mesRecebida->readString();
 						
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
+						CPeopleList * tempList = &_dataManager->getPersonagem((int)JOGADOR,idRaca,true);
 
-						CPersonagemJogador * tempJogador = _dataManager->getPersonagem((int)JOGADOR,idRaca,true);
-
-						if(tempJogador == NULL)
+						if(tempList == NULL)
 						{
-							sendMessage(false,enderecoIPJogador,(int)CREATE_PLAYER_FAIL);
+							sendMessage(false,_playersList->getElementAt(indexJogador)->getSocket(),(int)CREATE_PLAYER_FAIL);
 						}
 						else
 						{
-							tempJogador->setName(nome);
+								((CPersonagemJogador *)tempList->getElementAt(0))->setName(nome);
 
-							_cenarioList->addPlayer(tempJogador);
+								//_cenarioList->addPlayer(tempJogador);
 
-							_playersList->
+								_playersList->getElementAt(indexJogador)->setCharacter((CPersonagemJogador *)tempList->getElementAt(0));
+	
+								_dataManager->insertPersonagem(tempList->getElementAt(0));
 
-							_dataManager->insertPersonagem(tempJogador);
-
-							
-
-							//insert em personagens do novo personagem e insert em personagem_jogador da vinculação de 1 com o outro;
+								//insert em personagens do novo personagem e insert em personagem_jogador da vinculação de 1 com o outro;
 						}
 
 						break;
 					}
 				case PLAY: //ID PERSONAGEM
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem = mesRecebida.readLong();		
-
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
+						int    idPersonagem = mesRecebida->readLong();		
 
 						break;
 					}
 				case SEND_POSITION: //ID PERSONAGEM, POSICAO X, POSICAO Z
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem = mesRecebida.readLong();
-						float  posX = mesRecebida.readFloat();
-						float  posZ = mesRecebida.readFloat();
+						int    idPersonagem = mesRecebida->readLong();
+						float  posX = mesRecebida->readFloat();
+						float  posZ = mesRecebida->readFloat();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
-
-
+						_playersList->getElementAt(indexJogador)->getCharacter()->setPosition(posX,posZ);
 
 						break;
 					}
 				case SEND_ESTADO: //IDPERSONAGEM, ESTADO
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem = mesRecebida.readLong();
-						int    estado       = mesRecebida.readLong();
+						int    idPersonagem = mesRecebida->readLong();
+						int    estado       = mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
+						_playersList->getElementAt(indexJogador)->getCharacter()->setState((EstadoPersonagem)estado);
 
 						break;
 					}
 				case SEND_ATACK: //ID PERSONAGEM, ID ALVO, ID ATAQUE, POSICAO X E POSICAO Z ALVO CHÃO //PODE SER PODER OU ATAQUE NORMAL
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem = mesRecebida.readLong();
-						int    idAlvo       = mesRecebida.readLong();
-						int    idAtaque     = mesRecebida.readLong();
-						float  posX         = mesRecebida.readFloat();
-						float  posZ         = mesRecebida.readFloat();
+						int    idPersonagem = mesRecebida->readLong();
+						int    idAlvo       = mesRecebida->readLong();
+						int    idAtaque     = mesRecebida->readLong();
+						float  posX         = mesRecebida->readFloat();
+						float  posZ         = mesRecebida->readFloat();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
+						CPersonagem * tempPersonagem = _playersList->getElementAt(indexJogador)->getScene()->getPlayer(idAlvo);
+						
+						if(tempPersonagem ==NULL)
+							CPersonagem * tempPersonagem = _playersList->getElementAt(indexJogador)->getScene()->getMonster(idAlvo);
+							
+
+						if(tempPersonagem != NULL)
+
+						_playersList->getElementAt(indexJogador)->getCharacter()->setTarget(tempPersonagem);
+						_playersList->getElementAt(indexJogador)->getCharacter()->attack();
+
+						/*
+							posX e posZ não vi função para eles
+						*/
 
 						break;
 					}
 				case SEND_ITEM:  //ID PERSONAGEM, ID ITEM, DINHEIRO
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem = mesRecebida.readLong();
-						int    idItem       = mesRecebida.readLong();
-						int    dinheiro     = mesRecebida.readLong();
+						int    idPersonagem = mesRecebida->readLong();
+						int    idItem       = mesRecebida->readLong();
+						int    dinheiro     = mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
+						
 
 						break;
 					}
 				case USE_ITEM: //IDPERSONAGEM, IDITEM
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem = mesRecebida.readLong();
-						int    idItem       = mesRecebida.readLong();
+						int    idPersonagem = mesRecebida->readLong();
+						int    idItem       = mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
+						CItem * tempItem = _playersList->getElementAt(indexJogador)->getCharacter()->getBolsa()->getItem(idItem);
+
+						_playersList->getElementAt(indexJogador)->getCharacter()->useItem(tempItem);
 
 						break;
 					}
 				case DROP_ITEM: //IDPERSONAGEM, IDITEM
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem = mesRecebida.readLong();
-						int    idItem       = mesRecebida.readLong();
+						int    idPersonagem = mesRecebida->readLong();
+						int    idItem       = mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
+						CItem * tempItem = _playersList->getElementAt(indexJogador)->getCharacter()->getBolsa()->getItem(idItem);
+						CBolsa * tempBolsa = new CBolsa();
+						tempBolsa->addItem(tempItem);
 
-						break;
-					}
-				case ACCEPT_TRADE: //ID PERSONAGEM, ID FREGUES, ID ITEM MEU, DINHEIRO MEU, ID ITEM FREGUES, DINHEIRO FREGUES
-					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
-
-						int    idPersonagem			= mesRecebida.readLong();
-						int    idFregues			= mesRecebida.readLong();
-						int    idItemPersonagem		= mesRecebida.readLong();
-						int    dinheiroPersonagem	= mesRecebida.readLong();
-						int    idItemFregues		= mesRecebida.readLong();
-						int    dinheiroFregues		= mesRecebida.readLong();
-
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
+//						_playersList->getElementAt(indexJogador)->getScene()->addBag(tempBolsa);
 
 						break;
 					}
 				case OPEN_BOLSA: //ID PERSONAGEM, ID BOLSA
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idBolsa		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida->readLong();
+						int    idBolsa		= mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
+						_playersList->getElementAt(indexJogador)->getScene()->getBag(idBolsa);
 
 						break;
 					}
 				case CLOSE_BOLSA: //ID BOLSA
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idBolsa		= mesRecebida.readLong();
+						int    idBolsa		= mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
 
 						break;
 					}
 				case GET_ITEM_BOLSA: //ID PERSONAGEM, ID BOLSA, ID ITEM
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idBolsa		= mesRecebida.readLong();
-						int    idItem		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida->readLong();
+						int    idBolsa		= mesRecebida->readLong();
+						int    idItem		= mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
 
 						break;
 					}
 				case INSERT_ITEM_BOLSA: //ID BOLSA, ID ITEM
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idBolsa		= mesRecebida.readLong();
-						int    idItem		= mesRecebida.readLong();
+						int    idBolsa		= mesRecebida->readLong();
+						int    idItem		= mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
-
-						break;
-					}
-				case TRADE_CANCEL: //ID PERSONAGEM, ID FREGUES
-					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
-
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idFregues	= mesRecebida.readLong();
-
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
 
 						break;
 					}
 				case EQUIP_ITEM: //ID PERSONAGEM, ID ARMA, ID ARMADURA
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idArma		= mesRecebida.readLong();
-						int    idArmadura	= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida->readLong();
+						int    idArma		= mesRecebida->readLong();
+						int    idArmadura	= mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
 
 						break;
 					}
 				case SET_TARGET: //ID PERSONAGEM, ID ALVO
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idAlvo		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida->readLong();
+						int    idAlvo		= mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
-
-						break;
-					}
-				case START_TRADE: //ID PERSONAGEM, ID FREGUES
-					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
-
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idFregues	= mesRecebida.readLong();
-
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
 
 						break;
 					}
 				case SEND_MESSAGE: //ID DESTINO, MENSAGEM
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
 						//-1 para todos
-						int    idPersonagem	= mesRecebida.readLong();
-						char * mensagem     = mesRecebida.readString();
+						int    idPersonagem	= mesRecebida->readLong();
+						char * mensagem     = mesRecebida->readString();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
 
 						break;
 					}
 				case START_SHOT: //ID PERSONAGEM, ID ALVO, IDSHOT, POSICAO X E POSICAO Z INICIAL
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idAlvo		= mesRecebida.readLong();
-						int    idShot		= mesRecebida.readLong();
-						float  posX			= mesRecebida.readFloat();
-						float  posZ			= mesRecebida.readFloat();
+						int    idPersonagem	= mesRecebida->readLong();
+						int    idAlvo		= mesRecebida->readLong();
+						int    idShot		= mesRecebida->readLong();
+						float  posX			= mesRecebida->readFloat();
+						float  posZ			= mesRecebida->readFloat();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
 
 						break;
 					}
 				case REQUEST_FULL_STATUS: //ID PERSONAGEM
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
 
 						break;
 					}
 				case SEND_BONUS_POINTS: //ID PERSONAGEM,VETOR EM ORDEM ALFABETICA COM QTD PONTOS DA HABILIDADE PRIMARIA USADA E A QUANTIDADE DE PONTOS DE SKILL(PODER)[PODER1,PODER2,PODER3]
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    agilidade	= mesRecebida.readLong();
-						int    destreza		= mesRecebida.readLong();
-						int    forca		= mesRecebida.readLong();
-						int    instinto		= mesRecebida.readLong();
-						int    resistencia  = mesRecebida.readLong();
-						int    poder1		= mesRecebida.readLong();
-						int    poder2		= mesRecebida.readLong();
-						int    poder3		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida->readLong();
+						int    agilidade	= mesRecebida->readLong();
+						int    destreza		= mesRecebida->readLong();
+						int    forca		= mesRecebida->readLong();
+						int    instinto		= mesRecebida->readLong();
+						int    resistencia  = mesRecebida->readLong();
+						int    poder1		= mesRecebida->readLong();
+						int    poder2		= mesRecebida->readLong();
+						int    poder3		= mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
 
 						break;
 					}
 				case ACCEPT_QUEST: // ID PERSONAGEM, ID QUEST
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idQuest		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida->readLong();
+						int    idQuest		= mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
 
 						break;
 					}
 				case START_SHOP: //ID PERSONAGEM, ID NPC VENDEDOR
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idNPC		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida->readLong();
+						int    idNPC		= mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
 
 						break;
 					}
 				case BUY_ITEM: //IDPERSONAGEM, IDNPC VENDEDOR, ID ITEM
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idNPC		= mesRecebida.readLong();
-						int    idItem		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida->readLong();
+						int    idNPC		= mesRecebida->readLong();
+						int    idItem		= mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
 
 						break;
 					}
 				case REQUEST_PRICE_ITEM: //ID PERSONAGEM, ID NPCVENDEDOR, ID ITEM
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idNPC		= mesRecebida.readLong();
-						int    idItem		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida->readLong();
+						int    idNPC		= mesRecebida->readLong();
+						int    idItem		= mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
 
 						break;
 					}
 				case SELL_ITEM: //IDPERSOANGEM, ID NPCVENDEDOR, ID ITEM, PRECO
 					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idNPC		= mesRecebida.readLong();
-						int    idItem		= mesRecebida.readLong();
-						int    preco		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida->readLong();
+						int    idNPC		= mesRecebida->readLong();
+						int    idItem		= mesRecebida->readLong();
+						int    preco		= mesRecebida->readLong();
 
-						//para saber para quem enviar a mensagem de volta, dentro da classe de jogador possui essa variavel
-						sockaddr enderecoIPJogador = player;
-
+						
+						
 						break;
 					}	
-		
-		}//fim switch
+				case TRADE_REQUEST: //ID PERSONAGEM, ID FREGUES
+					{
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
 
-	}//fim while
+						int idPersonagem1 = mesRecebida->readLong();
+						int idPersonagem2 = mesRecebida->readLong();
+						
+						//CPersonagemJogador * tempPers = _playersList->getElementAt(indexJogador)->getScene()->
+
+
+						//sendMessage(false,_playersList->getJogador(idJogador)->getSocket(),(int)TRADE_REQUEST,idPersonagem2);
+
+						break;
+					}
+				case TRADE_REQUEST_ACCEPTED: //ID PERSONAGEM, ID FREGUES
+					{
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
+
+						break;
+					}
+				case TRADE_REQUEST_REFUSED: //ID PERSONAGEM, ID FREGUES
+					{
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
+
+						break;
+					}
+				case TRADE_CHANGED: //ID PERSONAGEM, ID FREGUES, idItemPersonagem, idItemFregues, qtdDinheiroPersonagem, qtdDinheiroFregues
+					{
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
+
+						break;
+					}
+				case TRADE_ACCEPTED: //ID PERSONAGEM
+					{
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
+
+						break;
+					}
+				case TRADE_REFUSED: //ID PERSONAGEM, ID FREGUES
+					{
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
+
+						break;
+					}
+				case TRADE_CONCLUDE: //ID PERSONAGEM, ID FREGUES
+					{
+						mesRecebida->beginReading();
+						mesRecebida->readByte();
+
+						break;
+					}		
+		}//fim switch
+	
+	}
 
 }
 
-void CCoreServer::sendMessage(bool toAll, sockaddr * destino, dreamMessage * mes)
+void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, CBugMessage * mes)
 {
-	dreamClient * cList;
-	cList = _networkServer->getClientList();
 
 	if(toAll)
 	{
-		for(;cList != NULL; cList = cList->_next)
+		CPlayerList * cList;
+		cList = _playersList;
+
+		for(int index = 0; index < cList->size(); index++)
 		{
-			cList->sendPacket(mes);
+			cList->getElementAt(index)->getSocket()->SendLine(*mes);
 		}
 	}
 	else
 	{
-		SOCKET temp = cList->getSocket();
-		cList = NULL;
-
-		cList = (dreamClient *) calloc(1, sizeof(dreamClient));
-		cList->setSocket(temp);
-		cList->setSocketAddress(destino);
-		cList->setConnectionState(DREAMSOCK_CONNECTED);
-		cList->setOutgoingSequence(1);
-		cList->setIncomingSequence(0);
-		cList->setIncomingAcknowledged(0);
-		cList->setIndex(0);
-		cList->setName("temp");
-		cList->_next = NULL;
-
-		cList->sendPacket(mes);
-
-		cList = NULL;
+		destino->SendLine(*mes);
 	}		
 }
 
 
 
-void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1, float f1, float f2)
+void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, float f1, float f2)
 {
 	char data[1400];
-	dreamMessage mes;
+	CBugMessage mes;
 	mes.init(data,sizeof(data));
 
 	mes.writeByte(idMensagem);
@@ -559,10 +535,10 @@ void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, in
 	sendMessage(toAll, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, CPersonagem * p1)
+void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, CPersonagem * p1)
 {
 /*	char data[1400];
-	dreamMessage mes;
+	CBugMessage mes;
 	mes.init(data,sizeof(data));
 
 	mes.writeByte(idMensagem);
@@ -610,22 +586,22 @@ void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, CP
 /*
 	Manda os personagens que o jogador possui
 */
-void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1, CPeopleList * p1)
+void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, CPeopleList * p1)
 {
 	char data[1400];
-	dreamMessage mes;
+	CBugMessage mes;
 	mes.init(data,sizeof(data));
 
 	mes.writeByte(idMensagem);
 
 	mes.writeLong(i1);
 
-	for(int j = 0; j < i1; i++)
+	for(int j = 0; j < i1; j++)
 	{
-		CPersonagemJogador * personagem = p1->getElementAt(i);
+		CPersonagemJogador * personagem = (CPersonagemJogador *)p1->getElementAt(j);
 
 		mes.writeLong(personagem->getID());
-		mes.writeString(personagem->getNome());
+		mes.writeString(personagem->getName());
 		mes.writeLong(personagem->getLevel());
 
 		mes.writeLong(personagem->getAGI());
@@ -651,10 +627,10 @@ void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, in
 }
 
 
-void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1, int i2, float f1, float f2)
+void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2, float f1, float f2)
 {
 	char data[1400];
-	dreamMessage mes;
+	CBugMessage mes;
 	mes.init(data,sizeof(data));
 
 	mes.writeByte(idMensagem);
@@ -667,10 +643,10 @@ void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, in
 	sendMessage(toAll, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10)
+void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10)
 {
 	char data[1400];
-	dreamMessage mes;
+	CBugMessage mes;
 	mes.init(data,sizeof(data));
 
 	mes.writeByte(idMensagem);
@@ -689,10 +665,10 @@ void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, in
 	sendMessage(toAll, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1)
+void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1)
 {
 	char data[1400];
-	dreamMessage mes;
+	CBugMessage mes;
 	mes.init(data,sizeof(data));
 
 	mes.writeByte(idMensagem);
@@ -702,10 +678,10 @@ void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, in
 	sendMessage(toAll, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1, int i2)
+void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2)
 {
 	char data[1400];
-	dreamMessage mes;
+	CBugMessage mes;
 	mes.init(data,sizeof(data));
 
 	mes.writeByte(idMensagem);
@@ -716,10 +692,10 @@ void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, in
 	sendMessage(toAll, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1, int i2, int i3)
+void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2, int i3)
 {
 	char data[1400];
-	dreamMessage mes;
+	CBugMessage mes;
 	mes.init(data,sizeof(data));
 
 	mes.writeByte(idMensagem);
@@ -731,10 +707,10 @@ void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, in
 	sendMessage(toAll, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem)
+void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem)
 { 
 	char data[1400];
-	dreamMessage mes;
+	CBugMessage mes;
 	mes.init(data,sizeof(data));
 
 	mes.writeByte(idMensagem);
@@ -742,10 +718,10 @@ void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem)
 	sendMessage(toAll, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9)
+void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9)
 {
 	char data[1400];
-	dreamMessage mes;
+	CBugMessage mes;
 	mes.init(data,sizeof(data));
 
 	mes.writeByte(idMensagem);
@@ -763,10 +739,10 @@ void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, in
 	sendMessage(toAll, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6)
+void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6)
 {
 	char data[1400];
-	dreamMessage mes;
+	CBugMessage mes;
 	mes.init(data,sizeof(data));
 
 	mes.writeByte(idMensagem);
@@ -781,10 +757,10 @@ void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, in
 	sendMessage(toAll, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, char * mensagem)
+void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, char * mensagem)
 {
 	char data[1400];
-	dreamMessage mes;
+	CBugMessage mes;
 	mes.init(data,sizeof(data));
 
 	mes.writeByte(idMensagem);
@@ -794,10 +770,10 @@ void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, ch
 	sendMessage(toAll, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, sockaddr * destino, int idMensagem, int v1[30], int v2[30])
+void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int v1[30], int v2[30])
 {
 	char data[1400];
-	dreamMessage mes;
+	CBugMessage mes;
 	mes.init(data,sizeof(data));
 
 	mes.writeByte(idMensagem);

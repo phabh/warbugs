@@ -23,6 +23,7 @@ public:
 	CJogador *removeJogador(int IDJogador);
 	CJogador *removeJogador(CJogador *Jogador);
 	CJogador *getJogador(int IDJogador);
+	CJogador *getElementAt(int index);
 
 	bool haveJogador(CJogador *Jogador);
 };

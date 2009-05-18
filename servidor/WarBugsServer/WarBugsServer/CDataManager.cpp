@@ -1191,8 +1191,8 @@ CItem * CDataManager::getItem(int id)
 				int tipoUso = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITTIPOUSO")]->ToString());
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITVALOR")]->ToString());
-				bool b1 = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITISTEMP")]->ToString());
-				bool b2 = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+				bool b1 = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITISTEMP")]->ToString());
+				bool b2 = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDURACAO")]->ToString());
 				dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 				dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
@@ -1300,7 +1300,7 @@ CItem * CDataManager::getItem(int id)
 				dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 				dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-				bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+				bool b2  = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
 				dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITRACA")]->ToString());
 				dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITMODIFICADOR")]->ToString());
@@ -1338,7 +1338,7 @@ CItem * CDataManager::getItem(int id)
 				dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 				dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-				bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+				bool b2  = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
 				dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITRACA")]->ToString());
 				dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDEFESA")]->ToString());
@@ -1373,7 +1373,7 @@ CItem * CDataManager::getItem(int id)
 				dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 				dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-				bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+				bool b2  = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
 				item = new CQItem((TypeItens) dado[0],NAMOCHILA,dado[1],b2,NULL);
 
@@ -1403,7 +1403,7 @@ CItem * CDataManager::getItem(int id)
 				dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 				dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-				bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+				bool b2  = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
 				dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITMODIFICADOR")]->ToString());
 				dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDANOMAX")]->ToString());
@@ -1440,7 +1440,7 @@ CItem * CDataManager::getItem(int id)
 				dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 				dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-				bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+				bool b2  = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
 				dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALARANHA")]->ToString());
 				dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALBESOURO")]->ToString());
@@ -1797,8 +1797,8 @@ CBolsa CDataManager::getBolsaPersonagem(int idPersonagem)
 					int tipoUso = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITTIPOUSO")]->ToString());
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITVALOR")]->ToString());
-					bool b1 = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITISTEMP")]->ToString());
-					bool b2 = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+					bool b1 = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITISTEMP")]->ToString());
+					bool b2 = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDURACAO")]->ToString());
 					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 					dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
@@ -1837,7 +1837,7 @@ CBolsa CDataManager::getBolsaPersonagem(int idPersonagem)
 					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-					bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+					bool b2  = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
 					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITRACA")]->ToString());
 					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITMODIFICADOR")]->ToString());
@@ -1875,7 +1875,7 @@ CBolsa CDataManager::getBolsaPersonagem(int idPersonagem)
 					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-					bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+					bool b2  = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
 					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITRACA")]->ToString());
 					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDEFESA")]->ToString());
@@ -1910,7 +1910,7 @@ CBolsa CDataManager::getBolsaPersonagem(int idPersonagem)
 					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-					bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+					bool b2  = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
 					item = new CQItem((TypeItens) dado[0],NAMOCHILA,dado[1],b2,NULL);
 
@@ -1940,7 +1940,7 @@ CBolsa CDataManager::getBolsaPersonagem(int idPersonagem)
 					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-					bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+					bool b2  = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
 					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITMODIFICADOR")]->ToString());
 					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDANOMAX")]->ToString());
@@ -1977,7 +1977,7 @@ CBolsa CDataManager::getBolsaPersonagem(int idPersonagem)
 					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-					bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+					bool b2  = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
 					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALARANHA")]->ToString());
 					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALBESOURO")]->ToString());
@@ -2090,8 +2090,8 @@ CBolsaList * CDataManager::getListBolsa(int idCenario)
 						int tipoUso = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITTIPOUSO")]->ToString());
 
 						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITVALOR")]->ToString());
-						bool b1 = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITISTEMP")]->ToString());
-						bool b2 = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+						bool b1 = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITISTEMP")]->ToString());
+						bool b2 = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 						dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDURACAO")]->ToString());
 						dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 						dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
@@ -2129,7 +2129,7 @@ CBolsaList * CDataManager::getListBolsa(int idCenario)
 						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-						bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+						bool b2  = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
 						dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITRACA")]->ToString());
 						dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITMODIFICADOR")]->ToString());
@@ -2167,7 +2167,7 @@ CBolsaList * CDataManager::getListBolsa(int idCenario)
 						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-						bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+						bool b2  = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
 						dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITRACA")]->ToString());
 						dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDEFESA")]->ToString());
@@ -2202,7 +2202,7 @@ CBolsaList * CDataManager::getListBolsa(int idCenario)
 						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-						bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+						bool b2  = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
 						item = new CQItem((TypeItens) dado[0],NAMOCHILA,dado[1],b2,NULL);
 
@@ -2232,7 +2232,7 @@ CBolsaList * CDataManager::getListBolsa(int idCenario)
 						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-						bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+						bool b2  = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
 						dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITMODIFICADOR")]->ToString());
 						dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDANOMAX")]->ToString());
@@ -2269,7 +2269,7 @@ CBolsaList * CDataManager::getListBolsa(int idCenario)
 						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTIPOITEM")]->ToString());
 						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITPRECO")]->ToString());
 
-						bool b2  = (bool)System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
+						bool b2  = System::Boolean::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
 						dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALARANHA")]->ToString());
 						dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITLEALBESOURO")]->ToString());
@@ -2368,7 +2368,7 @@ CJogador CDataManager::getJogador(char * login)
 		return jogador;	
 	}
 
-	for(int i = 0; i < numCampos; i++)
+	for(int i = 0; i < (int)numCampos; i++)
 	{
 		nomeCampos->Add(dados[0]);
 		dados->RemoveAt(0);
@@ -2416,7 +2416,7 @@ CPortal * CDataManager::getPortal(int idCenario, Direcoes direcao)
 		return portal;	
 	}
 
-	for(int i = 0; i < numCampos; i++)
+	for(int i = 0; i < (int)numCampos; i++)
 	{
 		nomeCampos->Add(dados[0]);
 		dados->RemoveAt(0);
@@ -2498,6 +2498,10 @@ void CDataManager::updatePersonagem(int id, int nivel, int xp)
 
 //Inserções
 void CDataManager::insertPersonagem(CPersonagem * p1)
-{}
+{
+	
+
+}
+
 void CDataManager::insertPersonagem(CPeopleList p1)
 {}

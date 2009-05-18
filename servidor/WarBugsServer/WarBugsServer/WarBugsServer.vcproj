@@ -228,22 +228,6 @@
 			<Filter
 				Name="BugNet"
 				>
-				<File
-					RelativePath=".\Includes\dreamClient.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Includes\dreamMessage.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Includes\dreamServer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Includes\dreamSock.cpp"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Warbugs"
@@ -385,23 +369,11 @@
 				Name="BugNet"
 				>
 				<File
-					RelativePath=".\Includes\dreamClient.h"
+					RelativePath=".\Includes\CBugMessage.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Includes\dreamMessage.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Includes\dreamServer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Includes\dreamSock.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Includes\dreamSockLog.h"
+					RelativePath=".\Includes\CBugSocket.h"
 					>
 				</File>
 			</Filter>
