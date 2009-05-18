@@ -2,11 +2,12 @@
 
 CPlayerList::CPlayerList(void)
 {
-	_first = NULL;
+	_first = new SPlayerElemento();
 	_size = 0;
 }
 CPlayerList::CPlayerList(CJogador *Jogador)
 {
+	_first = new SPlayerElemento();
 	_first->valor = Jogador;
 	_first->next = NULL;
 	_first->prev = NULL;
@@ -14,7 +15,7 @@ CPlayerList::CPlayerList(CJogador *Jogador)
 }
 bool CPlayerList::isEmpty()
 {
-	return(_first == NULL);
+	return(_size == 0);
 }
 int CPlayerList::size()
 {

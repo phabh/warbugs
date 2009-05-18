@@ -2,11 +2,12 @@
 
 CPeopleList::CPeopleList(void)
 {
-	_first = NULL;
+	_first = new SCharElemento();
 	_size = 0;
 }
 CPeopleList::CPeopleList(CPersonagem *personagem)
 {
+	_first = new SCharElemento();
 	_first->valor = personagem;
 	_first->next = NULL;
 	_first->prev = NULL;
@@ -14,7 +15,7 @@ CPeopleList::CPeopleList(CPersonagem *personagem)
 }
 bool CPeopleList::isEmpty()
 {
-	return(_first == NULL);
+	return(_size == 0);
 }
 int CPeopleList::size()
 {

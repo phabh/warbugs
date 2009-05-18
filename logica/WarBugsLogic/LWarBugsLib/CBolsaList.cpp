@@ -2,11 +2,12 @@
 
 CBolsaList::CBolsaList(void)
 {
-	_first = NULL;
+	_first = new SBagElemento();
 	_size = 0;
 }
 CBolsaList::CBolsaList(CBolsa *bolsa)
 {
+	_first = new SBagElemento();
 	_first->valor = bolsa;
 	_first->next = NULL;
 	_first->prev = NULL;
@@ -14,7 +15,7 @@ CBolsaList::CBolsaList(CBolsa *bolsa)
 }
 bool CBolsaList::isEmpty()
 {
-	return(_first == NULL);
+	return(_size == 0);
 }
 int CBolsaList::size()
 {

@@ -2,11 +2,12 @@
 
 CCenarioList::CCenarioList(void)
 {
-	_first = NULL;
+	_first = new SCenarioElemento();
 	_size = 0;
 }
 CCenarioList::CCenarioList(CCenario *Cenario)
 {
+	_first = new SCenarioElemento();
 	_first->valor = Cenario;
 	_first->next = NULL;
 	_first->prev = NULL;
@@ -14,7 +15,7 @@ CCenarioList::CCenarioList(CCenario *Cenario)
 }
 bool CCenarioList::isEmpty()
 {
-	return(_first == NULL);
+	return(_size == 0);
 }
 int CCenarioList::size()
 {
