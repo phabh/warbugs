@@ -23,7 +23,7 @@ char *CJogador::getPassword()
 {
 	return(_senha);
 }
-sockaddr *CJogador::getSocketAddress()
+CBugSocket * CJogador::getSocket()
 {
 	return(_socket);
 }
@@ -31,6 +31,11 @@ CPersonagemJogador *CJogador::getCharacter()
 {
 	return(_personagem);
 }
+CCenario * CJogador::getScene()
+{
+	return(_cenario);
+}
+
 void CJogador::setName(char *value)
 {
 	if(sizeof(_nome) >= strlen(value))
@@ -66,11 +71,15 @@ void CJogador::setPassword(char *value)
 		strcpy_s(_senha, value);
 	}
 }
-void CJogador::setSocketAddress(sockaddr *socket)
+void CJogador::setSocket(CBugSocket *socket)
 {
 	_socket = socket;
 }
 void CJogador::setCharacter(CPersonagemJogador *personagem)
 {
 	_personagem = personagem;
+}
+void CJogador::setScene(CCenario * cenario)
+{
+	_cenario = cenario;
 }

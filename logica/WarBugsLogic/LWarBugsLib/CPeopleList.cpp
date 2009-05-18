@@ -22,7 +22,6 @@ int CPeopleList::size()
 }
 void CPeopleList::addPersonagem(CPersonagem *personagem)
 {
-	_size = _size + 1;
 	SCharElemento *nodo = new SCharElemento();
 	nodo->valor = personagem;
 	nodo->next = NULL;
@@ -30,6 +29,7 @@ void CPeopleList::addPersonagem(CPersonagem *personagem)
 	if(isEmpty())
 	{
 		_first = nodo;
+		_size = 1;
 	}
 	else
 	{
@@ -40,51 +40,62 @@ void CPeopleList::addPersonagem(CPersonagem *personagem)
 		}
 		temp->next = nodo;
 		nodo->prev = temp;
+		_size = _size + 1;
 		temp = NULL;
 		delete temp;
 	}
 	nodo = NULL;
 	delete nodo;
 }
-CPersonagem *CPeopleList::removePersonagemByPosition(int pospersonagem)
+CPersonagem *CPeopleList::removePersonagemByPosition(int pos)
 {
 	SCharElemento *temp = _first;
-	pospersonagem = pospersonagem - 1;
-	while(pospersonagem > 0)
+	if(pos < size())
 	{
-		temp = temp->next;
-		pospersonagem = pospersonagem -1;
-	}
-	if(temp->prev != NULL)
-	{
-		(temp->prev)->next = temp->next;
-		return(temp->valor);
-	}
-	else
-	{
-		_first = temp->next;
-		_first->next = (temp->next)->next;
-		_first->prev = NULL;
-		return(temp->valor);
-	}
+		while(pos > 0)
+		{
+			temp = temp->next;
+			pos = pos -1;
+		}
+		if(temp->prev != NULL)
+		{
+			(temp->prev)->next = temp->next;
+			_size = _size - 1;
+			return(temp->valor);
+		}
+		else
+		{
+			_first = temp->next;
+			_first->next = (temp->next)->next;
+			_first->prev = NULL;
+			_size = _size - 1;
+			return(temp->valor);
+		}
 
-	if(temp->next != NULL)
-	{
-		(temp->next)->prev = temp->prev;
-		return(temp->valor);
+		if(temp->next != NULL)
+		{
+			(temp->next)->prev = temp->prev;
+			_size = _size - 1;
+			return(temp->valor);
+		}
+		else
+		{
+			(temp->prev)->next = NULL;
+			_size = _size - 1;
+			return(temp->valor);
+		}
 	}
 	else
 	{
-		(temp->prev)->next = NULL;
-		return(temp->valor);
+		return(NULL);
 	}
 }
-CPersonagem *CPeopleList::removePersonagem(int IDpersonagem)
+CPersonagem *CPeopleList::removePersonagem(int ID)
 {
 	SCharElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if((temp->valor)->getID() == IDpersonagem)
+		if((temp->valor)->getID() == ID)
 		{
 			if(temp->prev != NULL)
 				(temp->prev)->next = temp->next;
@@ -104,13 +115,16 @@ CPersonagem *CPeopleList::removePersonagem(int IDpersonagem)
 			_size = _size - 1;
 			return(temp->valor);
 		}
-		temp = temp->next;
+		else
+		{
+			temp = temp->next;
+		}
 	}
 	temp = NULL;
 	delete temp;
-	return (NULL);
+	return(NULL);
 }
-CPersonagem *CPeopleList::removePersonagem(CPersonagem *personagem)
+/*CPersonagem *CPeopleList::removePersonagem(CPersonagem *personagem)
 {
 	SCharElemento *temp = _first;
 	while(temp->next != NULL)
@@ -143,7 +157,7 @@ CPersonagem *CPeopleList::removePersonagem(CPersonagem *personagem)
 	temp = NULL;
 	delete temp;
 	return(NULL);
-}
+}*/
 CPersonagem *CPeopleList::getPersonagem(int IDpersonagem)
 {
 	SCharElemento *temp = _first;

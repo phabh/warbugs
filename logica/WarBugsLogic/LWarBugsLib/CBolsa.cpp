@@ -29,6 +29,7 @@ void CBolsa::addItem(CItem *item)
 	if(isEmpty())
 	{
 		_first = nodo;
+		_size = 1;
 	}
 	else
 	{
@@ -39,51 +40,62 @@ void CBolsa::addItem(CItem *item)
 		}
 		temp->next = nodo;
 		nodo->prev = temp;
+		_size = _size + 1;
 		temp = NULL;
 		delete temp;
 	}
 	nodo = NULL;
 	delete nodo;
 }
-CItem *CBolsa::removeItemByPosition(int posItem)
+CItem *CBolsa::removeItemByPosition(int pos)
 {
 	SElemento *temp = _first;
-	posItem = posItem - 1;
-	while(posItem > 0)
+	if(pos < size())
 	{
-		temp = temp->next;
-		posItem = posItem -1;
-	}
-	if(temp->prev != NULL)
-	{
-		(temp->prev)->next = temp->next;
-		return(temp->valor);
-	}
-	else
-	{
-		_first = temp->next;
-		_first->next = (temp->next)->next;
-		_first->prev = NULL;
-		return(temp->valor);
-	}
+		while(pos > 0)
+		{
+			temp = temp->next;
+			pos = pos -1;
+		}
+		if(temp->prev != NULL)
+		{
+			(temp->prev)->next = temp->next;
+			_size = _size - 1;
+			return(temp->valor);
+		}
+		else
+		{
+			_first = temp->next;
+			_first->next = (temp->next)->next;
+			_first->prev = NULL;
+			_size = _size - 1;
+			return(temp->valor);
+		}
 
-	if(temp->next != NULL)
-	{
-		(temp->next)->prev = temp->prev;
-		return(temp->valor);
+		if(temp->next != NULL)
+		{
+			(temp->next)->prev = temp->prev;
+			_size = _size - 1;
+			return(temp->valor);
+		}
+		else
+		{
+			(temp->prev)->next = NULL;
+			_size = _size - 1;
+			return(temp->valor);
+		}
 	}
 	else
 	{
-		(temp->prev)->next = NULL;
-		return(temp->valor);
+		return(NULL);
 	}
 }
-CItem *CBolsa::removeItem(int IDItem)
+CItem *CBolsa::removeItem(int ID)
 {
 	SElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if((temp->valor)->getID() == IDItem)
+		if((temp->valor)->getID() == ID)
 		{
 			if(temp->prev != NULL)
 				(temp->prev)->next = temp->next;
@@ -100,14 +112,19 @@ CItem *CBolsa::removeItem(int IDItem)
 			{
 				(temp->prev)->next = NULL;
 			}
+			_size = _size - 1;
 			return(temp->valor);
+		}
+		else
+		{
+			temp = temp->next;
 		}
 	}
 	temp = NULL;
 	delete temp;
 	return(NULL);
 }
-CItem *CBolsa::removeItem(CItem *item)
+/*CItem *CBolsa::removeItem(CItem *item)
 {
 	SElemento *temp = _first;
 	while(temp->next != NULL)
@@ -129,6 +146,7 @@ CItem *CBolsa::removeItem(CItem *item)
 			{
 				(temp->prev)->next = NULL;
 			}
+			_size = _size - 1;
 			return(temp->valor);
 		}
 		else
@@ -139,7 +157,7 @@ CItem *CBolsa::removeItem(CItem *item)
 	temp = NULL;
 	delete temp;
 	return(NULL);
-}
+}*/
 CItem *CBolsa::getItem(int IDItem)
 {
 	SElemento *temp = _first;

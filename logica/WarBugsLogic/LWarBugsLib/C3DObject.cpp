@@ -28,10 +28,10 @@ C3DObject::C3DObject(Ponto *posicao, int modeloID, int textura3DID, int animacao
 	textura3D = textura3DID;
 	animacao = animacaoID;
 }
-C3DObject::C3DObject(int x, int y, int modeloID, int textura3DID, int animacaoID, int textura2DID)
+C3DObject::C3DObject(float x, float z, int modeloID, int textura3DID, int animacaoID, int textura2DID)
 {
 	coordenada->x = x;
-	coordenada->y = y;
+	coordenada->z = z;
 	modelo = modeloID;
 	textura2D = textura2DID;
 	textura3D = textura3DID;
@@ -67,18 +67,18 @@ void C3DObject::set3DTexture(int valor)
 {
 	textura3D = valor;
 }
-void C3DObject::setPosition(int x, int y)
+void C3DObject::setPosition(float x, float z)
 {
 	coordenada->x = x;
-	coordenada->y = y;
+	coordenada->z = z;
 }
 void C3DObject::setPosition(Ponto *newPonto)
 {
 	coordenada->x = newPonto->x;
-	coordenada->y = newPonto->y;
+	coordenada->z = newPonto->z;
 }
 //Métodos matemáticos
-int C3DObject::modulo(int valor)
+float C3DObject::modulo(float valor)
 {
 	if (valor < 0)
 	{
@@ -87,9 +87,9 @@ int C3DObject::modulo(int valor)
 	return (valor);
 }
 //Métodos 3D
-int C3DObject::getDistanceToPoint(Ponto *ponto)
+float C3DObject::getDistanceToPoint(Ponto *ponto)
 {
-	return(modulo(coordenada->x - ponto->x) + modulo(coordenada->y - ponto->y));
+	return(modulo(coordenada->x - ponto->x) + modulo(coordenada->z - ponto->z));
 }
 //Métodos CObject
 #endif

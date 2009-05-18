@@ -20,7 +20,7 @@ int CBolsaList::size()
 {
 	return(_size);
 }
-void CBolsaList::addBolsa(CBolsa *bolsa)
+void CBolsaList::addBag(CBolsa *bolsa)
 {
 	SBagElemento *nodo = new SBagElemento();
 	nodo->valor = bolsa;
@@ -29,6 +29,7 @@ void CBolsaList::addBolsa(CBolsa *bolsa)
 	if(isEmpty())
 	{
 		_first = nodo;
+		_size = 1;
 	}
 	else
 	{
@@ -39,51 +40,62 @@ void CBolsaList::addBolsa(CBolsa *bolsa)
 		}
 		temp->next = nodo;
 		nodo->prev = temp;
+		_size = _size + 1;
 		temp = NULL;
 		delete temp;
 	}
 	nodo = NULL;
 	delete nodo;
 }
-CBolsa *CBolsaList::removeBolsaByPosition(int posBolsa)
+CBolsa *CBolsaList::removeBolsaByPosition(int pos)
 {
 	SBagElemento *temp = _first;
-	posBolsa = posBolsa - 1;
-	while(posBolsa > 0)
+	if(pos < size())
 	{
-		temp = temp->next;
-		posBolsa = posBolsa -1;
-	}
-	if(temp->prev != NULL)
-	{
-		(temp->prev)->next = temp->next;
-		return(temp->valor);
-	}
-	else
-	{
-		_first = temp->next;
-		_first->next = (temp->next)->next;
-		_first->prev = NULL;
-		return(temp->valor);
-	}
+		while(pos > 0)
+		{
+			temp = temp->next;
+			pos = pos -1;
+		}
+		if(temp->prev != NULL)
+		{
+			(temp->prev)->next = temp->next;
+			_size = _size - 1;
+			return(temp->valor);
+		}
+		else
+		{
+			_first = temp->next;
+			_first->next = (temp->next)->next;
+			_first->prev = NULL;
+			_size = _size - 1;
+			return(temp->valor);
+		}
 
-	if(temp->next != NULL)
-	{
-		(temp->next)->prev = temp->prev;
-		return(temp->valor);
+		if(temp->next != NULL)
+		{
+			(temp->next)->prev = temp->prev;
+			_size = _size - 1;
+			return(temp->valor);
+		}
+		else
+		{
+			(temp->prev)->next = NULL;
+			_size = _size - 1;
+			return(temp->valor);
+		}
 	}
 	else
 	{
-		(temp->prev)->next = NULL;
-		return(temp->valor);
+		return(NULL);
 	}
 }
-CBolsa *CBolsaList::removeBolsa(int IDbolsa)
+CBolsa *CBolsaList::removeBolsa(int ID)
 {
 	SBagElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if((temp->valor)->getID() == IDbolsa)
+		if((temp->valor)->getID() == ID)
 		{
 			if(temp->prev != NULL)
 				(temp->prev)->next = temp->next;
@@ -100,14 +112,19 @@ CBolsa *CBolsaList::removeBolsa(int IDbolsa)
 			{
 				(temp->prev)->next = NULL;
 			}
+			_size = _size - 1;
 			return(temp->valor);
+		}
+		else
+		{
+			temp = temp->next;
 		}
 	}
 	temp = NULL;
 	delete temp;
 	return(NULL);
 }
-CBolsa *CBolsaList::removeBolsa(CBolsa *bolsa)
+/*CBolsa *CBolsaList::removeBolsa(CBolsa *bolsa)
 {
 	SBagElemento *temp = _first;
 	while(temp->next != NULL)
@@ -139,7 +156,7 @@ CBolsa *CBolsaList::removeBolsa(CBolsa *bolsa)
 	temp = NULL;
 	delete temp;
 	return(NULL);
-}
+}*/
 CBolsa *CBolsaList::getBolsa(int IDbolsa)
 {
 	SBagElemento *temp = _first;

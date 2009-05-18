@@ -35,6 +35,11 @@ CPersonagemJogador::CPersonagemJogador()
 	_dano = 0;
 	_range = 0;
 	_speed = 0;
+	bool _tradeOn = false;
+	bool _tradeConfirmation = false;
+	int _idTrader = -1;
+	int _idItemTrade = -1;
+	int _idMoneyTrade = -1;
 }
 //Getters e setters
 char *CPersonagemJogador::getName()
@@ -67,7 +72,27 @@ int CPersonagemJogador::getDamage()
 	else
 		return(_dano + getBonus()->getTotalBonusOf(DAMAGERANGED));
 }
-
+bool CPersonagemJogador::isTradeOn()
+{
+	return(_tradeOn);
+}
+bool CPersonagemJogador::isTradeConfirmated()
+{
+	return(_tradeConfirmation);
+}
+int CPersonagemJogador::getIDTrader()
+{
+	return(_idTrader);
+}
+int CPersonagemJogador::getIDItemTrade()
+{
+	return(_idItemTrade);
+}
+int CPersonagemJogador::getIDMoneyTrade()
+{
+	return(_idMoneyTrade);
+}
+//Setters
 void CPersonagemJogador::setName(char *name)
 {
 	if(sizeof(_nome) >= strlen(name))
@@ -106,6 +131,7 @@ void CPersonagemJogador::setLoyalty(CLealdade *lealdade)
 {
 	_lealdade = lealdade;
 }
+
 /*void CPersonagemJogador::setParty(irr::core::array<CPersonagemJogador*> *lista)
 {
 	_party = lista;
@@ -142,7 +168,26 @@ void CPersonagemJogador::setSpeed(int speed)
 {
 	_speed = speed;
 }
-
+void CPersonagemJogador::setTradeOn(bool value)
+{
+	_tradeOn = value;
+}
+void CPersonagemJogador::setTradeConfirmated(bool value)
+{
+	_tradeConfirmation = value;
+}
+void CPersonagemJogador::setIDTrader(int value)
+{
+	_idTrader = value;
+}
+void CPersonagemJogador::setIDItemTrade(int value)
+{
+	_idItemTrade = value;
+}
+void CPersonagemJogador::setIDMoneyTrade(int value)
+{
+	_idMoneyTrade = value;
+}
 //Outros Métodos
 //Manipulação de itens
 int CPersonagemJogador::haveItem(CItem * item)
@@ -489,5 +534,9 @@ void CPersonagemJogador::distibutePoints(int points, int atribute)
 		}
 	}
 	return;
+}
+
+void CPersonagemJogador::update()
+{
 }
 #endif

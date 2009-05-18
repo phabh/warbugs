@@ -12,5 +12,15 @@
 #include "CInimigo.h"
 
 CInimigo::CInimigo(){}
-void CInimigo::takeDecision(){}
+int CInimigo::takeDecision()
+{
+	return((clock()%8)+1);
+}
+void CInimigo::update()
+{
+	if((destino->x != getPosition()->x)||(destino->z != getPosition()->z))
+	{
+		move();
+	}
+}
 #endif

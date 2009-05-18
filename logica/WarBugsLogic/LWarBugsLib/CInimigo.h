@@ -11,6 +11,7 @@
 #define _CINIMIGO_H_
 
 #include "CPersonagem.h"
+#include <time.h>
 
 class CInimigo : public CPersonagem{
 private:
@@ -18,6 +19,8 @@ private:
 	//Objeto de ia
 public:
 	CInimigo();
-	void takeDecision();
+	int takeDecision();
+
+	void update();
 };
 #endif

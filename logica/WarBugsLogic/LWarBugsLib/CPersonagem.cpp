@@ -25,6 +25,14 @@ CPersonagem::CPersonagem()
 	status = new CBuff();
 }
 //Getters
+float CPersonagem::getDirection()
+{
+	return(direcao);
+}
+float CPersonagem::getMoveSpeed()
+{
+	return(10.0f+(float)(getAGI()/10.0f));
+}
 int CPersonagem::getFOR()
 {
 	return(habilidadesPrimarias->getFOR() + bonusPrimario->getTotalBonusOf(FOR));
@@ -78,6 +86,10 @@ CBonusPrimario *CPersonagem::getBaseBonus()
 	return(bonusPrimario);
 }
 //Setters
+void CPersonagem::setDirection(float direction)
+{
+	direcao = direction;
+}
 void CPersonagem::setState(EstadoPersonagem newState)
 {
 	estado = newState;
@@ -116,7 +128,29 @@ void CPersonagem::addMoney(int value)
 	dinheiro = dinheiro + value;
 }
 //Outros métodos
-void CPersonagem::move(){}
+void CPersonagem::move()
+{
+	float PI = 3.14159265358979323846f;
+    Ponto *teste = new Ponto();
+	if(getPosition()->x < destino->x)
+	{
+	    teste->x = getPosition()->x + getMoveSpeed();
+    }
+    else
+	{
+        teste->x = getPosition()->x - getMoveSpeed();
+	}
+    if(getPosition()->z < destino->z)
+    {
+	   	teste->z = getPosition()->z + getMoveSpeed();
+    }
+    else
+    {
+        teste->z = getPosition()->z - getMoveSpeed();
+    }
+    setDirection(atan2(destino->z - getPosition()->z, destino->x - getPosition()->x) * 180 / PI);
+    setPosition(teste->x, teste->z);
+}
 void CPersonagem::die(){}
 //void CPersonagem::useSkill(CPoder *skill){}
 #endif
