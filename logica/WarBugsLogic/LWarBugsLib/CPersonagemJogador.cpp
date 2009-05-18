@@ -192,7 +192,7 @@ void CPersonagemJogador::setIDMoneyTrade(int value)
 //Manipulação de itens
 int CPersonagemJogador::haveItem(CItem * item)
 {
-	return(inventario->haveItem(item));
+	return(inventario->haveItem(item->getID()));
 }
 void CPersonagemJogador::addItem(CItem *item)
 {
@@ -203,7 +203,7 @@ void CPersonagemJogador::addItem(CItem *item)
 }
 void CPersonagemJogador::dropItem(CItem *item)
 {
-	if((item->isDropable())&&(inventario->removeItem(item) != NULL))
+	if((item->isDropable())&&(inventario->removeItem(item->getID()) != NULL))
 	{
 		item->setEstado(NOCHAO);
 		item->setPosition(this->getPosition());

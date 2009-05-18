@@ -38,16 +38,16 @@ void CVendedor::buy(CPersonagemJogador *vendedor, CItem *item)
 {
 	if((vendedor->haveItem(item)) && (getMoney() >= item->getPrice()/2))
 	{
-		vendedor->getBolsa()->removeItem(item);
+		vendedor->getBolsa()->removeItem(item->getID());
 		vendedor->addMoney(item->getPrice()/2);
 		getBolsa()->addItem(item);
 	}
 }
 void CVendedor::sell(CPersonagemJogador *comprador, CItem *item)
 {
-	if((getBolsa()->haveItem(item)) && (comprador->getMoney() >= item->getPrice()))
+	if((getBolsa()->haveItem(item->getID())) && (comprador->getMoney() >= item->getPrice()))
 	{
-		getBolsa()->removeItem(item);
+		getBolsa()->removeItem(item->getID());
 		comprador->addMoney((-1)*item->getPrice());
 		comprador->getBolsa()->addItem(item);
 	}

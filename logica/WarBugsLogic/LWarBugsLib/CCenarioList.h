@@ -25,7 +25,7 @@ public:
 	CCenario *getCenario(int IDCenario);
 	CCenario *getElementAt(int index);
 
-	bool haveCenario(CCenario *Cenario);
+	bool haveCenario(int ID);
 
 	void update();
 };
