@@ -186,12 +186,12 @@ CCenario *CCenarioList::getElementAt(int index)
 	}
 	return(temp->valor);
 }
-bool CCenarioList::haveCenario(CCenario *Cenario)
+bool CCenarioList::haveCenario(int ID)
 {
 	SCenarioElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if(temp->valor == Cenario)
+		if(temp->valor->getID() == ID)
 		{
 			temp = NULL;
 			delete temp;

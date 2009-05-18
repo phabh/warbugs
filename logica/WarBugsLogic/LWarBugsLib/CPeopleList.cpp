@@ -185,12 +185,12 @@ CPersonagem *CPeopleList::getElementAt(int index)
 	}
 	return(temp->valor);
 }
-bool CPeopleList::havePersonagem(CPersonagem *personagem)
+bool CPeopleList::havePersonagem(int ID)
 {
 	SCharElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if(temp->valor == personagem)
+		if(temp->valor->getID() == ID)
 		{
 			temp = NULL;
 			delete temp;

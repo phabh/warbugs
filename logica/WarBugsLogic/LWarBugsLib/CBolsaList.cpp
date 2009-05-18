@@ -186,12 +186,12 @@ CBolsa *CBolsaList::getElementAt(int index)
 	}
 	return(temp->valor);
 }
-bool CBolsaList::haveBolsa(CBolsa *bolsa)
+bool CBolsaList::haveBolsa(int ID)
 {
 	SBagElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if(temp->valor == bolsa)
+		if(temp->valor->getID() == ID)
 		{
 			temp = NULL;
 			delete temp;

@@ -25,5 +25,5 @@ public:
 	CBolsa *getBolsa(int IDBolsa);
 	CBolsa *getElementAt(int index);
 
-	bool haveBolsa(CBolsa *Bolsa);
+	bool haveBolsa(int ID);
 };

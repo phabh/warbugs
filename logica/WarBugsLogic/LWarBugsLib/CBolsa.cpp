@@ -187,12 +187,12 @@ CItem *CBolsa::getElementAt(int index)
 	}
 	return(temp->valor);
 }
-bool CBolsa::haveItem(CItem *item)
+bool CBolsa::haveItem(int ID)
 {
 	SElemento *temp = _first;
 	while(temp->next != NULL)
 	{
-		if(temp->valor == item)
+		if((temp->valor)->getID() == ID)
 		{
 			temp = NULL;
 			delete temp;

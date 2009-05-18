@@ -25,5 +25,5 @@ public:
 	CPersonagem *getPersonagem(int IDpersonagem);
 	CPersonagem *getElementAt(int index);
 
-	bool havePersonagem(CPersonagem *personagem);
+	bool havePersonagem(int ID);
 };
