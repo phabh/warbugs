@@ -53,36 +53,33 @@ CJogador *CPlayerList::removeJogadorByPosition(int pos)
 	SPlayerElemento *temp = _first;
 	if(pos < size())
 	{
-		pos = pos - 1;
 		while(pos > 0)
 		{
 			temp = temp->next;
 			pos = pos -1;
 		}
-		if(temp->prev != NULL)
-		{
-			(temp->prev)->next = temp->next;
-			_size = _size - 1;
-			return(temp->valor);
-		}
-		else
+		//Se for o primeiro
+		if(temp->prev == NULL)
 		{
 			_first = temp->next;
-			_first->next = (temp->next)->next;
-			_first->prev = NULL;
+			temp->next = NULL;
 			_size = _size - 1;
 			return(temp->valor);
 		}
-
-		if(temp->next != NULL)
+		//Se for o último
+		else if(temp->next == NULL)
 		{
-			(temp->next)->prev = temp->prev;
+			(temp->prev)->next = NULL;
+			temp->prev = NULL;
 			_size = _size - 1;
 			return(temp->valor);
 		}
 		else
 		{
-			(temp->prev)->next = NULL;
+			(temp->prev)->next = temp->next;
+			(temp->next)->prev = temp->prev;
+			temp->next = NULL;
+			temp->prev = NULL;
 			_size = _size - 1;
 			return(temp->valor);
 		}

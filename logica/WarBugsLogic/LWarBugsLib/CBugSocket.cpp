@@ -110,10 +110,7 @@ std::string CBugSocket::ReceiveBytes() {
   return ret;
 }
 
-CBugMessage * CBugSocket::ReceiveLine() {
-  char c[1400];
-  CBugMessage* m = new CBugMessage();
-  m->init(c,sizeof(c));
+void CBugSocket::ReceiveLine(CBugMessage &m) {
   //std::string ret;
   while (1) {
     char r;
@@ -123,9 +120,9 @@ CBugMessage * CBugSocket::ReceiveLine() {
               // ... but last line sent
               // might not end in \n,
               // so return ret anyway.
-        return NULL;
+        return;
       case -1:
-        return m;
+        return;
 //      if (errno == EAGAIN) {
 //        return ret;
 //      } else {
@@ -135,16 +132,19 @@ CBugMessage * CBugSocket::ReceiveLine() {
     }
 
     //ret += r;
-	m->writeByte(r);
-    if (r == '\n')  return m;
+	m.writeByte(r);
+    if (r == '|')
+	{
+		break;
+	}
   }
 }
 
 void CBugSocket::SendLine(CBugMessage &m) {
-  m.writeByte('\n');
+  m.writeByte('|');
   //s += '\n';
   //send(_socket,s.c_str(),s.length(),0);
-  send(_socket,m._data,m.getSize(),0);
+	send(_socket,m._data,m.getSize(),0);
 }
 
 void CBugSocket::SendBytes(const std::string& s) {

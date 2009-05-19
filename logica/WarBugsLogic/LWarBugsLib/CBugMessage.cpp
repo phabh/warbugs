@@ -117,7 +117,7 @@ void CBugMessage::writeString(char *s)
 		return;
 	}
 	else
-		write(s, strlen(s) + 1);
+		write(s, strlen(s)+1);
 }
 
 
