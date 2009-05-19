@@ -35,11 +35,15 @@ CPersonagemJogador::CPersonagemJogador()
 	_dano = 0;
 	_range = 0;
 	_speed = 0;
-	bool _tradeOn = false;
-	bool _tradeConfirmation = false;
-	int _idTrader = -1;
-	int _idItemTrade = -1;
-	int _idMoneyTrade = -1;
+	_tradeOn = false;
+	_tradeConfirmation = false;
+	_idTrader = -1;
+	_idItemTrade = -1;
+	_idMoneyTrade = -1;
+	_skillPontoDistribuir = 0;
+	_skillLevel[0] = 0;
+	_skillLevel[1] = 0;
+	_skillLevel[2] = 0;
 }
 //Getters e setters
 char *CPersonagemJogador::getName()
@@ -92,15 +96,27 @@ int CPersonagemJogador::getIDMoneyTrade()
 {
 	return(_idMoneyTrade);
 }
+CLealdade *CPersonagemJogador::getLoyalty()
+{
+	return(_lealdade);
+}
+CEquipamento *CPersonagemJogador::getEquip()
+{
+	return(_equip);
+}
+int CPersonagemJogador::getPointsLeft()
+{
+	return(_pontoDistribuir);
+}
+int CPersonagemJogador::getSkillPointsLeft()
+{
+	return(_skillPontoDistribuir);
+}
 //Setters
 void CPersonagemJogador::setName(char *name)
 {
 	if(sizeof(_nome) >= strlen(name))
 		strcpy_s(_nome, name);
-}
-void CPersonagemJogador::setRace(Raca raca)
-{
-	_raca = raca;
 }
 
 void CPersonagemJogador::setLevel(int level)
@@ -187,6 +203,14 @@ void CPersonagemJogador::setIDItemTrade(int value)
 void CPersonagemJogador::setIDMoneyTrade(int value)
 {
 	_idMoneyTrade = value;
+}
+void CPersonagemJogador::setPointsLeft(int value)
+{
+	_pontoDistribuir = value;
+}
+void CPersonagemJogador::setSkillPointsLeft(int value)
+{
+	_skillPontoDistribuir = value;
 }
 //Outros Métodos
 //Manipulação de itens
@@ -480,13 +504,17 @@ void CPersonagemJogador::attack()
 	}
 }
 //Level Up
-void CPersonagemJogador::updateXP(){/*Acessa banco de dados pra atualizar _xpToNextLv _xpToPrevLv*/}
+void CPersonagemJogador::updateXP(){/*Acessa banco de dados pra atualizar _xpToNextLv*/}
 bool CPersonagemJogador::haveLevelUp()
 {
 	if(_experiencia >= _xpToNextLv)
 	{
 		_pontoDistribuir = _pontoDistribuir + 5;
 		_nivel = _nivel + 1;
+		if(_nivel%2 == 0)
+		{
+			_skillPontoDistribuir = _skillPontoDistribuir + 1;
+		}
 		updateXP();
 		return(true);
 	}
@@ -496,6 +524,10 @@ bool CPersonagemJogador::haveLevelDown()
 {
 	if(_experiencia < 0)
 	{
+		if(_nivel%2 == 0)
+		{
+			_skillPontoDistribuir = _skillPontoDistribuir - 1;
+		}
 		_nivel = _nivel - 1;
 		 _pontoDistribuir = _pontoDistribuir - 5;
 		updateXP();
@@ -535,7 +567,13 @@ void CPersonagemJogador::distibutePoints(int points, int atribute)
 	}
 	return;
 }
-
+void CPersonagemJogador::distibuteSkillPoints(int points, int skillIndex)
+{
+	if((points <= _skillPontoDistribuir)&&((skillIndex > 0)&&(skillIndex < MAXSKILLNUMBER)))
+	{
+		 _skillLevel[skillIndex] = _skillLevel[skillIndex] + points;
+	}
+}
 void CPersonagemJogador::update()
 {
 }

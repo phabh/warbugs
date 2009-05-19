@@ -36,11 +36,12 @@ class CQuest;
 class CPersonagemJogador : public CPersonagem
 {
 	char _nome[10];
-	Raca _raca;
 	int _nivel;
+	int _skillLevel[3];
 	int _experiencia;
 	int _xpToNextLv;
 	int _pontoDistribuir;
+	int _skillPontoDistribuir;
 	CEquipamento *_equip;
 	//CBuff *_status;
 	CLealdade *_lealdade;
@@ -77,6 +78,10 @@ public:
 	int getIDTrader();
 	int getIDItemTrade();
 	int getIDMoneyTrade();
+	CLealdade *getLoyalty();
+	CEquipamento *getEquip();
+	int getPointsLeft();
+	int getSkillPointsLeft();
 	
 	//Setters
 	void setName(char *name);
@@ -102,6 +107,9 @@ public:
 	void setIDTrader(int value);
 	void setIDItemTrade(int value);
 	void setIDMoneyTrade(int value);
+	void setPointsLeft(int value);
+	void setSkillPointsLeft(int value);
+
 	//Outros Métodos
 	//Manipulação de itens
 	int haveItem(CItem * item);
@@ -137,6 +145,7 @@ public:
 	bool haveLevelUp();
 	bool haveLevelDown();
 	void distibutePoints(int points, int atribute);
+	void distibuteSkillPoints(int points, int skillIndex);
 
 	void update();
 };
