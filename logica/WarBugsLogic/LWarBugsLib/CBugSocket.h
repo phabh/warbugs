@@ -27,7 +27,7 @@ public:
   CBugSocket(const CBugSocket&);
   CBugSocket& operator=(CBugSocket&);
 
-  CBugMessage * ReceiveLine();
+  void        ReceiveLine(CBugMessage &m);
   std::string ReceiveBytes();
 
   void   Close();
