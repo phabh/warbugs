@@ -25,6 +25,14 @@ CPersonagem::CPersonagem()
 	status = new CBuff();
 }
 //Getters
+Raca CPersonagem::getRace()
+{
+	return(raca);
+}
+int CPersonagem::getRespawnTime()
+{
+	return(respawn);
+}
 float CPersonagem::getDirection()
 {
 	return(direcao);
@@ -86,6 +94,14 @@ CBonusPrimario *CPersonagem::getBaseBonus()
 	return(bonusPrimario);
 }
 //Setters
+void CPersonagem::setRace(Raca raca)
+{
+	raca = raca;
+}
+void CPersonagem::setRespawnTime(int newTime)
+{
+	respawn = newTime;
+}
 void CPersonagem::setDirection(float direction)
 {
 	direcao = direction;

@@ -18,9 +18,27 @@ int CInimigo::takeDecision()
 }
 void CInimigo::update()
 {
-	if((destino->x != getPosition()->x)||(destino->z != getPosition()->z))
+	if(respawn > 0)
+	{
+		respawn = respawn - 1;
+		if(respawn == 0)
+		{
+			estado = PARADO;
+		}
+	}
+	else if((destino->x != getPosition()->x)||(destino->z != getPosition()->z))
 	{
 		move();
+	}
+	else if((destino->x == getPosition()->x)||(destino->z == getPosition()->z))
+	{
+		takeDecision();
+	}
+
+	if(getStats()->getPV() <= 0)
+	{
+		estado = MORTO;
+		respawn = ENEMYRESPAWNTIME;
 	}
 }
 #endif
