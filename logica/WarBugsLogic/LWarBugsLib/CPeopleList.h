@@ -1,6 +1,13 @@
 #pragma once
 #include "Enumerators.h"
+
+#ifndef _CPERSONAGEM_H_
 #include "CPersonagem.h"
+#ifndef _CPERSONAGEM_H_
+class CPersonagem;
+#endif
+#endif
+
 #include <iostream>
 using namespace std;
 
