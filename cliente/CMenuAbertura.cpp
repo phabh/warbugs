@@ -3,8 +3,6 @@
 #include "CMenu.h"
 #include "CVideoTexture.h"
 
-#define eu reinterpret_cast<CMenuAbertura*>(lParam)
-
 class CMenuAbertura : public CMenu
 {
 	
@@ -22,13 +20,13 @@ private:
 	void readCommands()	{}
 
 	void updateGraphics() 
-	{
+	{/*
 		_video = CVideoTexture::createVideoTexture(_dispositivo, "recursos/videos/video.wmv");
 		_video->setVolume(100);
 		_video->playCutscene();
 		_video->drop();
 
-		_nextID = LOGIN;
+		_nextID = LOGIN;*/
 	}
 
 public:
@@ -59,13 +57,13 @@ public:
 		_gerenciadorHud = _dispositivo->getGUIEnvironment();  // Cria o gerenciador de menu
 
         _flags[HUDCHANGED] = true;
-/*
-		_video = IVideoTexture::createVideoTexture(_dispositivo, "recursos/videos/video.wmv");
+
+		_video = CVideoTexture::createVideoTexture(_dispositivo, "recursos/videos/movie.wmv");
 		_video->setVolume(100);
 		_video->playCutscene();
 		_video->drop();
 
-		_nextID = LOGIN;*/
+		_nextID = LOGIN;
 
 		return (true);
 	}

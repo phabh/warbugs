@@ -47,13 +47,13 @@ float4 pixelMain
 	float4 lightColor = tex1D(diffuseRamp, diffuse);
 
 	float fresnal = dot(Normal, EyeDir);
-	fresnal = clamp((fresnal - 0.2) * 1000.0, 0.0, 1.0);
+	fresnal = clamp((fresnal - 0.4) * 1000.0, 0.0, 1.0);
 	lightColor *= fresnal;
 	
 	float3 reflect = (2.0 * diffuse * Normal) - LightDir;
-	float specular = pow(clamp(dot(reflect, EyeDir), 0.0, 1.0), 8.0);
-	specular = clamp((specular - 0.5) * 1000.0, 0.0, 1.0);
-	float4 specular4 = specular * float4(1.0, 1.0, 1.0, 1.0);
+	//float specular = pow(clamp(dot(reflect, EyeDir), 0.0, 1.0), 8.0);
+	//specular = clamp((specular - 0.5) * 1000.0, 0.0, 1.0);
+	//float4 specular4 = specular * float4(1.0, 1.0, 1.0, 1.0);
 	
-	return(saturate(lightColor * texCol + specular4));
+	return(saturate(lightColor * texCol /*+ specular4*/));
 } 
