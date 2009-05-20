@@ -29,7 +29,7 @@ CPersonagemJogador::CPersonagemJogador()
 	//_party = new irr::core::array<CPersonagemJogador*>();
 	//_friends = new irr::core::array<CPersonagemJogador*>();
 	_jogadorID = 0;
-	_alvo = NULL;
+	alvo = NULL;
 	_bareHands = true;
 	_ataque = 0;
 	_dano = 0;
@@ -163,10 +163,6 @@ void CPersonagemJogador::setFriends(irr::core::array<CPersonagemJogador*> *lista
 void CPersonagemJogador::setPlayer(int playerID)
 {
 	_jogadorID = playerID;
-}
-void CPersonagemJogador::setTarget(CPersonagem *alvo)
-{
-	_alvo = alvo;
 }
 void CPersonagemJogador::setBareHands(bool isBareHands)
 {
@@ -486,7 +482,7 @@ void CPersonagemJogador::takeDamage(int damage)
 void CPersonagemJogador::attack()
 {
 	int testValue = 0;
-	if((this->getDistanceToPoint(_alvo->getPosition()) <= _range))
+	if((this->getDistanceToPoint(alvo->getPosition()) <= _range))
 	{
 		if(_bareHands)
 		{
@@ -497,7 +493,7 @@ void CPersonagemJogador::attack()
 			testValue = _ataque;
 		}
 
-		if(testValue > _alvo->getStats()->getDefense())
+		if(testValue > alvo->getStats()->getDefense())
 		{
 			if(_bareHands)
 			{
@@ -507,7 +503,7 @@ void CPersonagemJogador::attack()
 			{
 				testValue = _dano;
 			}
-			_alvo->takeDamage(testValue);
+			alvo->takeDamage(testValue);
 		}
 	}
 }

@@ -93,6 +93,10 @@ CBonusPrimario *CPersonagem::getBaseBonus()
 {
 	return(bonusPrimario);
 }
+CPersonagem *CPersonagem::getTarget()
+{
+	return(alvo);
+}
 //Setters
 void CPersonagem::setRace(Raca raca)
 {
@@ -133,6 +137,10 @@ void CPersonagem::setBuffs(CBuffList *buff)
 void CPersonagem::setBonus(CBonus *bonus)
 {
 	bonusSecundario = (CBonusSecundario*)bonus;
+}
+void CPersonagem::setTarget(CPersonagem *Alvo)
+{
+	alvo = Alvo;
 }
 void CPersonagem::setBaseBonus(CBonus *bonus)
 {

@@ -10,7 +10,7 @@
 #ifndef _CPERSONAGEM_H_
 
 #include <math.h>
-//#include "CHabilidadesSecundarias.h"
+#include "CHabilidadesSecundarias.h"
 	//#include "CWarBugObject.h"
 	//#include "CEquipamento.h"
 	//#include "CHabilidades.h"
@@ -29,6 +29,7 @@ class CBuffList;
 #endif
 #endif
 
+
 // ------------------------------------------------------------------------------------------------------------
 class CPersonagem : public C3DObject{
 protected:
@@ -45,6 +46,7 @@ protected:
 	CBuffList *status;
 	CHabilidades *habilidadesPrimarias;
 	CBonusPrimario *bonusPrimario;
+	CPersonagem *alvo;
 public:
 
 	CPersonagem();
@@ -66,6 +68,7 @@ public:
 	CBuffList *getBuffs();
 	CHabilidades *getBaseStats();
 	CBonusPrimario *getBaseBonus();
+	CPersonagem *getTarget();
 	
 	void setRace(Raca raca);
 	void setRespawnTime(int newTime);
@@ -78,7 +81,7 @@ public:
 	void setBuffs(CBuffList *buff);
 	void setBaseBonus(CBonus *bonus);
 	void setBonus(CBonus *bonus);
-	
+	void setTarget(CPersonagem *alvo);
 	void addMoney(int value);
 	//Outros métodos
 	void move();
