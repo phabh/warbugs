@@ -112,6 +112,10 @@ int CPersonagemJogador::getSkillPointsLeft()
 {
 	return(_skillPontoDistribuir);
 }
+CBugSocket *CPersonagemJogador::getSocket()
+{
+	return(_socketJogador);
+}
 //Setters
 void CPersonagemJogador::setName(char *name)
 {
@@ -211,6 +215,10 @@ void CPersonagemJogador::setPointsLeft(int value)
 void CPersonagemJogador::setSkillPointsLeft(int value)
 {
 	_skillPontoDistribuir = value;
+}
+void CPersonagemJogador::setSocket(CBugSocket * socket)
+{
+	_socketJogador = socket;
 }
 //Outros Métodos
 //Manipulação de itens
