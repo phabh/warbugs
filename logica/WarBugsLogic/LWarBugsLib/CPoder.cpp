@@ -38,7 +38,7 @@ void CPoder::berserkTornado(CPersonagemJogador *user, int level)
 		default:
 			break;
 		}
-		user->getBuffs()->addBuff(temp, user);
+		user->getBuffs()->addBuff(temp);
 		user->getStats()->addChargeTime(-90);
 	}
 	else
@@ -130,7 +130,7 @@ void strike(CPersonagemJogador *user, int level)
 		default:
 			break;
 		}
-		user->getBuffs()->addBuff(temp, user);
+		user->getBuffs()->addBuff(temp);
 		user->getStats()->addChargeTime(-50);
 	}
 	else

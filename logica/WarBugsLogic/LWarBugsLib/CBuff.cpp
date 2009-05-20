@@ -23,7 +23,6 @@ CBuff::CBuff()
 	_valor1 = 0;
 	_valor2 = 0;
 	_valor3 = 0;
-	_next = NULL;
 }
 CBuff::CBuff(TipoBuff tipo, int dur, /*int img, int efc,*/ int val1, int val2, int val3)
 {
@@ -104,37 +103,21 @@ void CBuff::addDuration(int newDuration)
 {
 	_duracao = _duracao + newDuration;
 }
-void CBuff::initialize(CObjectCount *counter)
+void CBuff::addBuff(CBuffList * lista, CPersonagem *alvo)
 {
-	CWarBugObject::initialize(counter);
-}
-void CBuff::addBuff(CBuff * buff, CPersonagem *alvo)
-{
-	int index = 0;
-	bool overwrite = false;
-	CBuff *temp;// = new CBuff();
-	CBuff *temp2;
 	CBonus *bonus;
-	temp = this->_next;
-	temp2 = this;
-	while((temp->_next != NULL)&&(!overwrite))
+	
+	if(lista->haveBuff(this))
 	{
-		if(temp->getTipo() == buff->getTipo())
-		{
-			temp2->_next = buff;
-			buff->_next = temp->_next;
-			overwrite = true;
-		}
-		temp2 = temp;
-		temp = temp->_next;
-		index = index + 1;
+		CBuff *temp = lista->getBuff(this);
+		temp->remove(alvo);
+		lista->removeBuff(this);
+		temp = NULL;
+		delete temp;
 	}
-	if((!overwrite)&&(index <= MAXSTATS))
-	{
-		temp->_next = buff;
-		buff->_next = NULL;
-	}
-	switch(buff->getTipo())
+
+	lista->addBuff(this);
+	switch(getTipo())
 	{
 		case DADIVA:
 			bonus = new CBonusPrimario();
@@ -197,25 +180,11 @@ void CBuff::addBuff(CBuff * buff, CPersonagem *alvo)
 		default:
 			break;
 	}
-	temp = NULL;
-	temp2 = NULL;
-	delete temp;
-	delete temp2;
 	return;
 }
-void CBuff::remove(int index, CPersonagem *alvo)
+void CBuff::remove(CPersonagem *alvo)
 {
-	CBuff *first;// = new CBuff();
-	CBuff *temp;// = new CBuff();
-	first = this;
-	while(index > 0)
-	{
-		temp = first;
-		first = first->_next;
-		index = index - 1;
-	}
-	temp->_next = first->_next;
-	switch(first->getTipo())
+	switch(this->getTipo())
 	{
 		case DADIVA:
 			alvo->getBaseBonus()->removeElement(this->getTipo());
@@ -240,62 +209,46 @@ void CBuff::remove(int index, CPersonagem *alvo)
 		default:
 			break;
 	}
-	temp = NULL;
-	first = NULL;
-	delete first;
-	delete temp;
 	return;
 }
-void CBuff::execute(CPersonagem *jogador)
+void CBuff::execute(CPersonagem *jogador, CBuffList *lista)
 {
-	int index = 0;
-	CBuff *temp = new CBuff();
-	temp = this;
-	while(temp->_next != NULL)
+	switch(getTipo())
 	{
-		switch(temp->getTipo())
+	case DESESPERO:
+		break;
+	case VENENO:
+		if(jogador->getRES() < _valor2)
 		{
-		case DESESPERO:
-			break;
-		case VENENO:
-			if(temp->getDuration()%FPS == 0)
-			{
-				if(jogador->getRES() < _valor2)
-				{
-					jogador->getStats()->addPV(((-1)*_valor1));
-				}
-			}
-			break;
-		case DADIVA:
-			break;
-		case BERSERKER:
-			break;
-		case STRIKE:
-			break;
-		case BACKSTAB:
-			break;
-		case LENTO:
-			if(temp->getDuration()%FPS == 0)
-			{
-				if(jogador->getFOR() < _valor3)
-				{
-					jogador->getStats()->addPV(((-1)*_valor2));
-				}
-			}
-			break;
-		case STUN:
-			break;
-		case ATORDOADO:
-			break;
-		default:
-			break;
+			jogador->getStats()->addPV(((-1)*_valor1));
 		}
-		temp->addDuration(-1);
-		if(temp->getDuration() == 0)
+		break;
+	case DADIVA:
+		break;
+	case BERSERKER:
+		break;
+	case STRIKE:
+		break;
+	case BACKSTAB:
+		break;
+	case LENTO:
+		if(jogador->getFOR() < _valor3)
 		{
-			temp->remove(index,jogador);
+			jogador->getStats()->addPV(((-1)*_valor2));
 		}
-		index = index + 1;
+		break;
+	case STUN:
+		break;
+	case ATORDOADO:
+		break;
+	default:
+		break;
+	}
+	addDuration(-1);
+	if(getDuration() == 0)
+	{
+		this->remove(jogador);
+		lista->removeBuff(this->getID());
 	}
 	return;
 }

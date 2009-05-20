@@ -20,7 +20,7 @@ CPersonagemJogador::CPersonagemJogador()
 	setBonus(new CBonusSecundario());
 	setBaseStats(new CHabilidades());
 	setBaseBonus(new CBonusPrimario());
-	setBuffs(new CBuff());
+	setBuffs(new CBuffList());
 	_nivel = 1;
 	_experiencia = 0;
 	_xpToNextLv = 0;
