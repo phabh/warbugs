@@ -11,6 +11,7 @@
 #include <iostream>
 using namespace std;
 
+#include "CBugSocket.h"
 #include "CPersonagem.h"
 	//#include "CHabilidadesSecundarias.h"
 		//#include "CWarBugObject.h"
@@ -35,6 +36,7 @@ class CQuest;
 #define _CPERSONAGEMJOGADOR_H_
 class CPersonagemJogador : public CPersonagem
 {
+	CBugSocket *_socketJogador;
 	char _nome[10];
 	int _nivel;
 	int _skillLevel[3];
@@ -82,6 +84,7 @@ public:
 	CEquipamento *getEquip();
 	int getPointsLeft();
 	int getSkillPointsLeft();
+	CBugSocket *getSocket();
 	
 	//Setters
 	void setName(char *name);
@@ -108,6 +111,7 @@ public:
 	void setIDMoneyTrade(int value);
 	void setPointsLeft(int value);
 	void setSkillPointsLeft(int value);
+	void setSocket(CBugSocket * socket);
 
 	//Outros Métodos
 	//Manipulação de itens

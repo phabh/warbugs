@@ -18,7 +18,7 @@ using namespace std;
 
 class CNPC : public CPersonagem{
 private:
-	//lista de quests disponiveis
+	//lista de quests disponiveis'
 	//lista de falas disponiveis
 public:
 	CNPC();

@@ -163,10 +163,6 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<File
-				RelativePath=".\CBuffList.cpp"
-				>
-			</File>
 			<Filter
 				Name="1 - Primarias"
 				>
@@ -318,6 +314,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\CBuffList.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\CCenarioList.cpp"
 						>
 					</File>
@@ -349,10 +349,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\CBuffList.h"
-				>
-			</File>
 			<File
 				RelativePath=".\Enumerators.h"
 				>
@@ -513,6 +509,10 @@
 					</File>
 					<File
 						RelativePath=".\CBolsaList.h"
+						>
+					</File>
+					<File
+						RelativePath=".\CBuffList.h"
 						>
 					</File>
 					<File
