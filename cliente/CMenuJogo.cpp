@@ -7,6 +7,7 @@
 #include "CHudStatus.cpp"
 #include "CPersonagem.h"
 #include "CCenario.h"
+//#include "CToonShader.cpp"
 
 class CMenuJogo : public CMenu
 {
@@ -36,7 +37,7 @@ private:
 	ITerrainSceneNode *_terreno;
 	IAnimatedMesh *_malha[10];
 	ITexture *_textura[10];
-	IAnimatedMeshSceneNode *_modelo[10];
+	ISceneNode *_modelo[10];
 
 	float _direcao, _velocidade;
 
@@ -424,43 +425,39 @@ public:
 		_terrenoBoxDim = dimension2d<s32>((s32)abs(_terrenoBox.MaxEdge.X) - (s32)abs(_terrenoBox.MinEdge.X), 
 								   (s32)abs(_terrenoBox.MaxEdge.Z) - (s32)abs(_terrenoBox.MinEdge.Z));
 
-		//------------
-
-	    _textura[0] = _gerenciadorVideo->getTexture("recursos/texturas/louva_lider.jpg");
-		_malha[0] = _gerenciadorCena->getMesh("recursos/modelos/louva_lider.3ds");
-
-		_modelo[0] = _gerenciadorCena->addAnimatedMeshSceneNode(_malha[0]);
-		_modelo[0]->setMaterialFlag(EMF_LIGHTING, false);
-		_modelo[0]->setMaterialTexture(0, _textura[0]);
-		_modelo[0]->setPosition(vector3df(990,_terreno->getHeight(990,980)+2,980));
-
-
-		_modelo[1] = _gerenciadorCena->addAnimatedMeshSceneNode(_malha[0],0,10);
-		_modelo[1]->setMaterialFlag(EMF_LIGHTING, false);
-		_modelo[1]->setMaterialTexture(0, _textura[0]);
-		_modelo[1]->setPosition(vector3df(950,_terreno->getHeight(950,980)+2,980));
-
-		ISceneNode* node = 0;
-		node = _gerenciadorCena->addLightSceneNode(0, vector3df(500,500,500), SColorf(1.0f, 0.6f, 0.7f, 1.0f), 1200.0f);
-        
-		/*ISceneNodeAnimator* anim = 0;
-        anim = _gerenciadorCena->createFlyCircleAnimator (vector3df(0,250,0),250.0f);
-        node->addAnimator(anim);
-        anim->drop();*/
-
-        _modelo[0]->addShadowVolumeSceneNode(_malha[0],-1,true, 1000);
-		_modelo[1]->addShadowVolumeSceneNode(_malha[0],-1,true, 1000);
-        _gerenciadorCena->setShadowColor(SColor(200,0,0,0));
-
-        _modelo[0]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-		_modelo[1]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-
 
 		_camera = _gerenciadorCena->addCameraSceneNode();
 		
 
+		
+		//------------
+
+		ILightSceneNode *luz = _gerenciadorCena->addLightSceneNode(0, vector3df(500,500,500), SColorf(1.0f, 0.6f, 0.7f, 1.0f), 1200.0f);
+        _toonShader = new CToonShader(_dispositivo, luz);
+
+	    //_textura[0] = _gerenciadorVideo->getTexture("recursos/texturas/louva_lider.jpg");
+		_malha[0] = _gerenciadorCena->getMesh("recursos/modelos/louva_lider.3ds");
+		_modelo[0] = _gerenciadorCena->addAnimatedMeshSceneNode(_malha[0]);
+
+		_modelo[0]->setPosition(vector3df(990,_terreno->getHeight(990,980)+2,980));
+
 		_camera->setPosition(_modelo[0]->getPosition() + vector3df(-20,30,0));
 		_camera->setTarget(_modelo[0]->getPosition());
+		luz->setParent(_camera);
+
+		_modelo[0]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+		//_modelo[0]->setMaterialFlag(EMF_LIGHTING, false);
+		_toonShader->apply(_modelo[0],"recursos/texturas/louva_lider.jpg");
+		
+
+
+		_malha[1] = _gerenciadorCena->getMesh("recursos/modelos/arvore.3ds");
+		_modelo[1] = _gerenciadorCena->addMeshSceneNode(_malha[1]);
+		_modelo[1]->setPosition(vector3df(1000,_terreno->getHeight(1000,980)+2,980));
+		_modelo[1]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+		//_modelo[1]->setMaterialFlag(EMF_LIGHTING, false);
+		_toonShader->apply(_modelo[1],"recursos/texturas/arvore.jpg");
+
 
 		_direcao = 0.0f;
 		_velocidade = 0.1f;
@@ -468,16 +465,7 @@ public:
 		s32 Width = _gerenciadorVideo->getViewPort().getWidth();
 		s32 Height = _gerenciadorVideo->getViewPort().getHeight();
 
-		ISceneNode *terreno = _gerenciadorCena->getSceneNodeFromType(ESNT_TERRAIN);
-		_selector = terreno->getTriangleSelector();
-        //terreno->setTriangleSelector(_selector);
-
-		ISceneNodeAnimator* anim = _gerenciadorCena->createCollisionResponseAnimator(
-			_selector, _modelo[0], vector3df(30,50,30),
-			vector3df(0,-10,0),
-			vector3df(0,50,0));
-		_modelo[0]->addAnimator(anim);
-		anim->drop();
+		_selector = _terreno->getTriangleSelector();
 
 		return (true);
 	}

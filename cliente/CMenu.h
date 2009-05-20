@@ -2,7 +2,7 @@
 
 #include "Setup.h"
 #include "CArquivoConfig.cpp"
-#include "CGerEventos.cpp"
+#include "CGerEventos.h"
 #include "CToonShader.cpp"
 #include "CGameData.h"
 
