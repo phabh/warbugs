@@ -204,7 +204,8 @@ enum EstadoPersonagem
 {
 	PARADO,
 	ANDANDO,
-	MORTO
+	MORTO,
+	FALANDO
 };
 // ------------------------------------------------------------------------------------------------------------
 enum Direcoes 

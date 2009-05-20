@@ -22,7 +22,7 @@ CPersonagem::CPersonagem()
 	habilidadesSecundarias = new CHabilidadesSecundarias();
 	bonusSecundario = new CBonusSecundario();
 	//poderes = new CPoder();
-	status = new CBuff();
+	status = new CBuffList();
 }
 //Getters
 Raca CPersonagem::getRace()
@@ -81,7 +81,7 @@ CBonus *CPersonagem::getBonus()
 {
 	return(bonusSecundario);
 }
-CBuff *CPersonagem::getBuffs()
+CBuffList *CPersonagem::getBuffs()
 {
 	return(status);
 }
@@ -126,7 +126,7 @@ void CPersonagem::setBaseStats(CHabilidades *stats)
 {
 	habilidadesPrimarias = stats;
 }
-void CPersonagem::setBuffs(CBuff *buff)
+void CPersonagem::setBuffs(CBuffList *buff)
 {
 	status = buff;
 }

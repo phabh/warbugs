@@ -22,10 +22,10 @@
 #include "CBonusSecundario.h"
 	//#include "CHabilidadesSecundarias.h"
 	//#include "CBonus.h"
-#ifndef _CBUFF_H_
-#include "CBuff.h"
-#ifndef _CBUFF_H_
-class CBuff;
+#ifndef _BUFFLIST_
+#include "CBuffList.h"
+#ifndef _BUFFLIST_
+class CBuffList;
 #endif
 #endif
 
@@ -42,7 +42,7 @@ protected:
 	CHabilidadesSecundarias *habilidadesSecundarias;
 	CBonusSecundario *bonusSecundario;
 	//CPoder *poderes;
-	CBuff *status;
+	CBuffList *status;
 	CHabilidades *habilidadesPrimarias;
 	CBonusPrimario *bonusPrimario;
 public:
@@ -63,7 +63,7 @@ public:
 	CBolsa *getBolsa();
 	CHabilidadesSecundarias *getStats();
 	CBonus *getBonus();
-	CBuff *getBuffs();
+	CBuffList *getBuffs();
 	CHabilidades *getBaseStats();
 	CBonusPrimario *getBaseBonus();
 	
@@ -75,7 +75,7 @@ public:
 	void setBolsa(CBolsa *bolsa);
 	void setBaseStats(CHabilidades *stats);
 	void setStats(CHabilidadesSecundarias *stats);
-	void setBuffs(CBuff *buff);
+	void setBuffs(CBuffList *buff);
 	void setBaseBonus(CBonus *bonus);
 	void setBonus(CBonus *bonus);
 	

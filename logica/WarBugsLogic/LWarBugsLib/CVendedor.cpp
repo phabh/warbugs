@@ -20,7 +20,7 @@ CVendedor::CVendedor()
 	setBonus(new CBonusSecundario());
 	setBaseStats(new CHabilidades());
 	setBaseBonus(new CBonusPrimario());
-	setBuffs(new CBuff());
+	setBuffs(new CBuffList());
 }
 CVendedor::CVendedor(EstadoPersonagem estado, int dinheiro, CBolsa *inventario)
 {
@@ -31,7 +31,7 @@ CVendedor::CVendedor(EstadoPersonagem estado, int dinheiro, CBolsa *inventario)
 	setBonus(new CBonusSecundario());
 	setBaseStats(new CHabilidades());
 	setBaseBonus(new CBonusPrimario());
-	setBuffs(new CBuff());
+	setBuffs(new CBuffList());
 }
 void CVendedor::speak(){}
 void CVendedor::buy(CPersonagemJogador *vendedor, CItem *item)
