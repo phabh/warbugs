@@ -26,7 +26,7 @@ namespace WarBugsServer {
 	public:
 		// Variaveis do Jogo
 		CDataBase			* _dataBase;
-		CCoreServer			* _coreServer;
+		CCoreServer			^ _coreServer;
 
 
 		frmPrincipal(void)
@@ -38,7 +38,7 @@ namespace WarBugsServer {
 			WarBugsLog::_log = logBox;
 			_dataBase = new CDataBase("localhost","warbugs","bd","bugsteam");
 			this->barStatusBD->Text = L"Status BD: "+( _dataBase->isConnected() ? "ON":"OFF");
-			_coreServer = new CCoreServer(_dataBase,30);
+			_coreServer = gcnew CCoreServer(_dataBase,30);
 		}
 
 	protected:

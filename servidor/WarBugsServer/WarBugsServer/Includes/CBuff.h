@@ -21,6 +21,13 @@ class CPersonagem;
 #endif
 #endif
 
+#ifndef _BUFFLIST_
+#include "CBuffList.h"
+#ifndef _BUFFLIST_
+class CBuffList;
+#endif
+#endif
+
 #define _CBUFF_H_
 class CBuff : public CWarBugObject
 {
@@ -35,7 +42,6 @@ private:
 	int _valor2;
 	int _valor3;
 public:
-	CBuff *_next;
 
 	CBuff();
 	CBuff(TipoBuff tipo, int dur, /*int img, int efc,*/ int val1 = 0, int val2 = 0, int val3 = 0);
@@ -44,9 +50,8 @@ public:
 	int getDuration();
 	void setDuration(int newDuration);
 	void addDuration(int newDuration);
-	void initialize(CObjectCount *counter);
-	void addBuff(CBuff * buff, CPersonagem *alvo);
-	void remove(int index, CPersonagem *alvo);
-	void execute(CPersonagem *jogador);
+	void addBuff(CBuffList * lista, CPersonagem *alvo);
+	void remove(CPersonagem *alvo);
+	void execute(CPersonagem *jogador, CBuffList *lista);
 };
 #endif
