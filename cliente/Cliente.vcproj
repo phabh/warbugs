@@ -325,6 +325,10 @@
 			<Filter
 				Name="Configuracoes"
 				>
+				<File
+					RelativePath=".\WarbugsClientLib\Setup.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Eventos"
@@ -395,10 +399,6 @@
 				</File>
 				<File
 					RelativePath=".\WarbugsClientLib\CPersonagem.h"
-					>
-				</File>
-				<File
-					RelativePath=".\WarbugsClientLib\Setup.h"
 					>
 				</File>
 			</Filter>

@@ -1,101 +1,59 @@
 #pragma once
 
 #include "CMenu.h"
-#include "CHudFadingTextList.cpp"
+#include "CVideoTexture.h"
 
 class CMenuCreditos : public CMenu
 {
 
-
 private:
 
-	CHudFadingTextList _creditos;
+	CVideoTexture *_video;
 
-	void graphicsDrawAddOn(){}
+	void graphicsDrawAddOn() {}
 
-	void updateHuds()
+	void updateHuds() 
 	{
-		_gerenciadorHud->clear();
-        
-		_creditos.start(_gerenciadorHud, _font, rect<s32>(0,0,500,500), 255, 1);
-
-		_gerenciadorHud->addButton(rect<s32>(320, 500, 450, 532), 0, 600, L"Sair");
+		_flags[HUDCHANGED] = false;
 	}
 
-	void readCommands()
-	{
-		//_timer->update();
-		if(_gerenciadorEventos->isKeyPressed(KEY_ESCAPE))
-		{
-			_nextID = SAIDA;
-		    return;
-		}
+	void readCommands()	{}
 
-		if(_gerenciadorEventos->getEventCallerByElement(EGET_BUTTON_CLICKED))
-		{
-			// Trata os cliques em botões
-			if (_gerenciadorEventos->getEventCallerByID() == 600)
-			{
-				_nextID = SAIDA;
-				cout << "\nSAI!";
-				return;
-			}
-		}
-	}
-
-	void updateGraphics()
+	void updateGraphics() 
 	{
-		_creditos.addText(L"Testando creditos");
-		_creditos.addText(L"Testando creditos2");
+		_video = CVideoTexture::createVideoTexture(_dispositivo, "recursos/videos/video.wmv");
+		_video->setVolume(100);
+		_video->playCutscene();
+		_video->drop();
+
+		_nextID = SAIDA;
 	}
 
 public:
 
-
 	CMenuCreditos(){}
-	
+
 	bool start(IrrlichtDevice *grafico, ISoundEngine *audio, CGameData *gameData)
 	{
-		_gameCfg = new CArquivoConfig();
-		TypeCfg cfg = _gameCfg->loadConfig();
+		_temPacote = false;
 
 		_gameData = gameData;
 
-	    _dispositivo = grafico;
+		_dispositivo = grafico;
 		_gerenciadorEventos = (CGerEventos*)_dispositivo->getEventReceiver();
+
 		_gerenciadorAudio = audio;
 		_gerenciadorAudio->removeAllSoundSources();
 
 		_myID = _nextID = CREDITOS;
-		_arquivoCena = "recursos/cenas/creditos.irr";
 
 		_dispositivo->setWindowCaption(L"Warbugs - BETA Version 0.1");
 
 		_gerenciadorCena = _dispositivo->getSceneManager();   // Cria o gerenciador de cena
 		_gerenciadorVideo = _dispositivo->getVideoDriver();   // Cria o driver para o vídeo
-		_gerenciadorHud = _dispositivo->getGUIEnvironment(); // Cria o gerenciador de menu
+		_gerenciadorHud = _dispositivo->getGUIEnvironment();  // Cria o gerenciador de menu
 
-		_musica = _gerenciadorAudio->play2D("recursos/audio/creditos.ogg", true, false, false, ESM_AUTO_DETECT);
-		
-		_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
-
-		_gerenciadorCena->clear();
-		if(_arquivoCena)
-			_gerenciadorCena->loadScene(_arquivoCena);
-		
-		_skin = _gerenciadorHud->getSkin();
-		_font = _gerenciadorHud->getFont("recursos/fonts/font_georgia.png");
-		
-		if (_font)
-			_skin->setFont(_font);
-
-		_skin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_TOOLTIP);
-
-		_camera = _gerenciadorCena->addCameraSceneNode(0,vector3df(0,50,0), vector3df(0,0,50));	
-
-		ILightSceneNode *luz = _gerenciadorCena->addLightSceneNode(0, vector3df(100, 100, 100));
-
-		_flags[HUDCHANGED] = false;
+		_flags[HUDCHANGED] = true;
 
 		return (true);
 	}

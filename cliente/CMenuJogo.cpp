@@ -7,7 +7,6 @@
 #include "CHudStatus.cpp"
 #include "CPersonagem.h"
 #include "CCenario.h"
-//#include "CToonShader.cpp"
 
 class CMenuJogo : public CMenu
 {
@@ -25,35 +24,32 @@ private:
 	IGUIEditBox *_chatInput; 
 
 	IGUIWindow *_invWindow,
-			   *_chatWindow,	
-			   *_statWindow,
-			   *_cfgWindow,
-			   *_mapWindow,
-			   *_equipWindow,
-			   *_alertWindow;
+		*_chatWindow,	
+		*_statWindow,
+		*_cfgWindow,
+		*_mapWindow,
+		*_equipWindow,
+		*_alertWindow;
 
 	CHudRoleta *_roleta;
 
 	ITerrainSceneNode *_terreno;
 	IAnimatedMesh *_malha[10];
 	ITexture *_textura[10];
-	ISceneNode *_modelo[10];
+	IAnimatedMeshSceneNode *_modelo[10];
 
 	float _direcao, _velocidade;
 
-	//minipama
-	CHudMiniMapa *_miniMapa;
-	aabbox3df _terrenoBox;
-	ITexture* _heightmapTx;
-	dimension2d<s32> _miniMapaDim;
-	position2d<s32> _miniMapaPos;
-	dimension2d<s32> _terrenoBoxDim;
+	float rotV, rotH;
+
+	ISceneNode *_empty;
+	ILightSceneNode *luz;
 
 	void updateHuds()
 	{
 		_gerenciadorHud->clear();
-		
-        //_font->draw(temp, rect<s32>(130,10,300,50), SColor(255,255,255,255));
+
+		//_font->draw(temp, rect<s32>(130,10,300,50), SColor(255,255,255,255));
 
 
 		// Criar janela de mini mapa
@@ -91,7 +87,7 @@ private:
 
 
 		_invWindow->setVisible(_flags[INVENTARIOON]);
-				
+
 		_cfgWindow->setVisible(_flags[CONFIGON]);
 
 		_statWindow->setVisible(_flags[STATUSON]);
@@ -116,19 +112,13 @@ private:
 		_gerenciadorHud->addScrollBar(true, rect<s32>(50,80,50+50,80+20), _cfgWindow, 20);
 		_gerenciadorHud->addStaticText(L"Anti-Aliasing", rect<s32>(50+60, 80, 50+80, 80+20), false, false, _cfgWindow, 21, true);
 
+		
 		// Elementos GUI da janela de minimapa
 		IGUIButton *btnMiniMapa = _gerenciadorHud->addButton(rect<s32>(0,20,200,220), _mapWindow, 30);
 		btnMiniMapa->setIsPushButton(true);
-		//btnMiniMapa->setSprite(
+
 		btnMiniMapa->setPressedImage(_gerenciadorVideo->getTexture("recursos/texturas/minimapa.png"));
 		btnMiniMapa->setImage(_gerenciadorVideo->getTexture("recursos/texturas/louva_lider.jpg"));
-		//::IGUIToolBar *toolBar = _gerenciadorHud->addToolBar(0,-1);
-		//toolBar->setRelativePositionProportional(rect<f32>(1,1,1,1));
-		//toolBar->addButton(-1,L"teste",0, _gerenciadorVideo->getTexture("recursos/texturas/minimapa.png"),_gerenciadorVideo->getTexture("recursos/texturas/louva_lider.jpg"),false,true);
-
-		//::IGUIButton *botao1 = _gerenciadorHud->addButton();
-		
-
 
 		if(_flags[MAPAON])
 		{
@@ -155,12 +145,12 @@ private:
 		}
 
 		_roleta = new CHudRoleta( 
-		rect<s32>(600, 400, 800, 600),  // Area da roleta
-		_gerenciadorHud,						 // Gerenciador de Hud
-		_gerenciadorHud->getRootGUIElement(), // Raiz do gerenciador de Hud 
-		_gerenciadorVideo->getTexture("recursos/huds/roleta.png"),   
-		_gerenciadorVideo->getTexture("recursos/huds/ponteiro.png")
-		);
+			rect<s32>(600, 400, 800, 600),  // Area da roleta
+			_gerenciadorHud,						 // Gerenciador de Hud
+			_gerenciadorHud->getRootGUIElement(), // Raiz do gerenciador de Hud 
+			_gerenciadorVideo->getTexture("recursos/huds/roleta.png"),   
+			_gerenciadorVideo->getTexture("recursos/huds/ponteiro.png")
+			);
 
 		_flags[HUDCHANGED] = false;
 	}
@@ -171,7 +161,7 @@ private:
 		temp += (int)_gerenciadorVideo->getFPS();
 
 		_dispositivo->setWindowCaption(temp.c_str());
-		
+
 		if(_gerenciadorEventos->isKeyDown(KEY_ESCAPE))
 		{
 			_nextID = SAIDA;
@@ -222,8 +212,8 @@ private:
 
 					if (_gerenciadorCena->getSceneCollisionManager()->getCollisionPoint(line, _selector, intersection, tri))
 					{
-						//bill->setPosition(intersection);
 						_targetPosition = intersection;
+
 
 						_gerenciadorVideo->setTransform(ETS_WORLD, matrix4());
 						_gerenciadorVideo->setMaterial(material);
@@ -231,25 +221,6 @@ private:
 					}
 					else
 						_targetPosition = _modelo[0]->getPosition();
-
-
-
-
-
-
-
-
-/*
-					const position2di clickPosition = _dispositivo->getCursorControl()->getPosition();
-					const line3df ray = _gerenciadorCena->getSceneCollisionManager()->getRayFromScreenCoordinates(clickPosition, _gerenciadorCena->getActiveCamera());
-
-					vector3df desiredPosition;
-					triangle3df outTriangle;
-
-					if(_gerenciadorCena->getSceneCollisionManager()->getCollisionPoint(ray, _selector, desiredPosition, outTriangle))
-						_targetPosition = desiredPosition;
-					else
-						_targetPosition = _modelo[0]->getPosition();*/
 
 					cout << "\nAlvo X: " << _targetPosition.X << "\nAlvo Y: " << _targetPosition.Y << "\nAlvo Z: " << _targetPosition.Z << endl;
 				}
@@ -268,7 +239,9 @@ private:
 			_cfgWindow->setVisible(_flags[CONFIGON]);
 		}
 
-        
+
+
+
 		if(_gerenciadorEventos->isKeyReleased(KEY_KEY_M))
 		{
 			// Mostrar | Esconder janela de minimapa
@@ -304,71 +277,96 @@ private:
 			_alertWindow->setVisible(_flags[ALERTON]);
 		}
 
-
-
 		if(_gerenciadorEventos->isKeyDown(::KEY_UP))
 		{
 			_modelo[0]->setPosition(_modelo[0]->getPosition() + 
-				                   vector3df(cos(((_direcao)*PI)/180)*_velocidade,
-								   0,
-								   -sin(((_direcao)*PI)/180)*_velocidade));
+				vector3df(cos(((_direcao)*PI)/180)*_velocidade,
+				0,
+				-sin(((_direcao)*PI)/180)*_velocidade));
 		}
 
 		if(_gerenciadorEventos->isKeyDown(::KEY_DOWN))
 		{
 			_modelo[0]->setPosition(_modelo[0]->getPosition() + 
-				                    vector3df(cos(((_direcao+180)*PI)/180)*_velocidade,
-									0,
-                                    -sin(((_direcao+180)*PI)/180)*_velocidade));
+				vector3df(cos(((_direcao+180)*PI)/180)*_velocidade,
+				0,
+				-sin(((_direcao+180)*PI)/180)*_velocidade));
 		}
 
 		if(_gerenciadorEventos->isKeyDown(::KEY_LEFT))
 		{
-		   _direcao-=1;
-		   _modelo[0]->setRotation(vector3df(0.f, _direcao, 0.f));
+			_direcao-=1;
+			_modelo[0]->setRotation(vector3df(0.f, _direcao, 0.f));
 		}
 
 		if(_gerenciadorEventos->isKeyDown(::KEY_RIGHT))
 		{
-		   _direcao+=1;
-		   _modelo[0]->setRotation(vector3df(0.f, _direcao, 0.f));
+			_direcao+=1;
+			_modelo[0]->setRotation(vector3df(0.f, _direcao, 0.f));
 		}
+
+
+		if(_gerenciadorEventos->isKeyDown(KEY_NUMPAD8))
+		{
+			rotV += 2;
+			if(rotV >= 360.0)
+				rotV -= 360.0;
+		}
+
+		if(_gerenciadorEventos->isKeyDown(KEY_NUMPAD2))
+		{
+			rotV -= 2;
+			if(rotV < 0.0)
+				rotV += 360.0;
+		}
+
+		if(_gerenciadorEventos->isKeyDown(KEY_NUMPAD4))
+		{
+			if(rotH < 40.0)
+				rotH+=2;
+		}
+
+		if(_gerenciadorEventos->isKeyDown(KEY_NUMPAD6))
+		{
+			if(rotH > -40.0)
+				rotH-=2;
+		}
+
 
 	}
 
-
 	void updateGraphics()
 	{
-
 		_modelo[0]->setPosition(vector3df(_modelo[0]->getPosition().X, _terreno->getHeight(_modelo[0]->getPosition().X,_modelo[0]->getPosition().Z)+2, _modelo[0]->getPosition().Z));
-		_camera->setPosition(_modelo[0]->getPosition() + vector3df(-20,30,0));
-		_camera->setTarget(_modelo[0]->getPosition());
+		
+		_empty->setPosition(_modelo[0]->getPosition());
+
+		_empty->setRotation(vector3df(rotH/2, rotV, rotH/2));
+		_camera->setTarget(_empty->getPosition());
+		//luz->setPosition(_camera->getPosition());
+		luz->setPosition(_modelo[0]->getPosition()+vector3df(0,100,0));
 
 		_roleta->update();
 	}
 
 	void graphicsDrawAddOn() 
 	{
-		_gerenciadorVideo->draw2DImage(_heightmapTx, _miniMapaPos);
 	}
-	
 
 public:
 
 	stringw temp;
 
-
 	CMenuJogo(){}
-	
+
 	bool start(IrrlichtDevice *grafico, ISoundEngine *audio, CGameData *gameData)
 	{
-
 		_gameCfg = new CArquivoConfig();
 		TypeCfg cfg = _gameCfg->loadConfig();
-		
+
 		_gameData = gameData;
 
-	    _dispositivo = grafico;
+		_dispositivo = grafico;
 		_gerenciadorEventos = (CGerEventos*)_dispositivo->getEventReceiver();
 		_gerenciadorAudio = audio;
 		_gerenciadorAudio->removeAllSoundSources();
@@ -378,10 +376,9 @@ public:
 
 		_nodoSelecionado = 0;
 		_idPersonagem = -1;
-		
 
 		for(int i=0; i<NUMFLAGSMENU; i++)
-		   _flags[i] = true;
+			_flags[i] = true;
 
 		_flags[OBJSELECTED] = false;
 		_flags[HUDCHANGED] = false;
@@ -394,70 +391,64 @@ public:
 		_gerenciadorHud = _dispositivo->getGUIEnvironment(); // Cria o gerenciador de menu
 
 		_musica = _gerenciadorAudio->play2D("recursos/audio/jogo.ogg", true, false, false, ESM_AUTO_DETECT);
-		
+
 		_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
 
 		_gerenciadorCena->clear();
 		if(_arquivoCena)
 			_gerenciadorCena->loadScene(_arquivoCena);
-		
+
 		_skin = _gerenciadorHud->getSkin();
 		_font = _gerenciadorHud->getFont("recursos/fonts/font_georgia.png");
-		
+
 		if (_font)
 			_skin->setFont(_font);
 
 		_skin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_TOOLTIP);
 
 		_terreno = (ITerrainSceneNode*)_gerenciadorCena->getSceneNodeFromType(ESNT_TERRAIN, 0);
-		
 
-		//MINIMAPA
-		_terrenoBox = _terreno->getBoundingBox();
-
-		_heightmapTx = _gerenciadorVideo->getTexture("recursos/texturas/minimapa.png"); //map 
-
-		_miniMapaDim = _heightmapTx->getSize(); 
-		 
-		_miniMapaPos.X = 600; 
-		_miniMapaPos.Y = 0; 
-
-		_terrenoBoxDim = dimension2d<s32>((s32)abs(_terrenoBox.MaxEdge.X) - (s32)abs(_terrenoBox.MinEdge.X), 
-								   (s32)abs(_terrenoBox.MaxEdge.Z) - (s32)abs(_terrenoBox.MinEdge.Z));
-
+		_empty = _gerenciadorCena->addEmptySceneNode();
 
 		_camera = _gerenciadorCena->addCameraSceneNode();
-		
 
-		
 		//------------
 
-		ILightSceneNode *luz = _gerenciadorCena->addLightSceneNode(0, vector3df(500,500,500), SColorf(1.0f, 0.6f, 0.7f, 1.0f), 1200.0f);
-        _toonShader = new CToonShader(_dispositivo, luz);
-
-	    //_textura[0] = _gerenciadorVideo->getTexture("recursos/texturas/louva_lider.jpg");
-		_malha[0] = _gerenciadorCena->getMesh("recursos/modelos/louva_lider.3ds");
-		_modelo[0] = _gerenciadorCena->addAnimatedMeshSceneNode(_malha[0]);
-
-		_modelo[0]->setPosition(vector3df(990,_terreno->getHeight(990,980)+2,980));
-
-		_camera->setPosition(_modelo[0]->getPosition() + vector3df(-20,30,0));
-		_camera->setTarget(_modelo[0]->getPosition());
-		luz->setParent(_camera);
-
-		_modelo[0]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-		//_modelo[0]->setMaterialFlag(EMF_LIGHTING, false);
-		_toonShader->apply(_modelo[0],"recursos/texturas/louva_lider.jpg");
+		luz = _gerenciadorCena->addLightSceneNode(0, vector3df(500,500,500), SColorf(1.0f, 0.6f, 0.7f, 1.0f), 1200.0f);
 		
 
+		//_textura[0] = _gerenciadorVideo->getTexture("recursos/texturas/louva_lider.jpg");
+		_malha[0] = _gerenciadorCena->getMesh("recursos/modelos/besouro.b3d");
+		_modelo[0] = _gerenciadorCena->addAnimatedMeshSceneNode(_malha[0]);
+		_modelo[0]->setPosition(vector3df(990,_terreno->getHeight(990,980)+2,980));
+
+		//_empty->setPosition(_modelo[0]->getPosition());
+		
+		_camera->setParent(_empty);
+		_camera->setPosition( vector3df(-20,20,0));
+		_camera->setTarget(_empty->getPosition());
+
+
+		luz->setPosition(_modelo[0]->getPosition()+vector3df(0,100,0));
+
+		_toonShader = new CToonShader(_dispositivo, luz);
+
+		_modelo[0]->setAnimationSpeed(30);
+		_modelo[0]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+		_toonShader->apply(_modelo[0],"recursos/texturas/besouro1.jpg");
 
 		_malha[1] = _gerenciadorCena->getMesh("recursos/modelos/arvore.3ds");
-		_modelo[1] = _gerenciadorCena->addMeshSceneNode(_malha[1]);
+		_modelo[1] = _gerenciadorCena->addAnimatedMeshSceneNode(_malha[1]);
 		_modelo[1]->setPosition(vector3df(1000,_terreno->getHeight(1000,980)+2,980));
 		_modelo[1]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-		//_modelo[1]->setMaterialFlag(EMF_LIGHTING, false);
 		_toonShader->apply(_modelo[1],"recursos/texturas/arvore.jpg");
 
+		_malha[2] = _gerenciadorCena->getMesh("recursos/modelos/louva_lider.b3d");
+		_modelo[2] = _gerenciadorCena->addAnimatedMeshSceneNode(_malha[2]);
+		_modelo[2]->setPosition(vector3df(1100,_terreno->getHeight(1100,980)+2,980));
+		_modelo[2]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+		_toonShader->apply(_modelo[2],"recursos/texturas/louva_lider.jpg");
+		_modelo[2]->setID(5);
 
 		_direcao = 0.0f;
 		_velocidade = 0.1f;
@@ -465,7 +456,11 @@ public:
 		s32 Width = _gerenciadorVideo->getViewPort().getWidth();
 		s32 Height = _gerenciadorVideo->getViewPort().getHeight();
 
-		_selector = _terreno->getTriangleSelector();
+		_selector = _gerenciadorCena->createTerrainTriangleSelector(_terreno, 0);
+		_terreno->setTriangleSelector(_selector); 
+		//_selector = _terreno->getTriangleSelector();
+
+		rotV = rotH = 0.0;
 
 		return (true);
 	}

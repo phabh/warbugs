@@ -20,13 +20,13 @@ private:
 	void readCommands()	{}
 
 	void updateGraphics() 
-	{/*
+	{
 		_video = CVideoTexture::createVideoTexture(_dispositivo, "recursos/videos/video.wmv");
 		_video->setVolume(100);
 		_video->playCutscene();
 		_video->drop();
 
-		_nextID = LOGIN;*/
+		_nextID = LOGIN;
 	}
 
 public:
@@ -49,7 +49,6 @@ public:
 
 		_myID = _nextID = ABERTURA;
 
-
 		_dispositivo->setWindowCaption(L"Warbugs - BETA Version 0.1");
 
 		_gerenciadorCena = _dispositivo->getSceneManager();   // Cria o gerenciador de cena
@@ -57,13 +56,13 @@ public:
 		_gerenciadorHud = _dispositivo->getGUIEnvironment();  // Cria o gerenciador de menu
 
         _flags[HUDCHANGED] = true;
-
+/*
 		_video = CVideoTexture::createVideoTexture(_dispositivo, "recursos/videos/movie.wmv");
 		_video->setVolume(100);
 		_video->playCutscene();
 		_video->drop();
 
-		_nextID = LOGIN;
+		_nextID = LOGIN;*/
 
 		return (true);
 	}
