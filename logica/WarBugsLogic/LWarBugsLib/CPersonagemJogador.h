@@ -85,7 +85,6 @@ public:
 	
 	//Setters
 	void setName(char *name);
-	void setRace(Raca raca);
 	void setLevel(int level);
 	void setXP(int xp);
 	void setXPToNextLv(int xp);
