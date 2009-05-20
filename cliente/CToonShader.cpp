@@ -27,7 +27,7 @@ public:
 		_camera = _gerCena->getActiveCamera();
 	}
 
-	void apply(::ISceneNode *modelo, c8 *textura)
+	void apply(IAnimatedMeshSceneNode *modelo, c8 *textura)
 	{
 		modelo->getMaterial(0).setTexture(0, _gerVideo->getTexture(textura));
 		modelo->getMaterial(0).setTexture(1, _gerVideo->getTexture("recursos/texturas/layercell.png"));
