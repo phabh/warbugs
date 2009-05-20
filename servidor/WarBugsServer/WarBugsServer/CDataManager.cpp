@@ -2499,9 +2499,53 @@ void CDataManager::updatePersonagem(int id, int nivel, int xp)
 {}
 
 //Inserções
-void CDataManager::insertPersonagem(CPersonagem * p1)
+void CDataManager::insertPersonagemJogador(CPersonagemJogador * p1)
 {
+	System::String ^ query;
+	System::String ^ temp;
+	temp = gcnew System::String(p1->getName());
+
+	int tempRaca = p1->getRace();
+
+
+	query = L"INSERT INTO `personagem` "
+		    +"(`PGID`,`PGNOME`,`PGNIVEL`,`PGDINHEIRO`,"
+			+"`PGEXPERIENCIA`,`PGEXPERIENCIAMAX`,`PGPONTOSVIDA`,"
+			+"`PGPONTOSVIDAMAX`,`PGPONTOSPODER`,`PGPONTOSPODERMAX`,"
+			+"`PGDIRECAO`,`PGVELOCIDADE`,`PGRACA`,`PGTEMPORESPAW`,"
+			+"`PGFORCA`,`PGAGILIDADE`,`PGDESTREZA`,`PGRESISTENCIA`,"
+			+"`PGINSTINTO`,`PGATAQUESDISTANCIA`,`PGATAQUESCORPO`,"
+			+"`PGDANOCORPO`,`PGDANODISTANCIA`,`PGDEFESA`,`PGTAXAATAQUE`,"
+			+"`PGTEMPOCARGA`,`PGTIPOPERSONAGEM`,`PGLEALARANHA`,`PGLEALBESOURO`,"
+			+"`PGLEALESCORPIAO`,`PGLEALLOUVA`,`PGLEALVESPA`,`PGIDARMOR`,"
+			+"`PGIDWEAPON`,`PGX`,`PGZ`,`PGY`,`PGIDTEXTURA`,`PGIDMODELO`,"
+			+"`PGBONUSPOINTSPRIMARIAS`,`PGBONUSPOINTSPODER`,`PGISBASE`,`PGIDHUD`)"
+			+" VALUES ("+p1->getID()+",\""+temp+"\","+p1->getLevel()+","+p1->getMoney()
+			+","+p1->getXP()+","+p1->getMaxXP()+","+p1->getStats()->getPV()
+			+","+p1->getStats()->getMaxPV()+","+p1->getStats()->getPM()+","+p1->getStats()->getMaxPM()
+			+","+p1->getDirection()+","+p1->getMoveSpeed()+","+tempRaca+","+p1->getRespawnTime()
+			+","+p1->getFOR()+","+p1->getAGI()+","+p1->getDES()+","+p1->getRES()
+			+","+p1->getINS()+","+p1->getStats()->getRangedAttack()+","+p1->getStats()->getMeleeAttack()
+			+","+p1->getStats()->getMeleeDamage()+","+p1->getStats()->getRangedDamage()+","+p1->getStats()->getDefense()+","+p1->getStats()->getAttackRate()
+			+","+p1->getStats()->getChargeTime()+","+(int)JOGADOR+","+p1->getLoyalty()->getLoyaltyToSpider()+","+p1->getLoyalty()->getLoyaltyToBeetle()
+			+","+p1->getLoyalty()->getLoyaltyToScorpion()+","+p1->getLoyalty()->getLoyaltyToMantis()+","+p1->getLoyalty()->getLoyaltyToWasp()+","+p1->getEquip()->armadura->getID()
+			+","+p1->getEquip()->arma->getID()+","+p1->getPosition()->x+","+p1->getPosition()->z+","+0+","+p1->get3DTexture()+","+p1->getModel()
+			+","+p1->getSkillPointsLeft()+","+p1->getPointsLeft()+",0,"+p1->get2DTexture()+")";
+
 	
+	System::String ^texto;
+
+	//se não for inserido com sucesso
+	if(_dataBase->insertNow(toChar(query)))
+	{
+		texto = L"Personagem '"+temp+"' Incluído com sucesso";
+	}
+	else
+	{
+		texto = L"Não foi possivel incluir o personagem '"+temp+"'.";
+	}
+
+	WarBugsLog::_log->Items->Add(texto);			
 
 }
 
