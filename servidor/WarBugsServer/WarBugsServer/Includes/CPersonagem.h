@@ -32,10 +32,11 @@ class CBuff;
 // ------------------------------------------------------------------------------------------------------------
 class CPersonagem : public C3DObject{
 protected:
+	Raca raca;
 	float direcao;
 	Ponto *destino;
 	EstadoPersonagem estado;
-	//Tempo de respawn
+	int respawn;
 	int dinheiro;
 	CBolsa *inventario;
 	CHabilidadesSecundarias *habilidadesSecundarias;
@@ -48,6 +49,8 @@ public:
 
 	CPersonagem();
 	//Getters e Setters
+	Raca getRace();
+	int getRespawnTime();
 	float getDirection();
 	float getMoveSpeed();
 	int getFOR();
@@ -64,6 +67,8 @@ public:
 	CHabilidades *getBaseStats();
 	CBonusPrimario *getBaseBonus();
 	
+	void setRace(Raca raca);
+	void setRespawnTime(int newTime);
 	void setDirection(float direction);
 	void setState(EstadoPersonagem newState);
 	void setMoney(int value);
