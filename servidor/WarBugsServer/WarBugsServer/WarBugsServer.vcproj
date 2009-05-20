@@ -285,6 +285,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Includes\CDoubleList.h"
+					>
+				</File>
+				<File
 					RelativePath=".\commom.h"
 					>
 				</File>

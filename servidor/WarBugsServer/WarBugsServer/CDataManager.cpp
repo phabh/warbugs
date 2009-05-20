@@ -444,7 +444,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 	
 	if(numRegs == 0 || numCampos == 0)
 	{
-		System::String ^texto = L"Não foi encontrado";
+		System::String ^texto = L"Não foi encontrado o Persoangem de Tipo"+idTipoPersonagem;
 		WarBugsLog::_log->Items->Add(texto);		
 		return Lista;	
 	}
@@ -690,7 +690,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 	
 	if(numRegs == 0 || numCampos == 0)
 	{
-		System::String ^texto = L"Não foi encontrado";
+		System::String ^texto = L"Não foi encontrado o Tipo de Personagem "+idTipoPersonagem+" no cenário "+idCenario;
 		WarBugsLog::_log->Items->Add(texto);		
 		return Lista;	
 	}
@@ -932,7 +932,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 	
 	if(numRegs == 0 || numCampos == 0)
 	{
-		System::String ^texto = L"Não foi encontrado";
+		System::String ^texto = L"Não foi encontrado o Personagem de Tipo "+idTipoPersonagem;
 		WarBugsLog::_log->Items->Add(texto);		
 		return Lista;	
 	}
@@ -1505,7 +1505,7 @@ CWeapon * CDataManager::getWeaponEquiped(int idPersonagem)
 
 	if(numRegs == 0 || numCampos == 0)
 	{
-		System::String ^texto = L"Não foi encontrado";
+		System::String ^texto = L"Não foi encontrado o equipamento do Personagem "+idPersonagem;
 		WarBugsLog::_log->Items->Add(texto);		
 		return NULL;	
 	}
@@ -1587,7 +1587,7 @@ CArmor * CDataManager::getArmorEquiped(int idPersonagem)
 
 	if(numRegs == 0 || numCampos == 0)
 	{
-		System::String ^texto = L"Não foi encontrado";
+		System::String ^texto = L"Não foi encontrado a Armadura do Personagem "+idPersonagem;
 		WarBugsLog::_log->Items->Add(texto);		
 		return NULL;	
 	}
@@ -2058,7 +2058,7 @@ CBolsaList * CDataManager::getListBolsa(int idCenario)
 
 	if(numRegs == 0 || numCampos == 0)
 	{
-		System::String ^texto = L"Não foi encontrado";
+		System::String ^texto = L"Não foi encontrado as bolsas do cenário "+idCenario;
 		WarBugsLog::_log->Items->Add(texto);		
 		return NULL;	
 	}
@@ -2364,7 +2364,7 @@ CJogador CDataManager::getJogador(char * login)
 
 	if(numRegs == 0 || numCampos == 0)
 	{
-		System::String ^texto = L"Não foi encontrado";
+		System::String ^texto = L"Não foi encontrado o Jogador com Login "+temp;
 		WarBugsLog::_log->Items->Add(texto);		
 		jogador.setID(-1);
 		return jogador;	
@@ -2413,7 +2413,7 @@ CPortal * CDataManager::getPortal(int idCenario, Direcoes direcao)
 
 	if(numRegs == 0 || numCampos == 0)
 	{
-		System::String ^texto = L"Não foi encontrado";
+		System::String ^texto = L"Não foi encontrado o Portal para "+idCenario;
 		WarBugsLog::_log->Items->Add(texto);		
 		return portal;	
 	}
@@ -2471,7 +2471,34 @@ bool  CDataManager::doLogin(char * login, char * senha, CJogador * jogador)
 //Micelandia
 long  CDataManager::numPersonagens()
 {
-	long result;
+	long result = 0;
+	
+	TDadosBD ^ dados      = gcnew TDadosBD();
+	TDadosBD ^ nomeCampos = gcnew TDadosBD();
+
+	unsigned int numRegs   = 0;
+	unsigned int numCampos = 0;
+
+	System::String ^ query;
+
+	query = L"SELECT COUNT(PGID) NOVOID FROM PERSONAGEM";
+
+	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
+
+	if(numRegs == 0 || numCampos == 0)
+	{
+		System::String ^texto = L"Não foi possível contar os Personagens";
+		WarBugsLog::_log->Items->Add(texto);		
+		return result;	
+	}
+
+	for(int i = 0; i < (int)numCampos; i++)
+	{
+		nomeCampos->Add(dados[0]);
+		dados->RemoveAt(0);
+	}
+
+	result = System::Int32::Parse(dados[0]->ToString());
 
 	return result;
 }
@@ -2520,7 +2547,7 @@ void CDataManager::insertPersonagemJogador(CPersonagemJogador * p1)
 			+"`PGLEALESCORPIAO`,`PGLEALLOUVA`,`PGLEALVESPA`,`PGIDARMOR`,"
 			+"`PGIDWEAPON`,`PGX`,`PGZ`,`PGY`,`PGIDTEXTURA`,`PGIDMODELO`,"
 			+"`PGBONUSPOINTSPRIMARIAS`,`PGBONUSPOINTSPODER`,`PGISBASE`,`PGIDHUD`)"
-			+" VALUES ("+p1->getID()+",\""+temp+"\","+p1->getLevel()+","+p1->getMoney()
+			+" VALUES ("+numPersonagens()+",\""+temp+"\","+p1->getLevel()+","+p1->getMoney()
 			+","+p1->getXP()+","+p1->getMaxXP()+","+p1->getStats()->getPV()
 			+","+p1->getStats()->getMaxPV()+","+p1->getStats()->getPM()+","+p1->getStats()->getMaxPM()
 			+","+p1->getDirection()+","+p1->getMoveSpeed()+","+tempRaca+","+p1->getRespawnTime()

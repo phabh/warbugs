@@ -4,15 +4,44 @@
 #include "commom.h"
 #include "CDataBase.h"
 #include "CDataManager.h"
+#include <CDoubleList.h>
 #include <CCenario.h>
 #include <CBugSocket.h>
 #include <CPersonagemJogador.h>
+#include <CBuff.h>
 #include <CJogador.h>
 #include <CPlayerList.h>
 
+class CFrame
+{
+	public:
+		CFrame      *   _next;
+		bool			_toAll;
+		CBugSocket  *	_socket;
+		CBugMessage *	_message;
+		int             _idCenario;
+
+		CFrame()
+		{
+			char data[1400];
+			_toAll	= false;
+			_socket = NULL;
+			_message = new CBugMessage();
+			_message->init(data,1400);
+			_idCenario = -1;
+		}
+
+		CFrame(bool toAll, CBugSocket * socket, CBugMessage * mes, int idCenario)
+		{
+			_toAll	= toAll;
+			_socket = socket;
+			_message = mes;
+			_idCenario = idCenario;
+		}
+};
 
 
-class CCoreServer
+ref class CCoreServer
 {
 				CCenarioList	* _cenarioList;
 				CBugSocketServer* _networkServer;
@@ -36,26 +65,35 @@ class CCoreServer
 
 		CPlayerList   * getPlayers();
 
+		static CFrame * _buffer;
 
-		void            addPlayer(CJogador * jogador);
-		void			removePlayer(int idJogador);
-		void			removePlayers();
+	//	void            addPlayer(CJogador * jogador);
+	//	void			removePlayer(int idJogador);
+	//	void			removePlayers();
 
 		//mensagens para enviar para o cliente
-		void			sendMessage(bool toAll, CBugSocket * destino, CBugMessage * mes);
-		void			sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, float f1, float f2);
-		void			sendMessage(bool toAll, CBugSocket * destino, int idMensagem, CPersonagem * p1);
-		void			sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, CPeopleList * p1);
-		void			sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2, float f1, float f2);
-		void			sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10);
-		void			sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1);
-		void			sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2);
-		void			sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2, int i3);
-		void			sendMessage(bool toAll, CBugSocket * destino, int idMensagem);
-		void			sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9);
-		void			sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6);
-		void			sendMessage(bool toAll, CBugSocket * destino, int idMensagem, char * mensagem);
-		void			sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int v1[30], int v2[30]);
+		/*
+			funcoes para enviar mensagem para o cliente
+			@param toAll -> True envia para todas as pessoas do cenário passado
+			@param idCenario -> -1 para nenhum cenário, 0 acima para o cenário que será enviado
+			@param destino -> caso seja para um jogador apenas
+			@param mes -> messagem a ser enviada
+		*/
+		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, CBugMessage * mes);
+		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, float f1, float f2);
+		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino,  int idMensagem, TypeClassChars tipoPersonagem, CPersonagem  * p1);
+		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, CPeopleList * p1);
+		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, float f1, float f2);
+		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10);
+		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1);
+		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2);
+		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3);
+		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem);
+		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9);
+		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6);
+		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, char * mensagem);
+		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int v1[30], int v2[30]);
+		static void		sendMessagesFrame(CPlayerList * cList);
 };
 #endif
 

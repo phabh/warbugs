@@ -1,5 +1,6 @@
 #include "CCoreServer.h"
 #include "CDataManager.h"
+#include <math.h>
 
 CCoreServer::CCoreServer(CDataBase *db, int fps)
 {
@@ -25,6 +26,7 @@ void CCoreServer::initialize()
 {
 	_playersList = new CPlayerList();
 
+	//CCoreServer::_buffer;
 
 	_cenarioList = _dataManager->getListCenario();
 }
@@ -91,14 +93,14 @@ void CCoreServer::readPackets()
 						//se fez login
 						if(_dataManager->doLogin(login,senha,tempJogador))
 						{
-							sendMessage(false,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN);
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN);
 							tempJogador->setSocket(_playersList->getElementAt(indexJogador)->getSocket());
 							_playersList->removeJogadorByPosition(indexJogador);
 							_playersList->addJogador(tempJogador);
 						}
 						else
 						{
-							sendMessage(false,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN_FAIL);
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN_FAIL);
 						}
 
 						break;
@@ -114,11 +116,11 @@ void CCoreServer::readPackets()
 
 						if(tempList != NULL)
 						{
-							sendMessage(false,_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOW_PERSONAGENS,tempList->size(),tempList);
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOW_PERSONAGENS,tempList->size(),tempList);
 						}
 						else
 						{
-							sendMessage(false,_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOW_PERSONAGENS,0);
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOW_PERSONAGENS,0);
 						}
 
 						break;
@@ -130,13 +132,14 @@ void CCoreServer::readPackets()
 
 						int    idJogador = mesRecebida.readLong();
 						int    idRaca	 = mesRecebida.readLong();
-						char * nome		 = mesRecebida.readString();
+						char   nome[15];
+						strcpy(nome,mesRecebida.readString());
 						
 						CPeopleList * tempList = &_dataManager->getPersonagem((int)JOGADOR,idRaca,true);
 
 						if(tempList == NULL)
 						{
-							sendMessage(false,_playersList->getElementAt(indexJogador)->getSocket(),(int)CREATE_PLAYER_FAIL);
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)CREATE_PLAYER_FAIL);
 						}
 						else
 						{
@@ -146,7 +149,7 @@ void CCoreServer::readPackets()
 
 								_playersList->getElementAt(indexJogador)->setCharacter((CPersonagemJogador *)tempList->getElementAt(0));
 	
-								_dataManager->insertPersonagem(tempList->getElementAt(0));
+								_dataManager->insertPersonagemJogador(((CPersonagemJogador *)tempList->getElementAt(0)));
 
 								//insert em personagens do novo personagem e insert em personagem_jogador da vinculação de 1 com o outro;
 						}
@@ -503,28 +506,30 @@ void CCoreServer::readPackets()
 
 }
 
-void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, CBugMessage * mes)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, CBugMessage * mes)
 {
+	CFrame * frame = new CFrame(toAll, destino, mes, idCenario);
 
-	if(toAll)
+	if(_buffer == NULL)
 	{
-		CPlayerList * cList;
-		cList = _playersList;
-
-		for(int index = 0; index < cList->size(); index++)
-		{
-			cList->getElementAt(index)->getSocket()->SendLine(*mes);
-		}
+		_buffer = frame;
 	}
 	else
 	{
-		destino->SendLine(*mes);
-	}		
+		CFrame * temp = _buffer;
+
+		while(temp != NULL)
+		{
+			temp = temp->_next;
+		}
+
+		temp = frame;
+	}
 }
 
 
 
-void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, float f1, float f2)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, float f1, float f2)
 {
 	char data[1400];
 	CBugMessage mes;
@@ -535,37 +540,319 @@ void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, 
 	mes.writeFloat(f1);
 	mes.writeFloat(f2);
 
-	sendMessage(toAll, destino, &mes);
+	sendMessage(toAll, idCenario, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, CPersonagem * p1)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino,  int idMensagem, TypeClassChars tipoPersonagem, CPersonagem  * p1)
 {
-/*	char data[1400];
+	char data[1400];
 	CBugMessage mes;
 	mes.init(data,sizeof(data));
+
+	int idArmor		= -1;
+	int idWeapon	= -1;
+
+	int tipoClasse	= (int)tipoPersonagem;
+	int race		= (int)p1->getRace();
+	char * nome;	
+
+	switch(p1->getRace())
+	{
+		case ARANHA:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Aranha";	break;
+					case FILHOTE:	nome = "Filhote Aranha";	break;
+					case VENDEDOR:	nome = "Vendedor Aranha";	break;
+					case LIDER:		nome = "Deena Balaath";		break;
+					case MAE:		nome = "Deena Balaath";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+			break;
+		case BESOURO:		
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Besouro";	break;
+					case FILHOTE:	nome = "Filhote Besouro";	break;
+					case VENDEDOR:	nome = "Vendedor Besouro";	break;
+					case LIDER:		nome = "Líder Besouro";		break;
+					case MAE:		nome = "Mãe Besouro";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+			break;
+		case ESCORPIAO:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Escorpião";	break;
+					case FILHOTE:	nome = "Filhote Escorpião";	break;
+					case VENDEDOR:	nome = "Vendedor Escorpião";	break;
+					case LIDER:		nome = "Líder Escorpião";		break;
+					case MAE:		nome = "Mãe Escorpião";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+		case LOUVADEUS:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Louva-a-Deus";	break;
+					case FILHOTE:	nome = "Filhote Louva-a-Deus";	break;
+					case VENDEDOR:	nome = "Vendedor Louva-a-Deus";	break;
+					case LIDER:		nome = "Líder Louva-a-Deus";		break;
+					case MAE:		nome = "Mãe Louva-a-Deus";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+		case VESPA:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Vespa";	break;
+					case FILHOTE:	nome = "Filhote Vespa";	break;
+					case VENDEDOR:	nome = "Vendedor Vespa";	break;
+					case LIDER:		nome = "Líder Vespa";		break;
+					case MAE:		nome = "Mãe Vespa";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+		case ABELHA:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Abelha";	break;
+					case FILHOTE:	nome = "Filhote Abelha";	break;
+					case VENDEDOR:	nome = "Vendedor Abelha";	break;
+					case LIDER:		nome = "Líder Abelha";		break;
+					case MAE:		nome = "Mãe Abelha";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+		case BARATA:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Barata";	break;
+					case FILHOTE:	nome = "Filhote Barata";	break;
+					case VENDEDOR:	nome = "Vendedor Barata";	break;
+					case LIDER:		nome = "Líder Barata";		break;
+					case MAE:		nome = "Mãe Barata";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+		case BARBEIRO:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Barbeiro";	break;
+					case FILHOTE:	nome = "Filhote Barbeiro";	break;
+					case VENDEDOR:	nome = "Vendedor Barbeiro";	break;
+					case LIDER:		nome = "Líder Barbeiro";	break;
+					case MAE:		nome = "Mãe Barbeiro";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+		case CALANGO:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Calango";	break;
+					case FILHOTE:	nome = "Filhote Calango";	break;
+					case VENDEDOR:	nome = "Vendedor Calango";	break;
+					case LIDER:		nome = "Líder Calango";		break;
+					case MAE:		nome = "Mãe Calango";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+		case CAMALEAO:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Camaleão";	break;
+					case FILHOTE:	nome = "Filhote Camaleão";	break;
+					case VENDEDOR:	nome = "Vendedor Camaleão";	break;
+					case LIDER:		nome = "Líder Camaleão";		break;
+					case MAE:		nome = "Mãe Camaleão";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+		case CUPIM:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Cupim";	break;
+					case FILHOTE:	nome = "Filhote Cupim";	break;
+					case VENDEDOR:	nome = "Vendedor Cupim";	break;
+					case LIDER:		nome = "Líder Cupim";		break;
+					case MAE:		nome = "Mãe Cupim";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+		case FORMIGA:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Formiga";	break;
+					case FILHOTE:	nome = "Filhote Formiga";	break;
+					case VENDEDOR:	nome = "Vendedor Formiga";	break;
+					case LIDER:		nome = "Líder Formiga";		break;
+					case MAE:		nome = "Mãe Formiga";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+		case JOANINHA:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Joaninha";	break;
+					case FILHOTE:	nome = "Filhote Joaninha";	break;
+					case VENDEDOR:	nome = "Vendedor Joaninha";	break;
+					case LIDER:		nome = "Líder Joaninha";	break;
+					case MAE:		nome = "Mãe Joaninha";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+		case LAGARTIXA:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Lagartixa";	break;
+					case FILHOTE:	nome = "Filhote Lagartixa";	break;
+					case VENDEDOR:	nome = "Vendedor Lagartixa";	break;
+					case LIDER:		nome = "Líder Largatixa";		break;
+					case MAE:		nome = "Mãe Largatixa";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+		case LIBELULA:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Libélula";	break;
+					case FILHOTE:	nome = "Filhote Libélula";	break;
+					case VENDEDOR:	nome = "Vendedor Libélula";	break;
+					case LIDER:		nome = "Líder Libélula";	break;
+					case MAE:		nome = "Mãe Libélula";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+		case PERCEVEJO:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Percevejo";		break;
+					case FILHOTE:	nome = "Filhote Percevejo";		break;
+					case VENDEDOR:	nome = "Vendedor Percevejo";	break;
+					case LIDER:		nome = "Líder Percevejo";		break;
+					case MAE:		nome = "Mãe Percevejo";			break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+		case SAPO:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Sapo";	break;
+					case FILHOTE:	nome = "Filhote Sapo";	break;
+					case VENDEDOR:	nome = "Vendedor Sapo";	break;
+					case LIDER:		nome = "Líder Sapo";	break;
+					case MAE:		nome = "Mãe Sapo";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+		case TATUBOLINHA:
+				switch(tipoPersonagem)
+				{
+					case SOLDADO:	nome = "Soldado Tatu Bolinha";	break;
+					case FILHOTE:	nome = "Filhote Tatu Bolinha";	break;
+					case VENDEDOR:	nome = "Vendedor Tatu Bolinha";	break;
+					case LIDER:		nome = "Líder Tatu Bolinha";	break;
+					case MAE:		nome = "Mãe Tatu Bolinha";		break;
+					case JOGADOR:	nome = ((CPersonagemJogador *)p1)->getName();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->armadura->getID();
+									idArmor = ((CPersonagemJogador *)p1)->getEquip()->arma->getID();
+						break;
+				}
+				break;
+	}
 
 	mes.writeByte(idMensagem);
 
 	mes.writeLong(p1->getID());
-	//mes.writeString(p1->getNome());
+	mes.writeString(nome);
 	mes.writeFloat(p1->getPosition()->x);
-	mes.writeFloat(p1->getPosition()->y);
-	//mes.writeLong(p1);
-	//mes.writeLong(p1.getPP());
-	//mes.writeLong(p1->);
-	//mes.writeLong(p1.getPVMax());
-	//mes.writeLong(p1.getPPMax());
-
+	mes.writeFloat(p1->getPosition()->z);
+	mes.writeLong(p1->getStats()->getPV());
+	mes.writeLong(p1->getStats()->getPM());
+	mes.writeLong(p1->getStats()->getMaxPV());
+	mes.writeLong(p1->getStats()->getMaxPM());
 	
 	//	AKI VAI TER QUE PREENCHER OS BUFFS CONFORME FOR, OLHA AE EDER
 	
-	short   buff;	
+	short   buff = 0;	
 
-	bool    buffer[15]  = p1.getBuff();
+	bool    buffer[15];
+	CBuff * tempBuff;
+	int     intBuff;
+
+	for(int i = 0; i < p1->getBuffs()->size(); i++ )
+	{
+		tempBuff = p1->getBuffs()->getElementAt(i);
+
+		if(tempBuff != NULL)
+		{
+			intBuff = (int)tempBuff->getTipo();
+			if( intBuff > 0)
+				buffer[intBuff] = true;		
+		}
+	}
+
+		
+	int potencia;
 
 	for(int i = 0; i < 14; i--)
 	{
-		buff = (short)(buffer[i] & pow(2,i));
+		potencia = 1;
+		for(int j = 0; j < i; j++)
+			potencia = potencia * 2;
+
+		buff = (short)(buffer[i] & potencia);
 	}
 
 	mes.writeShort(buff);
@@ -574,22 +861,21 @@ void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, 
 	//	END BUFF
 	
 
-	mes.writeLong(p1.getEstado());
-	mes.writeLong(p1.getRaca());
-	mes.writeLong(p1.getTipoPersonagem());
-	mes.writeLong(p1.getIdArma());
-	mes.writeLong(p1.getIdArmadura());
-	mes.writeFloat(p1.getDirecao());
-	mes.writeFloat(p1.getVelocidade());
+	mes.writeLong(p1->getState());
+	mes.writeLong(race);
+	mes.writeLong(tipoClasse);
+	mes.writeLong(idWeapon);
+	mes.writeLong(idArmor);
+	mes.writeFloat(p1->getDirection());
+	mes.writeFloat(p1->getMoveSpeed());
 
-	sendMessage(toAll, destino, &mes);
-	*/
+	sendMessage(toAll, idCenario, destino, &mes);
 }
 
 /*
 	Manda os personagens que o jogador possui
 */
-void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, CPeopleList * p1)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, CPeopleList * p1)
 {
 	char data[1400];
 	CBugMessage mes;
@@ -602,17 +888,17 @@ void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, 
 	for(int j = 0; j < i1; j++)
 	{
 		CPersonagemJogador * personagem = (CPersonagemJogador *)p1->getElementAt(j);
-
+		//Dados pessoais
 		mes.writeLong(personagem->getID());
 		mes.writeString(personagem->getName());
 		mes.writeLong(personagem->getLevel());
-
+		//Habilidades Primárias
 		mes.writeLong(personagem->getAGI());
 		mes.writeLong(personagem->getDES());
 		mes.writeLong(personagem->getFOR());
 		mes.writeLong(personagem->getINS());
 		mes.writeLong(personagem->getRES());
-
+		//Habilidades Secundárias
 		mes.writeLong(personagem->getStats()->getAttackRate());
 		mes.writeLong(personagem->getStats()->getChargeTime());
 		mes.writeLong(personagem->getStats()->getDefense());
@@ -620,17 +906,17 @@ void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, 
 		mes.writeLong(personagem->getStats()->getMeleeDamage());
 		mes.writeLong(personagem->getStats()->getRangedAttack());
 		mes.writeLong(personagem->getStats()->getRangedDamage());
-
+		//3D
 		mes.writeLong(personagem->getModel());
 		mes.writeLong(personagem->get3DTexture());
 	}
 
-	sendMessage(toAll, destino, &mes);
+	sendMessage(toAll, idCenario, destino, &mes);
 	
 }
 
 
-void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2, float f1, float f2)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, float f1, float f2)
 {
 	char data[1400];
 	CBugMessage mes;
@@ -643,10 +929,10 @@ void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, 
 	mes.writeFloat(f1);
 	mes.writeFloat(f2);
 
-	sendMessage(toAll, destino, &mes);
+	sendMessage(toAll, idCenario, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10)
 {
 	char data[1400];
 	CBugMessage mes;
@@ -665,10 +951,10 @@ void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, 
 	mes.writeLong(i9);
 	mes.writeLong(i10);
 
-	sendMessage(toAll, destino, &mes);
+	sendMessage(toAll, idCenario, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1)
 {
 	char data[1400];
 	CBugMessage mes;
@@ -678,10 +964,10 @@ void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, 
 
 	mes.writeLong(i1);
 
-	sendMessage(toAll, destino, &mes);
+	sendMessage(toAll, idCenario, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2)
 {
 	char data[1400];
 	CBugMessage mes;
@@ -692,10 +978,10 @@ void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, 
 	mes.writeLong(i1);
 	mes.writeLong(i2);
 
-	sendMessage(toAll, destino, &mes);
+	sendMessage(toAll, idCenario, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2, int i3)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3)
 {
 	char data[1400];
 	CBugMessage mes;
@@ -707,10 +993,10 @@ void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, 
 	mes.writeLong(i2);
 	mes.writeLong(i3);
 
-	sendMessage(toAll, destino, &mes);
+	sendMessage(toAll, idCenario, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem)
 { 
 	char data[1400];
 	CBugMessage mes;
@@ -718,10 +1004,10 @@ void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem)
 
 	mes.writeByte(idMensagem);
 
-	sendMessage(toAll, destino, &mes);
+	sendMessage(toAll, idCenario, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9)
 {
 	char data[1400];
 	CBugMessage mes;
@@ -739,10 +1025,10 @@ void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, 
 	mes.writeLong(i8);
 	mes.writeLong(i9);
 	
-	sendMessage(toAll, destino, &mes);
+	sendMessage(toAll, idCenario, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6)
 {
 	char data[1400];
 	CBugMessage mes;
@@ -757,10 +1043,10 @@ void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, 
 	mes.writeLong(i5);
 	mes.writeLong(i6);
 
-	sendMessage(toAll, destino, &mes);
+	sendMessage(toAll, idCenario, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, char * mensagem)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, char * mensagem)
 {
 	char data[1400];
 	CBugMessage mes;
@@ -770,10 +1056,10 @@ void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, 
 
 	mes.writeString(mensagem);
 
-	sendMessage(toAll, destino, &mes);
+	sendMessage(toAll, idCenario, destino, &mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, int v1[30], int v2[30])
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int v1[30], int v2[30])
 {
 	char data[1400];
 	CBugMessage mes;
@@ -791,5 +1077,34 @@ void CCoreServer::sendMessage(bool toAll, CBugSocket * destino, int idMensagem, 
 		mes.writeLong(v2[i]);
 	}
 
-	sendMessage(toAll, destino, &mes);
+	sendMessage(toAll, idCenario, destino, &mes);
+}
+
+void CCoreServer::sendMessagesFrame(CPlayerList * cList)
+{
+	CFrame * frame;
+	if(cList != NULL)
+	while(_buffer != NULL)
+	{
+		frame = _buffer;
+
+		if(frame != NULL)
+		{
+			if(frame->_toAll)
+			{
+				for(int index = 0; index < cList->size(); index++)
+				{
+					if(frame->_idCenario == cList->getElementAt(index)->getScene()->getID())
+						cList->getElementAt(index)->getSocket()->SendLine(*frame->_message);
+				}
+			}
+			else
+			{
+				frame->_socket->SendLine(*frame->_message);
+			}
+		}
+
+		_buffer = _buffer->_next;
+		delete frame;
+	}
 }
