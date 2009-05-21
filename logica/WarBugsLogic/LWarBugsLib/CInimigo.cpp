@@ -64,6 +64,14 @@ void CInimigo::takeDecision()
 		break;
 	}
 }
+void CInimigo::die()
+{
+	if(getStats()->getPV() <= 0)
+	{
+		estado = MORTO;
+		respawn = ENEMYRESPAWNTIME;
+	}
+}
 void CInimigo::update()
 {
 	if(respawn > 0)
@@ -87,10 +95,6 @@ void CInimigo::update()
 		this->takeDecision();
 	}
 
-	if(getStats()->getPV() <= 0)
-	{
-		estado = MORTO;
-		respawn = ENEMYRESPAWNTIME;
-	}
+	die();
 }
 #endif
