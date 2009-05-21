@@ -28,6 +28,7 @@ private:
 public:
 	CInimigo(CCenario *cenario);
 	void takeDecision();
+	void die();
 
 	void update();
 };

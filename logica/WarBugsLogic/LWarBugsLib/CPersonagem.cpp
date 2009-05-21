@@ -108,6 +108,10 @@ void CPersonagem::setRespawnTime(int newTime)
 }
 void CPersonagem::setDirection(float direction)
 {
+	if(direction < 0)
+	{
+		direction = direction + 360;
+	}
 	direcao = direction;
 }
 void CPersonagem::setState(EstadoPersonagem newState)
@@ -175,6 +179,6 @@ void CPersonagem::move()
     setDirection(atan2(destino->z - getPosition()->z, destino->x - getPosition()->x) * 180 / PI);
     setPosition(teste->x, teste->z);
 }
-void CPersonagem::die(){}
+//void CPersonagem::die(){}
 //void CPersonagem::useSkill(CPoder *skill){}
 #endif
