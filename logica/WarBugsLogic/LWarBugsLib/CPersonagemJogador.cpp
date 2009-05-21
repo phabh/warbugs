@@ -26,6 +26,7 @@ CPersonagemJogador::CPersonagemJogador()
 	_xpToNextLv = 0;
 	_pontoDistribuir = 0;
 	_lealdade = new CLealdade();
+	_quest = new CQuest();
 	//_party = new irr::core::array<CPersonagemJogador*>();
 	//_friends = new irr::core::array<CPersonagemJogador*>();
 	_jogadorID = 0;
@@ -470,7 +471,18 @@ void CPersonagemJogador::leaveParty(CPersonagemJogador *lider)
 	}
 }*/
 //Quest
-void CPersonagemJogador::acceptQuest(CQuest *quest){}
+void CPersonagemJogador::acceptQuest(CQuest *quest)
+{
+	_quest = new CQuest();
+	_quest->setPlayer(quest->getPlayer());
+	_quest->setRequestedItem(quest->getRequestedItem());
+	_quest->setRequestedEnemy(quest->getRequestedEnemy());
+	_quest->setRequestedNumber(quest->getRequestedNumber());
+	_quest->setReward(quest->getReward());
+	_quest->setXPReward(quest->getXPReward());
+	_quest->setItemReward(quest->getItemReward());
+	_quest->setLoyaltyReward(quest->getLoyaltyReward());
+}
 //Speaking
 void CPersonagemJogador::speakToPlayer(CPersonagemJogador *alvo){}
 void CPersonagemJogador::speakToNPC(CPersonagem *alvo){}
@@ -578,6 +590,7 @@ void CPersonagemJogador::distibuteSkillPoints(int points, int skillIndex)
 		 _skillLevel[skillIndex] = _skillLevel[skillIndex] + points;
 	}
 }
+void CPersonagemJogador::die(){}
 void CPersonagemJogador::update()
 {
 }

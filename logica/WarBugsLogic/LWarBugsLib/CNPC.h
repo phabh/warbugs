@@ -11,6 +11,7 @@
 #define _CNPC_H_
 
 //#include "CPersonagem.h"
+#include <time.h>
 #include "CPersonagemJogador.h"
 #include "CQuest.h"
 #include <string>
@@ -18,10 +19,13 @@ using namespace std;
 
 class CNPC : public CPersonagem{
 private:
+	Ponto *_ancora;
+	CQuest *_quest;
 	//lista de quests disponiveis'
 	//lista de falas disponiveis
 public:
 	CNPC();
+	void takeDecision();
 	void speak(CPersonagemJogador *alvo);
 	void giveQuest (CPersonagemJogador *alvo);
 	void update();

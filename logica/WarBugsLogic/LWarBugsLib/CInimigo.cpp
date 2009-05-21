@@ -86,11 +86,11 @@ void CInimigo::update()
 	{
 		this->attack();
 	}
-	else if((destino->x != getPosition()->x)||(destino->z != getPosition()->z))
+	else if((destino->x != this->getPosition()->x)||(destino->z != this->getPosition()->z))
 	{
 		this->move();
 	}
-	else if((destino->x == getPosition()->x)||(destino->z == getPosition()->z))
+	else// if((destino->x == getPosition()->x)||(destino->z == getPosition()->z))
 	{
 		this->takeDecision();
 	}

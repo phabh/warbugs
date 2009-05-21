@@ -52,6 +52,7 @@ class CPersonagemJogador : public CPersonagem
 	CEquipamento *_equip;
 	//CBuff *_status;
 	CLealdade *_lealdade;
+	CQuest *_quest;
 	//irr::core::array<CPersonagemJogador*> *_party;
 	//irr::core::array<CPersonagemJogador*> *_friends;
 	int _jogadorID;
@@ -154,6 +155,7 @@ public:
 	void distibutePoints(int points, int atribute);
 	void distibuteSkillPoints(int points, int skillIndex);
 
+	void die();
 	void update();
 };
 #endif
