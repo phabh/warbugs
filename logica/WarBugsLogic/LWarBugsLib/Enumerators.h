@@ -59,6 +59,7 @@ enum TypeClassChars
 // ------------------------------------------------------------------------------------------------------------
 enum TypeModelos 
 { 
+	M_NONE,
 	M_ARANHA_LIDER, 
 	M_ARANHA_JOGADOR, 
 	M_ARANHA_SOLDADO, 
@@ -102,11 +103,12 @@ enum TypeModelos
 	M_SAPO, 
 	M_JOANINHA, 
 	M_CAMALEAO, 
-	M_TANDAN 
+	M_TANDAN
 };
 // ------------------------------------------------------------------------------------------------------------
 enum TypeItens 
 { 
+	I_NONE,
 	I_BUZINA, 
 	I_VARINHA, 
 	I_SOCO, 

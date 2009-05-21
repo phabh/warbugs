@@ -29,5 +29,7 @@ public:
 	void speak();
 	void buy(CPersonagemJogador *vendedor, CItem *item);
 	void sell(CPersonagemJogador *comprador, CItem *item);
+
+	void update();
 };
 #endif

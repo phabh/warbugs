@@ -80,7 +80,11 @@ void CVendedor::takeDecision()
 		}
 	}
 }
-void CVendedor::speak(){}
+void CVendedor::speak()
+{
+	destino->x = this->getPosition()->x;
+	destino->z = this->getPosition()->z;
+}
 void CVendedor::buy(CPersonagemJogador *vendedor, CItem *item)
 {
 	if((vendedor->haveItem(item)) && (getMoney() >= item->getPrice()/2))
@@ -97,6 +101,18 @@ void CVendedor::sell(CPersonagemJogador *comprador, CItem *item)
 		getBolsa()->removeItem(item->getID());
 		comprador->addMoney((-1)*item->getPrice());
 		comprador->getBolsa()->addItem(item);
+	}
+}
+
+void CVendedor::update()
+{
+	if((destino->x != this->getPosition()->x)||(destino->z != this->getPosition()->z))
+	{
+		this->move();
+	}
+	else
+	{
+		this->takeDecision();
 	}
 }
 #endif
