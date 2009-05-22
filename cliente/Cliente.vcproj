@@ -122,7 +122,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\Irrlicht\include&quot;;&quot;$(ProjectDir)\IrrKlang\include&quot;;&quot;$(ProjectDir)\WarbugsClientLib&quot;;&quot;$(ProjectDir)\VideoTexture\include&quot;;&quot;$(ProjectDir)\Network&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\Irrlicht\include&quot;;&quot;$(ProjectDir)\IrrKlang\include&quot;;&quot;$(ProjectDir)\Dsvt\include&quot;;&quot;$(ProjectDir)\Source\Setup&quot;;&quot;$(ProjectDir)\Source\Event&quot;;&quot;$(ProjectDir)\Source\DataStruct&quot;;&quot;$(ProjectDir)\Source\GameLogicData&quot;;&quot;$(ProjectDir)\Source\Hud&quot;;&quot;$(ProjectDir)\Source\Menu&quot;;&quot;$(ProjectDir)\Source\Network&quot;;&quot;$(ProjectDir)\Source\Shader&quot;;&quot;$(ProjectDir)\Source\Video&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -144,7 +144,7 @@
 				AdditionalDependencies="user32.lib ole32.lib ws2_32.lib"
 				OutputFile="$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)\Irrlicht\lib&quot;;&quot;$(ProjectDir)\IrrKlang\lib&quot;;&quot;$(ProjectDir)\VideoTexture\lib\debug&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)\Irrlicht\lib&quot;;&quot;$(ProjectDir)\IrrKlang\lib&quot;;&quot;$(ProjectDir)\Dsvt\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -185,90 +185,74 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Cliente.cpp"
+				RelativePath=".\Source\Cliente.cpp"
 				>
 			</File>
 			<Filter
-				Name="Configuracoes"
+				Name="Setup"
+				>
+			</Filter>
+			<Filter
+				Name="Menu"
 				>
 				<File
-					RelativePath=".\CArquivoConfig.cpp"
+					RelativePath=".\Source\Menu\CMenu.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Menu\CMenuAbertura.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Menu\CMenuCreditos.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Menu\CMenuCriacao.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Menu\CMenuJogo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Menu\CMenuLogin.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Menu\CMenuSelecao.cpp"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="Menus"
+				Name="Shader"
 				>
 				<File
-					RelativePath=".\CMenu.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CMenuAbertura.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CMenuCreditos.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CMenuCriacao.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CMenuJogo.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CMenuLogin.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CMenuSelecao.cpp"
+					RelativePath=".\Source\Shader\CToonShader.cpp"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="Timer"
+				Name="GameLogicData"
 				>
 				<File
-					RelativePath=".\CTimer.cpp"
+					RelativePath=".\Source\GameLogicData\CCenario.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GameLogicData\CGameLogicData.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GameLogicData\CPersonagem.cpp"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="Shaders"
+				Name="Video"
 				>
 				<File
-					RelativePath=".\CToonShader.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="GameData"
-				>
-				<File
-					RelativePath=".\WarbugsClientLib\CCenario.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\WarbugsClientLib\CGameData.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\WarbugsClientLib\CPersonagem.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\WarbugsClientLib\CTree.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="VideoPlayer"
-				>
-				<File
-					RelativePath=".\VideoTexture\include\CVideoTexture.cpp"
+					RelativePath=".\Source\Video\CVideoTexture.cpp"
 					>
 				</File>
 			</Filter>
@@ -276,47 +260,63 @@
 				Name="Network"
 				>
 				<File
-					RelativePath=".\Network\CBugMessage.cpp"
+					RelativePath=".\Source\Network\CBugMessage.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Network\CBugSocket.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Eventos"
-				>
-				<File
-					RelativePath=".\CGerEventos.cpp"
+					RelativePath=".\Source\Network\CBugSocket.cpp"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="Huds"
+				Name="Event"
 				>
 				<File
-					RelativePath=".\CHudChat.cpp"
+					RelativePath=".\Source\Event\CGerEventos.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Hud"
+				>
+				<File
+					RelativePath=".\Source\Hud\CHudChat.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\CHudFadingTextList.cpp"
+					RelativePath=".\Source\Hud\CHudFadingTextList.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\CHudInventario.cpp"
+					RelativePath=".\Source\Hud\CHudInventario.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\CHudMiniMapa.cpp"
+					RelativePath=".\Source\Hud\CHudMiniMapa.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\CHudRoleta.cpp"
+					RelativePath=".\Source\Hud\CHudRoleta.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\CHudStatus.cpp"
+					RelativePath=".\Source\Hud\CHudStatus.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="DataStruct"
+				>
+				<File
+					RelativePath=".\Source\DataStruct\CArquivoConfig.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\DataStruct\CArquivoMatrizes.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\DataStruct\CTree.cpp"
 					>
 				</File>
 			</Filter>
@@ -327,30 +327,38 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<Filter
-				Name="Configuracoes"
+				Name="Setup"
 				>
 				<File
-					RelativePath=".\WarbugsClientLib\Setup.h"
+					RelativePath=".\Source\Setup\NetworkSetup.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Setup\PathSetup.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Setup\Setup.h"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="Eventos"
+				Name="Event"
 				>
 				<File
-					RelativePath=".\CGerEventos.h"
+					RelativePath=".\Source\Event\CGerEventos.h"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="Huds"
+				Name="Hud"
 				>
 			</Filter>
 			<Filter
-				Name="Menus"
+				Name="Menu"
 				>
 				<File
-					RelativePath=".\CMenu.h"
+					RelativePath=".\Source\Menu\CMenu.h"
 					>
 				</File>
 			</Filter>
@@ -358,55 +366,51 @@
 				Name="Network"
 				>
 				<File
-					RelativePath=".\Network\CBugMessage.h"
+					RelativePath=".\Source\Network\CBugMessage.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Network\CBugSocket.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Shaders"
-				>
-			</Filter>
-			<Filter
-				Name="VideoPlayer"
-				>
-				<File
-					RelativePath=".\VideoTexture\include\CVideoTexture.h"
-					>
-				</File>
-				<File
-					RelativePath=".\VideoTexture\include\dsvt.h"
+					RelativePath=".\Source\Network\CBugSocket.h"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="GameData"
+				Name="Shader"
+				>
+			</Filter>
+			<Filter
+				Name="Video"
 				>
 				<File
-					RelativePath=".\WarbugsClientLib\Caminhos.h"
+					RelativePath=".\Source\Video\CVideoTexture.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GameLogicData"
+				>
+				<File
+					RelativePath=".\Source\GameLogicData\CCenario.h"
 					>
 				</File>
 				<File
-					RelativePath=".\WarbugsClientLib\CCenario.h"
+					RelativePath=".\Source\GameLogicData\CGameLogicData.h"
 					>
 				</File>
 				<File
-					RelativePath=".\WarbugsClientLib\CDoubleList.h"
+					RelativePath=".\Source\GameLogicData\CPersonagem.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="DataStruct"
+				>
+				<File
+					RelativePath=".\Source\DataStruct\CDoubleList.h"
 					>
 				</File>
 				<File
-					RelativePath=".\WarbugsClientLib\CGameData.h"
-					>
-				</File>
-				<File
-					RelativePath=".\WarbugsClientLib\CPersonagem.h"
-					>
-				</File>
-				<File
-					RelativePath=".\WarbugsClientLib\CTree.h"
+					RelativePath=".\Source\DataStruct\CTree.h"
 					>
 				</File>
 			</Filter>
