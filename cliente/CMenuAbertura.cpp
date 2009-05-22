@@ -20,11 +20,11 @@ private:
 	void readCommands()	{}
 
 	void updateGraphics() 
-	{
+	{/*
 		_video = CVideoTexture::createVideoTexture(_dispositivo, "recursos/videos/video.wmv");
 		_video->setVolume(100);
 		_video->playCutscene();
-		_video->drop();
+		_video->drop();*/
 
 		_nextID = LOGIN;
 	}

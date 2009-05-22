@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Setup.h"
+#include "CTree.h"
 
 struct SBolsa 
 {
@@ -18,8 +19,8 @@ struct SQuadrante
 
 class CPersonagem 
 {
-	private:
- 
+private:
+
 	int _agilidade;
 	int _alcance;
 	int _ataque;
@@ -55,8 +56,8 @@ class CPersonagem
 	int _pontosPoderMaximo;
 	int _pontosVida;
 	int _pontosVidaMaximo;
-	int _posX;
-	int _posZ;
+	float _posX;
+	float _posZ;
 	int _raca;
 	int _resistencia;
 	int _roleta[NUMROLETAOPCOES];
@@ -65,7 +66,7 @@ class CPersonagem
 	int _velocidade;
 	int _xp;
 	int _xpMaximo;
-	
+
 	bool _buff[NUMBUFFERS];
 	bool _modoAtaque;
 
@@ -74,8 +75,10 @@ class CPersonagem
 	SQuadrante _quadranteSeguinte;
 
 	ISound* _soundFX; // Efeito sonoro do personagem
-	
-	public:
+
+	CTree Memoria;
+
+public:
 
 	CPersonagem();
 
@@ -111,4 +114,12 @@ class CPersonagem
 	void trocarNivel();
 	void usarItem(int idItem);
 	void venderItem(int idItem, int idComprador);
+
+	int       getQuadranteID(int linha, int coluna);
+	float     getDistanceBetween( vector3d<f32> p1, vector3d<f32> p2 );
+	vector3df getQuadranteCenter(int linha, int coluna);
+	int       getDirectionTo(vector3d<f32> p2);
+	float     getRotationTo(vector3d<f32> destino);
+
+	void LRTAStar(SQuadrante origem, vector3df objetivo, SQuadrante &proximoPasso, bool Matriz[MAPMAXLIN][MAPMAXCOL]);
 };

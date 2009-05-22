@@ -8,6 +8,7 @@
 #include "CPersonagem.h"
 #include "CCenario.h"
 
+
 class CMenuJogo : public CMenu
 {
 
@@ -16,8 +17,7 @@ private:
 
 	int _idPersonagem, _idInimigo;
 	ITriangleSelector* _selector;
-	ISceneNode *_nodoSelecionado;
-	vector3df _targetPosition;
+	
 	bool _combate;
 
 	IGUIListBox *_chatText;
@@ -44,6 +44,48 @@ private:
 
 	ISceneNode *_empty;
 	ILightSceneNode *luz;
+
+
+	// Variáveis para tratar o click do mouse no terreno
+	SMaterial _material;
+	vector3df _coordenadaCapt;
+	triangle3df _trianguloCapt;
+	position2di _posClick;
+	line3df _raio;
+	ISceneNode *_nodoSelecionado;
+	vector3df _targetPosition;
+
+	//! rotacaoResultante
+	/*!
+	\Calcula a rotação resultante entre três eixos (X,Y,Z).
+	\Retorna o vetor de rotação absoluta resultante
+	*/
+	vector3df rotacaoResultante(f32 rotX, f32 rotY, f32 rotZ)
+	{
+		// Matrizes de rotação
+		matrix4 mRotX; 
+		matrix4 mRotY;
+		matrix4 mRotZ;
+		matrix4 mRotResultante;
+
+		mRotResultante.setRotationDegrees(vector3df(0, 0, 0));
+
+		// Matrizes separadas para os eixos coordenados
+		mRotX.setRotationDegrees(vector3df(rotX, 0, 0)); 
+		mRotY.setRotationDegrees(vector3df(0, rotY, 0));
+		mRotZ.setRotationDegrees(vector3df(0, 0, rotZ));
+
+		// Produto de vetores
+		mRotResultante *= mRotX;
+		mRotResultante *= mRotY;
+		mRotResultante *= mRotZ;
+
+		return mRotResultante.getRotationDegrees();
+	}
+
+//-----------------------------------------------------------------------------------------------------------------
+// TRATAMENTO DE HUDS
+//-----------------------------------------------------------------------------------------------------------------
 
 	void updateHuds()
 	{
@@ -112,7 +154,7 @@ private:
 		_gerenciadorHud->addScrollBar(true, rect<s32>(50,80,50+50,80+20), _cfgWindow, 20);
 		_gerenciadorHud->addStaticText(L"Anti-Aliasing", rect<s32>(50+60, 80, 50+80, 80+20), false, false, _cfgWindow, 21, true);
 
-		
+
 		// Elementos GUI da janela de minimapa
 		IGUIButton *btnMiniMapa = _gerenciadorHud->addButton(rect<s32>(0,20,200,220), _mapWindow, 30);
 		btnMiniMapa->setIsPushButton(true);
@@ -155,6 +197,10 @@ private:
 		_flags[HUDCHANGED] = false;
 	}
 
+//-----------------------------------------------------------------------------------------------------------------
+// TRATAMENTO DE COMANDOS
+//-----------------------------------------------------------------------------------------------------------------
+	
 	void readCommands()
 	{		
 		temp = L"";
@@ -169,7 +215,8 @@ private:
 		}
 
 		if(_gerenciadorEventos->isMouseButtonReleased(MBLEFT))
-		{		
+		{	
+			// BOTÃO ESQUERDO DO MOUSE
 
 			if(_gerenciadorEventos->getEventCallerByElement(EGET_BUTTON_CLICKED))
 			{
@@ -200,25 +247,20 @@ private:
 					_combate = false;
 					cout << "\nCombate FALSE.\n";
 
-					SMaterial material;
-					material.Lighting = false;
+					_material.Lighting = false;
 
-					line3d<f32> line;
-					line.start = _gerenciadorCena->getActiveCamera()->getPosition();
-					line.end = line.start + (_gerenciadorCena->getActiveCamera()->getTarget() - line.start).normalize() * 1000.0f;
+					_posClick = _dispositivo->getCursorControl()->getPosition();
+					_raio = _gerenciadorCena->getSceneCollisionManager()->getRayFromScreenCoordinates(_posClick, _camera);
 
-					vector3df intersection;
-					triangle3df tri;
+					
 
-					if (_gerenciadorCena->getSceneCollisionManager()->getCollisionPoint(line, _selector, intersection, tri))
+					if(_gerenciadorCena->getSceneCollisionManager()->getCollisionPoint(_raio, _selector, _targetPosition, _trianguloCapt))
 					{
-						_targetPosition = intersection;
-
-
+						//_targetPosition = desiredPosition;
 						_gerenciadorVideo->setTransform(ETS_WORLD, matrix4());
-						_gerenciadorVideo->setMaterial(material);
-						_gerenciadorVideo->draw3DTriangle(tri, SColor(0,255,0,0));
-					}
+						_gerenciadorVideo->setMaterial(_material);
+						_gerenciadorVideo->draw3DTriangle(_trianguloCapt, SColor(0,255,0,0));
+					} 
 					else
 						_targetPosition = _modelo[0]->getPosition();
 
@@ -306,51 +348,57 @@ private:
 		}
 
 
-		if(_gerenciadorEventos->isKeyDown(KEY_NUMPAD8))
-		{
-			rotV += 2;
-			if(rotV >= 360.0)
-				rotV -= 360.0;
-		}
-
+		// ROTACOES DA CAMERA
 		if(_gerenciadorEventos->isKeyDown(KEY_NUMPAD2))
 		{
-			rotV -= 2;
-			if(rotV < 0.0)
-				rotV += 360.0;
+			if(rotV < 80)
+				rotV += 2;
+		}
+
+		if(_gerenciadorEventos->isKeyDown(KEY_NUMPAD8))
+		{
+			if(rotV > 10)
+				rotV -= 2;
 		}
 
 		if(_gerenciadorEventos->isKeyDown(KEY_NUMPAD4))
 		{
-			if(rotH < 40.0)
-				rotH+=2;
+			rotH += 2;
+			if(rotH >= 360.0)
+				rotH -= 360.0;
 		}
 
 		if(_gerenciadorEventos->isKeyDown(KEY_NUMPAD6))
 		{
-			if(rotH > -40.0)
-				rotH-=2;
+			rotH -= 2;
+			if(rotH < 0.0)
+				rotH += 360.0;
 		}
-
-
 	}
 
 	void updateGraphics()
 	{
 		_modelo[0]->setPosition(vector3df(_modelo[0]->getPosition().X, _terreno->getHeight(_modelo[0]->getPosition().X,_modelo[0]->getPosition().Z)+2, _modelo[0]->getPosition().Z));
-		
 		_empty->setPosition(_modelo[0]->getPosition());
+		_empty->setRotation(rotacaoResultante(0, rotH, rotV));
 
-		_empty->setRotation(vector3df(rotH/2, rotV, rotH/2));
 		_camera->setTarget(_empty->getPosition());
 		//luz->setPosition(_camera->getPosition());
-		luz->setPosition(_modelo[0]->getPosition()+vector3df(0,100,0));
+
+		//_toonShader->apply(_modelo[0],"recursos/texturas/besouro1.jpg");
+		//luz->setPosition(_modelo[0]->getPosition()+vector3df(0,100,0));
 
 		_roleta->update();
 	}
 
 	void graphicsDrawAddOn() 
 	{
+		//if(_trianguloCapt.)
+		//{
+			_gerenciadorVideo->setTransform(ETS_WORLD, matrix4());
+			_gerenciadorVideo->setMaterial(_material);
+			_gerenciadorVideo->draw3DTriangle(_trianguloCapt, SColor(0,255,0,0));
+		//}
 	}
 
 public:
@@ -399,7 +447,7 @@ public:
 			_gerenciadorCena->loadScene(_arquivoCena);
 
 		_skin = _gerenciadorHud->getSkin();
-		_font = _gerenciadorHud->getFont("recursos/fonts/font_georgia.png");
+		_font = _gerenciadorHud->getFont("recursos/fonts/mplus8.xml");
 
 		if (_font)
 			_skin->setFont(_font);
@@ -414,8 +462,8 @@ public:
 
 		//------------
 
-		luz = _gerenciadorCena->addLightSceneNode(0, vector3df(500,500,500), SColorf(1.0f, 0.6f, 0.7f, 1.0f), 1200.0f);
-		
+		luz = _gerenciadorCena->addLightSceneNode(0, vector3df(0,0,0/*500,500,500*/), SColorf(1.0f, 0.6f, 0.7f, 1.0f), 1200.0f);
+
 
 		//_textura[0] = _gerenciadorVideo->getTexture("recursos/texturas/louva_lider.jpg");
 		_malha[0] = _gerenciadorCena->getMesh("recursos/modelos/besouro.b3d");
@@ -423,13 +471,14 @@ public:
 		_modelo[0]->setPosition(vector3df(990,_terreno->getHeight(990,980)+2,980));
 
 		//_empty->setPosition(_modelo[0]->getPosition());
-		
+
 		_camera->setParent(_empty);
 		_camera->setPosition( vector3df(-20,20,0));
 		_camera->setTarget(_empty->getPosition());
 
+		luz->setParent(_camera);
 
-		luz->setPosition(_modelo[0]->getPosition()+vector3df(0,100,0));
+		//luz->setPosition(_modelo[0]->getPosition()+vector3df(0,100,0));
 
 		_toonShader = new CToonShader(_dispositivo, luz);
 
@@ -458,6 +507,8 @@ public:
 
 		_selector = _gerenciadorCena->createTerrainTriangleSelector(_terreno, 0);
 		_terreno->setTriangleSelector(_selector); 
+
+		cout << "\nIndex Count: " << _terreno->getIndexCount() << endl;
 		//_selector = _terreno->getTriangleSelector();
 
 		rotV = rotH = 0.0;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="Cliente"
 	ProjectGUID="{828E4CB9-AB7C-4054-908B-E27EEC208C68}"
 	RootNamespace="Aula_1"
@@ -259,6 +259,10 @@
 					RelativePath=".\WarbugsClientLib\CPersonagem.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\WarbugsClientLib\CTree.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="VideoPlayer"
@@ -399,6 +403,10 @@
 				</File>
 				<File
 					RelativePath=".\WarbugsClientLib\CPersonagem.h"
+					>
+				</File>
+				<File
+					RelativePath=".\WarbugsClientLib\CTree.h"
 					>
 				</File>
 			</Filter>
