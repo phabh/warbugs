@@ -1,8 +1,7 @@
 // TesteCliente.cpp : Defines the entry point for the console application.
 //
 #include <iostream>
-#include <dreamMessage.h>
-#include <dreamServer.h>
+#include <CBugSocket.h>
 
 using namespace std;
 
@@ -25,10 +24,6 @@ enum TYPE_MESSAGE
 	REMOVE_ITEM,  //ID ITEM, QTD DINHEIRO
 	PRICE_ITEM, //ID ITEM, PRECO
 	CHANGE_MONEY, //quantidade
-	TRADE_REQUEST, //ID JOGADOR ABRE A JANELA DE TROCA
-	SHOW_TRADE_ITEM, //ID ITEM, QTD DINEHIRO, ID JOGADOR
-	TRADE_OK, //FECHA A JANELA DE TROCA E ADICIONA OU RETIRA ITEM NO INVENTÁRIO
-	TRADE_CANCELED,//FECHA A JANELA DE TROCA 
 	CHANGE_BONUS, //HABILIDADES PRIMARIAS E SECUNDARIAS DO JOGADOR EM ORDEM ALFABETICA
 	UPDATE_PVPPNIVEL,  //ID PERSONAGEM, PONTOS VIDA, PONTOS PODER, NIVEL, PP_MAX, PV_MAX
 	UPDATE_EQUIP, //ID PERSONAGEM, ID ARMA, ID ARMADURA
@@ -60,10 +55,17 @@ enum TYPE_MESSAGE
 	CLOSE_BOLSA, //ID BOLSA
 	GET_ITEM_BOLSA, //ID PERSONAGEM, ID BOLSA, ID ITEM
 	INSERT_ITEM_BOLSA, //ID BOLSA, ID ITEM
-	TRADE_CANCEL, //ID PERSONAGEM, ID FREGUES
+
+	TRADE_REQUEST, //ID PERSONAGEM, ID FREGUES
+	TRADE_REQUEST_ACCEPTED, //ID PERSONAGEM, ID FREGUES
+	TRADE_REQUEST_REFUSED, //ID PERSONAGEM, ID FREGUES
+	TRADE_CHANGED, //ID PERSONAGEM, ID FREGUES, idItemPersonagem, idItemFregues, qtdDinheiroPersonagem, qtdDinheiroFregues
+	TRADE_ACCEPTED, //ID PERSONAGEM
+	TRADE_REFUSED, //ID PERSONAGEM, ID FREGUES
+	TRADE_CONCLUDE, //ID PERSONAGEM, ID FREGUES
+
 	EQUIP_ITEM, //ID PERSONAGEM, ID ARMA, ID ARMADURA
 	SET_TARGET, //ID PERSONAGEM, ID ALVO
-	START_TRADE, //ID PERSONAGEM, ID FREGUES
 	SEND_MESSAGE, //ID DESTINO, MENSAGEM
 	START_SHOT, //ID PERSONAGEM, ID ALVO, IDSHOT, POSICAO X E POSICAO Z INICIAL
 	REQUEST_FULL_STATUS, //ID PERSONAGEM
@@ -81,188 +83,68 @@ enum TYPE_MESSAGE
 	SELECT_PLAYER_FAIL
 };
 
+#define PORT 30003
+
 int main()
 {
 	char	dadosRec[1400];
-	char	memoria[1400];
+	char	dadosEnv[1400];
 
-	memoria[0] = '\0';
+	CBugMessage mesRec;
+	mesRec.init(dadosRec,1400);
 
-	char *	tipoMes = "nada";
+	CBugMessage mesEnv;
+	mesEnv.init(dadosEnv,1400);
 
-	sockaddr from;
+	char login[15];
+	char senha[15];
 
-	dreamServer * _server = new dreamServer();
-	_server->initialize("",8767);
+	CBugSocketClient * _socketClient;
 
-	dreamMessage mes;
-	mes.init(dadosRec,sizeof(dadosRec));
-
-	int retorno = 0;
-
-	system("cls");
-
-	while(true)
+	//tratamento de erro caso não seja possível conectar
+	try{
+		//endereço do server do warbugs
+		//se você executar o server que fiz provavelmente pode dar erro
+		//por não possuir o banco de dados, mas se não der erro ele irá
+		//conseguir ler as mensagens e falar que o usuário é invalido
+		CBugSocketClient * _socketClient = new CBugSocketClient("localhost",PORT);
+	}catch(string)
 	{
-		cout<<"Teste do Cliente WarBugs\n";
-
-		while(retorno = _server->getPacket(mes._data, &from) != 0)
-		{
-			mes.beginReading();
-
-			int tipo = mes.readByte();
-
-
-			switch(tipo)
-			{
-				case LOGIN_REQUEST: //LOGIN, SENHA
-					{
-						tipoMes = "LOGIN_REQUEST";
-						break;
-					}
-				case REQUEST_PERSONAGENS:  //ID PESSOA
-					{
-						tipoMes = "REQUEST_PERSONAGENS";
-						break;
-					}
-				case CREATE_PERSONAGEM: //ID RACA, NOME
-					{
-						tipoMes = "CREATE_PERSONAGEM";
-						break;
-					}
-				case PLAY: //ID PERSONAGEM
-					{
-						tipoMes = "PLAY";
-						break;
-					}
-				case SEND_POSITION: //ID PERSONAGEM, POSICAO X, POSICAO Z
-					{
-						tipoMes = "SEND_POSITION";
-						break;
-					}
-				case SEND_ESTADO: //IDPERSONAGEM, ESTADO
-					{
-						tipoMes = "SEND_ESTADO";
-						break;
-					}
-				case SEND_ATACK: //ID PERSONAGEM, ID ALVO, ID ATAQUE, POSICAO X E POSICAO Z ALVO CHÃO //PODE SER PODER OU ATAQUE NORMAL
-					{
-						tipoMes = "SEND_ATACK";
-						break;
-					}
-				case SEND_ITEM:  //ID PERSONAGEM, ID ITEM, DINHEIRO
-					{
-						tipoMes = "SEND_ITEM";
-						break;
-					}
-				case USE_ITEM: //IDPERSONAGEM, IDITEM
-					{
-						tipoMes = "USE_ITEM";
-						break;
-					}
-				case DROP_ITEM: //IDPERSONAGEM, IDITEM
-					{
-						tipoMes = "DROP_ITEM";
-						break;
-					}
-				case ACCEPT_TRADE: //ID PERSONAGEM, ID FREGUES, ID ITEM MEU, DINHEIRO MEU, ID ITEM FREGUES, DINHEIRO FREGUES
-					{
-						tipoMes = "ACCEPT_TRADE";
-						break;
-					}
-				case OPEN_BOLSA: //ID PERSONAGEM, ID BOLSA
-					{
-						tipoMes = "OPEN_BOLSA";
-						break;
-					}
-				case CLOSE_BOLSA: //ID BOLSA
-					{
-						tipoMes = "CLOSE_BOLSA";
-						break;
-					}
-				case GET_ITEM_BOLSA: //ID PERSONAGEM, ID BOLSA, ID ITEM
-					{
-						tipoMes = "GET_ITEM_BOLSA";
-						break;
-					}
-				case INSERT_ITEM_BOLSA: //ID BOLSA, ID ITEM
-					{
-						tipoMes = "INSERT_ITEM_BOLSA";
-						break;
-					}
-				case TRADE_CANCEL: //ID PERSONAGEM, ID FREGUES
-					{
-						tipoMes = "TRADE_CANCEL";
-						break;
-					}
-				case EQUIP_ITEM: //ID PERSONAGEM, ID ARMA, ID ARMADURA
-					{
-						tipoMes = "EQUIP_ITEM";
-						break;
-					}
-				case SET_TARGET: //ID PERSONAGEM, ID ALVO
-					{
-						tipoMes = "SET_TARGET";
-						break;
-					}
-				case START_TRADE: //ID PERSONAGEM, ID FREGUES
-					{
-						tipoMes = "START_TRADE";
-						break;
-					}
-				case SEND_MESSAGE: //ID DESTINO, MENSAGEM
-					{
-						tipoMes = "SEND_MESSAGE";
-						break;
-					}
-				case START_SHOT: //ID PERSONAGEM, ID ALVO, IDSHOT, POSICAO X E POSICAO Z INICIAL
-					{
-						tipoMes = "START_SHOT";
-						break;
-					}
-				case REQUEST_FULL_STATUS: //ID PERSONAGEM
-					{
-						tipoMes = "REQUEST_FULL_STATUS";
-						break;
-					}
-				case SEND_BONUS_POINTS: //ID PERSONAGEM,VETOR EM ORDEM ALFABETICA COM QTD PONTOS DA HABILIDADE PRIMARIA USADA E A QUANTIDADE DE PONTOS DE SKILL(PODER)[PODER1,PODER2,PODER3]
-					{
-						tipoMes = "SEND_BONUS_POINTS";
-						break;
-					}
-				case ACCEPT_QUEST: // ID PERSONAGEM, ID QUEST
-					{
-						tipoMes = "ACCEPT_QUEST";
-						break;
-					}
-				case START_SHOP: //ID PERSONAGEM, ID NPC VENDEDOR
-					{
-						tipoMes = "START_SHOP";
-						break;
-					}
-				case BUY_ITEM: //IDPERSONAGEM, IDNPC VENDEDOR, ID ITEM
-					{
-						tipoMes = "BUY_ITEM";
-						break;
-					}
-				case REQUEST_PRICE_ITEM: //ID PERSONAGEM, ID NPCVENDEDOR, ID ITEM
-					{
-						tipoMes = "REQUEST_PRICE_ITEM";
-						break;
-					}
-				case SELL_ITEM: //IDPERSOANGEM, ID NPCVENDEDOR, ID ITEM, PRECO
-					{
-						tipoMes = "SELL_ITEM";
-						break;
-					}
-			}
-
-			strcpy(memoria,mes._data);
-			mes.clear();
-		}	
-
-		cout<<"\n"<<"Recebido do Client: "<<tipoMes<<" - "<<memoria;
-		system("cls");
+		cout<<"\nNão foi possivel Encontrar o servidor!";
+		Sleep(2000);
+		return 0;
 	}
+
+
+	while(true) //so pra testar
+	{
+
+		cout<<"\nDigite o usuario: ";
+		cin.getline(login,15);
+
+		cout<<"\nDigite a senha: ";
+		cin.getline(senha,15);
+
+
+		mesEnv.writeByte(LOGIN_REQUEST); // requisição de login
+		mesEnv.writeString(login);       // login
+		mesEnv.writeString(senha);		 // senha
+		
+		//Envia a mensagem
+		_socketClient->SendLine(mesEnv);
+
+		cout<<"\nRecebendo Pacote...";
+		//recebe o pacote
+		_socketClient->ReceiveLine(mesRec);
+
+		//começa a ler o pacote
+		mesRec.beginReading();
+		
+		cout<<"\nPacote Recebido = "<< mesRec.readByte(); //le o id da mensagem
+		cout<<"\nPacote Recebido = "<< mesRec.readString(); //e por ae vai =D
+
+		Sleep(1000);			
+	}
+
 
 }
