@@ -26,7 +26,7 @@ void CCoreServer::initialize()
 {
 	_playersList = new CPlayerList();
 
-	//CCoreServer::_buffer;
+	_buffer = gcnew CBufferFrame();
 
 	_cenarioList = _dataManager->getListCenario();
 }
@@ -88,10 +88,10 @@ void CCoreServer::readPackets()
 						strcpy(login,mesRecebida.readString());
 						strcpy(senha,mesRecebida.readString());
 						
-						CJogador *  tempJogador = new CJogador();
+						CJogador * tempJogador = new CJogador;
 
 						//se fez login
-						if(_dataManager->doLogin(login,senha,tempJogador))
+						if(_dataManager->doLogin(login,senha,*tempJogador))
 						{
 							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN);
 							tempJogador->setSocket(_playersList->getElementAt(indexJogador)->getSocket());
@@ -102,6 +102,8 @@ void CCoreServer::readPackets()
 						{
 							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN_FAIL);
 						}
+
+						sendMessagesFrame(_playersList);
 
 						break;
 					}
@@ -506,25 +508,11 @@ void CCoreServer::readPackets()
 
 }
 
-void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, CBugMessage * mes)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, CBugMessage & mes)
 {
-	CFrame * frame = new CFrame(toAll, destino, mes, idCenario);
+	CFrame ^ frame = gcnew CFrame(toAll, destino, mes, idCenario);
 
-	if(_buffer == NULL)
-	{
-		_buffer = frame;
-	}
-	else
-	{
-		CFrame * temp = _buffer;
-
-		while(temp != NULL)
-		{
-			temp = temp->_next;
-		}
-
-		temp = frame;
-	}
+	_buffer->Add(frame);
 }
 
 
@@ -540,7 +528,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 	mes.writeFloat(f1);
 	mes.writeFloat(f2);
 
-	sendMessage(toAll, idCenario, destino, &mes);
+	sendMessage(toAll, idCenario, destino, mes);
 }
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino,  int idMensagem, TypeClassChars tipoPersonagem, CPersonagem  * p1)
@@ -869,7 +857,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino,  
 	mes.writeFloat(p1->getDirection());
 	mes.writeFloat(p1->getMoveSpeed());
 
-	sendMessage(toAll, idCenario, destino, &mes);
+	sendMessage(toAll, idCenario, destino, mes);
 }
 
 /*
@@ -911,7 +899,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 		mes.writeLong(personagem->get3DTexture());
 	}
 
-	sendMessage(toAll, idCenario, destino, &mes);
+	sendMessage(toAll, idCenario, destino, mes);
 	
 }
 
@@ -929,7 +917,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 	mes.writeFloat(f1);
 	mes.writeFloat(f2);
 
-	sendMessage(toAll, idCenario, destino, &mes);
+	sendMessage(toAll, idCenario, destino, mes);
 }
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10)
@@ -951,7 +939,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 	mes.writeLong(i9);
 	mes.writeLong(i10);
 
-	sendMessage(toAll, idCenario, destino, &mes);
+	sendMessage(toAll, idCenario, destino, mes);
 }
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1)
@@ -964,7 +952,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 	mes.writeLong(i1);
 
-	sendMessage(toAll, idCenario, destino, &mes);
+	sendMessage(toAll, idCenario, destino, mes);
 }
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2)
@@ -978,7 +966,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 	mes.writeLong(i1);
 	mes.writeLong(i2);
 
-	sendMessage(toAll, idCenario, destino, &mes);
+	sendMessage(toAll, idCenario, destino, mes);
 }
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3)
@@ -993,7 +981,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 	mes.writeLong(i2);
 	mes.writeLong(i3);
 
-	sendMessage(toAll, idCenario, destino, &mes);
+	sendMessage(toAll, idCenario, destino, mes);
 }
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem)
@@ -1004,7 +992,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 	mes.writeByte(idMensagem);
 
-	sendMessage(toAll, idCenario, destino, &mes);
+	sendMessage(toAll, idCenario, destino, mes);
 }
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9)
@@ -1025,7 +1013,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 	mes.writeLong(i8);
 	mes.writeLong(i9);
 	
-	sendMessage(toAll, idCenario, destino, &mes);
+	sendMessage(toAll, idCenario, destino, mes);
 }
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6)
@@ -1043,7 +1031,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 	mes.writeLong(i5);
 	mes.writeLong(i6);
 
-	sendMessage(toAll, idCenario, destino, &mes);
+	sendMessage(toAll, idCenario, destino, mes);
 }
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, char * mensagem)
@@ -1056,7 +1044,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 	mes.writeString(mensagem);
 
-	sendMessage(toAll, idCenario, destino, &mes);
+	sendMessage(toAll, idCenario, destino, mes);
 }
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int v1[30], int v2[30])
@@ -1077,18 +1065,19 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 		mes.writeLong(v2[i]);
 	}
 
-	sendMessage(toAll, idCenario, destino, &mes);
+	sendMessage(toAll, idCenario, destino, mes);
 }
 
 void CCoreServer::sendMessagesFrame(CPlayerList * cList)
 {
-	CFrame * frame;
+	CFrame ^ frame;
 	if(cList != NULL)
-	while(_buffer != NULL)
+	while(_buffer->Count > 0)
 	{
-		frame = _buffer;
+		frame = (CFrame ^)_buffer[0];
+		_buffer->RemoveAt(0);
 
-		if(frame != NULL)
+		if(frame)
 		{
 			if(frame->_toAll)
 			{
@@ -1104,7 +1093,5 @@ void CCoreServer::sendMessagesFrame(CPlayerList * cList)
 			}
 		}
 
-		_buffer = _buffer->_next;
-		delete frame;
 	}
 }

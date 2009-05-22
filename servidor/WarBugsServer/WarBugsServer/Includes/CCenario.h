@@ -1,17 +1,25 @@
 #pragma once
+#ifndef _CCENARIO_H_
 #include <iostream>
 using namespace std;
 #include "Enumerators.h"
 #include "C3DObject.h"
 #include "CBolsaList.h"
-#include "CItem.h"
+	//#include "CBolsa.h"
+		//#include "CItem.h"
 #include "CPeopleList.h"
-#include "CPersonagem.h"
+	//#include "CPersonagem.h"
 #include "CPersonagemJogador.h"
+#ifndef _CINIMIGO_H_
 #include "CInimigo.h"
+#ifndef _CINIMIGO_H_
+class CInimigo;
+#endif
+#endif
 #include "CNPC.h"
 #include "CPortal.h"
 
+#define _CCENARIO_H_
 class CCenario : public C3DObject
 {
 private:
@@ -52,3 +60,4 @@ public:
 
 	void update();
 };
+#endif

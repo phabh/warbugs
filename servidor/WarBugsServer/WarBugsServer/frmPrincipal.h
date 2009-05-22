@@ -651,16 +651,19 @@ private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  
 			for(int i = 0; i < _coreServer->getPlayers()->size(); i++)
 			{
 				//primeira coluna
-				gridJogadores->Rows[i]->Cells[0]->Value = i;
+				gridJogadores->Rows[i]->Cells[0]->Value = i+1;
 
 				//gridJogadores->Rows[i]->Cells[1]->Value = _coreServer->getPlayers()->getElementAt(i)->getID();
+				
+				if(_coreServer->getPlayers()->getElementAt(i)->getName() != NULL)
+					gridJogadores->Rows[i]->Cells[1]->Value = gcnew String(_coreServer->getPlayers()->getElementAt(i)->getName());
 
-				//gridJogadores->Rows[i]->Cells[2]->Value = gcnew String(" "+_coreServer->getPlayers()->getElementAt(i)->getName());
+/*				if(_coreServer->getPlayers()->getElementAt(i)->getCharacter() != NULL)
+					gridJogadores->Rows[i]->Cells[2]->Value = gcnew String(_coreServer->getPlayers()->getElementAt(i)->getCharacter()->getName());
 
-				//gridJogadores->Rows[i]->Cells[3]->Value = gcnew String(" "+_coreServer->getPlayers()->getElementAt(i)->getCharacter()->getName());
-
-				//gridJogadores->Rows[i]->Cells[4]->Value = gcnew String(" "+_coreServer->getPlayers()->getElementAt(i)->getScene()->getID());
-
+				if(_coreServer->getPlayers()->getElementAt(i)->getScene() != NULL)
+					gridJogadores->Rows[i]->Cells[4]->Value = gcnew String(L""+_coreServer->getPlayers()->getElementAt(i)->getScene()->getID());
+*/
 			}
 		 }
 

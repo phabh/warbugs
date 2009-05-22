@@ -62,7 +62,7 @@ public:
 	CJogador getJogador(char * login);
 	
 	//Login
-	bool  doLogin(char * login, char * senha, CJogador * jogador);
+	bool  doLogin(char * login, char * senha, CJogador & jogador);
 	
 	//Micelandia
 	long  numPersonagens();

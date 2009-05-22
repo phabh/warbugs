@@ -348,9 +348,6 @@ CPeopleList CDataManager::getPersonagemJogador(int idJogador)
 
 		((CPersonagemJogador *)personagem)->setName(nome);
 		
-		//dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
-
-		//FICA PRA DEPOIS
 		((CPersonagemJogador *)personagem)->setPlayer(idJogador);
 
 		float posX = (float) System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
@@ -362,9 +359,6 @@ CPeopleList CDataManager::getPersonagemJogador(int idJogador)
 
 		((CPersonagemJogador *)personagem)->setSpeed(dado[0]);
 
-		//dado = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
-
-		//FICA PRA DEPOIS
 		((CPersonagemJogador *)personagem)->setTarget(NULL);
 
 		dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGEXPERIENCIA")]->ToString());
@@ -2447,12 +2441,12 @@ CPortal * CDataManager::getPortal(int idCenario, Direcoes direcao)
 	@param jogador -> o objeto jogador que será retornado caso as informações estejam corretas
 	@retun -> se usuario e senha são válidos retorna true
 */
-bool  CDataManager::doLogin(char * login, char * senha, CJogador * jogador)
+bool  CDataManager::doLogin(char * login, char * senha, CJogador & jogador)
 {
 	bool result = false;
 
 	CJogador j;
-	jogador = NULL;
+	//jogador = NULL;
 
 	j = getJogador(login);
 
@@ -2460,7 +2454,7 @@ bool  CDataManager::doLogin(char * login, char * senha, CJogador * jogador)
 	{
 		if( strcmp(login,j.getLogin()) == 0 && strcmp(senha,j.getPassword()) == 0)
 		{
-			jogador = &j;
+			jogador = j;
 			result = true;
 		}
 	}
