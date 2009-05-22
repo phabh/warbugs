@@ -381,8 +381,8 @@ private:
 		_empty->setPosition(_modelo[0]->getPosition());
 		_empty->setRotation(rotacaoResultante(0, rotH, rotV));
 
-		_camera->setTarget(_empty->getPosition());
-		//luz->setPosition(_camera->getPosition());
+		_camera->setTarget(_empty->getAbsolutePosition());
+		//luz->setPosition(vector3df(0, rotH, rotV));
 
 		//_toonShader->apply(_modelo[0],"recursos/texturas/besouro1.jpg");
 		//luz->setPosition(_modelo[0]->getPosition()+vector3df(0,100,0));
@@ -473,7 +473,7 @@ public:
 
 		_camera->setParent(_empty);
 		_camera->setPosition( vector3df(-20,20,0));
-		_camera->setTarget(_empty->getPosition());
+		_camera->setTarget(_empty->getAbsolutePosition());
 
 		luz->setParent(_camera);
 

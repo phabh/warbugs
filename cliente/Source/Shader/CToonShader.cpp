@@ -22,7 +22,7 @@ public:
 		_gerVideo = _dispositivo->getVideoDriver();
 		_gerCena = _dispositivo->getSceneManager();
 
-		_lightPosition = light->getPosition();
+		_lightPosition = light->getAbsolutePosition();
 
 		_camera = _gerCena->getActiveCamera();
 	}
@@ -58,7 +58,7 @@ public:
 
 		vector3df camPosOS;
 
-		invWorld.transformVect(camPosOS, _camera->getPosition());
+		invWorld.transformVect(camPosOS, _camera->getAbsolutePosition());
 		servicos->setVertexShaderConstant("mCamPos", &camPosOS.X, 3);
 	
 		matrix4 wvp = _gerVideo->getTransform(ETS_PROJECTION);
