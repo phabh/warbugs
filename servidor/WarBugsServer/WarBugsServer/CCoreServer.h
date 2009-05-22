@@ -4,7 +4,7 @@
 #include "commom.h"
 #include "CDataBase.h"
 #include "CDataManager.h"
-#include <CDoubleList.h>
+//#include <CDoubleList.h>
 #include <CCenario.h>
 #include <CBugSocket.h>
 #include <CPersonagemJogador.h>
@@ -12,33 +12,45 @@
 #include <CJogador.h>
 #include <CPlayerList.h>
 
-class CFrame
+ref class CFrame
 {
 	public:
-		CFrame      *   _next;
 		bool			_toAll;
+		char        *   _data;
 		CBugSocket  *	_socket;
 		CBugMessage *	_message;
 		int             _idCenario;
 
 		CFrame()
 		{
-			char data[1400];
 			_toAll	= false;
 			_socket = NULL;
+			_data   = new char[1400];
 			_message = new CBugMessage();
-			_message->init(data,1400);
+			_message->init(_data,1400);
 			_idCenario = -1;
 		}
 
-		CFrame(bool toAll, CBugSocket * socket, CBugMessage * mes, int idCenario)
+		CFrame(bool toAll, CBugSocket * socket, CBugMessage  & mes, int idCenario)
 		{
 			_toAll	= toAll;
 			_socket = socket;
-			_message = mes;
+			_data   = new char[1400];
+			_message = new CBugMessage();
+			_message->init(_data,1400);
+			strcpy(_message->_data,  mes._data);
+			_message->setSize(mes.getSize());
+			_message->beginReading();
+			for(int i = 0; i < mes.getSize(); i++)
+			{
+				_message->readByte();
+			}
 			_idCenario = idCenario;
 		}
 };
+
+typedef System::Collections::ArrayList CBufferFrame;
+
 
 
 ref class CCoreServer
@@ -65,7 +77,7 @@ ref class CCoreServer
 
 		CPlayerList   * getPlayers();
 
-		static CFrame * _buffer;
+		static CBufferFrame ^ _buffer;
 
 	//	void            addPlayer(CJogador * jogador);
 	//	void			removePlayer(int idJogador);
@@ -79,7 +91,7 @@ ref class CCoreServer
 			@param destino -> caso seja para um jogador apenas
 			@param mes -> messagem a ser enviada
 		*/
-		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, CBugMessage * mes);
+		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, CBugMessage & mes);
 		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, float f1, float f2);
 		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino,  int idMensagem, TypeClassChars tipoPersonagem, CPersonagem  * p1);
 		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, CPeopleList * p1);

@@ -12,7 +12,12 @@
 using namespace std;
 
 #include "CBugSocket.h"
+#ifndef _CPERSONAGEM_H_
 #include "CPersonagem.h"
+#ifndef _CPERSONAGEM_H_
+class CPersonagem;
+#endif
+#endif
 	//#include "CHabilidadesSecundarias.h"
 		//#include "CWarBugObject.h"
 		//#include "CEquipamento.h"
@@ -47,11 +52,11 @@ class CPersonagemJogador : public CPersonagem
 	CEquipamento *_equip;
 	//CBuff *_status;
 	CLealdade *_lealdade;
+	CQuest *_quest;
 	//irr::core::array<CPersonagemJogador*> *_party;
 	//irr::core::array<CPersonagemJogador*> *_friends;
 	int _jogadorID;
 	//Combate
-	CPersonagem *_alvo;
 	bool _bareHands;
 	int _ataque;
 	int _dano;
@@ -98,7 +103,7 @@ public:
 	//void setParty(irr::core::array<CPersonagemJogador*> *lista);
 	//void setFriends(irr::core::array<CPersonagemJogador*> *lista);
 	void setPlayer(int playerID);
-	void setTarget(CPersonagem *alvo);
+	
 	void setBareHands(bool isBareHands);
 	void setAttack(int ataque);
 	void setDamage(int dano);
@@ -150,6 +155,7 @@ public:
 	void distibutePoints(int points, int atribute);
 	void distibuteSkillPoints(int points, int skillIndex);
 
+	void die();
 	void update();
 };
 #endif

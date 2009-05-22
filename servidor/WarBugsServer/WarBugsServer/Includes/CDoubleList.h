@@ -4,20 +4,19 @@
 
 using namespace std;
 
-template <class A> struct SCelula1
+template <class A> ref struct SCelula1
 {
 	A *valor;
 	int id;
-	SCelula1 *next;
-	SCelula1 *prev;
+	SCelula1 ^next;
+	SCelula1 ^prev;
 };
 
-template <class T> class CDoubleList
+template <class T> ref class CDoubleList
 {
 
 private:
-
-	static SCelula1<T> *_first;
+	static SCelula1<T> ^_first;
 	static int _size;
 
 public:
@@ -47,14 +46,14 @@ template <class T> CDoubleList<T>::CDoubleList()
 
 template <class T> CDoubleList<T>::~CDoubleList()
 {
-	_first = NULL;
+	//_first = NULL;
 	delete _first;
 	_size = 0;
 }
 
-template <class T> static void CDoubleList<T>::start()
+template <class T> void CDoubleList<T>::start()
 {
-	_first = NULL;
+	_first = System::Resources::NU;
 	_size = 0;
 }
 
@@ -78,53 +77,53 @@ template <class T> void CDoubleList<T>::addElement(T *element, int ID)
 	{
 		_first->valor = element;
 		_first->next = NULL;
-		_first->prev = NULL;
+		_first->prev = System::Nullable::Value;
 		_first->id = ID;
 		_size = 1;
 	}
 	else
 	{
-		SCelula1<T> *temp = _first;
-		SCelula1<T> *temp2 = new SCelula1<T>();
-		while(temp->next != NULL)
+		SCelula1<T> ^temp = _first;
+		SCelula1<T> ^temp2 = gcnew SCelula1<T>();
+		while(temp->next != System::Nullable::Value;)
 		{
 			temp = temp->next;
 		}
 		temp2->valor = element;
 		temp2->prev = temp;
-		temp2->next = NULL;
+		temp2->next = System::Nullable::Value;;
 		temp2->id = ID;
 		temp->next = temp2;
 
 		_size = _size + 1;
-		temp = NULL;
-		temp2 = NULL;
+		temp = System::Nullable::Value;;
+		temp2 = System::Nullable::Value;;
 		delete temp;
 		delete temp2;
 	}
 }
 
 //Remove o elemento indicado da lista. No pior caso percorre toda a lista
-template <class T> static T *CDoubleList<T>::removeElement(int ID)
+template <class T> T *CDoubleList<T>::removeElement(int ID)
 {
-	SCelula1<T> *temp = _first;
-	while(temp->next != NULL)
+	SCelula1<T> ^temp = _first;
+	while(temp->next != System::Nullable::Value;)
 	{
 		if(temp->id == ID)
 		{
 			//Se for o primeiro
-			if(temp->prev == NULL)
+			if(temp->prev == System::Nullable::Value;)
 			{
 				_first = temp->next;
-				temp->next = NULL;
+				temp->next = System::Nullable::Value;;
 				_size = _size - 1;
 				return(temp->valor);
 			}
 			//Se for o último
-			else if(temp->next == NULL)
+			else if(temp->next == System::Nullable::Value;)
 			{
-				(temp->prev)->next = NULL;
-				temp->prev = NULL;
+				(temp->prev)->next = System::Nullable::Value;;
+				temp->prev = System::Nullable::Value;;
 				_size = _size - 1;
 				return(temp->valor);
 			}
@@ -132,8 +131,8 @@ template <class T> static T *CDoubleList<T>::removeElement(int ID)
 			{
 				(temp->prev)->next = temp->next;
 				(temp->next)->prev = temp->prev;
-				temp->next = NULL;
-				temp->prev = NULL;
+				temp->next = System::Nullable::Value;;
+				temp->prev = System::Nullable::Value;;
 				_size = _size - 1;
 				return(temp->valor);
 			}
@@ -143,15 +142,15 @@ template <class T> static T *CDoubleList<T>::removeElement(int ID)
 			temp = temp->next;
 		}
 	}
-	temp = NULL;
+	temp = System::Nullable::Value;
 	delete temp;
-	return(NULL);
+	return(System::Nullable::Value);
 }
 
-template <class T> static T *CDoubleList<T>::getElement(int ID)
+template <class T> T *CDoubleList<T>::getElement(int ID)
 {
-	SCelula1<T> *temp = _first;
-	while(temp->next != NULL)
+	SCelula1<T> ^temp = _first;
+	while(temp->next != System::Nullable::Value;)
 	{
 		if(temp->id == ID)
 		{
@@ -162,11 +161,11 @@ template <class T> static T *CDoubleList<T>::getElement(int ID)
 			temp = temp->next;
 		}
 	}
-	return(NULL);
+	return(System::Nullable::Value);
 }
 
 //Adiciona um elemento na posição pos. Caso pos seja maior que size()-1, adiciona o elemento ao fim da lista
-template <class T> static void CDoubleList<T>::addElementAt(T *element, int pos)
+template <class T> void CDoubleList<T>::addElementAt(T *element, int pos)
 {
 	if((isEmpty()) || (pos >= size()-1))
 	{
@@ -177,8 +176,8 @@ template <class T> static void CDoubleList<T>::addElementAt(T *element, int pos)
 	{
 		if(pos > 0)
 		{
-			SCelula1<T> *temp = _first;
-			SCelula1<T> *temp2 = new SCelula1<T>();   
+			SCelula1<T> ^temp = _first;
+			SCelula1<T> ^temp2 = gcnew SCelula1<T>();   
 			while(pos > 0)
 			{
 				temp = temp->next;
@@ -191,21 +190,21 @@ template <class T> static void CDoubleList<T>::addElementAt(T *element, int pos)
 			temp->prev = temp2;
 
 			_size = _size + 1;
-			temp = NULL;
-			temp2 = NULL;
+			temp = System::Nullable::Value;
+			temp2 = System::Nullable::Value;
 			delete temp;
 			delete temp2;
 		}
 		else
 		{
-			SCelula1<T> *temp = new SCelula1<T>();
+			SCelula1<T> ^temp = gcnew SCelula1<T>();
 			temp->valor = element;
 			temp->next = _first;
-			temp->prev = NULL;
+			temp->prev = System::Nullable::Value;
 			_first->prev = temp;
 			_first = temp;
 			_size = _size + 1;
-			temp = NULL;
+			temp = System::Nullable::Value;
 			delete temp;
 		}
 		return;
@@ -215,7 +214,7 @@ template <class T> static void CDoubleList<T>::addElementAt(T *element, int pos)
 //Remove o elemento na posição pos e retorna seu valor
 template <class T> T *CDoubleList<T>::removeElementAt(int pos)
 {
-	SCelula1<T> *temp = _first;
+	SCelula1<T> ^temp = _first;
 	while(pos > 0)
 	{
 		temp = temp->next;
@@ -223,24 +222,24 @@ template <class T> T *CDoubleList<T>::removeElementAt(int pos)
 	}
 	(temp->next)->prev = temp->prev;
 	(temp->prev)->next = temp->next;
-	temp->next = NULL;
-	temp->prev = NULL;
-	T *value = (temp->valor);
+	temp->next = System::Nullable::Value;
+	temp->prev = System::Nullable::Value;
+	T ^value = (temp->valor);
 	_size = _size - 1;
-	temp = NULL;
+	temp = System::Nullable::Value;
 	delete temp;
 	return(value);
 }
 
 //Retorna o valor do elemento na posição dada. Alterações posteriores ao apontador retornado, NÃO alterarão o elemento na lista 
-template <class T> static T *CDoubleList<T>::getElementAt(int pos)
+template <class T> T *CDoubleList<T>::getElementAt(int pos)
 {
-	SCelula1<T> *temp = _first;
+	SCelula1<T> ^temp = _first;
 	while(pos > 0)
 	{
 		temp = temp->next;
 		pos = pos - 1;
 	}
-	T *value = (temp->valor);
+	T ^value = (temp->valor);
 	return(value);
 }
