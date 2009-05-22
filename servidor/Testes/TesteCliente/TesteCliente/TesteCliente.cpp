@@ -107,44 +107,49 @@ int main()
 		//se você executar o server que fiz provavelmente pode dar erro
 		//por não possuir o banco de dados, mas se não der erro ele irá
 		//conseguir ler as mensagens e falar que o usuário é invalido
-		CBugSocketClient * _socketClient = new CBugSocketClient("localhost",PORT);
-	}catch(string)
+		CBugSocketClient * _socketClient = new CBugSocketClient("127.0.0.1",PORT);
+
+		while(true) //so pra testar
+		{
+
+			cout<<"\nDigite o usuario: ";
+			cin.getline(login,15);
+
+			cout<<"\nDigite a senha: ";
+			cin.getline(senha,15);
+
+
+			mesEnv.writeByte(LOGIN_REQUEST); // requisição de login
+			mesEnv.writeString(login);       // login
+			mesEnv.writeString(senha);		 // senha
+			
+			//Envia a mensagem
+			_socketClient->SendLine(mesEnv);
+
+			cout<<"\nRecebendo Pacote...";
+			//recebe o pacote
+			_socketClient->ReceiveLine(mesRec);
+
+			cout<<"\nRecebeu Pacote";
+			if(mesRec.getSize() != 0)
+			{
+				//começa a ler o pacote
+				mesRec.beginReading();
+
+
+			
+				cout<<"\nPacote Recebido = "<< mesRec.readByte(); //le o id da mensagem
+				cout<<"\nPacote Recebido = "<< mesRec.readByte(); //le o id da mensagem
+				//cout<<"\nPacote Recebido = "<< mesRec.readString(); //e por ae vai =D
+			}
+		}
+
+	}catch(...)
 	{
 		cout<<"\nNão foi possivel Encontrar o servidor!";
 		Sleep(2000);
 		return 0;
 	}
-
-
-	while(true) //so pra testar
-	{
-
-		cout<<"\nDigite o usuario: ";
-		cin.getline(login,15);
-
-		cout<<"\nDigite a senha: ";
-		cin.getline(senha,15);
-
-
-		mesEnv.writeByte(LOGIN_REQUEST); // requisição de login
-		mesEnv.writeString(login);       // login
-		mesEnv.writeString(senha);		 // senha
-		
-		//Envia a mensagem
-		_socketClient->SendLine(mesEnv);
-
-		cout<<"\nRecebendo Pacote...";
-		//recebe o pacote
-		_socketClient->ReceiveLine(mesRec);
-
-		//começa a ler o pacote
-		mesRec.beginReading();
-		
-		cout<<"\nPacote Recebido = "<< mesRec.readByte(); //le o id da mensagem
-		cout<<"\nPacote Recebido = "<< mesRec.readString(); //e por ae vai =D
-
-		Sleep(1000);			
-	}
-
+	return 0;
 
 }
