@@ -173,19 +173,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\includes\dreamClient.cpp"
+				RelativePath=".\includes\CBugMessage.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\includes\dreamMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\includes\dreamServer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\includes\dreamSock.cpp"
+				RelativePath=".\includes\CBugSocket.cpp"
 				>
 			</File>
 			<File
@@ -219,19 +211,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\includes\dreamClient.h"
+				RelativePath=".\includes\CBugMessage.h"
 				>
 			</File>
 			<File
-				RelativePath=".\includes\dreamMessage.h"
-				>
-			</File>
-			<File
-				RelativePath=".\includes\dreamServer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\includes\dreamSock.h"
+				RelativePath=".\includes\CBugSocket.h"
 				>
 			</File>
 			<File
