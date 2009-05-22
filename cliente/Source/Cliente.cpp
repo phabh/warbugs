@@ -31,8 +31,8 @@ int main()
 	const HWND hDesktop = GetDesktopWindow(); // Captura a dimensão da tela 
 	GetWindowRect(hDesktop, &desktop);   
 
-	cfg.parametrosVideo.WindowSize.Width = desktop.right;
-	cfg.parametrosVideo.WindowSize.Height = desktop.bottom;
+	cfg.parametrosVideo.WindowSize.Width = 1024;//desktop.right;
+	cfg.parametrosVideo.WindowSize.Height = 768;//desktop.bottom;
 	cfg.parametrosVideo.Fullscreen = false;
 
 	dispositivoGrafico = createDevice(EDT_DIRECT3D9, 
