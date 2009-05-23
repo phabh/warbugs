@@ -11,9 +11,21 @@
 
 #include "CInimigo.h"
 
+CInimigo::CInimigo()
+{
+	_cenario = NULL;
+}
 CInimigo::CInimigo(CCenario *cenario)
 {
 	_cenario = cenario;
+}
+CCenario *CInimigo::getScene()
+{
+	return(_cenario);
+}
+void CInimigo::setScene(CCenario *newScene)
+{
+	_cenario = newScene;
 }
 void CInimigo::takeDecision()
 {
