@@ -64,6 +64,13 @@ void CInimigo::takeDecision()
 		break;
 	}
 }
+void CInimigo::attack()
+{
+}
+void CInimigo::takeDamage(int damage)
+{
+	this->getStats()->addPV((-1)*damage);
+}
 void CInimigo::die()
 {
 	if(getStats()->getPV() <= 0)
@@ -71,6 +78,9 @@ void CInimigo::die()
 		estado = MORTO;
 		respawn = ENEMYRESPAWNTIME;
 	}
+}
+void CInimigo::useItem(CItem *item)
+{
 }
 void CInimigo::update()
 {

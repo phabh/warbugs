@@ -69,6 +69,19 @@ void CNPC::giveQuest(CPersonagemJogador *alvo)
 {
 	alvo->acceptQuest(_quest);
 }
+void CNPC::attack()
+{
+}
+void CNPC::takeDamage(int damage)
+{
+	this->getStats()->addPV((-1)*damage);
+}
+void CNPC::die()
+{
+}
+void CNPC::useItem(CItem *item)
+{
+}
 void CNPC::update()
 {
 	if((destino->x != this->getPosition()->x)||(destino->z != this->getPosition()->z))
