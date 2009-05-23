@@ -489,7 +489,7 @@ void CPersonagemJogador::speakToNPC(CPersonagem *alvo){}
 //Batalha
 void CPersonagemJogador::takeDamage(int damage)
 {
-	habilidadesSecundarias->addPV(habilidadesSecundarias->getPV() - damage);
+	habilidadesSecundarias->addPV((-1)*damage);
 }
 void CPersonagemJogador::attack()
 {

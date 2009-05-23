@@ -30,6 +30,11 @@ public:
 	void buy(CPersonagemJogador *vendedor, CItem *item);
 	void sell(CPersonagemJogador *comprador, CItem *item);
 
+	void attack();
+	void takeDamage(int damage);
+	void die();
+	void useItem(CItem *item);
+
 	void update();
 };
 #endif

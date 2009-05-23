@@ -103,7 +103,19 @@ void CVendedor::sell(CPersonagemJogador *comprador, CItem *item)
 		comprador->getBolsa()->addItem(item);
 	}
 }
-
+void CVendedor::attack()
+{
+}
+void CVendedor::takeDamage(int damage)
+{
+	this->getStats()->addPV((-1)*damage);
+}
+void CVendedor::die()
+{
+}
+void CVendedor::useItem(CItem *item)
+{
+}
 void CVendedor::update()
 {
 	if((destino->x != this->getPosition()->x)||(destino->z != this->getPosition()->z))

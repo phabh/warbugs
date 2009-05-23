@@ -28,7 +28,11 @@ private:
 public:
 	CInimigo(CCenario *cenario);
 	void takeDecision();
+
+	void attack();
+	void takeDamage(int damage);
 	void die();
+	void useItem(CItem *item);
 
 	void update();
 };
