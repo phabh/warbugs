@@ -60,12 +60,16 @@ private:
 
 				case 5:
 					_camRotation+=90;
-					cout << "\n" << _camRotation;
+					if(_camRotation > 360.0)
+						_camRotation -= 360.0;
+					//cout << "\n" << _camRotation;
 				break;
 
 				case 6:
 					_camRotation-=90;
-					cout << "\n" << _camRotation;
+					if(_camRotation < 0.0)
+						_camRotation += 360.0;
+					//cout << "\n" << _camRotation;
 				break;
 			
 				default:
@@ -113,14 +117,14 @@ private:
 			else
 			{
 				if(_camRotation > _camCurrRotation)
-					_camCurrRotation += 1*delta/100;
+					_camCurrRotation += 1*delta/50;
 
 				else if(_camRotation < _camCurrRotation)
-					_camCurrRotation -= 1*delta/100;
+					_camCurrRotation -= 1*delta/50;
 			}
 		}
 
-		cout << "\n" << _camCurrRotation;
+		//cout << "\n" << _camCurrRotation;
 
 		_camera->setRotation(vector3df(0,_camCurrRotation,0));
 	}
@@ -130,21 +134,22 @@ public:
 
 	CMenuSelecao(){}
 	
-	bool start(IrrlichtDevice *grafico, ISoundEngine *audio, CGameData *gameData)
+	bool start(CGameCore *gameCore)
 	{
 
 		_gameCfg = new CArquivoConfig();
 		TypeCfg cfg = _gameCfg->loadConfig();
 
-		_gameData = gameData;
+//		_gameData = gameData;
 
-	    _dispositivo = grafico;
-		_gerenciadorEventos = (CGerEventos*)_dispositivo->getEventReceiver();
-		_gerenciadorAudio = audio;
+		_dispositivo      = gameCore->getGraphicDevice();
+		_gerenciadorAudio = gameCore->getSoundDevice();
+
 		_gerenciadorAudio->removeAllSoundSources();
+		_gerenciadorEventos = (CGerEventos*)_dispositivo->getEventReceiver();
 
 		_myID = _nextID = MN_SELECAOPERSONAGEM;
-		_arquivoCena = "recursos/cenas/selecao.irr";
+		//_arquivoCena = "recursos/cenas/selecao.irr";
 
 		_nodoSelecionado = 0;
 		_idPersonagem = -1;
@@ -161,9 +166,10 @@ public:
 		
 		_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
 
-		_gerenciadorCena->clear();
-		if(_arquivoCena)
-			_gerenciadorCena->loadScene(_arquivoCena);
+		_gerenciadorCena->clear(); // Limpa toda a cena do jogo
+		
+		//if(_arquivoCena)
+		_gerenciadorCena->loadScene(pathArquivoCena[MN_SELECAOPERSONAGEM]);
 		
 		_skin = _gerenciadorHud->getSkin();
 		_font = _gerenciadorHud->getFont("recursos/fonts/font_georgia.png");

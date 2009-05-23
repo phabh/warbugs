@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Setup.h"
-#include "CArquivoConfig.cpp"
-#include "CGerEventos.h"
-#include "CToonShader.cpp"
-#include "CGameLogicData.h"
+//#include "CArquivoConfig.cpp"
+//#include "CGerEventos.h"
+//#include "CGameLogicData.h"
+
+#include "CGameCore.h"
 
 class CMenu
 {
@@ -29,7 +30,7 @@ protected:
 	bool _flags[NUMFLAGSMENU];
 	bool _temPacote;
 
-	CGameData *_gameData;
+	//CGameData *_gameData;
 
 	CToonShader *_toonShader;
 
@@ -43,6 +44,6 @@ public:
 	enum flagMenu {HUDCHANGED, OBJSELECTED, INVENTARIOON, CHATON, STATUSON, MAPAON, TRADEON, EQUIPON, SHOPON, BOLSAON, ALERTON, CONFIGON };
 
 	CMenu(){}
-	virtual bool start(IrrlichtDevice *grafico, ISoundEngine *audio, CGameData *gameData) = 0;
+	virtual bool start(CGameCore *gameCore) = 0;
 	menuID run();
 };

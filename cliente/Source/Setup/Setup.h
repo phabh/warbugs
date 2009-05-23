@@ -60,6 +60,9 @@ const int NUMPODERES = 3;
 const int NUMBUFFERS = 15;
 const int MAXITENSVENDEDOR = 30;
 
+// Menu
+const int NUMMENUCENA = 4; // número de menus com cenas irr a carregar
+
 // Hud
 const int NUMROLETAOPCOES = 6;
 const int NUMFXHUD = 10; // efeitos sonoros do HUD
@@ -82,8 +85,12 @@ const int PACKAGESIZE = 1400;
 // Enumerators
 //-----------------------------------------------------------------------------------------
 
-// Menu
-enum menuID {MN_ABERTURA, MN_LOGIN, MN_CONFIGURACAO, MN_SELECAOPERSONAGEM, MN_CRIACAOPERSONAGEM, MN_JOGO, MN_CREDITOS, MN_SAIDA, MN_ERRO};
+// Inicialização
+enum TypeStart {ERRO, SUCESSO};
+
+
+// Menu /* MN_CONFIGURACAO,*/
+enum menuID {MN_ABERTURA, MN_LOGIN, MN_SELECAOPERSONAGEM, MN_CRIACAOPERSONAGEM, MN_JOGO, MN_CREDITOS, MN_SAIDA, MN_ERRO};
 
 
 // Cenario

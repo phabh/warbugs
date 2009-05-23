@@ -236,11 +236,15 @@
 				Name="GameLogicData"
 				>
 				<File
-					RelativePath=".\Source\GameLogicData\CCenario.cpp"
+					RelativePath=".\Source\GameLogicData\CGameCore.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Source\GameLogicData\CGameLogicData.cpp"
+					RelativePath=".\Source\GameLogicData\CGameData.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GameLogicData\CGameLogic.cpp"
 					>
 				</File>
 				<File
@@ -390,11 +394,15 @@
 				Name="GameLogicData"
 				>
 				<File
-					RelativePath=".\Source\GameLogicData\CCenario.h"
+					RelativePath=".\Source\GameLogicData\CGameCore.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Source\GameLogicData\CGameLogicData.h"
+					RelativePath=".\Source\GameLogicData\CGameData.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GameLogicData\CGameLogic.h"
 					>
 				</File>
 				<File

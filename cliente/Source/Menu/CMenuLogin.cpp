@@ -49,17 +49,18 @@ public:
 
 	CMenuLogin(){}
 	
-	bool start(IrrlichtDevice *grafico, ISoundEngine *audio, CGameData *gameData)
+	bool start(CGameCore *gameCore)
 	{
 		_gameCfg = new CArquivoConfig();
 		TypeCfg cfg = _gameCfg->loadConfig();
 
-		_gameData = gameData;
+		//_gameData = gameData;
 
-	    _dispositivo = grafico;
-		_gerenciadorEventos = (CGerEventos*)_dispositivo->getEventReceiver();
-		_gerenciadorAudio = audio;
+		_dispositivo      = gameCore->getGraphicDevice();
+		_gerenciadorAudio = gameCore->getSoundDevice();
+
 		_gerenciadorAudio->removeAllSoundSources();
+		_gerenciadorEventos = (CGerEventos*)_dispositivo->getEventReceiver();
 
 		_myID = _nextID = MN_LOGIN;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Irrlicht.h"
+//#include "Irrlicht.h"
 #include "Setup.h"
 #include "CDoubleList.h"
 #include "CPersonagem.h"
@@ -13,7 +13,7 @@ struct SPortal
 	SQuadrante _quadrante;
 };
 
-class CCenario 
+class CGameLogic 
 {
 	private:
  
@@ -33,7 +33,7 @@ class CCenario
 	 
 	public:
 	
-	CCenario();
+	CGameLogic();
 
 	void loadStaticData(int idCenario);
 
