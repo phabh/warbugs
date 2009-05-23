@@ -94,6 +94,7 @@ public:
 	void setXP(int xp);
 	void setXPToNextLv(int xp);
 	void setPointsToDistribute(int points);
+	void setSkillPointsToDistribute(int value);
 	void setEquip(CEquipamento *equip);
 	//void setStatus(CBuff *status);
 	void setLoyalty(CLealdade *lealdade);
@@ -111,8 +112,6 @@ public:
 	void setIDTrader(int value);
 	void setIDItemTrade(int value);
 	void setIDMoneyTrade(int value);
-	void setPointsLeft(int value);
-	void setSkillPointsLeft(int value);
 	void setSocket(CBugSocket * socket);
 
 	//Outros Métodos

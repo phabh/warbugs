@@ -130,6 +130,10 @@ void CPersonagemJogador::setPointsToDistribute(int points)
 {
 	_pontoDistribuir = points;
 }
+void CPersonagemJogador::setSkillPointsToDistribute(int value)
+{
+	_skillPontoDistribuir = value;
+}
 void CPersonagemJogador::setEquip(CEquipamento *equip)
 {
 	_equip = equip;
@@ -194,14 +198,6 @@ void CPersonagemJogador::setIDItemTrade(int value)
 void CPersonagemJogador::setIDMoneyTrade(int value)
 {
 	_idMoneyTrade = value;
-}
-void CPersonagemJogador::setPointsLeft(int value)
-{
-	_pontoDistribuir = value;
-}
-void CPersonagemJogador::setSkillPointsLeft(int value)
-{
-	_skillPontoDistribuir = value;
 }
 void CPersonagemJogador::setSocket(CBugSocket * socket)
 {
