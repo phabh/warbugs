@@ -16,6 +16,7 @@
 CPersonagem::CPersonagem()
 {
 	dinheiro = 0;
+	baseMoveSpeed = 0;
 	habilidadesPrimarias = new CHabilidades();
 	bonusPrimario = new CBonusPrimario();
 	inventario = new CBolsa();
@@ -25,9 +26,17 @@ CPersonagem::CPersonagem()
 	status = new CBuffList();
 }
 //Getters
+char *CPersonagem::getName()
+{
+	return(nome);
+}
 Raca CPersonagem::getRace()
 {
 	return(raca);
+}
+TypeClassChars CPersonagem::getType()
+{
+	return(tipo);
 }
 int CPersonagem::getRespawnTime()
 {
@@ -39,7 +48,7 @@ float CPersonagem::getDirection()
 }
 float CPersonagem::getMoveSpeed()
 {
-	return(10.0f+(float)(getAGI()/10.0f));
+	return(baseMoveSpeed+(float)(getAGI()/10.0f));
 }
 int CPersonagem::getFOR()
 {
@@ -98,9 +107,18 @@ CPersonagem *CPersonagem::getTarget()
 	return(alvo);
 }
 //Setters
+void CPersonagem::setName(char *name)
+{
+	if(sizeof(nome) >= strlen(name))
+		strcpy_s(nome, name);
+}
 void CPersonagem::setRace(Raca raca)
 {
 	raca = raca;
+}
+void CPersonagem::setType(TypeClassChars novotipo)
+{
+	tipo = novotipo;
 }
 void CPersonagem::setRespawnTime(int newTime)
 {
@@ -113,6 +131,10 @@ void CPersonagem::setDirection(float direction)
 		direction = direction + 360;
 	}
 	direcao = direction;
+}
+void CPersonagem::setMoveSpeed(float newSpeed)
+{
+	baseMoveSpeed = newSpeed;
 }
 void CPersonagem::setState(EstadoPersonagem newState)
 {

@@ -47,10 +47,6 @@ CPersonagemJogador::CPersonagemJogador()
 	_skillLevel[2] = 0;
 }
 //Getters e setters
-char *CPersonagemJogador::getName()
-{
-	return(_nome);
-}
 int CPersonagemJogador::getLevel()
 {
 	return(_nivel);
@@ -118,12 +114,6 @@ CBugSocket *CPersonagemJogador::getSocket()
 	return(_socketJogador);
 }
 //Setters
-void CPersonagemJogador::setName(char *name)
-{
-	if(sizeof(_nome) >= strlen(name))
-		strcpy_s(_nome, name);
-}
-
 void CPersonagemJogador::setLevel(int level)
 {
 	_nivel = level;
