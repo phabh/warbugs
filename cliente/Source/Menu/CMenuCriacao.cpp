@@ -83,23 +83,23 @@ public:
 
 	CMenuCriacao(){}
 	
-	bool start(IrrlichtDevice *grafico, ISoundEngine *audio, CGameData *gameData)
+	bool start(CGameCore *gameCore)
 	{
-
 		_gameCfg = new CArquivoConfig();
 		TypeCfg cfg = _gameCfg->loadConfig();
 
-		_gameData = gameData;
-		
-		_dispositivo = grafico;
-		_gerenciadorEventos = (CGerEventos*)_dispositivo->getEventReceiver();
-		_gerenciadorAudio = audio;
+		//_gameData = gameData;
+
+		_dispositivo      = gameCore->getGraphicDevice();
+		_gerenciadorAudio = gameCore->getSoundDevice();
+
 		_gerenciadorAudio->removeAllSoundSources();
-		
+		_gerenciadorEventos = (CGerEventos*)_dispositivo->getEventReceiver();
+	
 		_myID = _nextID = MN_CRIACAOPERSONAGEM;
-		_arquivoCena = "recursos/cenas/criacao.irr";
-		//_timer = new CTimer();
-		//_timer->initialize();
+
+		//_arquivoCena = "recursos/cenas/criacao.irr";
+
 		_nodoSelecionado = 0;
 		_idPersonagem = -1;
 		_flags[OBJSELECTED] = false;
@@ -115,9 +115,10 @@ public:
 		
 		_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
 
-		_gerenciadorCena->clear();
-		if(_arquivoCena)
-			_gerenciadorCena->loadScene(_arquivoCena);
+		_gerenciadorCena->clear(); // Limpa toda a cena do jogo
+		
+		//if(_arquivoCena)
+		_gerenciadorCena->loadScene(pathArquivoCena[MN_CRIACAOPERSONAGEM]);
 		
 		_skin = _gerenciadorHud->getSkin();
 		_font = _gerenciadorHud->getFont("recursos/fonts/font_georgia.png");

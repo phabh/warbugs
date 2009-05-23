@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Setup.h"
-
+/*
 //-----------------------------------------------------------------------------------------
 // Caminhos de diretórios
 
@@ -13,7 +13,7 @@ static c8 *pathMusics   = "recursos/audio/";
 static c8 *pathScenes   = "recursos/cenas/";
 static c8 *pathShaders  = "recursos/shaders/";
 static c8 *pathTextures = "recursos/texturas/";
-static c8 *pathVideos   = "recursos/videos/";
+static c8 *pathVideos   = "recursos/videos/";*/
 
 //-----------------------------------------------------------------------------------------
 // Caminhos de arquivos específicos
@@ -23,6 +23,12 @@ static c8 *pathConfig = "recursos/data/config.dat";
 
 static c8 *pathVideoAbertura = "recursos/videos/abertura.wmv";
 static c8 *pathVideoCreditos = "recursos/videos/creditos.wmv";
+
+static c8 *pathArquivoCena[NUMMENUCENA] = {
+"",
+"recursos/cenas/login.irr",
+"recursos/cenas/selecao.irr",
+"recursos/cenas/criacao.irr" };
 
 //-----------------------------------------------------------------------------------------
 // Nomes de arquivos

@@ -7,8 +7,8 @@ struct SBolsa
 {
 	int _idBolsa;
 	int _listaItens[BOLSAMAXITENS];
-	int _x;
-	int _z;	 
+	float _x;
+	float _z;	 
 };
 
 struct SQuadrante 

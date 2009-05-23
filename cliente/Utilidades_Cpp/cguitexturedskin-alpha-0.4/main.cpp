@@ -27,7 +27,7 @@ an event receiver.
 We only react to gui events, and if it's such an event, we get the
 id of the caller (the gui element which caused the event) and get 
 the pointer to the gui environment.
-*//*
+*/
 class MyEventReceiver : public IEventReceiver
 {
 public:
@@ -114,7 +114,7 @@ public:
 		return false;
 	}
 };
-*/
+
 
 /*
 Ok, now for the more interesting part. First, create the 
@@ -131,8 +131,8 @@ int main()
 	/* The creation was successful, now we set the event receiver and
 		store pointers to the driver and to the gui environment. */
 
-	//MyEventReceiver receiver;
-	//device->setEventReceiver(&receiver);
+	MyEventReceiver receiver;
+	device->setEventReceiver(&receiver);
 	device->setWindowCaption(L"Irrlicht Engine - User Interface Demo");
 
 	video::IVideoDriver* driver = device->getVideoDriver();
@@ -162,10 +162,10 @@ int main()
 	IGUIFont* font = env->getFont("fonthaettenschweiler.bmp");
 	if (font)
 		pNewSkin->setFont(font, EGDF_DEFAULT);
-
+/*
 	IGUIImage* img = env->addImage(
 		driver->getTexture("irrlichtlogoalpha2.tga"),
-		position2d<int>(500,350));
+		position2d<int>(500,350));*/
 
 	// create menu
 	gui::IGUIContextMenu* menu = env->addMenu();
@@ -233,6 +233,7 @@ int main()
 	//env->addMessageBox(L"MB",L"MB",false);
 	//env->addMeshViewer(rect<s32>(150,300,200,350));
 	//env->addTab(rect<s32>(150,350,200,400));
+
 	IGUITabControl * pTC = env->addTabControl(rect<s32>(150,300,300,450));
 	pTC->addTab(L"1"); pTC->addTab(L"2"); pTC->addTab(L"3");
 

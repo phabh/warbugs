@@ -1,24 +1,20 @@
-#include "CGameLogicData.h"
+#include "CGameData.h"
 
-CGameData::CGameData()
-{
-}
-
-void CGameData::start(IrrlichtDevice *grafico)
+CGameData::CGameData(IrrlichtDevice *grafico)
 {
 	porcentagem = 0.0f;
 	_dataLoaded = 0.0f;
 
 	_dispositivo = grafico;
-	_gerenciadorCena = _dispositivo->getSceneManager();   // Cria o gerenciador de cena
-	_gerenciadorVideo = _dispositivo->getVideoDriver();   // Cria o driver para o vídeo
-	_gerenciadorHud = _dispositivo->getGUIEnvironment(); // Cria o gerenciador de menu
+
+	_gerenciadorCena  = _dispositivo->getSceneManager();   // Cria o gerenciador de cena
+	_gerenciadorVideo = _dispositivo->getVideoDriver();    // Cria o driver para o vídeo
+	_gerenciadorHud   = _dispositivo->getGUIEnvironment(); // Cria o gerenciador de menu
 
 	_totalLoading = /*NUMCENARIOS*8 +*/ NUMMENUHUDS + NUM2DOBJS + NUM3DPERS*2 + NUM3DITENS*2;// + NUMPROPS*2;
-
 }
 
-void CGameData::loadGameData(int stage)
+void CGameData::loadStage(int stage)
 {
 	switch (stage) // Estágios de carregamento do jogo
 	{
@@ -40,13 +36,13 @@ void CGameData::loadGameData(int stage)
 			porcentagem = _dataLoaded/_totalLoading*100.0f;
 		}	          
 		break;
-		/*
-		case 2: // Carrega malhas dos props 3D
+/*
+	case 2: // Carrega malhas dos props 3D
 		for(int i=0; i<NUMPROPS; i++)
 		{
-		dataGeometryProps[i] = _gerenciadorCena->getMesh(modelPropFile[i]);
-		_dataLoaded++;
-		porcentagem = _dataLoaded/_totalLoading*100.0f;
+			dataGeometryProps[i] = _gerenciadorCena->getMesh(modelPropFile[i]);
+			_dataLoaded++;
+			porcentagem = _dataLoaded/_totalLoading*100.0f;
 		}	          
 		break;*/
 
@@ -67,13 +63,13 @@ void CGameData::loadGameData(int stage)
 			porcentagem = _dataLoaded/_totalLoading*100.0f;
 		}	          
 		break;
-		/*
-		case 5: // Carrega texturas dos props 3D
+/*
+	case 5: // Carrega texturas dos props 3D
 		for(int i=0; i<NUMPROPS; i++)
 		{
-		dataTxProps[i] = _gerenciadorVideo->getTexture(texturePropFile[i]);
-		_dataLoaded++;
-		porcentagem = _dataLoaded/_totalLoading*100.0f;
+			dataTxProps[i] = _gerenciadorVideo->getTexture(texturePropFile[i]);
+			_dataLoaded++;
+			porcentagem = _dataLoaded/_totalLoading*100.0f;
 		}	          
 		break;*/
 
@@ -98,27 +94,3 @@ void CGameData::loadGameData(int stage)
 
 	cout << "\n" << porcentagem << endl;
 }
-
-//--------------------------------------------------------------------------------------
-// Métodos Network
-
-void CGameData::conectar(const std::string& host, int port)
-{
-	gameNetClient = new CBugSocketClient(host, port);
-
-	msgToSend.init(dataSend, PACKAGESIZE);
-	msgToReceive.init(dataReceive, PACKAGESIZE);
-}
-
-void CGameData::enviarPacote(char *s)
-{
-	msgToSend.writeString(s);
-	gameNetClient->SendLine(msgToSend);
-}
-
-CBugMessage *CGameData::receberPacote()
-{
-	//return gameNetClient->ReceiveLine();
-}
-
-//--------------------------------------------------------------------------------------

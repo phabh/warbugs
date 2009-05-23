@@ -1,5 +1,3 @@
-#pragma once
-
 #include "CMenu.h"
 
 menuID CMenu::run()
@@ -57,7 +55,7 @@ menuID CMenu::run()
 			_gerenciadorEventos->startEventProcess(); 
 		}
 	}
-
 	_gerenciadorAudio->stopAllSounds();
+
 	return _nextID;
 }
