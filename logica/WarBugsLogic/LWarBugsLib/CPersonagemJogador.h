@@ -42,7 +42,6 @@ class CQuest;
 class CPersonagemJogador : public CPersonagem
 {
 	CBugSocket *_socketJogador;
-	char _nome[10];
 	int _nivel;
 	int _skillLevel[3];
 	int _experiencia;
@@ -74,7 +73,6 @@ public:
 
 	CPersonagemJogador();
 	//Getters
-	char *getName();
 	int getLevel();
 	int getXP();
 	int getMaxXP();
@@ -92,7 +90,6 @@ public:
 	CBugSocket *getSocket();
 	
 	//Setters
-	void setName(char *name);
 	void setLevel(int level);
 	void setXP(int xp);
 	void setXPToNextLv(int xp);
