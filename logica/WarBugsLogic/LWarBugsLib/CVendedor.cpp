@@ -13,6 +13,15 @@
 
 CVendedor::CVendedor()
 {
+	coordenada = new Ponto();
+	dinheiro = 0;
+	baseMoveSpeed = 0;
+	habilidadesPrimarias = new CHabilidades();
+	bonusPrimario = new CBonusPrimario();
+	inventario = new CBolsa();
+	habilidadesSecundarias = new CHabilidadesSecundarias();
+	bonusSecundario = new CBonusSecundario();
+	status = new CBuffList();	
 	setState(PARADO);
 	setMoney(0);
 	setBolsa(new CBolsa());

@@ -14,6 +14,15 @@
 CNPC::CNPC()
 {
 	//CPersonagem::CPersonagem();
+	coordenada = new Ponto();
+	dinheiro = 0;
+	baseMoveSpeed = 0;
+	habilidadesPrimarias = new CHabilidades();
+	bonusPrimario = new CBonusPrimario();
+	inventario = new CBolsa();
+	habilidadesSecundarias = new CHabilidadesSecundarias();
+	bonusSecundario = new CBonusSecundario();
+	status = new CBuffList();
 }
 void CNPC::takeDecision()
 {
