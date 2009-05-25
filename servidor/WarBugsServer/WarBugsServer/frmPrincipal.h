@@ -642,10 +642,14 @@ private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  
 
 			_coreServer->readPackets();
 
+			gridJogadores->Rows->Clear();
+
 			while(gridJogadores->Rows->Count < _coreServer->getPlayers()->size())
 			{ 
 				gridJogadores->Rows->Add();
 			}
+
+
 
 			//atualização da aba de Jogadores On Line
 			for(int i = 0; i < _coreServer->getPlayers()->size(); i++)
@@ -666,6 +670,8 @@ private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  
 */
 
 			}
+
+	//		_coreServer->verificaPlayers();
 
 			//Atualiza os Server
 			_coreServer->updateAll();
