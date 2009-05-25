@@ -48,6 +48,10 @@ CBolsa *CCenario::getBag(int idBag)
 {
 	return (_itens->getBolsa(idBag));
 }
+CVendedor *CCenario::getVendedor(int idVendedor)
+{
+	return((CVendedor*)_vendedores->getPersonagem(idVendedor));
+}
 CPersonagemJogador *CCenario::getPlayerAt(int pos)
 {
 	return((CPersonagemJogador*)_jogadores->getElementAt(pos));
@@ -63,6 +67,10 @@ CNPC *CCenario::getNpcAt(int pos)
 CBolsa *CCenario::getBagAt(int pos)
 {
 	return (_itens->getElementAt(pos));
+}
+CVendedor *CCenario::getVendedorAt(int idVendedor)
+{
+	return((CVendedor*)_vendedores->getElementAt(idVendedor));
 }
 CPortal *CCenario::getExit(Direcoes idPortal)
 {
@@ -116,6 +124,10 @@ void CCenario::addBag(CBolsa *bolsa)
 {
 	_itens->addBag(bolsa);
 }
+void CCenario::addVendedor(CVendedor *vendedor)
+{
+	_vendedores->addPersonagem(vendedor);
+}
 //
 CPersonagemJogador *CCenario::removePlayer(int idJogador)
 {
@@ -129,7 +141,14 @@ CNPC *CCenario::removeNPC(int idNPC)
 {
 	return((CNPC*)_npcs->removePersonagem(idNPC));
 }
-
+CBolsa *CCenario::removeBag(int idBag)
+{
+	return((CBolsa*)_itens->removeBolsa(idBag));
+}
+CVendedor *CCenario::removeVendedor(int idVendedor)
+{
+	return((CVendedor*)_vendedores->removePersonagem(idVendedor));
+}
 void CCenario::update()
 {
 	for(int i = 0; i < max(_jogadores->size() , max(_inimigos->size(), _npcs->size())); i=i+1)
