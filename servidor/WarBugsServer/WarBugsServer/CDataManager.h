@@ -45,7 +45,6 @@ public:
 	CArmor  * getArmorEquiped(int idPersonagem);
 
 	//Obter Cenarios
-	CCenario * getCenario(int id);
 	CCenarioList * getListCenario();
 
 	//Portal
@@ -58,7 +57,6 @@ public:
 	CBolsaList  * getListBolsa(int idCenario);
 
 	//Obtem Jogador
-	CJogador getJogador(int id);
 	CJogador getJogador(char * login);
 	
 	//Login

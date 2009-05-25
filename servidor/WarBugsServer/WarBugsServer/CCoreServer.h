@@ -79,6 +79,10 @@ ref class CCoreServer
 
 		static CBufferFrame ^ _buffer;
 
+		void            updateAll();
+
+		void			sendAllMessages();
+
 	//	void            addPlayer(CJogador * jogador);
 	//	void			removePlayer(int idJogador);
 	//	void			removePlayers();

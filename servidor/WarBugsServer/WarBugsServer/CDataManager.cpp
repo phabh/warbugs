@@ -9,8 +9,10 @@
 #include <CLoyaltyScroll.h>
 #include <CArmor.h>
 #include <CWeapon.h>
+#include <CVendedor.h>
 #include <CCenario.h>
 #include <CCenarioList.h>
+
 
 CDataManager::CDataManager(CDataBase * db)
 {
@@ -62,7 +64,7 @@ CPersonagem * CDataManager::getPersonagem(int id)
 			case JOGADOR: //Jogador
 			{
 				personagem = new CPersonagemJogador();
-				
+
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 				((CPersonagemJogador *)personagem)->setID(dado[0]);
@@ -116,8 +118,6 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 				((CPersonagemJogador *)personagem)->setName(nome);
 				
-				//dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
-
 				//FICA PRA DEPOIS
 				((CPersonagemJogador *)personagem)->setPlayer(-1);
 
@@ -129,8 +129,6 @@ CPersonagem * CDataManager::getPersonagem(int id)
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 				((CPersonagemJogador *)personagem)->setSpeed(dado[0]);
-
-				//dado = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 				//FICA PRA DEPOIS
 				((CPersonagemJogador *)personagem)->setTarget(NULL);
@@ -155,6 +153,9 @@ CPersonagem * CDataManager::getPersonagem(int id)
 				dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
 				dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
 
+				dado[11] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGBONUSPOINTSPRIMARIAS")]->ToString());
+				dado[12] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGBONUSPOINTSPODER")]->ToString());
+
 				((CPersonagemJogador *)personagem)->getStats()->setAttackRate(dado[0]);
 				((CPersonagemJogador *)personagem)->getStats()->setChargeTime(dado[1]);
 				((CPersonagemJogador *)personagem)->getStats()->setDefense(dado[2]);
@@ -167,54 +168,319 @@ CPersonagem * CDataManager::getPersonagem(int id)
 				((CPersonagemJogador *)personagem)->getStats()->setRangedAttack(dado[9]);
 				((CPersonagemJogador *)personagem)->getStats()->setRangedDamage(dado[10]);
 
-				//Colocar a bolsa de itens para o personagem
-
+				((CPersonagemJogador *)personagem)->setPointsToDistribute(dado[11]);
+				((CPersonagemJogador *)personagem)->setSkillPointsToDistribute(dado[12]);
 
 				break;
 			}
 		case LIDER:
 			{
-				personagem = NULL;
 				int race = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
 
-				if(race == FORMIGA)
+				switch((Raca)race)
 				{
-					//monta o TanDan
+					case FORMIGA:
+						{
+							//monta o TanDan
+							personagem = new CInimigo();
+
+							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+							((CInimigo *)personagem)->setID(dado[0]);
+
+							char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+							((CPersonagemJogador *)personagem)->setName(nome);
+
+							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+							dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+							dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+							dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+							dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+							CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+							((CInimigo *)personagem)->setBaseStats(tempHabilidades);
+
+							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+							((CInimigo *)personagem)->setRace((Raca)dado[0]);
+
+							CBolsa tempBolsa;
+
+/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+							((CInimigo *)personagem)->setBolsa(&tempBolsa);
+
+							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+							((CInimigo *)personagem)->setMoney(dado[0]);
+
+							float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+							float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+							((CInimigo *)personagem)->setPosition(posX, posZ);
+
+							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+							((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+
+							//FICA PRA DEPOIS
+							((CInimigo *)personagem)->setTarget(NULL);
+
+							dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+							dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+							dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+							dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+							dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+							dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+							dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+							dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+							dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+							dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+							dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+							((CInimigo *)personagem)->getStats()->setAttackRate(dado[0]);
+							((CInimigo *)personagem)->getStats()->setChargeTime(dado[1]);
+							((CInimigo *)personagem)->getStats()->setDefense(dado[2]);
+							((CInimigo *)personagem)->getStats()->setMaxPM(dado[3]);
+							((CInimigo *)personagem)->getStats()->setMaxPV(dado[4]);
+							((CInimigo *)personagem)->getStats()->setMeleeAttack(dado[5]);
+							((CInimigo *)personagem)->getStats()->setMeleeDamage(dado[6]);
+							((CInimigo *)personagem)->getStats()->setPM(dado[7]);
+							((CInimigo *)personagem)->getStats()->setPV(dado[8]);
+							((CInimigo *)personagem)->getStats()->setRangedAttack(dado[9]);
+							((CInimigo *)personagem)->getStats()->setRangedDamage(dado[10]);
+
+							break;
+						}
+					case BESOURO:
+					case ARANHA:
+					case LOUVADEUS:
+					case ESCORPIAO:
+					case VESPA:
+						{
+							personagem = new CNPC();
+
+							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+							((CNPC *)personagem)->setID(dado[0]);
+
+							char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+							dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+							dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+							dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+							dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+							CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+							((CNPC *)personagem)->setBaseStats(tempHabilidades);
+
+							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+							((CNPC *)personagem)->setRace((Raca)dado[0]);
+
+							CBolsa tempBolsa;
+
+/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+							((CNPC *)personagem)->setBolsa(&tempBolsa);
+
+							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+							((CNPC *)personagem)->setMoney(dado[0]);
+
+							float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+							float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+							((CNPC *)personagem)->setPosition(posX, posZ);
+
+							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+							((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+							//FICA PRA DEPOIS
+							((CNPC *)personagem)->setTarget(NULL);
+
+							dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+							dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+							dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+							dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+							dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+							dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+							dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+							dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+							dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+							dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+							dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+							((CNPC *)personagem)->getStats()->setAttackRate(dado[0]);
+							((CNPC *)personagem)->getStats()->setChargeTime(dado[1]);
+							((CNPC *)personagem)->getStats()->setDefense(dado[2]);
+							((CNPC *)personagem)->getStats()->setMaxPM(dado[3]);
+							((CNPC *)personagem)->getStats()->setMaxPV(dado[4]);
+							((CNPC *)personagem)->getStats()->setMeleeAttack(dado[5]);
+							((CNPC *)personagem)->getStats()->setMeleeDamage(dado[6]);
+							((CNPC *)personagem)->getStats()->setPM(dado[7]);
+							((CNPC *)personagem)->getStats()->setPV(dado[8]);
+							((CNPC *)personagem)->getStats()->setRangedAttack(dado[9]);
+							((CNPC *)personagem)->getStats()->setRangedDamage(dado[10]);
+
+							break;
+						}
+				
 				}
 				break;
 			}
 		case MAE: //NPC
 		case FILHOTE: //NPC
 			{
-				personagem = NULL;
-				/*
 				personagem = new CNPC();
-				
+
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 				((CNPC *)personagem)->setID(dado[0]);
 
-				float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-				float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+				char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
 
-				((CNPC *)personagem)->setPosition(posX,posZ);*/
+				((CPersonagemJogador *)personagem)->setName(nome);
+
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+				dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+				dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+				dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+				CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+				((CNPC *)personagem)->setBaseStats(tempHabilidades);
+
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+				((CNPC *)personagem)->setRace((Raca)dado[0]);
+
+				CBolsa tempBolsa;
+
+/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+				((CNPC *)personagem)->setBolsa(&tempBolsa);
+
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+				((CNPC *)personagem)->setMoney(dado[0]);
+
+				float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+				float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+				((CNPC *)personagem)->setPosition(posX, posZ);
+
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+				((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+				//FICA PRA DEPOIS
+				((CNPC *)personagem)->setTarget(NULL);
+
+				dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+				dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+				dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+				dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+				dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+				dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+				dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+				dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+				dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+				dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+				dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+				((CNPC *)personagem)->getStats()->setAttackRate(dado[0]);
+				((CNPC *)personagem)->getStats()->setChargeTime(dado[1]);
+				((CNPC *)personagem)->getStats()->setDefense(dado[2]);
+				((CNPC *)personagem)->getStats()->setMaxPM(dado[3]);
+				((CNPC *)personagem)->getStats()->setMaxPV(dado[4]);
+				((CNPC *)personagem)->getStats()->setMeleeAttack(dado[5]);
+				((CNPC *)personagem)->getStats()->setMeleeDamage(dado[6]);
+				((CNPC *)personagem)->getStats()->setPM(dado[7]);
+				((CNPC *)personagem)->getStats()->setPV(dado[8]);
+				((CNPC *)personagem)->getStats()->setRangedAttack(dado[9]);
+				((CNPC *)personagem)->getStats()->setRangedDamage(dado[10]);
+
 
 				break;
 			}
 		case VENDEDOR: //Vendedor
 			{
-				personagem = NULL;
-/*				personagem = new CVendedor();
-				
+				personagem = new CVendedor();
+
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 				((CVendedor *)personagem)->setID(dado[0]);
 
-				float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-				float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+				char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
 
-				((CVendedor *)personagem)->setPosition(posX,posZ);
-*/
+				((CPersonagemJogador *)personagem)->setName(nome);
+
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+				dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+				dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+				dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+				CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+				((CVendedor *)personagem)->setBaseStats(tempHabilidades);
+
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+				((CVendedor *)personagem)->setRace((Raca)dado[0]);
+
+				CBolsa tempBolsa;
+
+/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+				((CVendedor *)personagem)->setBolsa(&tempBolsa);
+
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+				((CVendedor *)personagem)->setMoney(dado[0]);
+
+				float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+				float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+				((CVendedor *)personagem)->setPosition(posX, posZ);
+
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+				((CVendedor *)personagem)->setMoveSpeed(dado[0]);
+
+				//FICA PRA DEPOIS
+				((CVendedor *)personagem)->setTarget(NULL);
+
+				dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+				dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+				dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+				dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+				dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+				dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+				dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+				dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+				dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+				dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+				dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+				((CVendedor *)personagem)->getStats()->setAttackRate(dado[0]);
+				((CVendedor *)personagem)->getStats()->setChargeTime(dado[1]);
+				((CVendedor *)personagem)->getStats()->setDefense(dado[2]);
+				((CVendedor *)personagem)->getStats()->setMaxPM(dado[3]);
+				((CVendedor *)personagem)->getStats()->setMaxPV(dado[4]);
+				((CVendedor *)personagem)->getStats()->setMeleeAttack(dado[5]);
+				((CVendedor *)personagem)->getStats()->setMeleeDamage(dado[6]);
+				((CVendedor *)personagem)->getStats()->setPM(dado[7]);
+				((CVendedor *)personagem)->getStats()->setPV(dado[8]);
+				((CVendedor *)personagem)->getStats()->setRangedAttack(dado[9]);
+				((CVendedor *)personagem)->getStats()->setRangedDamage(dado[10]);
 				break;
 			}
 		case SOLDADO: //Inimigo
@@ -225,28 +491,323 @@ CPersonagem * CDataManager::getPersonagem(int id)
 				if(race != BESOURO && race != ARANHA && race != ESCORPIAO && race != LOUVADEUS && race != VESPA)
 				{
 					//se for inimigo
+					personagem = new CInimigo();
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+					((CInimigo *)personagem)->setID(dado[0]);
+
+					char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+					((CPersonagemJogador *)personagem)->setName(nome);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+					dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+					dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+					CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+					((CInimigo *)personagem)->setBaseStats(tempHabilidades);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+					((CInimigo *)personagem)->setRace((Raca)dado[0]);
+
+					CBolsa tempBolsa;
+
+					int secret;
+
+					for(int p = 0; p < 3; p++)
+					{
+						srand((unsigned int)time(NULL));
+
+						secret = rand()%3;
+
+						switch(((CInimigo *)personagem)->getRace())
+						{
+							case CUPIM:       //USO
+								{
+									if(secret == 0)
+									{
+										CItem * itemTemp;
+
+										itemTemp = getItem(28); //Polpa de Cupim
+
+										tempBolsa.addItem(itemTemp);
+									}
+									break;
+								}
+							case FORMIGA:     //USO
+								{
+									if(secret == 0)
+									{
+										CItem * itemTemp;
+
+										itemTemp = getItem(27); //Polpa de Formiga
+
+										tempBolsa.addItem(itemTemp);
+									}
+									break;
+								}
+							case BARBEIRO:    //QUEST
+								{
+									if(secret == 0)
+									{
+										CItem * itemTemp;
+
+										itemTemp = getItem(34); //Tesoura de Barbeiro
+
+										tempBolsa.addItem(itemTemp);
+									}
+									break;
+								}
+							case BARATA:	  //USO
+								{
+									if(secret == 0)
+									{
+										CItem * itemTemp;
+
+										itemTemp = getItem(29); //Polpa de Barata
+
+										tempBolsa.addItem(itemTemp);
+									}
+									break;
+								}
+							case TATUBOLINHA: //USO
+								{
+									if(secret == 0)
+									{
+										CItem * itemTemp;
+
+										itemTemp = getItem(30); //Polpa de Tatu
+
+										tempBolsa.addItem(itemTemp);
+									}
+									break;
+								}
+							case LIBELULA:    //QUEST
+								{
+									if(secret == 0)
+									{
+										CItem * itemTemp;
+
+										itemTemp = getItem(31); //Asas de Libélula
+
+										tempBolsa.addItem(itemTemp);
+									}
+									break;
+								}
+							case PERCEVEJO:   //QUEST
+								{
+									if(secret == 0)
+									{
+										CItem * itemTemp;
+
+										itemTemp = getItem(32); //Perfume de Percevejo
+
+										tempBolsa.addItem(itemTemp);
+									}
+									break;
+								}
+							case ABELHA:      //QUEST
+								{
+									if(secret == 0)
+									{
+										CItem * itemTemp;
+
+										itemTemp = getItem(33); //Mel de Abelha
+
+										tempBolsa.addItem(itemTemp);
+									}
+									break;
+								}
+							case LAGARTIXA:	  //QUEST
+								{
+									if(secret == 0)
+									{
+										CItem * itemTemp;
+
+										itemTemp = getItem(36); //Ovo de Lagartixa
+
+										tempBolsa.addItem(itemTemp);
+									}
+									break;
+								}
+							case CALANGO:     //QUEST
+								{
+									if(secret == 0)
+									{
+										CItem * itemTemp;
+
+										itemTemp = getItem(35); //Rabo de Calango
+
+										tempBolsa.addItem(itemTemp);
+									}
+									break;
+								}
+							case SAPO:		  //QUEST
+								{
+									if(secret == 0)
+									{
+										CItem * itemTemp;
+
+										itemTemp = getItem(37); //Língua de Sapo
+
+										tempBolsa.addItem(itemTemp);
+									}
+									break;
+								}
+							case JOANINHA:	  //QUEST
+								{
+									break;
+								}
+							case CAMALEAO:	  //QUEST
+								{
+									if(secret == 0)
+									{
+										CItem * itemTemp;
+
+										itemTemp = getItem(38); //Língua de Camaleão
+
+										tempBolsa.addItem(itemTemp);
+									}
+									break;
+								}
+						}
+						
+					}
+
+					((CInimigo *)personagem)->setBolsa(&tempBolsa);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+					((CInimigo *)personagem)->setMoney(dado[0]);
+
+					float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+					float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+					((CInimigo *)personagem)->setPosition(posX, posZ);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+					((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+
+					//FICA PRA DEPOIS
+					((CInimigo *)personagem)->setTarget(NULL);
+
+					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+					dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+					dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+					dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+					dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+					dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+					dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+					dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+					((CInimigo *)personagem)->getStats()->setAttackRate(dado[0]);
+					((CInimigo *)personagem)->getStats()->setChargeTime(dado[1]);
+					((CInimigo *)personagem)->getStats()->setDefense(dado[2]);
+					((CInimigo *)personagem)->getStats()->setMaxPM(dado[3]);
+					((CInimigo *)personagem)->getStats()->setMaxPV(dado[4]);
+					((CInimigo *)personagem)->getStats()->setMeleeAttack(dado[5]);
+					((CInimigo *)personagem)->getStats()->setMeleeDamage(dado[6]);
+					((CInimigo *)personagem)->getStats()->setPM(dado[7]);
+					((CInimigo *)personagem)->getStats()->setPV(dado[8]);
+					((CInimigo *)personagem)->getStats()->setRangedAttack(dado[9]);
+					((CInimigo *)personagem)->getStats()->setRangedDamage(dado[10]);
+
 				}
 				else
 				{
 					//se for amigo
+					personagem = new CNPC();
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+					((CNPC *)personagem)->setID(dado[0]);
+
+					char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+					((CNPC *)personagem)->setName(nome);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+					dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+					dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+					CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+					((CNPC *)personagem)->setBaseStats(tempHabilidades);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+					((CNPC *)personagem)->setRace((Raca)dado[0]);
+
+					CBolsa tempBolsa;
+
+	/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+					((CNPC *)personagem)->setBolsa(&tempBolsa);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+					((CNPC *)personagem)->setMoney(dado[0]);
+
+					float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+					float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+					((CNPC *)personagem)->setPosition(posX, posZ);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+					((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+					//FICA PRA DEPOIS
+					((CNPC *)personagem)->setTarget(NULL);
+
+					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+					dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+					dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+					dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+					dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+					dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+					dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+					dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+					((CNPC *)personagem)->getStats()->setAttackRate(dado[0]);
+					((CNPC *)personagem)->getStats()->setChargeTime(dado[1]);
+					((CNPC *)personagem)->getStats()->setDefense(dado[2]);
+					((CNPC *)personagem)->getStats()->setMaxPM(dado[3]);
+					((CNPC *)personagem)->getStats()->setMaxPV(dado[4]);
+					((CNPC *)personagem)->getStats()->setMeleeAttack(dado[5]);
+					((CNPC *)personagem)->getStats()->setMeleeDamage(dado[6]);
+					((CNPC *)personagem)->getStats()->setPM(dado[7]);
+					((CNPC *)personagem)->getStats()->setPV(dado[8]);
+					((CNPC *)personagem)->getStats()->setRangedAttack(dado[9]);
+					((CNPC *)personagem)->getStats()->setRangedDamage(dado[10]);
 				}
-
-				/*
-				personagem = new CInimigo();
-				
-				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
-
-				((CInimigo *)personagem)->setID(dado[0]);
-
-				float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-				float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
-
-				((CInimigo *)personagem)->setPosition(posX,posZ);*/
 
 				break;
 			}
 	}
 
+
+	if(personagem != NULL)
+	{
+		personagem->set2DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDHUD")]->ToString()));
+		personagem->set3DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDTEXTURA")]->ToString()));
+		personagem->set2DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDMODELO")]->ToString()));
+	
+	}
 
 	return personagem;
 }
@@ -393,6 +954,18 @@ CPeopleList CDataManager::getPersonagemJogador(int idJogador)
 		((CPersonagemJogador *)personagem)->getStats()->setRangedAttack(dado[9]);
 		((CPersonagemJogador *)personagem)->getStats()->setRangedDamage(dado[10]);
 
+		dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDMODELO")]->ToString());
+		dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDTEXTURA")]->ToString());
+		dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDHUD")]->ToString());
+		dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGBONUSPOINTSPRIMARIAS")]->ToString());
+		dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGBONUSPOINTSPODER")]->ToString());
+
+		((CPersonagemJogador *)personagem)->setModel(dado[0]);
+		((CPersonagemJogador *)personagem)->set3DTexture(dado[1]);
+		((CPersonagemJogador *)personagem)->set2DTexture(dado[2]);
+		((CPersonagemJogador *)personagem)->setPointsToDistribute(dado[3]);
+		((CPersonagemJogador *)personagem)->setSkillPointsToDistribute(dado[4]);
+
 		Lista.addPersonagem(personagem);
 
 		for(int i = 0; i < (int)numCampos; i++)
@@ -454,6 +1027,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 	for(int i = 0; i < (int)numRegs; i++)
 	{
+
 		int tipoPersonagem = System::Int32::Parse(dados[nomeCampos->IndexOf("PGTIPOPERSONAGEM")]->ToString());
 
 
@@ -461,10 +1035,10 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 		switch(tipoPersonagem)
 		{
-				case JOGADOR: 
+				case JOGADOR: //Jogador
 				{
 					personagem = new CPersonagemJogador();
-					
+
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 					((CPersonagemJogador *)personagem)->setID(dado[0]);
@@ -483,13 +1057,10 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 					((CPersonagemJogador *)personagem)->setRace((Raca)dado[0]);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDARMOR")]->ToString());
-					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDWEAPON")]->ToString());
-
 					CEquipamento * tempEquip = new CEquipamento();
 					
-					tempEquip->armadura = (CArmor  *) getItem(dado[0]);
-					tempEquip->arma     = (CWeapon *)getItem(dado[1]);
+					tempEquip->armadura = getArmorEquiped(personagem->getID());
+					tempEquip->arma     = getWeaponEquiped(personagem->getID());
 
 					((CPersonagemJogador *)personagem)->setEquip(tempEquip);
 
@@ -521,8 +1092,6 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 					((CPersonagemJogador *)personagem)->setName(nome);
 					
-					//dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
-
 					//FICA PRA DEPOIS
 					((CPersonagemJogador *)personagem)->setPlayer(-1);
 
@@ -534,8 +1103,6 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 					((CPersonagemJogador *)personagem)->setSpeed(dado[0]);
-
-					//dado = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 					//FICA PRA DEPOIS
 					((CPersonagemJogador *)personagem)->setTarget(NULL);
@@ -560,6 +1127,9 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 					dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
 					dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
 
+					dado[11] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGBONUSPOINTSPRIMARIAS")]->ToString());
+					dado[12] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGBONUSPOINTSPODER")]->ToString());
+
 					((CPersonagemJogador *)personagem)->getStats()->setAttackRate(dado[0]);
 					((CPersonagemJogador *)personagem)->getStats()->setChargeTime(dado[1]);
 					((CPersonagemJogador *)personagem)->getStats()->setDefense(dado[2]);
@@ -572,49 +1142,319 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 					((CPersonagemJogador *)personagem)->getStats()->setRangedAttack(dado[9]);
 					((CPersonagemJogador *)personagem)->getStats()->setRangedDamage(dado[10]);
 
+					((CPersonagemJogador *)personagem)->setPointsToDistribute(dado[11]);
+					((CPersonagemJogador *)personagem)->setSkillPointsToDistribute(dado[12]);
+
 					break;
 				}
-			case LIDER: //NPC
+			case LIDER:
 				{
-					personagem = NULL;
 					int race = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
-					
-					if(race == FORMIGA)
+
+					switch((Raca)race)
 					{
-						//monta o TanDan
+						case FORMIGA:
+							{
+								//monta o TanDan
+								personagem = new CInimigo();
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+								((CInimigo *)personagem)->setID(dado[0]);
+
+								char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+								((CPersonagemJogador *)personagem)->setName(nome);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+								dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+								dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+								dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+								dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+								CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+								((CInimigo *)personagem)->setBaseStats(tempHabilidades);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+								((CInimigo *)personagem)->setRace((Raca)dado[0]);
+
+								CBolsa tempBolsa;
+
+	/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+								((CInimigo *)personagem)->setBolsa(&tempBolsa);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+								((CInimigo *)personagem)->setMoney(dado[0]);
+
+								float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+								float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+								((CInimigo *)personagem)->setPosition(posX, posZ);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+								((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+
+								//FICA PRA DEPOIS
+								((CInimigo *)personagem)->setTarget(NULL);
+
+								dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+								dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+								dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+								dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+								dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+								dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+								dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+								dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+								dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+								dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+								dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+								((CInimigo *)personagem)->getStats()->setAttackRate(dado[0]);
+								((CInimigo *)personagem)->getStats()->setChargeTime(dado[1]);
+								((CInimigo *)personagem)->getStats()->setDefense(dado[2]);
+								((CInimigo *)personagem)->getStats()->setMaxPM(dado[3]);
+								((CInimigo *)personagem)->getStats()->setMaxPV(dado[4]);
+								((CInimigo *)personagem)->getStats()->setMeleeAttack(dado[5]);
+								((CInimigo *)personagem)->getStats()->setMeleeDamage(dado[6]);
+								((CInimigo *)personagem)->getStats()->setPM(dado[7]);
+								((CInimigo *)personagem)->getStats()->setPV(dado[8]);
+								((CInimigo *)personagem)->getStats()->setRangedAttack(dado[9]);
+								((CInimigo *)personagem)->getStats()->setRangedDamage(dado[10]);
+
+								break;
+							}
+						case BESOURO:
+						case ARANHA:
+						case LOUVADEUS:
+						case ESCORPIAO:
+						case VESPA:
+							{
+								personagem = new CNPC();
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+								((CNPC *)personagem)->setID(dado[0]);
+
+								char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+								dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+								dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+								dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+								dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+								CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+								((CNPC *)personagem)->setBaseStats(tempHabilidades);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+								((CNPC *)personagem)->setRace((Raca)dado[0]);
+
+								CBolsa tempBolsa;
+
+	/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+								((CNPC *)personagem)->setBolsa(&tempBolsa);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+								((CNPC *)personagem)->setMoney(dado[0]);
+
+								float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+								float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+								((CNPC *)personagem)->setPosition(posX, posZ);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+								((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+								//FICA PRA DEPOIS
+								((CNPC *)personagem)->setTarget(NULL);
+
+								dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+								dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+								dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+								dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+								dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+								dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+								dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+								dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+								dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+								dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+								dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+								((CNPC *)personagem)->getStats()->setAttackRate(dado[0]);
+								((CNPC *)personagem)->getStats()->setChargeTime(dado[1]);
+								((CNPC *)personagem)->getStats()->setDefense(dado[2]);
+								((CNPC *)personagem)->getStats()->setMaxPM(dado[3]);
+								((CNPC *)personagem)->getStats()->setMaxPV(dado[4]);
+								((CNPC *)personagem)->getStats()->setMeleeAttack(dado[5]);
+								((CNPC *)personagem)->getStats()->setMeleeDamage(dado[6]);
+								((CNPC *)personagem)->getStats()->setPM(dado[7]);
+								((CNPC *)personagem)->getStats()->setPV(dado[8]);
+								((CNPC *)personagem)->getStats()->setRangedAttack(dado[9]);
+								((CNPC *)personagem)->getStats()->setRangedDamage(dado[10]);
+
+								break;
+							}
+					
 					}
+					break;
 				}
 			case MAE: //NPC
 			case FILHOTE: //NPC
 				{
-					personagem = NULL;
-/*					personagem = new CNPC();
-					
+					personagem = new CNPC();
+
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 					((CNPC *)personagem)->setID(dado[0]);
 
-					float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-					float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+					char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
 
-					((CNPC *)personagem)->setPosition(posX,posZ);
-*/
+					((CPersonagemJogador *)personagem)->setName(nome);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+					dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+					dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+					CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+					((CNPC *)personagem)->setBaseStats(tempHabilidades);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+					((CNPC *)personagem)->setRace((Raca)dado[0]);
+
+					CBolsa tempBolsa;
+
+	/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+					((CNPC *)personagem)->setBolsa(&tempBolsa);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+					((CNPC *)personagem)->setMoney(dado[0]);
+
+					float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+					float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+					((CNPC *)personagem)->setPosition(posX, posZ);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+					((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+					//FICA PRA DEPOIS
+					((CNPC *)personagem)->setTarget(NULL);
+
+					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+					dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+					dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+					dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+					dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+					dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+					dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+					dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+					((CNPC *)personagem)->getStats()->setAttackRate(dado[0]);
+					((CNPC *)personagem)->getStats()->setChargeTime(dado[1]);
+					((CNPC *)personagem)->getStats()->setDefense(dado[2]);
+					((CNPC *)personagem)->getStats()->setMaxPM(dado[3]);
+					((CNPC *)personagem)->getStats()->setMaxPV(dado[4]);
+					((CNPC *)personagem)->getStats()->setMeleeAttack(dado[5]);
+					((CNPC *)personagem)->getStats()->setMeleeDamage(dado[6]);
+					((CNPC *)personagem)->getStats()->setPM(dado[7]);
+					((CNPC *)personagem)->getStats()->setPV(dado[8]);
+					((CNPC *)personagem)->getStats()->setRangedAttack(dado[9]);
+					((CNPC *)personagem)->getStats()->setRangedDamage(dado[10]);
+
+
 					break;
 				}
 			case VENDEDOR: //Vendedor
 				{
-					personagem = NULL;
-					/*				personagem = new CVendedor();
-					
+					personagem = new CVendedor();
+
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 					((CVendedor *)personagem)->setID(dado[0]);
 
-					float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-					float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+					char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
 
-					((CVendedor *)personagem)->setPosition(posX,posZ);
-	*/
+					((CPersonagemJogador *)personagem)->setName(nome);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+					dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+					dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+					CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+					((CVendedor *)personagem)->setBaseStats(tempHabilidades);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+					((CVendedor *)personagem)->setRace((Raca)dado[0]);
+
+					CBolsa tempBolsa;
+
+	/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+					((CVendedor *)personagem)->setBolsa(&tempBolsa);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+					((CVendedor *)personagem)->setMoney(dado[0]);
+
+					float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+					float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+					((CVendedor *)personagem)->setPosition(posX, posZ);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+					((CVendedor *)personagem)->setMoveSpeed(dado[0]);
+
+					//FICA PRA DEPOIS
+					((CVendedor *)personagem)->setTarget(NULL);
+
+					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+					dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+					dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+					dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+					dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+					dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+					dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+					dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+					((CVendedor *)personagem)->getStats()->setAttackRate(dado[0]);
+					((CVendedor *)personagem)->getStats()->setChargeTime(dado[1]);
+					((CVendedor *)personagem)->getStats()->setDefense(dado[2]);
+					((CVendedor *)personagem)->getStats()->setMaxPM(dado[3]);
+					((CVendedor *)personagem)->getStats()->setMaxPV(dado[4]);
+					((CVendedor *)personagem)->getStats()->setMeleeAttack(dado[5]);
+					((CVendedor *)personagem)->getStats()->setMeleeDamage(dado[6]);
+					((CVendedor *)personagem)->getStats()->setPM(dado[7]);
+					((CVendedor *)personagem)->getStats()->setPV(dado[8]);
+					((CVendedor *)personagem)->getStats()->setRangedAttack(dado[9]);
+					((CVendedor *)personagem)->getStats()->setRangedDamage(dado[10]);
 					break;
 				}
 			case SOLDADO: //Inimigo
@@ -625,25 +1465,327 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 					if(race != BESOURO && race != ARANHA && race != ESCORPIAO && race != LOUVADEUS && race != VESPA)
 					{
 						//se for inimigo
+						personagem = new CInimigo();
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+						((CInimigo *)personagem)->setID(dado[0]);
+
+						char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+						((CPersonagemJogador *)personagem)->setName(nome);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+						dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+						dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+						dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+						dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+						CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+						((CInimigo *)personagem)->setBaseStats(tempHabilidades);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+						((CInimigo *)personagem)->setRace((Raca)dado[0]);
+
+						CBolsa tempBolsa;
+
+						int secret;
+
+						for(int p = 0; p < 3; p++)
+						{
+							srand((unsigned int)time(NULL));
+
+							secret = rand()%3;
+
+							switch(((CInimigo *)personagem)->getRace())
+							{
+								case CUPIM:       //USO
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(28); //Polpa de Cupim
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case FORMIGA:     //USO
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(27); //Polpa de Formiga
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case BARBEIRO:    //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(34); //Tesoura de Barbeiro
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case BARATA:	  //USO
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(29); //Polpa de Barata
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case TATUBOLINHA: //USO
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(30); //Polpa de Tatu
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case LIBELULA:    //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(31); //Asas de Libélula
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case PERCEVEJO:   //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(32); //Perfume de Percevejo
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case ABELHA:      //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(33); //Mel de Abelha
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case LAGARTIXA:	  //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(36); //Ovo de Lagartixa
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case CALANGO:     //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(35); //Rabo de Calango
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case SAPO:		  //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(37); //Língua de Sapo
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case JOANINHA:	  //QUEST
+									{
+										break;
+									}
+								case CAMALEAO:	  //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(38); //Língua de Camaleão
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+							}
+							
+						}
+
+						((CInimigo *)personagem)->setBolsa(&tempBolsa);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+						((CInimigo *)personagem)->setMoney(dado[0]);
+
+						float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+						float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+						((CInimigo *)personagem)->setPosition(posX, posZ);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+						((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+
+						//FICA PRA DEPOIS
+						((CInimigo *)personagem)->setTarget(NULL);
+
+						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+						dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+						dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+						dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+						dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+						dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+						dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+						dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+						dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+						dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+						((CInimigo *)personagem)->getStats()->setAttackRate(dado[0]);
+						((CInimigo *)personagem)->getStats()->setChargeTime(dado[1]);
+						((CInimigo *)personagem)->getStats()->setDefense(dado[2]);
+						((CInimigo *)personagem)->getStats()->setMaxPM(dado[3]);
+						((CInimigo *)personagem)->getStats()->setMaxPV(dado[4]);
+						((CInimigo *)personagem)->getStats()->setMeleeAttack(dado[5]);
+						((CInimigo *)personagem)->getStats()->setMeleeDamage(dado[6]);
+						((CInimigo *)personagem)->getStats()->setPM(dado[7]);
+						((CInimigo *)personagem)->getStats()->setPV(dado[8]);
+						((CInimigo *)personagem)->getStats()->setRangedAttack(dado[9]);
+						((CInimigo *)personagem)->getStats()->setRangedDamage(dado[10]);
+
 					}
 					else
 					{
 						//se for amigo
+						personagem = new CNPC();
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+						((CNPC *)personagem)->setID(dado[0]);
+
+						char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+						((CNPC *)personagem)->setName(nome);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+						dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+						dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+						dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+						dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+						CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+						((CNPC *)personagem)->setBaseStats(tempHabilidades);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+						((CNPC *)personagem)->setRace((Raca)dado[0]);
+
+						CBolsa tempBolsa;
+
+		/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+						((CNPC *)personagem)->setBolsa(&tempBolsa);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+						((CNPC *)personagem)->setMoney(dado[0]);
+
+						float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+						float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+						((CNPC *)personagem)->setPosition(posX, posZ);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+						((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+						//FICA PRA DEPOIS
+						((CNPC *)personagem)->setTarget(NULL);
+
+						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+						dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+						dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+						dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+						dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+						dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+						dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+						dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+						dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+						dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+						((CNPC *)personagem)->getStats()->setAttackRate(dado[0]);
+						((CNPC *)personagem)->getStats()->setChargeTime(dado[1]);
+						((CNPC *)personagem)->getStats()->setDefense(dado[2]);
+						((CNPC *)personagem)->getStats()->setMaxPM(dado[3]);
+						((CNPC *)personagem)->getStats()->setMaxPV(dado[4]);
+						((CNPC *)personagem)->getStats()->setMeleeAttack(dado[5]);
+						((CNPC *)personagem)->getStats()->setMeleeDamage(dado[6]);
+						((CNPC *)personagem)->getStats()->setPM(dado[7]);
+						((CNPC *)personagem)->getStats()->setPV(dado[8]);
+						((CNPC *)personagem)->getStats()->setRangedAttack(dado[9]);
+						((CNPC *)personagem)->getStats()->setRangedDamage(dado[10]);
 					}
-					/*
-					personagem = new CInimigo();
-					
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
-
-					((CInimigo *)personagem)->setID(dado[0]);
-
-					float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-					float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
-
-					((CInimigo *)personagem)->setPosition(posX,posZ);*/
 
 					break;
 				}
+		}
+
+
+		if(personagem != NULL)
+		{
+			personagem->set2DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDHUD")]->ToString()));
+			personagem->set3DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDTEXTURA")]->ToString()));
+			personagem->setModel(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDMODELO")]->ToString()));
+		
+		}
+
+		for(int i = 0; i < (int)numCampos; i++)
+		{
+			dados->RemoveAt(0);
 		}
 
 		Lista.addPersonagem(personagem);
@@ -666,13 +1808,13 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 	unsigned int numRegs   = 0;
 	unsigned int numCampos = 0;
 	System::String ^ query;
-	System::String ^ complemento;
+	System::String ^ complemento = L" ";
 	if(idRaca != ALLRACE && idRaca != NONERACE)
 	{
 		complemento = L"P.PGRACA = "+idRaca+" AND ";
 	}
 
-	query = L"SELECT P.* FROM PERSONAGEM P, PERSONAGEM_CENARIO PC"
+	query = L"SELECT P.* FROM PERSONAGEM P, PERSONAGEM_CENARIO PC "
 		    +"WHERE P.PGID = PC.PGID AND   "
 			+"PC.CNID =  "+idCenario+" AND "
 			+complemento
@@ -700,6 +1842,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 	for(int i = 0; i < (int)numRegs; i++)
 	{
+
 		int tipoPersonagem = System::Int32::Parse(dados[nomeCampos->IndexOf("PGTIPOPERSONAGEM")]->ToString());
 
 
@@ -710,7 +1853,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 				case JOGADOR: //Jogador
 				{
 					personagem = new CPersonagemJogador();
-					
+
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 					((CPersonagemJogador *)personagem)->setID(dado[0]);
@@ -729,13 +1872,10 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 					((CPersonagemJogador *)personagem)->setRace((Raca)dado[0]);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDARMOR")]->ToString());
-					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDWEAPON")]->ToString());
-
 					CEquipamento * tempEquip = new CEquipamento();
 					
-					tempEquip->armadura = (CArmor  *)getItem(dado[0]);
-					tempEquip->arma     = (CWeapon *)getItem(dado[1]);
+					tempEquip->armadura = getArmorEquiped(personagem->getID());
+					tempEquip->arma     = getWeaponEquiped(personagem->getID());
 
 					((CPersonagemJogador *)personagem)->setEquip(tempEquip);
 
@@ -767,8 +1907,6 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 					((CPersonagemJogador *)personagem)->setName(nome);
 					
-					//dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
-
 					//FICA PRA DEPOIS
 					((CPersonagemJogador *)personagem)->setPlayer(-1);
 
@@ -780,8 +1918,6 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 					((CPersonagemJogador *)personagem)->setSpeed(dado[0]);
-
-					//dado = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 					//FICA PRA DEPOIS
 					((CPersonagemJogador *)personagem)->setTarget(NULL);
@@ -806,6 +1942,9 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 					dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
 					dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
 
+					dado[11] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGBONUSPOINTSPRIMARIAS")]->ToString());
+					dado[12] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGBONUSPOINTSPODER")]->ToString());
+
 					((CPersonagemJogador *)personagem)->getStats()->setAttackRate(dado[0]);
 					((CPersonagemJogador *)personagem)->getStats()->setChargeTime(dado[1]);
 					((CPersonagemJogador *)personagem)->getStats()->setDefense(dado[2]);
@@ -818,76 +1957,651 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 					((CPersonagemJogador *)personagem)->getStats()->setRangedAttack(dado[9]);
 					((CPersonagemJogador *)personagem)->getStats()->setRangedDamage(dado[10]);
 
+					((CPersonagemJogador *)personagem)->setPointsToDistribute(dado[11]);
+					((CPersonagemJogador *)personagem)->setSkillPointsToDistribute(dado[12]);
+
 					break;
 				}
-				case LIDER: //NPC
+			case LIDER:
 				{
 					int race = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
-					if(race == FORMIGA)
+
+					switch((Raca)race)
 					{
-						//monta o inimigo
+						case FORMIGA:
+							{
+								//monta o TanDan
+								personagem = new CInimigo();
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+								((CInimigo *)personagem)->setID(dado[0]);
+
+								char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+								((CPersonagemJogador *)personagem)->setName(nome);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+								dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+								dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+								dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+								dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+								CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+								((CInimigo *)personagem)->setBaseStats(tempHabilidades);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+								((CInimigo *)personagem)->setRace((Raca)dado[0]);
+
+								CBolsa tempBolsa;
+
+	/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+								((CInimigo *)personagem)->setBolsa(&tempBolsa);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+								((CInimigo *)personagem)->setMoney(dado[0]);
+
+								float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+								float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+								((CInimigo *)personagem)->setPosition(posX, posZ);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+								((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+
+								//FICA PRA DEPOIS
+								((CInimigo *)personagem)->setTarget(NULL);
+
+								dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+								dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+								dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+								dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+								dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+								dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+								dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+								dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+								dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+								dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+								dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+								((CInimigo *)personagem)->getStats()->setAttackRate(dado[0]);
+								((CInimigo *)personagem)->getStats()->setChargeTime(dado[1]);
+								((CInimigo *)personagem)->getStats()->setDefense(dado[2]);
+								((CInimigo *)personagem)->getStats()->setMaxPM(dado[3]);
+								((CInimigo *)personagem)->getStats()->setMaxPV(dado[4]);
+								((CInimigo *)personagem)->getStats()->setMeleeAttack(dado[5]);
+								((CInimigo *)personagem)->getStats()->setMeleeDamage(dado[6]);
+								((CInimigo *)personagem)->getStats()->setPM(dado[7]);
+								((CInimigo *)personagem)->getStats()->setPV(dado[8]);
+								((CInimigo *)personagem)->getStats()->setRangedAttack(dado[9]);
+								((CInimigo *)personagem)->getStats()->setRangedDamage(dado[10]);
+
+								break;
+							}
+						case BESOURO:
+						case ARANHA:
+						case LOUVADEUS:
+						case ESCORPIAO:
+						case VESPA:
+							{
+								personagem = new CNPC();
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+								((CNPC *)personagem)->setID(dado[0]);
+
+								char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+								dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+								dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+								dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+								dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+								CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+								((CNPC *)personagem)->setBaseStats(tempHabilidades);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+								((CNPC *)personagem)->setRace((Raca)dado[0]);
+
+								CBolsa tempBolsa;
+
+	/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+								((CNPC *)personagem)->setBolsa(&tempBolsa);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+								((CNPC *)personagem)->setMoney(dado[0]);
+
+								float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+								float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+								((CNPC *)personagem)->setPosition(posX, posZ);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+								((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+								//FICA PRA DEPOIS
+								((CNPC *)personagem)->setTarget(NULL);
+
+								dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+								dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+								dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+								dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+								dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+								dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+								dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+								dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+								dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+								dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+								dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+								((CNPC *)personagem)->getStats()->setAttackRate(dado[0]);
+								((CNPC *)personagem)->getStats()->setChargeTime(dado[1]);
+								((CNPC *)personagem)->getStats()->setDefense(dado[2]);
+								((CNPC *)personagem)->getStats()->setMaxPM(dado[3]);
+								((CNPC *)personagem)->getStats()->setMaxPV(dado[4]);
+								((CNPC *)personagem)->getStats()->setMeleeAttack(dado[5]);
+								((CNPC *)personagem)->getStats()->setMeleeDamage(dado[6]);
+								((CNPC *)personagem)->getStats()->setPM(dado[7]);
+								((CNPC *)personagem)->getStats()->setPV(dado[8]);
+								((CNPC *)personagem)->getStats()->setRangedAttack(dado[9]);
+								((CNPC *)personagem)->getStats()->setRangedDamage(dado[10]);
+
+								break;
+							}
+					
 					}
-					personagem = NULL;
 					break;
 				}
-				case FILHOTE: //NPC
-				case MAE: //NPC
+			case MAE: //NPC
+			case FILHOTE: //NPC
 				{
-					personagem = NULL;
-					/*
 					personagem = new CNPC();
-					
+
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 					((CNPC *)personagem)->setID(dado[0]);
 
-					float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-					float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+					char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
 
-					((CNPC *)personagem)->setPosition(posX,posZ);
-*/
+					((CPersonagemJogador *)personagem)->setName(nome);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+					dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+					dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+					CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+					((CNPC *)personagem)->setBaseStats(tempHabilidades);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+					((CNPC *)personagem)->setRace((Raca)dado[0]);
+
+					CBolsa tempBolsa;
+
+	/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+					((CNPC *)personagem)->setBolsa(&tempBolsa);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+					((CNPC *)personagem)->setMoney(dado[0]);
+
+					float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+					float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+					((CNPC *)personagem)->setPosition(posX, posZ);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+					((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+					//FICA PRA DEPOIS
+					((CNPC *)personagem)->setTarget(NULL);
+
+					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+					dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+					dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+					dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+					dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+					dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+					dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+					dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+					((CNPC *)personagem)->getStats()->setAttackRate(dado[0]);
+					((CNPC *)personagem)->getStats()->setChargeTime(dado[1]);
+					((CNPC *)personagem)->getStats()->setDefense(dado[2]);
+					((CNPC *)personagem)->getStats()->setMaxPM(dado[3]);
+					((CNPC *)personagem)->getStats()->setMaxPV(dado[4]);
+					((CNPC *)personagem)->getStats()->setMeleeAttack(dado[5]);
+					((CNPC *)personagem)->getStats()->setMeleeDamage(dado[6]);
+					((CNPC *)personagem)->getStats()->setPM(dado[7]);
+					((CNPC *)personagem)->getStats()->setPV(dado[8]);
+					((CNPC *)personagem)->getStats()->setRangedAttack(dado[9]);
+					((CNPC *)personagem)->getStats()->setRangedDamage(dado[10]);
+
+
 					break;
 				}
-				case VENDEDOR: //Vendedor
+			case VENDEDOR: //Vendedor
 				{
-					personagem = NULL;
-					/*
+					personagem = new CVendedor();
+
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 					((CVendedor *)personagem)->setID(dado[0]);
 
-					float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-					float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+					char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
 
-					((CVendedor *)personagem)->setPosition(posX,posZ);
-	*/
+					((CPersonagemJogador *)personagem)->setName(nome);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+					dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+					dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+					CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+					((CVendedor *)personagem)->setBaseStats(tempHabilidades);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+					((CVendedor *)personagem)->setRace((Raca)dado[0]);
+
+					CBolsa tempBolsa;
+
+	/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+					((CVendedor *)personagem)->setBolsa(&tempBolsa);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+					((CVendedor *)personagem)->setMoney(dado[0]);
+
+					float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+					float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+					((CVendedor *)personagem)->setPosition(posX, posZ);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+					((CVendedor *)personagem)->setMoveSpeed(dado[0]);
+
+					//FICA PRA DEPOIS
+					((CVendedor *)personagem)->setTarget(NULL);
+
+					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+					dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+					dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+					dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+					dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+					dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+					dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+					dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+					((CVendedor *)personagem)->getStats()->setAttackRate(dado[0]);
+					((CVendedor *)personagem)->getStats()->setChargeTime(dado[1]);
+					((CVendedor *)personagem)->getStats()->setDefense(dado[2]);
+					((CVendedor *)personagem)->getStats()->setMaxPM(dado[3]);
+					((CVendedor *)personagem)->getStats()->setMaxPV(dado[4]);
+					((CVendedor *)personagem)->getStats()->setMeleeAttack(dado[5]);
+					((CVendedor *)personagem)->getStats()->setMeleeDamage(dado[6]);
+					((CVendedor *)personagem)->getStats()->setPM(dado[7]);
+					((CVendedor *)personagem)->getStats()->setPV(dado[8]);
+					((CVendedor *)personagem)->getStats()->setRangedAttack(dado[9]);
+					((CVendedor *)personagem)->getStats()->setRangedDamage(dado[10]);
 					break;
 				}
-				case SOLDADO: //Inimigo
+			case SOLDADO: //Inimigo
 				{
 					personagem = NULL;
+
 					int race = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
 
 					if(race != BESOURO && race != ARANHA && race != ESCORPIAO && race != LOUVADEUS && race != VESPA)
 					{
 						//se for inimigo
+						personagem = new CInimigo();
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+						((CInimigo *)personagem)->setID(dado[0]);
+
+						char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+						((CPersonagemJogador *)personagem)->setName(nome);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+						dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+						dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+						dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+						dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+						CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+						((CInimigo *)personagem)->setBaseStats(tempHabilidades);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+						((CInimigo *)personagem)->setRace((Raca)dado[0]);
+
+						CBolsa tempBolsa;
+
+						int secret;
+
+						for(int p = 0; p < 3; p++)
+						{
+							srand((unsigned int)time(NULL));
+
+							secret = rand()%3;
+
+							switch(((CInimigo *)personagem)->getRace())
+							{
+								case CUPIM:       //USO
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(28); //Polpa de Cupim
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case FORMIGA:     //USO
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(27); //Polpa de Formiga
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case BARBEIRO:    //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(34); //Tesoura de Barbeiro
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case BARATA:	  //USO
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(29); //Polpa de Barata
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case TATUBOLINHA: //USO
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(30); //Polpa de Tatu
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case LIBELULA:    //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(31); //Asas de Libélula
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case PERCEVEJO:   //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(32); //Perfume de Percevejo
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case ABELHA:      //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(33); //Mel de Abelha
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case LAGARTIXA:	  //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(36); //Ovo de Lagartixa
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case CALANGO:     //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(35); //Rabo de Calango
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case SAPO:		  //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(37); //Língua de Sapo
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case JOANINHA:	  //QUEST
+									{
+										break;
+									}
+								case CAMALEAO:	  //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(38); //Língua de Camaleão
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+							}
+							
+						}
+
+						((CInimigo *)personagem)->setBolsa(&tempBolsa);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+						((CInimigo *)personagem)->setMoney(dado[0]);
+
+						float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+						float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+						((CInimigo *)personagem)->setPosition(posX, posZ);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+						((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+
+						//FICA PRA DEPOIS
+						((CInimigo *)personagem)->setTarget(NULL);
+
+						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+						dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+						dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+						dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+						dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+						dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+						dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+						dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+						dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+						dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+						((CInimigo *)personagem)->getStats()->setAttackRate(dado[0]);
+						((CInimigo *)personagem)->getStats()->setChargeTime(dado[1]);
+						((CInimigo *)personagem)->getStats()->setDefense(dado[2]);
+						((CInimigo *)personagem)->getStats()->setMaxPM(dado[3]);
+						((CInimigo *)personagem)->getStats()->setMaxPV(dado[4]);
+						((CInimigo *)personagem)->getStats()->setMeleeAttack(dado[5]);
+						((CInimigo *)personagem)->getStats()->setMeleeDamage(dado[6]);
+						((CInimigo *)personagem)->getStats()->setPM(dado[7]);
+						((CInimigo *)personagem)->getStats()->setPV(dado[8]);
+						((CInimigo *)personagem)->getStats()->setRangedAttack(dado[9]);
+						((CInimigo *)personagem)->getStats()->setRangedDamage(dado[10]);
+
 					}
 					else
 					{
 						//se for amigo
+						personagem = new CNPC();
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+						((CNPC *)personagem)->setID(dado[0]);
+
+						char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+						((CNPC *)personagem)->setName(nome);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+						dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+						dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+						dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+						dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+						CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+						((CNPC *)personagem)->setBaseStats(tempHabilidades);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+						((CNPC *)personagem)->setRace((Raca)dado[0]);
+
+						CBolsa tempBolsa;
+
+		/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+						((CNPC *)personagem)->setBolsa(&tempBolsa);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+						((CNPC *)personagem)->setMoney(dado[0]);
+
+						float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+						float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+						((CNPC *)personagem)->setPosition(posX, posZ);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+						((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+						//FICA PRA DEPOIS
+						((CNPC *)personagem)->setTarget(NULL);
+
+						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+						dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+						dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+						dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+						dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+						dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+						dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+						dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+						dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+						dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+						((CNPC *)personagem)->getStats()->setAttackRate(dado[0]);
+						((CNPC *)personagem)->getStats()->setChargeTime(dado[1]);
+						((CNPC *)personagem)->getStats()->setDefense(dado[2]);
+						((CNPC *)personagem)->getStats()->setMaxPM(dado[3]);
+						((CNPC *)personagem)->getStats()->setMaxPV(dado[4]);
+						((CNPC *)personagem)->getStats()->setMeleeAttack(dado[5]);
+						((CNPC *)personagem)->getStats()->setMeleeDamage(dado[6]);
+						((CNPC *)personagem)->getStats()->setPM(dado[7]);
+						((CNPC *)personagem)->getStats()->setPV(dado[8]);
+						((CNPC *)personagem)->getStats()->setRangedAttack(dado[9]);
+						((CNPC *)personagem)->getStats()->setRangedDamage(dado[10]);
 					}
-					/*
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
-
-					((CInimigo *)personagem)->setID(dado[0]);
-
-					float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-					float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
-
-					((CInimigo *)personagem)->setPosition(posX,posZ);*/
 
 					break;
 				}
+		}
+
+
+		if(personagem != NULL)
+		{
+			personagem->set2DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDHUD")]->ToString()));
+			personagem->set3DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDTEXTURA")]->ToString()));
+			personagem->setModel(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDMODELO")]->ToString()));
+		
+		}
+
+		for(int i = 0; i < (int)numCampos; i++)
+		{
+			dados->RemoveAt(0);
 		}
 
 		Lista.addPersonagem(personagem);
@@ -942,6 +2656,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 	for(int i = 0; i < (int)numRegs; i++)
 	{
+
 		int tipoPersonagem = System::Int32::Parse(dados[nomeCampos->IndexOf("PGTIPOPERSONAGEM")]->ToString());
 
 
@@ -949,10 +2664,10 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 		switch(tipoPersonagem)
 		{
-			case JOGADOR: //Jogador
+				case JOGADOR: //Jogador
 				{
 					personagem = new CPersonagemJogador();
-					
+
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 					((CPersonagemJogador *)personagem)->setID(dado[0]);
@@ -1006,8 +2721,6 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 					((CPersonagemJogador *)personagem)->setName(nome);
 					
-					//dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
-
 					//FICA PRA DEPOIS
 					((CPersonagemJogador *)personagem)->setPlayer(-1);
 
@@ -1019,8 +2732,6 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 					((CPersonagemJogador *)personagem)->setSpeed(dado[0]);
-
-					//dado = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 					//FICA PRA DEPOIS
 					((CPersonagemJogador *)personagem)->setTarget(NULL);
@@ -1045,6 +2756,9 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 					dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
 					dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
 
+					dado[11] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGBONUSPOINTSPRIMARIAS")]->ToString());
+					dado[12] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGBONUSPOINTSPODER")]->ToString());
+
 					((CPersonagemJogador *)personagem)->getStats()->setAttackRate(dado[0]);
 					((CPersonagemJogador *)personagem)->getStats()->setChargeTime(dado[1]);
 					((CPersonagemJogador *)personagem)->getStats()->setDefense(dado[2]);
@@ -1057,80 +2771,650 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 					((CPersonagemJogador *)personagem)->getStats()->setRangedAttack(dado[9]);
 					((CPersonagemJogador *)personagem)->getStats()->setRangedDamage(dado[10]);
 
+					((CPersonagemJogador *)personagem)->setPointsToDistribute(dado[11]);
+					((CPersonagemJogador *)personagem)->setSkillPointsToDistribute(dado[12]);
+
 					break;
 				}
-			case LIDER: //NPC
+			case LIDER:
 				{
-					personagem = NULL;
-
 					int race = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
 
-					if(race == FORMIGA)
+					switch((Raca)race)
 					{
-						//monta o TANDAN
-					}
+						case FORMIGA:
+							{
+								//monta o TanDan
+								personagem = new CInimigo();
 
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+								((CInimigo *)personagem)->setID(dado[0]);
+
+								char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+								((CPersonagemJogador *)personagem)->setName(nome);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+								dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+								dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+								dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+								dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+								CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+								((CInimigo *)personagem)->setBaseStats(tempHabilidades);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+								((CInimigo *)personagem)->setRace((Raca)dado[0]);
+
+								CBolsa tempBolsa;
+
+	/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+								((CInimigo *)personagem)->setBolsa(&tempBolsa);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+								((CInimigo *)personagem)->setMoney(dado[0]);
+
+								float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+								float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+								((CInimigo *)personagem)->setPosition(posX, posZ);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+								((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+
+								//FICA PRA DEPOIS
+								((CInimigo *)personagem)->setTarget(NULL);
+
+								dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+								dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+								dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+								dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+								dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+								dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+								dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+								dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+								dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+								dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+								dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+								((CInimigo *)personagem)->getStats()->setAttackRate(dado[0]);
+								((CInimigo *)personagem)->getStats()->setChargeTime(dado[1]);
+								((CInimigo *)personagem)->getStats()->setDefense(dado[2]);
+								((CInimigo *)personagem)->getStats()->setMaxPM(dado[3]);
+								((CInimigo *)personagem)->getStats()->setMaxPV(dado[4]);
+								((CInimigo *)personagem)->getStats()->setMeleeAttack(dado[5]);
+								((CInimigo *)personagem)->getStats()->setMeleeDamage(dado[6]);
+								((CInimigo *)personagem)->getStats()->setPM(dado[7]);
+								((CInimigo *)personagem)->getStats()->setPV(dado[8]);
+								((CInimigo *)personagem)->getStats()->setRangedAttack(dado[9]);
+								((CInimigo *)personagem)->getStats()->setRangedDamage(dado[10]);
+
+								break;
+							}
+						case BESOURO:
+						case ARANHA:
+						case LOUVADEUS:
+						case ESCORPIAO:
+						case VESPA:
+							{
+								personagem = new CNPC();
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+								((CNPC *)personagem)->setID(dado[0]);
+
+								char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+								dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+								dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+								dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+								dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+								CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+								((CNPC *)personagem)->setBaseStats(tempHabilidades);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+								((CNPC *)personagem)->setRace((Raca)dado[0]);
+
+								CBolsa tempBolsa;
+
+	/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+								((CNPC *)personagem)->setBolsa(&tempBolsa);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+								((CNPC *)personagem)->setMoney(dado[0]);
+
+								float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+								float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+								((CNPC *)personagem)->setPosition(posX, posZ);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+								((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+								//FICA PRA DEPOIS
+								((CNPC *)personagem)->setTarget(NULL);
+
+								dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+								dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+								dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+								dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+								dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+								dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+								dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+								dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+								dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+								dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+								dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+								((CNPC *)personagem)->getStats()->setAttackRate(dado[0]);
+								((CNPC *)personagem)->getStats()->setChargeTime(dado[1]);
+								((CNPC *)personagem)->getStats()->setDefense(dado[2]);
+								((CNPC *)personagem)->getStats()->setMaxPM(dado[3]);
+								((CNPC *)personagem)->getStats()->setMaxPV(dado[4]);
+								((CNPC *)personagem)->getStats()->setMeleeAttack(dado[5]);
+								((CNPC *)personagem)->getStats()->setMeleeDamage(dado[6]);
+								((CNPC *)personagem)->getStats()->setPM(dado[7]);
+								((CNPC *)personagem)->getStats()->setPV(dado[8]);
+								((CNPC *)personagem)->getStats()->setRangedAttack(dado[9]);
+								((CNPC *)personagem)->getStats()->setRangedDamage(dado[10]);
+
+								break;
+							}
+					
+					}
 					break;
 				}
-			case FILHOTE: //NPC
 			case MAE: //NPC
+			case FILHOTE: //NPC
 				{
-					personagem = NULL;
-/*
 					personagem = new CNPC();
-					
+
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 					((CNPC *)personagem)->setID(dado[0]);
 
-					float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-					float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+					char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
 
-					((CNPC *)personagem)->setPosition(posX,posZ);
-*/
+					((CPersonagemJogador *)personagem)->setName(nome);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+					dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+					dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+					CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+					((CNPC *)personagem)->setBaseStats(tempHabilidades);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+					((CNPC *)personagem)->setRace((Raca)dado[0]);
+
+					CBolsa tempBolsa;
+
+	/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+					((CNPC *)personagem)->setBolsa(&tempBolsa);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+					((CNPC *)personagem)->setMoney(dado[0]);
+
+					float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+					float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+					((CNPC *)personagem)->setPosition(posX, posZ);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+					((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+					//FICA PRA DEPOIS
+					((CNPC *)personagem)->setTarget(NULL);
+
+					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+					dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+					dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+					dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+					dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+					dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+					dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+					dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+					((CNPC *)personagem)->getStats()->setAttackRate(dado[0]);
+					((CNPC *)personagem)->getStats()->setChargeTime(dado[1]);
+					((CNPC *)personagem)->getStats()->setDefense(dado[2]);
+					((CNPC *)personagem)->getStats()->setMaxPM(dado[3]);
+					((CNPC *)personagem)->getStats()->setMaxPV(dado[4]);
+					((CNPC *)personagem)->getStats()->setMeleeAttack(dado[5]);
+					((CNPC *)personagem)->getStats()->setMeleeDamage(dado[6]);
+					((CNPC *)personagem)->getStats()->setPM(dado[7]);
+					((CNPC *)personagem)->getStats()->setPV(dado[8]);
+					((CNPC *)personagem)->getStats()->setRangedAttack(dado[9]);
+					((CNPC *)personagem)->getStats()->setRangedDamage(dado[10]);
+
+
 					break;
 				}
 			case VENDEDOR: //Vendedor
 				{
-					personagem = NULL;
-					/*
+					personagem = new CVendedor();
+
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
 					((CVendedor *)personagem)->setID(dado[0]);
 
-					float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-					float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+					char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
 
-					((CVendedor *)personagem)->setPosition(posX,posZ);
-	*/
+					((CPersonagemJogador *)personagem)->setName(nome);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+					dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+					dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+					dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+					CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+					((CVendedor *)personagem)->setBaseStats(tempHabilidades);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+					((CVendedor *)personagem)->setRace((Raca)dado[0]);
+
+					CBolsa tempBolsa;
+
+	/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+					((CVendedor *)personagem)->setBolsa(&tempBolsa);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+					((CVendedor *)personagem)->setMoney(dado[0]);
+
+					float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+					float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+					((CVendedor *)personagem)->setPosition(posX, posZ);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+					((CVendedor *)personagem)->setMoveSpeed(dado[0]);
+
+					//FICA PRA DEPOIS
+					((CVendedor *)personagem)->setTarget(NULL);
+
+					dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+					dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+					dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+					dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+					dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+					dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+					dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+					dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+					dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+					dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+					dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+					((CVendedor *)personagem)->getStats()->setAttackRate(dado[0]);
+					((CVendedor *)personagem)->getStats()->setChargeTime(dado[1]);
+					((CVendedor *)personagem)->getStats()->setDefense(dado[2]);
+					((CVendedor *)personagem)->getStats()->setMaxPM(dado[3]);
+					((CVendedor *)personagem)->getStats()->setMaxPV(dado[4]);
+					((CVendedor *)personagem)->getStats()->setMeleeAttack(dado[5]);
+					((CVendedor *)personagem)->getStats()->setMeleeDamage(dado[6]);
+					((CVendedor *)personagem)->getStats()->setPM(dado[7]);
+					((CVendedor *)personagem)->getStats()->setPV(dado[8]);
+					((CVendedor *)personagem)->getStats()->setRangedAttack(dado[9]);
+					((CVendedor *)personagem)->getStats()->setRangedDamage(dado[10]);
 					break;
 				}
 			case SOLDADO: //Inimigo
 				{
-					
 					personagem = NULL;
 					int race = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
 
 					if(race != BESOURO && race != ARANHA && race != ESCORPIAO && race != LOUVADEUS && race != VESPA)
 					{
 						//se for inimigo
+						personagem = new CInimigo();
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+						((CInimigo *)personagem)->setID(dado[0]);
+
+						char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+						((CPersonagemJogador *)personagem)->setName(nome);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+						dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+						dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+						dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+						dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+						CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+						((CInimigo *)personagem)->setBaseStats(tempHabilidades);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+						((CInimigo *)personagem)->setRace((Raca)dado[0]);
+
+						CBolsa tempBolsa;
+
+						int secret;
+
+						for(int p = 0; p < 3; p++)
+						{
+							srand((unsigned int)time(NULL));
+
+							secret = rand()%3;
+
+							switch(((CInimigo *)personagem)->getRace())
+							{
+								case CUPIM:       //USO
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(28); //Polpa de Cupim
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case FORMIGA:     //USO
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(27); //Polpa de Formiga
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case BARBEIRO:    //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(34); //Tesoura de Barbeiro
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case BARATA:	  //USO
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(29); //Polpa de Barata
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case TATUBOLINHA: //USO
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(30); //Polpa de Tatu
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case LIBELULA:    //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(31); //Asas de Libélula
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case PERCEVEJO:   //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(32); //Perfume de Percevejo
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case ABELHA:      //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(33); //Mel de Abelha
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case LAGARTIXA:	  //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(36); //Ovo de Lagartixa
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case CALANGO:     //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(35); //Rabo de Calango
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case SAPO:		  //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(37); //Língua de Sapo
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+								case JOANINHA:	  //QUEST
+									{
+										break;
+									}
+								case CAMALEAO:	  //QUEST
+									{
+										if(secret == 0)
+										{
+											CItem * itemTemp;
+
+											itemTemp = getItem(38); //Língua de Camaleão
+
+											tempBolsa.addItem(itemTemp);
+										}
+										break;
+									}
+							}
+							
+						}
+
+						((CInimigo *)personagem)->setBolsa(&tempBolsa);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+						((CInimigo *)personagem)->setMoney(dado[0]);
+
+						float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+						float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+						((CInimigo *)personagem)->setPosition(posX, posZ);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+						((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+
+						//FICA PRA DEPOIS
+						((CInimigo *)personagem)->setTarget(NULL);
+
+						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+						dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+						dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+						dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+						dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+						dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+						dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+						dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+						dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+						dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+						((CInimigo *)personagem)->getStats()->setAttackRate(dado[0]);
+						((CInimigo *)personagem)->getStats()->setChargeTime(dado[1]);
+						((CInimigo *)personagem)->getStats()->setDefense(dado[2]);
+						((CInimigo *)personagem)->getStats()->setMaxPM(dado[3]);
+						((CInimigo *)personagem)->getStats()->setMaxPV(dado[4]);
+						((CInimigo *)personagem)->getStats()->setMeleeAttack(dado[5]);
+						((CInimigo *)personagem)->getStats()->setMeleeDamage(dado[6]);
+						((CInimigo *)personagem)->getStats()->setPM(dado[7]);
+						((CInimigo *)personagem)->getStats()->setPV(dado[8]);
+						((CInimigo *)personagem)->getStats()->setRangedAttack(dado[9]);
+						((CInimigo *)personagem)->getStats()->setRangedDamage(dado[10]);
+
 					}
 					else
 					{
 						//se for amigo
+						personagem = new CNPC();
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
+
+						((CNPC *)personagem)->setID(dado[0]);
+
+						char * nome = toChar(dados[nomeCampos->IndexOf(L"PGNOME")]->ToString());
+
+						((CNPC *)personagem)->setName(nome);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGAGILIDADE")]->ToString());
+						dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDESTREZA")]->ToString());
+						dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGFORCA")]->ToString());
+						dado[3] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGINSTINTO")]->ToString());
+						dado[4] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRESISTENCIA")]->ToString());
+
+						CHabilidades * tempHabilidades = new CHabilidades(dado[2],dado[0],dado[1],dado[3],dado[4]);
+
+						((CNPC *)personagem)->setBaseStats(tempHabilidades);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGRACA")]->ToString());
+
+						((CNPC *)personagem)->setRace((Raca)dado[0]);
+
+						CBolsa tempBolsa;
+
+		/////////////////////////////COLOCAR UM ITEM PARA O TANDAN
+
+						((CNPC *)personagem)->setBolsa(&tempBolsa);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDINHEIRO")]->ToString());
+
+						((CNPC *)personagem)->setMoney(dado[0]);
+
+						float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
+						float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+
+						((CNPC *)personagem)->setPosition(posX, posZ);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+
+						((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+						//FICA PRA DEPOIS
+						((CNPC *)personagem)->setTarget(NULL);
+
+						dado[0]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTAXAATAQUE")]->ToString());
+						dado[1]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPOCARGA")]->ToString());
+						dado[2]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDEFESA")]->ToString());
+						dado[3]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODERMAX")]->ToString());
+						dado[4]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDAMAX")]->ToString());
+						dado[5]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESCORPO")]->ToString());
+						dado[6]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANOCORPO")]->ToString());
+						dado[7]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSPODER")]->ToString());
+						dado[8]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGPONTOSVIDA")]->ToString());
+						dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGATAQUESDISTANCIA")]->ToString());
+						dado[10] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDANODISTANCIA")]->ToString());
+
+						((CNPC *)personagem)->getStats()->setAttackRate(dado[0]);
+						((CNPC *)personagem)->getStats()->setChargeTime(dado[1]);
+						((CNPC *)personagem)->getStats()->setDefense(dado[2]);
+						((CNPC *)personagem)->getStats()->setMaxPM(dado[3]);
+						((CNPC *)personagem)->getStats()->setMaxPV(dado[4]);
+						((CNPC *)personagem)->getStats()->setMeleeAttack(dado[5]);
+						((CNPC *)personagem)->getStats()->setMeleeDamage(dado[6]);
+						((CNPC *)personagem)->getStats()->setPM(dado[7]);
+						((CNPC *)personagem)->getStats()->setPV(dado[8]);
+						((CNPC *)personagem)->getStats()->setRangedAttack(dado[9]);
+						((CNPC *)personagem)->getStats()->setRangedDamage(dado[10]);
 					}
-					/*
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
-
-					((CInimigo *)personagem)->setID(dado[0]);
-
-					float posX = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-					float posZ = System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
-
-					((CInimigo *)personagem)->setPosition(posX,posZ);*/
 
 					break;
 				}
+		}
+
+
+		if(personagem != NULL)
+		{
+			personagem->set2DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDHUD")]->ToString()));
+			personagem->set3DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDTEXTURA")]->ToString()));
+			personagem->setModel(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDMODELO")]->ToString()));
+		
+		}
+
+		for(int i = 0; i < (int)numCampos; i++)
+		{
+			dados->RemoveAt(0);
 		}
 
 		Lista.addPersonagem(personagem);
@@ -1193,17 +3477,8 @@ CItem * CDataManager::getItem(int id)
 
 				item = new CConsumableItem((TypeItens)dado[2],NAMOCHILA,dado[3],b2,(Atrib)tipoUso,dado[0],b1,dado[1]);
 
-/*
-				string str;
-				str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
-				((CConsumableItem *)item)->setDescricao(str);*/
-
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
 				((CConsumableItem *)item)->setID(dado[0]);
-/*
-				str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
-				((CConsumableItem *)item)->setNome(str);*/
-
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
 				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
@@ -1212,79 +3487,6 @@ CItem * CDataManager::getItem(int id)
 				item->set2DTexture(dado[2]);
 				item->set3DTexture(dado[1]);
 				item->setModel(dado[0]);
-
-				/*
-				switch(tipoUso)
-				{
-				case NENHUM:
-					{
-						item = new CConsumableItem();
-						break;
-					}
-				case PV:
-					{
-						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITTIPOUSO")]->ToString());
-						item = new CConsumableItem(PV,);
-						break;
-					}
-				case PM:
-					{
-						item = new CConsumableItem();
-						break;
-					}
-				case FOR:
-					{
-						item = new CConsumableItem();
-						break;
-					}
-				case DES: 
-					{
-						item = new CConsumableItem();
-						break;
-					}
-				case AGI: 
-					{
-						item = new CConsumableItem();
-						break;
-					}
-				case RES:
-					{
-						item = new CConsumableItem();
-						break;
-					}
-				case INS:
-					{
-						item = new CConsumableItem();
-						break;
-					}
-				case ATTACKMELEE: 
-					{
-						item = new CConsumableItem();
-						break;
-					}
-				case ATTACKRANGED:
-					{
-						item = new CConsumableItem();
-						break;
-					}
-				case DAMAGEMELEE: 
-					{
-						item = new CConsumableItem();
-						break;
-					}
-				case DAMAGERANGED:
-					{
-						item = new CConsumableItem();
-						break;
-					}
-				case DEFESA:
-					{
-						item = new CConsumableItem();
-						break;
-					}				
-				}
-				*/
-
 
 				break;
 			}
@@ -1306,16 +3508,9 @@ CItem * CDataManager::getItem(int id)
 				dado[9]  = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITNIVELMAGICO")]->ToString());
 
 				item = new CWeapon((TypeItens)dado[0],NAMOCHILA,dado[1],b2,(Raca)dado[2],dado[3],dado[5],dado[4],dado[6],dado[7],dado[8],dado[9]);
-/*
-				string str;
-				str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
-				((CWeapon *)item)->setDescricao(str);*/
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
 				((CWeapon *)item)->setID(dado[0]);
-/*
-				str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
-				((CWeapon *)item)->setNome(str);*/
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
 				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
@@ -1341,15 +3536,8 @@ CItem * CDataManager::getItem(int id)
 
 				item = new CArmor((TypeItens)dado[0],NAMOCHILA,dado[1],b2,(Raca)dado[2],dado[3],dado[4],dado[5]);
 
-				/*string str;
-				str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
-				((CArmor *)item)->setDescricao(str);*/
-
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
 				((CArmor *)item)->setID(dado[0]);
-
-				/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
-				((CArmor *)item)->setNome(str);*/
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
 				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
@@ -1371,15 +3559,8 @@ CItem * CDataManager::getItem(int id)
 
 				item = new CQItem((TypeItens) dado[0],NAMOCHILA,dado[1],b2,NULL);
 
-				/*string str;
-				str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
-				((CQItem *)item)->setDescricao(str);*/
-
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
 				((CQItem *)item)->setID(dado[0]);
-
-				/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
-				((CQItem *)item)->setNome(str);*/
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
 				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
@@ -1409,15 +3590,9 @@ CItem * CDataManager::getItem(int id)
 				
 				item = new CScroll((TypeItens)dado[0],NAMOCHILA,dado[1],b2,dado[2],dado[4],dado[3],dado[5],dado[6],dado[7],dado[8]);
 
-				/*string str;
-				str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
-				((CScroll *)item)->setDescricao(str);*/
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
 				((CScroll *)item)->setID(dado[0]);
-
-				/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
-				((CScroll *)item)->setNome(str);*/
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
 				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
@@ -1444,15 +3619,8 @@ CItem * CDataManager::getItem(int id)
 
 				item = new CLoyaltyScroll((TypeItens)dado[0], NAMOCHILA,dado[1],b2,dado[2],dado[3],dado[4],dado[5],dado[6]);
 
-				/*string str;
-				str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
-				((CLoyaltyScroll *)item)->setDescricao(str);*/
-
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
 				((CLoyaltyScroll *)item)->setID(dado[0]);
-
-				/*str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
-				((CLoyaltyScroll *)item)->setNome(str);*/
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
 				dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
@@ -1470,9 +3638,6 @@ CItem * CDataManager::getItem(int id)
 
 	return item;	
 }
-
-
-
 
 
 
@@ -1634,44 +3799,9 @@ CArmor * CDataManager::getArmorEquiped(int idPersonagem)
 
 //Obter Cenarios
 /*
-	Obtem o objeto cenario com o id especificado
-	@param id -> id do Cenario
-	@return -> o cenario selecionado	
+	Obtem todos os cenários do jogo
+	@return -> o lista de cenarios
 */
-CCenario * CDataManager::getCenario(int id)
-{
-	CCenario * cenario;
-	
-	TDadosBD ^ dados      = gcnew TDadosBD();
-	TDadosBD ^ nomeCampos = gcnew TDadosBD();
-	unsigned int numRegs   = 0;
-	unsigned int numCampos = 0;
-	System::String ^ query;
-
-	query = L"SELECT * FROM CENARIO CNID = "+id;
-
-	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
-
-
-	if(numRegs == 0 || numCampos == 0)
-	{
-		System::String ^texto = L"Não foi encontrado nenhum Personagem com este id = "+id;
-		WarBugsLog::_log->Items->Add(texto);		
-		return NULL;	
-	}
-
-	for(int i = 0; i < (int)numCampos; i++)
-	{
-		nomeCampos->Add(dados[0]);
-		dados->RemoveAt(0);
-	}	
-
-	int i = System::Int32::Parse(dados[nomeCampos->IndexOf(L"CNID")]->ToString());
-
-	cenario = new CCenario(i,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
-
-	return cenario;
-}
 
 CCenarioList * CDataManager::getListCenario()
 {
@@ -1801,18 +3931,8 @@ CBolsa CDataManager::getBolsaPersonagem(int idPersonagem)
 
 					item = new CConsumableItem((TypeItens)dado[2],NAMOCHILA,dado[3],b2,(Atrib)tipoUso,dado[0],b1,dado[1]);
 
-
-					/*string str;
-					str = toChar(dados[nomeCampos->IndexOf(L"ITDESCRICAO")]->ToString());
-					((CConsumableItem *)item)->setDescricao(str);*/
-
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
 					((CConsumableItem *)item)->setID(dado[0]);
-
-					/*
-					str = toChar(dados[nomeCampos->IndexOf(L"ITNOME")]->ToString());
-					((CConsumableItem *)item)->setNome(str);*/
-
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDMODELO")]->ToString());
 					dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"ITIDTEXTURA")]->ToString());
@@ -2333,12 +4453,6 @@ CBolsaList * CDataManager::getListBolsa(int idCenario)
 
 
 //Obtem Jogador
-CJogador CDataManager::getJogador(int id)
-{
-	CJogador jogador;
-
-	return jogador;
-}
 
 CJogador CDataManager::getJogador(char * login)
 {
@@ -2499,14 +4613,68 @@ long  CDataManager::numPersonagens()
 
 long  CDataManager::numBolsas()
 {
-	long result;
+	long result = 0;
+	
+	TDadosBD ^ dados      = gcnew TDadosBD();
+	TDadosBD ^ nomeCampos = gcnew TDadosBD();
+
+	unsigned int numRegs   = 0;
+	unsigned int numCampos = 0;
+
+	System::String ^ query;
+
+	query = L"SELECT COUNT(BSID) NOVOID FROM BOLSA";
+
+	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
+
+	if(numRegs == 0 || numCampos == 0)
+	{
+		System::String ^texto = L"Não foi possível contar as Bolsas";
+		WarBugsLog::_log->Items->Add(texto);		
+		return result;	
+	}
+
+	for(int i = 0; i < (int)numCampos; i++)
+	{
+		nomeCampos->Add(dados[0]);
+		dados->RemoveAt(0);
+	}
+
+	result = System::Int32::Parse(dados[0]->ToString());
 
 	return result;
 }
 
 long  CDataManager::numItens()
 {
-	long result;
+	long result = 0;
+	
+	TDadosBD ^ dados      = gcnew TDadosBD();
+	TDadosBD ^ nomeCampos = gcnew TDadosBD();
+
+	unsigned int numRegs   = 0;
+	unsigned int numCampos = 0;
+
+	System::String ^ query;
+
+	query = L"SELECT COUNT(ITID)NOVOID FROM ITEMBASE";
+
+	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
+
+	if(numRegs == 0 || numCampos == 0)
+	{
+		System::String ^texto = L"Não foi possível contar os Personagens";
+		WarBugsLog::_log->Items->Add(texto);		
+		return result;	
+	}
+
+	for(int i = 0; i < (int)numCampos; i++)
+	{
+		nomeCampos->Add(dados[0]);
+		dados->RemoveAt(0);
+	}
+
+	result = System::Int32::Parse(dados[0]->ToString());
 
 	return result;
 }

@@ -413,6 +413,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Includes\CBuffList.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Includes\CCenario.h"
 					>
 				</File>
@@ -501,6 +505,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Includes\CTimer.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Includes\CVendedor.h"
 					>
 				</File>
@@ -510,6 +518,10 @@
 				</File>
 				<File
 					RelativePath=".\Includes\CWeapon.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Includes\Enumerators.h"
 					>
 				</File>
 			</Filter>

@@ -17,7 +17,8 @@
 #include <string>
 using namespace std;
 
-class CNPC : public CPersonagem{
+class CNPC : public CPersonagem
+{
 private:
 	Ponto *_ancora;
 	CQuest *_quest;
@@ -28,6 +29,12 @@ public:
 	void takeDecision();
 	void speak(CPersonagemJogador *alvo);
 	void giveQuest (CPersonagemJogador *alvo);
+
+	void attack();
+	void takeDamage(int damage);
+	void die();
+	void useItem(CItem *item);
+
 	void update();
 };
 
