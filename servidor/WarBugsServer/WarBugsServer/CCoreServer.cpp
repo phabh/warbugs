@@ -68,10 +68,18 @@ void CCoreServer::readPackets()
 
 		//recebe a mensagem do socket 
 		_playersList->getElementAt(indexJogador)->getSocket()->ReceiveLine(mesRecebida);
+
 		tipoMensagem = 0;
 
 		mesRecebida.beginReading();
 		tipoMensagem = mesRecebida.readByte();	
+
+		if(tipoMensagem == 0)
+		{
+			_playersList->getElementAt(indexJogador)->getSocket()->Close();
+			_playersList->removeJogadorByPosition(indexJogador);
+			return;
+		}
 		
 
 		switch(tipoMensagem)
@@ -101,6 +109,7 @@ void CCoreServer::readPackets()
 						else
 						{
 							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN_FAIL);
+
 						}
 
 						//sendMessagesFrame(_playersList);
@@ -1120,4 +1129,20 @@ void CCoreServer::sendAllMessages()
 {
 	//sendMessage(true,-1,NULL,END_FRAME);
 	sendMessagesFrame(_playersList);
+}
+
+void CCoreServer::verificaPlayers()
+{
+	for(int i = 0; i < _playersList->size(); i++)
+	{
+
+		try{
+			_playersList->getElementAt(i)->getSocket()->ReceiveBytes();
+		}
+		catch(...)
+		{
+				_playersList->removeJogadorByPosition(i);			
+		}
+	}
+
 }

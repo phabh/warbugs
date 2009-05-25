@@ -83,6 +83,8 @@ ref class CCoreServer
 
 		void			sendAllMessages();
 
+		void            verificaPlayers();
+
 	//	void            addPlayer(CJogador * jogador);
 	//	void			removePlayer(int idJogador);
 	//	void			removePlayers();
