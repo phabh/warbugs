@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Setup.h"
+#include "GameSetup.h"
 #include "PathSetup.h"
 
 struct SMatriz

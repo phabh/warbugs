@@ -1,136 +1,104 @@
-#pragma once
+#include "CMenuCriacao.h"
 
-#include "CMenu.h"
+//-----------------------------------------------------------------------------------------------------------------
 
-class CMenuCriacao : public CMenu
+CMenuCriacao::CMenuCriacao()
 {
+}
 
-private:
+//-----------------------------------------------------------------------------------------------------------------
 
-	ISceneNode *_nodoSelecionado;
-	int _idPersonagem;
+bool CMenuCriacao::start(CGameCore *gameCore)
+{
+	gameCore->getAllManagers(_dispGrafico, _dispAudio, _gerEventos, _gerCena, _gerVideo, _gerHud, _gameConfig);
 
-	void graphicsDrawAddOn(){}
+	gameCore->loadGameScene(pathArquivoCena[MC_CRIACAO]);
 
-	void updateHuds()
+	_menuCamera = gameCore->createCamera( vector3df(0,50,0), vector3df(0,0,50), vector3df(0,0,0), 0, 179.0f/*true*/, true);
+
+	gameCore->playMusic(pathBackgroundSound[MM_SELECAO]);
+	
+	_myID = _nextID = MN_CRIACAOPERSONAGEM;
+	_nodoSelecionado = 0;
+	_idPersonagem = -1;
+
+	_menuFlag[OBJSELECTED] = false;
+	_menuFlag[HUDUPDATED] = false;
+
+	return true;
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CMenuCriacao::graphicsDrawAddOn()
+{
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CMenuCriacao::updateHuds()
+{
+	_gerHud->clear();
+	_gerHud->addButton(rect<s32>(440,500,540,540), 0, 7, L"Criar");
+	_menuFlag[HUDUPDATED] = true;
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CMenuCriacao::readCommands()
+{
+	if(_gerEventos->isKeyPressed(KEY_ESCAPE))
 	{
-
-		_gerenciadorHud->clear();
-		_gerenciadorHud->addButton(rect<s32>(440,500,540,540), 0, 7, L"Criar");
-
-		_flags[HUDCHANGED] = false;
+		_nextID = MN_SAIDA;
+		return;
 	}
 
-	void readCommands()
+	if(_gerEventos->isMouseButtonReleased(MBLEFT))
 	{
-		//_timer->update();
+		// Clique com o botao esquerdo
 
-		if(_gerenciadorEventos->isKeyPressed(KEY_ESCAPE))
+		if(_menuFlag[OBJSELECTED])
 		{
-			_nextID = MN_SAIDA;
-		    return;
+			_menuFlag[OBJSELECTED] = false; // Drop 3D
+			_menuFlag[HUDUPDATED] = true;
 		}
- 
-		if(_gerenciadorEventos->isMouseButtonReleased(MBLEFT))
+		else
 		{
-			// Clique com o botao esquerdo
-						
-			if(_flags[OBJSELECTED])
+			_idPersonagem = -1;
+			_nodoSelecionado = _gerCena->getSceneCollisionManager()->getSceneNodeFromScreenCoordinatesBB(_dispGrafico->getCursorControl()->getPosition());
+
+			if (_nodoSelecionado)
+				_idPersonagem = _nodoSelecionado->getID();
+
+			if(_idPersonagem > 0)
 			{
-				_flags[OBJSELECTED] = false; // Drop 3D
-				_flags[HUDCHANGED] = true;
+				_menuFlag[OBJSELECTED] = true; // Get 3D
+				_menuFlag[HUDUPDATED] = true;
 			}
-			else
-			{
-				_idPersonagem = -1;
-				_nodoSelecionado = _gerenciadorCena->getSceneCollisionManager()->getSceneNodeFromScreenCoordinatesBB(_dispositivo->getCursorControl()->getPosition());
-
-				if (_nodoSelecionado)
-					_idPersonagem = _nodoSelecionado->getID();
-
-				if(_idPersonagem > 0)
-				{
-				   _flags[OBJSELECTED] = true; // Get 3D
-				   _flags[HUDCHANGED] = true;
-				}
-			}
-
-			if(_gerenciadorEventos->getEventCallerByElement(EGET_BUTTON_CLICKED))
-			{
-				// Trata os cliques em botões
-
-				switch (_gerenciadorEventos->getEventCallerByID())
-				{
-					case 7:
-						_nextID = MN_SELECAOPERSONAGEM;
-						return;
-					break;
-					
-					default:
-						cout << "\nID de botao desconhecido." << endl;
-				};
-			}		
 		}
+
+		if(_gerEventos->getEventCallerByElement(EGET_BUTTON_CLICKED))
+		{
+			// Trata os cliques em botões
+
+			switch (_gerEventos->getEventCallerByID())
+			{
+			case 7:
+				_nextID = MN_SELECAOPERSONAGEM;
+				return;
+				break;
+
+			default:
+				cout << "\nID de botao desconhecido." << endl;
+			};
+		}		
 	}
+}
 
-	void updateGraphics()
-	{
-		//_timer->update();
-	}
-	
+//-----------------------------------------------------------------------------------------------------------------
 
-public:
+void CMenuCriacao::updateGraphics()
+{
+}
 
-	CMenuCriacao(){}
-	
-	bool start(CGameCore *gameCore)
-	{
-		_gameCfg = new CArquivoConfig();
-		TypeCfg cfg = _gameCfg->loadConfig();
-
-		//_gameData = gameData;
-
-		_dispositivo      = gameCore->getGraphicDevice();
-		_gerenciadorAudio = gameCore->getSoundDevice();
-
-		_gerenciadorAudio->removeAllSoundSources();
-		_gerenciadorEventos = (CGerEventos*)_dispositivo->getEventReceiver();
-	
-		_myID = _nextID = MN_CRIACAOPERSONAGEM;
-
-		//_arquivoCena = "recursos/cenas/criacao.irr";
-
-		_nodoSelecionado = 0;
-		_idPersonagem = -1;
-		_flags[OBJSELECTED] = false;
-		_flags[HUDCHANGED] = false;
-
-		_dispositivo->setWindowCaption(L"Warbugs - BETA Version 0.1");
-
-		_gerenciadorCena = _dispositivo->getSceneManager();   // Cria o gerenciador de cena
-		_gerenciadorVideo = _dispositivo->getVideoDriver();   // Cria o driver para o vídeo
-		_gerenciadorHud = _dispositivo->getGUIEnvironment(); // Cria o gerenciador de menu
-
-		_musica = _gerenciadorAudio->play2D("recursos/audio/criacao.ogg", true, false, false, ESM_AUTO_DETECT);
-		
-		_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
-
-		_gerenciadorCena->clear(); // Limpa toda a cena do jogo
-		
-		//if(_arquivoCena)
-		_gerenciadorCena->loadScene(pathArquivoCena[MN_CRIACAOPERSONAGEM]);
-		
-		_skin = _gerenciadorHud->getSkin();
-		_font = _gerenciadorHud->getFont("recursos/fonts/font_georgia.png");
-		
-		if (_font)
-			_skin->setFont(_font);
-
-		_skin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_TOOLTIP);
-
-		
-		_camera = _gerenciadorCena->addCameraSceneNode(0,vector3df(0,50,0), vector3df(0,0,50));
-
-		return (true);
-	}
-};
+//-----------------------------------------------------------------------------------------------------------------

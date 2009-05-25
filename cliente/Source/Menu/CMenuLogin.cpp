@@ -1,94 +1,91 @@
-#pragma once
+#include "CMenuLogin.h"
 
-#include "CMenu.h"
+//-----------------------------------------------------------------------------------------------------------------
 
-class CMenuLogin : public CMenu
+CMenuLogin::CMenuLogin()
 {
+}
 
-private:
+//-----------------------------------------------------------------------------------------------------------------
 
-	void graphicsDrawAddOn(){}
+bool CMenuLogin::start(CGameCore *gameCore)
+{
+	_gameCore = gameCore;
 
-	void updateHuds()
+	_gameCore->getAllManagers(_dispGrafico, _dispAudio, _gerEventos, _gerCena, _gerVideo, _gerHud, _gameConfig);
+
+	_gameCore->playMusic(pathBackgroundSound[MM_LOGIN]);
+
+	_myID = _nextID = MN_LOGIN;
+
+	_menuFlag[HUDUPDATED] = false;
+
+	return true;
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CMenuLogin::graphicsDrawAddOn()
+{
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CMenuLogin::updateHuds()
+{
+	_gerHud->clear();
+
+	IGUIImage *img =_gerHud->addImage(rect<s32>(0, 0, _gerVideo->getScreenSize().Width, _gerVideo->getScreenSize().Height), 0, -1, L"");
+	img->setImage(_gerVideo->getTexture("recursos/texturas/huds/tx2d_bg_login.jpg"));
+	
+	Login = _gerHud->addEditBox(L"login", rect<s32>(300,500,400,520), true, 0, 10);
+	Password = _gerHud->addEditBox(L"senha", rect<s32>(300,530,400,550), true, 0, 20);
+	Login->setMax(15);
+	Password->setMax(15);
+	
+	_gerHud->addButton(rect<s32>(420,500,520,550), 0, 2, L"conectar");
+
+	_menuFlag[HUDUPDATED] = true;
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CMenuLogin::readCommands()
+{
+	if(_gerEventos->isKeyDown(KEY_ESCAPE))
 	{
-		_gerenciadorHud->clear();
-		IGUIImage *img =_gerenciadorHud->addImage(rect<s32>(0, 0, _dispositivo->getVideoDriver()->getScreenSize().Width, _dispositivo->getVideoDriver()->getScreenSize().Height), 0, -1, L"");
-		img->setImage(_gerenciadorVideo->getTexture("recursos/texturas/huds/tx2d_bg_login.jpg"));
-		_gerenciadorHud->addEditBox(L"login", rect<s32>(300,500,400,520), true, 0, 10);
-		_gerenciadorHud->addEditBox(L"senha", rect<s32>(300,530,400,550), true, 0, 20);
-		_gerenciadorHud->addButton(rect<s32>(420,500,520,550), 0, 2, L"conectar");
+		_nextID = MN_SAIDA;
+		return;
 	}
 
-	void readCommands()
+	if(_gerEventos->getEventCallerByElement(EGET_BUTTON_CLICKED))
 	{
-		if(_gerenciadorEventos->isKeyDown(KEY_ESCAPE))
+		// Trata os cliques em botões
+		if (_gerEventos->getEventCallerByID() == 2)
 		{
-			_nextID = MN_SAIDA;
-			return;
-		}
+			// Clicou no botão conectar
 
-		if(_gerenciadorEventos->getEventCallerByElement(EGET_BUTTON_CLICKED))
-		{
-			// Trata os cliques em botões
+			stringc str1(Login->getText());
+            strcpy(_login, str1.c_str()); 
 
-			if (_gerenciadorEventos->getEventCallerByID() == 2)
+			stringc str2(Password->getText());
+            strcpy(_senha, str2.c_str()); 
+
+			_gameCore->conectar( _login, _senha);
+
+			if(_gameCore->isConnected())
 			{
-				// Clicou no botão conectar
 				_nextID = MN_SELECAOPERSONAGEM;
 				return;
 			}
 		}
 	}
+}
 
-	void updateGraphics()
-	{
-	}
-	
+//-----------------------------------------------------------------------------------------------------------------
 
-public:
+void CMenuLogin::updateGraphics()
+{
+}
 
-	CMenuLogin(){}
-	
-	bool start(CGameCore *gameCore)
-	{
-		_gameCfg = new CArquivoConfig();
-		TypeCfg cfg = _gameCfg->loadConfig();
-
-		//_gameData = gameData;
-
-		_dispositivo      = gameCore->getGraphicDevice();
-		_gerenciadorAudio = gameCore->getSoundDevice();
-
-		_gerenciadorAudio->removeAllSoundSources();
-		_gerenciadorEventos = (CGerEventos*)_dispositivo->getEventReceiver();
-
-		_myID = _nextID = MN_LOGIN;
-
-		_dispositivo->setWindowCaption(L"Warbugs - BETA Version 0.1");
-
-		_gerenciadorCena = _dispositivo->getSceneManager();   // Cria o gerenciador de cena
-		_gerenciadorVideo = _dispositivo->getVideoDriver();   // Cria o driver para o vídeo
-		_gerenciadorHud = _dispositivo->getGUIEnvironment(); // Cria o gerenciador de menu
-
-		_musica = _gerenciadorAudio->play2D("recursos/audio/login.ogg", true, false, false, ESM_AUTO_DETECT);
-		
-		_gerenciadorAudio->setSoundVolume(cfg.parametrosAudio.volumeMusica);
-
-		_gerenciadorCena->clear();
-
-		
-		_skin = _gerenciadorHud->getSkin();
-		_font = _gerenciadorHud->getFont("recursos/fonts/font_georgia.png");
-		
-		if (_font)
-			_skin->setFont(_font);
-
-		_skin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_TOOLTIP);
-		
-		_camera = _gerenciadorCena->addCameraSceneNode(0,vector3df(0,50,0), vector3df(0,0,50));
-
-		_flags[HUDCHANGED] = false;
-
-		return (true);
-	}
-};
+//-----------------------------------------------------------------------------------------------------------------

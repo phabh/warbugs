@@ -1,7 +1,7 @@
 #pragma once
 
-//#include "Setup.h"
 #include "PathSetup.h"
+#include "MsgSetup.h"
 
 class CGameData
 {

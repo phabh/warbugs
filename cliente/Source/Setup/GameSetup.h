@@ -40,46 +40,64 @@ using namespace irrklang;
 //-----------------------------------------------------------------------------------------
 
 // Cenario
-const int MAXPORTAIS = 4;
-const int MAPMAXLIN  = 50;
-const int MAPMAXCOL  = 50;
-const int TAMQUADRANTE = 44;
-const int NUMCENARIOS = 10; // Número de cenários no jogo
+const int MAXPORTAIS = 4;    // Número de portais por cenário
+const int MAPMAXLIN  = 50;   // Número máximo de linhas por cenário
+const int MAPMAXCOL  = 50;   // Número máximo de colunas por cenário
+const int TAMQUADRANTE = 44; // Tamanho de cada quadrante em pixels
+const int NUMCENARIOS = 10;  // Número de cenários no jogo
 const int NUMPROPS = 50; // Número de props do jogo (arvore, templos, flores, etc..)
 
 // Bolsa
-const int BOLSAMAXITENS = 9;
-const int BOLSA_ID_OFFSET = 1000000; // para nao colidir com id de personagens
+const int BOLSAMAXITENS = 9; // Número máximo de itens na bolsa de um personagem
+const int BOLSA_ID_OFFSET = 1000000; // para nao colidir com id de personagens no nó de cena
 
 // Personagens
-const int INVENTARIOMAXITENS = 12;
-const int RACASMAX = 5;
-const int NUMRACES = 20; // Número de raças disponíveis no jogo
-const int NUMCLASSES = 8; // Número de classes para cada raça
-const int NUMPODERES = 3;
-const int NUMBUFFERS = 15;
-const int MAXITENSVENDEDOR = 30;
+const int INVENTARIOMAXITENS = 12; // Número máximo de itens no inventário
+const int RACASMAX = 5;    // Número máximo de raças jogáveis
+const int NUMRACES = 20;   // Número de raças disponíveis no jogo
+const int NUMCLASSES = 8;  // Número de classes para cada raça
+const int NUMPODERES = 3;  // Número de poderes de cada personagem
+const int NUMBUFFERS = 15; // Número de buffs de cada personagem
+const int MAXITENSVENDEDOR = 30; // Número máximo de itens do vendedor
 
 // Menu
-const int NUMMENUCENA = 4; // número de menus com cenas irr a carregar
+const int NUMMENUCENA = 3; // número de menus com cenas irr a carregar
 
 // Hud
-const int NUMROLETAOPCOES = 6;
-const int NUMFXHUD = 10; // efeitos sonoros do HUD
-const int NUMFLAGSMENU = 20;
+const int NUMROLETAOPCOES = 6; // número de opções na roleta
+const int NUMSFXHUD = 10;      // efeitos sonoros do HUD
+const int NUMFLAGSMENU = 20;   // número de flags de menu
+const int NUMHUDFONTS = 2;     // número de fonts no menu
 
 // Pathfinding
-const int LARGURABUSCA = 10;
-const int AREABUSCA = LARGURABUSCA*LARGURABUSCA;
+const int LARGURABUSCA = 10; // largura de busca 10 quadrantes
+const int AREABUSCA = LARGURABUSCA*LARGURABUSCA; // área de busca 10x10 quadrantes
 
 // Game Data
 const int NUM3DITENS = 26; // Número de itens 3D no jogo
-const int NUM3DPERS = 44; // Número de personagens 3D no jogo
-const int NUM2DOBJS = 38; // Número de objetos 2D no jogo
+const int NUM3DPERS = 44;  // Número de personagens 3D no jogo
+const int NUM2DOBJS = 38;  // Número de objetos 2D no jogo
 const int NUMMENUHUDS = 3; // Número de huds nos menus
+const int NUMMUSICAS = 4;  // Número de músicas do jogo
 
-// Rede
-const int PACKAGESIZE = 1400;
+// Irrlicht
+
+const E_DRIVER_TYPE defDriver = EDT_DIRECT3D9;
+const dimension2d <s32> defDimension = dimension2d <s32>( 1024, 768 );
+const u8 defBits = 32;
+const bool defFullScreen = false;
+const bool defStencilBuffer = true;
+const bool defVsync = true;
+const bool defAntiAlias = true;
+const bool defAlphaChannel = true;
+const bool defHiPrecisionFpu = false;
+const bool defIgnoreInput = false;
+const u8 defZBufferBits = 16;
+
+// IrrKlang
+
+const f32 defSFXVol = 1.0;
+const f32 defMusicVol = 1.0;
 
 //-----------------------------------------------------------------------------------------
 // Enumerators
@@ -89,15 +107,26 @@ const int PACKAGESIZE = 1400;
 enum TypeStart {ERRO, SUCESSO};
 
 
-// Menu /* MN_CONFIGURACAO,*/
-enum menuID {MN_ABERTURA, MN_LOGIN, MN_SELECAOPERSONAGEM, MN_CRIACAOPERSONAGEM, MN_JOGO, MN_CREDITOS, MN_SAIDA, MN_ERRO};
+// Menu
+enum TypeMenuID {MN_ABERTURA, MN_LOGIN, MN_SELECAOPERSONAGEM, MN_CRIACAOPERSONAGEM, MN_JOGO, MN_CREDITOS, MN_COUNT, MN_SAIDA, MN_ERRO};
+
+enum TypeMenuFlag {HUDUPDATED, OBJSELECTED, INVENTARIOON, CHATON, STATUSON, MAPAON, TRADEON, EQUIPON, SHOPON, BOLSAON, ALERTON, CONFIGON, FLAG_COUNT};
+
+enum TypeFontSize {FONT_PEQUENA, FONT_GRANDE, FONT_COUNT};
+
+enum TypeMenuSCene {MC_LOGIN, MC_SELECAO, MC_CRIACAO, MC_COUNT};
+
+enum TypeMenuMusic {MM_LOGIN, MM_SELECAO, MM_CRIACAO, MM_JOGO, MM_COUNT};
+
+enum TypeMenuSfx {MFX_BOTAO, MFX_OPENWINDOW, MFX_CLOSEWINDOW, MFX_SLIDEBAR, MFX_CASH, MFX_PICKUP, MFX_COUNT};
 
 
 // Cenario
-enum tipoLua {LUANULL, LUABESOURO, LUAVESPA, LUAESCORPIAO, LUAARANHA, LUALOUVAADEUS};
+enum TypeMoon {LUANULL, LUABESOURO, LUAVESPA, LUAESCORPIAO, LUAARANHA, LUALOUVAADEUS, LUA_COUNT};
 
-enum TypeTxScenes {TXCENA0, TXCENA1, TXCENA2, TXCENA3, TXCENA4, TXCENA5, TXCENA6, TXCENA7, HEIGHTMAP};
+enum TypeTxScenes {TXCENA_0, TXCENA_1, TXCENA_2, TXCENA_3, TXCENA_4, TXCENA_5, TXCENA_6, TXCENA_7, TXCENA_BUMP, TXCENA_COUNT};
 
+enum TypeGameScene {GAMESCENE_01, GAMESCENE_02, GAMESCENE_03, GAMESCENE_04, GAMESCENE_05, GAMESCENE_06, GAMESCENE_07, GAMESCENE_08, GAMESCENE_09, GAMESCENE_10};
 
 // Personagem
 enum TypeRaceChars {NONERACE, ALLRACE, ARANHA, BESOURO, ESCORPIAO, LOUVADEUS, VESPA, CUPIM, FORMIGA, BARBEIRO, BARATA, TATUBOLINHA, LIBELULA, PERCEVEJO, ABELHA, LAGARTIXA, CALANGO, SAPO, JOANINHA, CAMALEAO};

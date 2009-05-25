@@ -1,7 +1,7 @@
 #pragma once
 
 //#include "Irrlicht.h"
-#include "Setup.h"
+#include "GameSetup.h"
 #include "CDoubleList.h"
 #include "CPersonagem.h"
 #include "CArquivoMatrizes.cpp"

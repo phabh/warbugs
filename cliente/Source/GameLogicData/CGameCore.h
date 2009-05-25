@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Setup.h"
+#include "GameSetup.h"
 #include "PathSetup.h"
 
 #include "CDoubleList.h"
@@ -28,18 +28,34 @@ private:
 	IVideoDriver    *_gerenciadorVideo; 
 	ISceneManager   *_gerenciadorCena; 
 	IGUIEnvironment *_gerenciadorHud;
-	CGerEventos      _gerenciadorEventos;
+	CGerEventos     _gerenciadorEventos;
 
-	CBugSocketClient *_netClient;
+	ICameraSceneNode *_gameCamera;
 
-	CBugMessage _msgToSend,    // Pacote a enviar
-		        _msgToReceive; // Pacote a receber
+	IGUISkin *_gameSkin;
+	IGUIFont *_gameFont[NUMHUDFONTS];
 
-	char _dataSend[PACKAGESIZE],
-		 _dataReceive[PACKAGESIZE];
+	ISound* _gameMusic;
+	ISound* _hudFX[NUMSFXHUD];
+
+	CBugSocketClient *_gameSocket;
+
+	CBugMessage _packageToSend,    // Pacote a enviar
+		_packageReceived; // Pacote a receber
+
+	char _dataToSend[PACKAGESIZE],
+		_dataReceived[PACKAGESIZE];
+
+	CArquivoConfig *_fileCfg;
+	TypeCfg _gameConfig;
 
 	CGameData *_Data;
 	CGameLogic *_Logic;
+
+	char _myLogin[15],
+		_myPassword[15];
+
+	bool _connected; // Identifica se o cliente está conectado ao servidor
 
 public:
 
@@ -49,11 +65,35 @@ public:
 
 	void loadGameData();
 
-	IrrlichtDevice* getGraphicDevice();
-	ISoundEngine*   getSoundDevice();
+	IrrlichtDevice * getGraphicDevice();
+	ISoundEngine * getSoundDevice();
+	CGerEventos * getEventManager();
 
-	// Métodos Network
-	void conectar(const std::string& host, int port);
-	void enviarPacote(char *s);
+	void getAllManagers(IrrlichtDevice*&dispGrafico, ISoundEngine*&dispAudio, CGerEventos*&gerEventos, ISceneManager*&gerCena, IVideoDriver*&gerVideo, IGUIEnvironment*&gerHud, TypeCfg &gameCfg); 
+
+	void playMusic( char* soundFile, bool looped = true, bool startPaused = false, bool track = false, E_STREAM_MODE modo = ESM_AUTO_DETECT, bool efeitos = false);
+	
+	void loadMenuScene(c8 *sceneFile);
+
+	void loadGameScene(c8 *sceneFile);
+
+	ICameraSceneNode *createCamera( vector3df posicao, vector3df target = vector3df(0,0,100) , vector3df rotacao = vector3df(0,0,0), ISceneNode *parent = 0, f32 angulo = 179.0f/*bool isOrtogonal = true*/, bool bind = true);
+
+	bool conectar(char *login, char *password);
+
 	CBugMessage *receberPacote();
+	bool isConnected();
+
+	void enviarPacote(int packageID, int i1);
+	void enviarPacote(int packageID, int i1, int i2);
+	void enviarPacote(int packageID, int i1, int i2, int i3);
+	void enviarPacote(int packageID, int i1, int i2, int i3, int i4);
+	void enviarPacote(int packageID, int i1, int i2, int i3, int i4, int i5, int i6);
+	void enviarPacote(int packageID, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9);
+	void enviarPacote(int packageID, int i1, char *s1);
+	void enviarPacote(int packageID, int i1, float f1, float f2);
+	void enviarPacote(int packageID, int i1, int i2, int i3, float f1, float f2);
+	void enviarPacote(int packageID, char *s1, char *s2);
+
+
 };
