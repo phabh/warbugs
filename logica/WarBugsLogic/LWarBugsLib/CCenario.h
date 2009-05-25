@@ -24,6 +24,7 @@ class CInimigo;
 class CCenario : public C3DObject
 {
 private:
+	CObjectCount *_contador;
 	CPeopleList *_jogadores;//Lista de personagens
 	CPeopleList *_inimigos;
 	CPeopleList *_npcs;
@@ -35,7 +36,7 @@ private:
 	CPortal *_saidaRight;
 public:
 
-	CCenario(int ID, CPeopleList *players, CPeopleList *monsters, CPeopleList *npcs, CBolsaList *bolsa, CPortal *saidaNorte, CPortal *saidaSul, CPortal *saidaLeft, CPortal *saidaRight);
+	CCenario(int ID, CPeopleList *players, CPeopleList *monsters, CPeopleList *npcs, CPeopleList *vendedores, CBolsaList *bolsa, CPortal *saidaNorte, CPortal *saidaSul, CPortal *saidaLeft, CPortal *saidaRight);
 	void enterScene();
 	int personagemCount();
 	int itemCount();
