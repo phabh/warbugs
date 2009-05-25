@@ -43,11 +43,11 @@ void CMenuAbertura::readCommands()
 //-----------------------------------------------------------------------------------------------------------------
 
 void CMenuAbertura::updateGraphics() 
-{/*
+{
 	_video = CVideoTexture::createVideoTexture(_dispGrafico, pathVideoAbertura);
 	_video->setVolume(100);
 	_video->playCutscene();
-	_video->drop();*/
+	_video->drop();
 
 	_nextID = MN_LOGIN;
 }
