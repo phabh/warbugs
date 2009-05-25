@@ -1,15 +1,15 @@
 #include "CMenu.h"
 
-menuID CMenu::run()
+TypeMenuID CMenu::run()
 {
-	ITimer *cronometroMS = _dispositivo->getTimer(); 
+	ITimer *cronometroMS = _dispGrafico->getTimer(); 
 
 	u32 tempoInicial,
 		tempoCorrido;
 
 	updateHuds();
 
-	while(_dispositivo->run())
+	while(_dispGrafico->run())
 	{
 		tempoInicial = cronometroMS->getRealTime(); // Milisegundos
 
@@ -18,23 +18,23 @@ menuID CMenu::run()
 			//Ler pacotes
 		}
 
-		if (_dispositivo->isWindowActive())
+		if (_dispGrafico->isWindowActive())
 		{
-			_gerenciadorEventos->endEventProcess(); // Desativa a escuta de eventos para desenhar.
+			_gerEventos->endEventProcess(); // Desativa a escuta de eventos para desenhar.
 
-			_gerenciadorVideo->beginScene(true, true, SColor(255, 0, 0, 0));
-			_gerenciadorCena->drawAll(); 
-			_gerenciadorHud->drawAll();
+			_gerVideo->beginScene(true, true, SColor(255, 0, 0, 0));
+			_gerCena->drawAll(); 
+			_gerHud->drawAll();
 			graphicsDrawAddOn();
-			_gerenciadorVideo->endScene();
+			_gerVideo->endScene();
 
 			readCommands();
 
 			updateGraphics();
 
-			if(_flags[HUDCHANGED])
+			if(!_menuFlag[HUDUPDATED])
 			{
-				// Se for necessário redesenhar o HUD
+				// Se o HUD não estiver atualizado
 				updateHuds();
 			}
 
@@ -48,14 +48,14 @@ menuID CMenu::run()
 				tempoCorrido = cronometroMS->getRealTime() - tempoInicial;
 
 				if(tempoCorrido < 33) // 30ms = 1000/30
-					_dispositivo->sleep(33 - tempoCorrido); // Adormece para manter o FPS
+					_dispGrafico->sleep(33 - tempoCorrido); // Adormece para manter o FPS
 			}
 
 			// Ativa a escuta de eventos. SEMPRE deve ser a última linha do while.
-			_gerenciadorEventos->startEventProcess(); 
+			_gerEventos->startEventProcess(); 
 		}
 	}
-	_gerenciadorAudio->stopAllSounds();
+	_dispAudio->stopAllSounds();
 
 	return _nextID;
 }

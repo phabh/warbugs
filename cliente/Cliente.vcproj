@@ -189,10 +189,6 @@
 				>
 			</File>
 			<Filter
-				Name="Setup"
-				>
-			</Filter>
-			<Filter
 				Name="Menu"
 				>
 				<File
@@ -233,7 +229,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="GameLogicData"
+				Name="GameCore"
 				>
 				<File
 					RelativePath=".\Source\GameLogicData\CGameCore.cpp"
@@ -334,15 +330,19 @@
 				Name="Setup"
 				>
 				<File
+					RelativePath=".\Source\Setup\GameSetup.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Setup\MsgSetup.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Setup\NetworkSetup.h"
 					>
 				</File>
 				<File
 					RelativePath=".\Source\Setup\PathSetup.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Setup\Setup.h"
 					>
 				</File>
 			</Filter>
@@ -363,6 +363,30 @@
 				>
 				<File
 					RelativePath=".\Source\Menu\CMenu.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Menu\CMenuAbertura.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Menu\CMenuCreditos.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Menu\CMenuCriacao.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Menu\CMenuJogo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Menu\CMenuLogin.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Menu\CMenuSelecao.h"
 					>
 				</File>
 			</Filter>
@@ -391,7 +415,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="GameLogicData"
+				Name="GameCore"
 				>
 				<File
 					RelativePath=".\Source\GameLogicData\CGameCore.h"

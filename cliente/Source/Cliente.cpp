@@ -1,14 +1,12 @@
 #pragma once
 
-#include "Setup.h"
 #include "CGameCore.h"
-#include "CMenu.h"
-#include "CMenuAbertura.cpp"
-#include "CMenuLogin.cpp"
-#include "CMenuSelecao.cpp"
-#include "CMenuCriacao.cpp"
-#include "CMenuJogo.cpp" 
-#include "CMenuCreditos.cpp"
+#include "CMenuAbertura.h"
+#include "CMenuLogin.h"
+#include "CMenuSelecao.h"
+#include "CMenuCriacao.h"
+#include "CMenuJogo.h" 
+#include "CMenuCreditos.h"
 
 int main()
 {
@@ -22,7 +20,7 @@ int main()
 	{
 		Warbugs->loadGameData(); // Carrega os dados do jogo na memória
 
-		menuID nextMenu = MN_ABERTURA;
+		TypeMenuID nextMenu = MN_ABERTURA;
 
 		while(nextMenu != MN_SAIDA && nextMenu != MN_ERRO)
 		{
@@ -41,32 +39,32 @@ int main()
 			case MN_LOGIN:
 
 				menuCorrente = new CMenuLogin();
-				if( ((CMenuLogin*)menuCorrente)->start(Warbugs/*dispositivoGrafico, dispositivoAudio, gameData*/))
+				if( ((CMenuLogin*)menuCorrente)->start(Warbugs))
 					nextMenu = ((CMenuLogin*)menuCorrente)->run();
 				break;
 
 			case MN_SELECAOPERSONAGEM:
 
 				menuCorrente = new CMenuSelecao();
-				if( ((CMenuSelecao*)menuCorrente)->start(Warbugs/*dispositivoGrafico, dispositivoAudio, gameData*/))
+				if( ((CMenuSelecao*)menuCorrente)->start(Warbugs))
 					nextMenu = ((CMenuSelecao*)menuCorrente)->run();
 				break;
 
 			case MN_CRIACAOPERSONAGEM:
 				menuCorrente = new CMenuCriacao();
-				if( ((CMenuCriacao*)menuCorrente)->start(Warbugs/*dispositivoGrafico, dispositivoAudio, gameData*/))
+				if( ((CMenuCriacao*)menuCorrente)->start(Warbugs))
 					nextMenu = ((CMenuCriacao*)menuCorrente)->run();
 				break;
 
 			case MN_JOGO:
 				menuCorrente = new CMenuJogo();
-				if( ((CMenuJogo*)menuCorrente)->start(Warbugs/*dispositivoGrafico, dispositivoAudio, gameData*/))
+				if( ((CMenuJogo*)menuCorrente)->start(Warbugs))
 					nextMenu = ((CMenuJogo*)menuCorrente)->run();
 				break;
 
 			case MN_CREDITOS:
 				menuCorrente = new CMenuCreditos();
-				if( ((CMenuCreditos*)menuCorrente)->start(Warbugs/*dispositivoGrafico, dispositivoAudio, gameData*/))
+				if( ((CMenuCreditos*)menuCorrente)->start(Warbugs))
 					nextMenu = ((CMenuCreditos*)menuCorrente)->run();
 				break;
 
@@ -79,8 +77,9 @@ int main()
 
 		return 1;
 	}
-	else
+	else 
 	{
+		// Erro ao carregar dispositivos
 		system("pause");
 		return 0;
 	}

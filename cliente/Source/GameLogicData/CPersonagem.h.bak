@@ -13,7 +13,6 @@ struct SBolsa
 
 struct SQuadrante 
 {
-	int _id;
 	int _coluna;
 	int _linha;
 };
@@ -31,7 +30,7 @@ private:
 	int _dinheiro;
 	int _dinheiroEnviarTroca;
 	int _dinheiroReceberTroca;
-	float _direcao;
+	int _direcao;
 	int _estado;
 	int _ultimoEstado;
 	int _forca;
@@ -49,7 +48,7 @@ private:
 	int _listaProdutos[MAXITENSVENDEDOR];
 	int _nivel;
 	int _nivelPoder[NUMPODERES];
-	char *_nome;
+	int _nome;
 	int _objetivosQuest;
 	int _pontosPoder;
 	int _pontosHabilidadeDisponiveis;
@@ -64,7 +63,6 @@ private:
 	int _roleta[NUMROLETAOPCOES];
 	int _taxaAtaque;
 	int _tipoPersonagem;
-	int _tempoCarga;
 	int _velocidade;
 	int _xp;
 	int _xpMaximo;

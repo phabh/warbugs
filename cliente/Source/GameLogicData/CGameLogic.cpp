@@ -75,7 +75,7 @@ void CGameLogic::setHorario(long hora)
 void CGameLogic::setLua(int idLua)
 {
 	// Cenário do cliente recebe a lua corrente do cenário do servidor
-	_luaCorrente = (tipoLua)idLua;
+	_luaCorrente = (TypeMoon)idLua;
 }
 
 //-----------------------------------------------------------------------------------------------------------------
