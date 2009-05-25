@@ -4,17 +4,20 @@ CCenario::CCenario(int ID,
 				   CPeopleList *players, 
 				   CPeopleList *monsters,
 				   CPeopleList *npcs,
+				   CPeopleList *vendedores,
 				   CBolsaList *bolsa,
 				   CPortal *saidaNorte,
 				   CPortal *saidaSul,
 				   CPortal *saidaLeft,
 				   CPortal *saidaRight)
 {
+	_contador = new CObjectCount();
 	this->setID(ID);
 	_jogadores = players;//Lista de personagens
 	_inimigos = monsters;
 	_npcs = npcs;
 	_itens = bolsa;
+	_vendedores = vendedores;
 	_saidaNorte = saidaNorte;
 	_saidaSul = saidaSul;
 	_saidaLeft = saidaLeft;
@@ -110,44 +113,63 @@ void CCenario::setExit(CPortal *newExit, Direcoes idPortal)
 //
 void CCenario::addPlayer(CPersonagem *jogador)
 {
+	jogador->setSceneID(_contador->giveID());
 	_jogadores->addPersonagem(jogador);
 }
 void CCenario::addMonster(CPersonagem *inimigo)
 {
+	inimigo->setSceneID(_contador->giveID());
 	_inimigos->addPersonagem(inimigo);
 }
 void CCenario::addNpc(CPersonagem *npc)
 {
+	npc->setSceneID(_contador->giveID());
 	_npcs->addPersonagem(npc);
 }
 void CCenario::addBag(CBolsa *bolsa)
 {
+	bolsa->setSceneID(_contador->giveID());
 	_itens->addBag(bolsa);
 }
 void CCenario::addVendedor(CVendedor *vendedor)
 {
+	vendedor->setSceneID(_contador->giveID());
 	_vendedores->addPersonagem(vendedor);
 }
 //
 CPersonagemJogador *CCenario::removePlayer(int idJogador)
 {
-	return((CPersonagemJogador*)_jogadores->removePersonagem(idJogador));
+	CPersonagemJogador *temp = (CPersonagemJogador*)_jogadores->removePersonagem(idJogador);
+	_contador->removeID(temp->getSceneID());
+	return(temp);
 }
 CInimigo *CCenario::removeMonster(int idInimigo)
 {
-	return((CInimigo*)_inimigos->removePersonagem(idInimigo));
+	CInimigo *temp = (CInimigo*)_jogadores->removePersonagem(idInimigo);
+	_contador->removeID(temp->getSceneID());
+	return(temp);
+	//return((CInimigo*)_inimigos->removePersonagem(idInimigo));
 }
 CNPC *CCenario::removeNPC(int idNPC)
 {
-	return((CNPC*)_npcs->removePersonagem(idNPC));
+	CNPC *temp = (CNPC*)_jogadores->removePersonagem(idNPC);
+	_contador->removeID(temp->getSceneID());
+	return(temp);
+	//return((CNPC*)_npcs->removePersonagem(idNPC));
 }
 CBolsa *CCenario::removeBag(int idBag)
 {
-	return((CBolsa*)_itens->removeBolsa(idBag));
+	CBolsa *temp = (CBolsa*)_itens->removeBolsa(idBag);
+	_contador->removeID(temp->getSceneID());
+	return(temp);
+	//return((CBolsa*)_itens->removeBolsa(idBag));
 }
 CVendedor *CCenario::removeVendedor(int idVendedor)
 {
-	return((CVendedor*)_vendedores->removePersonagem(idVendedor));
+	CVendedor *temp = (CVendedor*)_jogadores->removePersonagem(idVendedor);
+	_contador->removeID(temp->getSceneID());
+	return(temp);
+	//return((CVendedor*)_vendedores->removePersonagem(idVendedor));
 }
 void CCenario::update()
 {

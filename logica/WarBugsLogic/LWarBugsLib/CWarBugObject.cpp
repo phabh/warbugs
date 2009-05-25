@@ -22,6 +22,14 @@ void CWarBugObject::setID(int newID)
 {
 	_id = newID;
 }
+int CWarBugObject::getSceneID()
+{
+	return(_sceneId);
+}
+void CWarBugObject::setSceneID(int newID)
+{
+	_sceneId = newID;
+}
 /*void inicializar(CObjectCount &counter)
  *inicializa o objeto, dando para ele um ID único e incrementando o contador de objetos
  *
@@ -47,7 +55,7 @@ atribuir IDs diferentes e únicos aos mesmos
 */
 CObjectCount::CObjectCount()
 {
-	objCount = 0;
+	_objCount = 0;
 }
 /*int giveID()
  *incrementa o contador e retorna o valor que possuia no inicio do método
@@ -56,8 +64,59 @@ CObjectCount::CObjectCount()
  */
 int CObjectCount::giveID()
 {
-	objCount = objCount+1;
-	return(objCount-1);
+    int idToReturn;
+    if(_bufferSize > 0)
+    {
+		idToReturn = _buffer[0];
+        int *tempBuffer;
+        if(_bufferSize == 1)
+        {
+			tempBuffer = NULL;
+		}
+        else
+        {
+			tempBuffer = new int[_bufferSize-1];
+		}
+        for(int i = 0; i < _bufferSize-1; i = i + 1)
+        {
+			tempBuffer[i] = _buffer[i+1];        
+		}
+        _buffer = NULL;
+        _buffer = tempBuffer;
+        _bufferSize = _bufferSize-1;
+	}
+    else
+    {
+		_objCount = _objCount + 1;
+        idToReturn = _objCount - 1;
+    }
+    return(idToReturn);
+}
+/*int removeID()
+ *remove um elemento do contador e armazena-o em um buffer
+ *
+ *@param: int ID: ID a ser removido e acrescentado ao buffer
+ */
+void CObjectCount::removeID(int ID)
+{
+    if(_bufferSize == 0)
+    {
+		_buffer = new int[1];
+        _buffer[0] = ID;
+        _bufferSize = 1;
+    }
+    else
+    {
+		int *tempBuffer = new int[_bufferSize+1];
+        for(int i = _bufferSize-1; i >= 0; i = i - 1)
+        {
+			tempBuffer[i] = _buffer[i];
+		}
+        tempBuffer[_bufferSize] = ID;
+		_buffer = NULL;
+        _buffer = tempBuffer;
+        _bufferSize = _bufferSize+1;
+	}
 }
 /*int objectCount()
  *conta a quantidade atual de objetos criados
@@ -66,6 +125,6 @@ int CObjectCount::giveID()
  */
 int CObjectCount::objectCount()
 { 
-	return(objCount);
+	return(_objCount);
 }
 #endif
