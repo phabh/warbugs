@@ -178,6 +178,8 @@ namespace WarBugsServer {
 			this->txtSenha = (gcnew System::Windows::Forms::TextBox());
 			this->txtLogin = (gcnew System::Windows::Forms::TextBox());
 			this->txtSQL = (gcnew System::Windows::Forms::TextBox());
+			this->tabLog = (gcnew System::Windows::Forms::TabPage());
+			this->logBox = (gcnew System::Windows::Forms::ListBox());
 			this->barStatus = (gcnew System::Windows::Forms::StatusStrip());
 			this->barStatusJogo = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 			this->barStatusBD = (gcnew System::Windows::Forms::ToolStripStatusLabel());
@@ -185,8 +187,6 @@ namespace WarBugsServer {
 			this->menu = (gcnew System::Windows::Forms::MenuStrip());
 			this->arquivoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->timerBD = (gcnew System::Windows::Forms::Timer(this->components));
-			this->tabLog = (gcnew System::Windows::Forms::TabPage());
-			this->logBox = (gcnew System::Windows::Forms::ListBox());
 			this->abas->SuspendLayout();
 			this->tabJogadoresOn->SuspendLayout();
 			this->gbJogador->SuspendLayout();
@@ -194,9 +194,9 @@ namespace WarBugsServer {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->gridJogadores))->BeginInit();
 			this->tabManutencaoBD->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->gridResultados))->BeginInit();
+			this->tabLog->SuspendLayout();
 			this->barStatus->SuspendLayout();
 			this->menu->SuspendLayout();
-			this->tabLog->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// abas
@@ -493,6 +493,27 @@ namespace WarBugsServer {
 			this->txtSQL->Size = System::Drawing::Size(752, 155);
 			this->txtSQL->TabIndex = 0;
 			// 
+			// tabLog
+			// 
+			this->tabLog->Controls->Add(this->logBox);
+			this->tabLog->Cursor = System::Windows::Forms::Cursors::Arrow;
+			this->tabLog->Location = System::Drawing::Point(4, 22);
+			this->tabLog->Name = L"tabLog";
+			this->tabLog->Padding = System::Windows::Forms::Padding(3);
+			this->tabLog->Size = System::Drawing::Size(766, 423);
+			this->tabLog->TabIndex = 2;
+			this->tabLog->Text = L"Log";
+			this->tabLog->UseVisualStyleBackColor = true;
+			// 
+			// logBox
+			// 
+			this->logBox->FormattingEnabled = true;
+			this->logBox->Location = System::Drawing::Point(6, 10);
+			this->logBox->Name = L"logBox";
+			this->logBox->ScrollAlwaysVisible = true;
+			this->logBox->Size = System::Drawing::Size(754, 407);
+			this->logBox->TabIndex = 0;
+			// 
 			// barStatus
 			// 
 			this->barStatus->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {this->barStatusJogo, this->barStatusBD, 
@@ -552,29 +573,8 @@ namespace WarBugsServer {
 			// timerBD
 			// 
 			this->timerBD->Enabled = true;
-			this->timerBD->Interval = 1000;
+			this->timerBD->Interval = 33;
 			this->timerBD->Tick += gcnew System::EventHandler(this, &frmPrincipal::timerBD_Tick);
-			// 
-			// tabLog
-			// 
-			this->tabLog->Controls->Add(this->logBox);
-			this->tabLog->Cursor = System::Windows::Forms::Cursors::Arrow;
-			this->tabLog->Location = System::Drawing::Point(4, 22);
-			this->tabLog->Name = L"tabLog";
-			this->tabLog->Padding = System::Windows::Forms::Padding(3);
-			this->tabLog->Size = System::Drawing::Size(766, 423);
-			this->tabLog->TabIndex = 2;
-			this->tabLog->Text = L"Log";
-			this->tabLog->UseVisualStyleBackColor = true;
-			// 
-			// logBox
-			// 
-			this->logBox->FormattingEnabled = true;
-			this->logBox->Location = System::Drawing::Point(6, 10);
-			this->logBox->Name = L"logBox";
-			this->logBox->ScrollAlwaysVisible = true;
-			this->logBox->Size = System::Drawing::Size(754, 407);
-			this->logBox->TabIndex = 0;
 			// 
 			// frmPrincipal
 			// 
@@ -598,11 +598,11 @@ namespace WarBugsServer {
 			this->tabManutencaoBD->ResumeLayout(false);
 			this->tabManutencaoBD->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->gridResultados))->EndInit();
+			this->tabLog->ResumeLayout(false);
 			this->barStatus->ResumeLayout(false);
 			this->barStatus->PerformLayout();
 			this->menu->ResumeLayout(false);
 			this->menu->PerformLayout();
-			this->tabLog->ResumeLayout(false);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -657,14 +657,23 @@ private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  
 				
 				if(_coreServer->getPlayers()->getElementAt(i)->getName() != NULL)
 					gridJogadores->Rows[i]->Cells[1]->Value = gcnew String(_coreServer->getPlayers()->getElementAt(i)->getName());
-
-/*				if(_coreServer->getPlayers()->getElementAt(i)->getCharacter() != NULL)
+/*
+				if(_coreServer->getPlayers()->getElementAt(i)->getCharacter() != NULL)
 					gridJogadores->Rows[i]->Cells[2]->Value = gcnew String(_coreServer->getPlayers()->getElementAt(i)->getCharacter()->getName());
 
 				if(_coreServer->getPlayers()->getElementAt(i)->getScene() != NULL)
 					gridJogadores->Rows[i]->Cells[4]->Value = gcnew String(L""+_coreServer->getPlayers()->getElementAt(i)->getScene()->getID());
 */
+
 			}
+
+			//Atualiza os Server
+			_coreServer->updateAll();
+
+			//Envia mensagens para os clientes
+			_coreServer->sendAllMessages();
+	
+
 		 }
 
 
@@ -684,6 +693,7 @@ private: System::Void btConsultar_Click(System::Object^  sender, System::EventAr
 				unsigned int numRegs;
 				unsigned int indexCampos = 0, indexRegs = 0;
 				gridResultados->Columns->Clear();
+				
 				if(_dataBase->selectNow(toChar2(txtSQL->Text), numCampos, numRegs, dados))
 				{
 
@@ -701,7 +711,8 @@ private: System::Void btConsultar_Click(System::Object^  sender, System::EventAr
 					{
 						for(indexCampos = 0; indexCampos < numCampos; indexCampos++)
 						{
-							String ^ text = gcnew String(toChar2(dados[0]->ToString()) != NULL ? toChar2(dados[0]->ToString()): "NULL");
+							char * s = toChar2(dados[0]->ToString()) != NULL ? toChar2(dados[0]->ToString()): "NULL";
+							String ^ text = gcnew String(s);
 							gridResultados->Rows[indexRegs]->Cells[indexCampos]->Value = text;
 							dados->RemoveAt(0);
 						}

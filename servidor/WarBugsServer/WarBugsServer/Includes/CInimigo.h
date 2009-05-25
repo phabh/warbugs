@@ -26,9 +26,19 @@ private:
 	//Lista de divisores de xp
 	//Objeto de ia
 public:
+	CInimigo();
 	CInimigo(CCenario *cenario);
+
+	CCenario *getScene();
+
+	void setScene(CCenario *newScene);
+
 	void takeDecision();
+
+	void attack();
+	void takeDamage(int damage);
 	void die();
+	void useItem(CItem *item);
 
 	void update();
 };

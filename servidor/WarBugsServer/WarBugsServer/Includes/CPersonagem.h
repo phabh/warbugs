@@ -33,7 +33,10 @@ class CBuffList;
 // ------------------------------------------------------------------------------------------------------------
 class CPersonagem : public C3DObject{
 protected:
+	char nome[10];
 	Raca raca;
+	TypeClassChars tipo;
+	float baseMoveSpeed;
 	float direcao;
 	Ponto *destino;
 	EstadoPersonagem estado;
@@ -51,7 +54,9 @@ public:
 
 	CPersonagem();
 	//Getters e Setters
+	char *getName();
 	Raca getRace();
+	TypeClassChars getType();
 	int getRespawnTime();
 	float getDirection();
 	float getMoveSpeed();
@@ -70,9 +75,12 @@ public:
 	CBonusPrimario *getBaseBonus();
 	CPersonagem *getTarget();
 	
+	void setName(char *name);
 	void setRace(Raca raca);
+	void setType(TypeClassChars novotipo);
 	void setRespawnTime(int newTime);
 	void setDirection(float direction);
+	void setMoveSpeed(float newSpeed);
 	void setState(EstadoPersonagem newState);
 	void setMoney(int value);
 	void setBolsa(CBolsa *bolsa);

@@ -93,7 +93,7 @@ void CCoreServer::readPackets()
 						//se fez login
 						if(_dataManager->doLogin(login,senha,*tempJogador))
 						{
-							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN);
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN_OK);
 							tempJogador->setSocket(_playersList->getElementAt(indexJogador)->getSocket());
 							_playersList->removeJogadorByPosition(indexJogador);
 							_playersList->addJogador(tempJogador);
@@ -103,11 +103,11 @@ void CCoreServer::readPackets()
 							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN_FAIL);
 						}
 
-						sendMessagesFrame(_playersList);
+						//sendMessagesFrame(_playersList);
 
 						break;
 					}
-				case REQUEST_PERSONAGENS:  //ID PESSOA
+				case PERSONAGENS_REQUEST:  //ID PESSOA
 					{
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
@@ -308,7 +308,7 @@ void CCoreServer::readPackets()
 
 						break;
 					}
-				case EQUIP_ITEM: //ID PERSONAGEM, ID ARMA, ID ARMADURA
+				case SEND_EQUIP: //ID PERSONAGEM, ID ARMA, ID ARMADURA
 					{
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
@@ -320,7 +320,7 @@ void CCoreServer::readPackets()
 
 						break;
 					}
-				case SET_TARGET: //ID PERSONAGEM, ID ALVO
+				case SEND_TARGET: //ID PERSONAGEM, ID ALVO
 					{
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
@@ -897,10 +897,10 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 		//3D
 		mes.writeLong(personagem->getModel());
 		mes.writeLong(personagem->get3DTexture());
+		mes.writeLong(personagem->get2DTexture());
 	}
 
-	sendMessage(toAll, idCenario, destino, mes);
-	
+	sendMessage(toAll, idCenario, destino, mes);	
 }
 
 
@@ -1084,14 +1084,40 @@ void CCoreServer::sendMessagesFrame(CPlayerList * cList)
 				for(int index = 0; index < cList->size(); index++)
 				{
 					if(frame->_idCenario == cList->getElementAt(index)->getScene()->getID())
-						cList->getElementAt(index)->getSocket()->SendLine(*frame->_message);
+					{
+						try{
+							cList->getElementAt(index)->getSocket()->SendLine(*frame->_message);
+						}
+						catch(...)
+						{
+							cList->removeJogadorByPosition(index);
+						}
+					}
 				}
 			}
 			else
 			{
-				frame->_socket->SendLine(*frame->_message);
+				try{
+					frame->_socket->SendLine(*frame->_message);
+				}
+				catch(...)
+				{
+					System::String ^ texto = L"Não foi possivel manda a mensagem!";
+					WarBugsLog::_log->Items->Add(texto);
+				}
 			}
 		}
-
 	}
+}
+
+
+void CCoreServer::updateAll()
+{
+	_cenarioList->update();
+}
+
+void CCoreServer::sendAllMessages()
+{
+	//sendMessage(true,-1,NULL,END_FRAME);
+	sendMessagesFrame(_playersList);
 }
