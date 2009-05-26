@@ -19,6 +19,8 @@ const int PACKAGESIZE = 1400; // Tamanho do pacote de mensagens
 enum TYPE_MESSAGE 
 {
 	//MENSAGENS RECEBIDAS
+	DISCONNECT,
+	PING,
 	LOGIN_OK = 33, // se o login foi OK
 	LOGIN_FAIL, //se o login falhou por algum motivo
 	SHOW_PERSONAGENS, //QTD PERSONAGENS QUE O JOGADOR POSSUI, E OS PERSONAGENS

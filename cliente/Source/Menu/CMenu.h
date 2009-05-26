@@ -21,28 +21,7 @@ protected:
 
 	bool _menuFlag[NUMFLAGSMENU];
 	
-
-	//IGUISkin *_skin;
-	//IGUIFont *_font[NUMHUDFONTS];
-
-	//ISceneNode *_nodoSelecionado;
-
-	//ICameraSceneNode *_camera;
-
 	TypeMenuID _myID, _nextID;
-
-	//ISound* _musica;
-	//ISound* _hudFX[NUMFXHUD];
-
-	
-
-	//char *_arquivoCena;
-	
-	//bool _temPacote;
-
-	//CGameData *_gameData;
-
-	//CToonShader *_toonShader;
 
 	virtual void updateHuds() = 0;
 	virtual void readCommands() = 0;

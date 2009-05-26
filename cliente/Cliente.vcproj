@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="Cliente"
 	ProjectGUID="{828E4CB9-AB7C-4054-908B-E27EEC208C68}"
 	RootNamespace="Aula_1"
@@ -405,6 +405,10 @@
 			<Filter
 				Name="Shader"
 				>
+				<File
+					RelativePath=".\Source\Shader\CToonShader.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Video"

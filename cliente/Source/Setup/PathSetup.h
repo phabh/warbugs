@@ -53,7 +53,7 @@ static c8 *pathParticleImage[NUMPARTICLETYPES] =
 //-----------------------------------------------------------------------------------------
 // Nomes de arquivos
 
-static c8 *modelCharFile[NUM3DPERS]=
+static c8 *pathCharsModels[NUM3DPERS]=
 { // Modelos 3D de todos os personagens do jogo
 	"recursos/modelos/p3d_aranha_lider.b3d", 
 	"recursos/modelos/p3d_aranha_jogador.b3d", 
@@ -101,7 +101,7 @@ static c8 *modelCharFile[NUM3DPERS]=
 	"recursos/modelos/p3d_tandan.b3d" 
 };
 
-static c8 *textureCharFile[NUM3DPERS]=
+static c8 *pathTextureModels[NUM3DPERS]=
 { // Texturas de todos os personagens 3D do jogo
 	"recursos/texturas/tx3d_aranha_lider.png", 
 	"recursos/texturas/tx3d_aranha_jogador.png", 
@@ -110,7 +110,7 @@ static c8 *textureCharFile[NUM3DPERS]=
 	"recursos/texturas/tx3d_aranha_mae.png", 
 	"recursos/texturas/tx3d_aranha_filhote.png", 
 	"recursos/texturas/tx3d_besouro_lider.png", 
-	"recursos/texturas/tx3d_besouro_jogador.png", 
+	"recursos/texturas/besouro.jpg",//tx3d_besouro_jogador.png", 
 	"recursos/texturas/tx3d_besouro_soldado.png", 
 	"recursos/texturas/tx3d_besouro_vendedor.png", 
 	"recursos/texturas/tx3d_besouro_mae.png", 
@@ -149,7 +149,7 @@ static c8 *textureCharFile[NUM3DPERS]=
 	"recursos/texturas/tx3d_tandan.png" 
 };
 
-static c8 *modelItemFile[NUM3DITENS]=
+static c8 *pathItensModels[NUM3DITENS]=
 { // Modelos 3D de todos os itens do jogo
 	"recursos/modelos/i3d_buzina.b3d",
 	"recursos/modelos/i3d_varinha.b3d",
@@ -179,7 +179,7 @@ static c8 *modelItemFile[NUM3DITENS]=
 	"recursos/modelos/i3d_mascara_gas.b3d" 
 };
 
-static c8 *textureItemFile[NUM3DITENS]=
+static c8 *pathTextureItens[NUM3DITENS]=
 { // Texturas de todos os itens 3d do jogo
 	"recursos/texturas/tx3d_buzina.png",
 	"recursos/texturas/tx3d_varinha.png",
@@ -209,7 +209,7 @@ static c8 *textureItemFile[NUM3DITENS]=
 	"recursos/texturas/tx3d_mascara_gas.png" 
 };
 
-static c8 *texture2DFile[NUM2DOBJS]=
+static c8 *pathTexture2D[NUM2DOBJS]=
 { // Texturas de todos os objetos 2d do jogo
 	"recursos/texturas/huds/tx2d_buzina.png",
 	"recursos/texturas/huds/tx2d_varinha.png",
@@ -251,14 +251,14 @@ static c8 *texture2DFile[NUM2DOBJS]=
 	"recursos/texturas/huds/tx2d_lingua_camaleao.png" 
 };
 
-static c8 *textureHudFile[NUMMENUHUDS]=
+static c8 *pathTextureHud[NUMMENUHUDS]=
 { // Texturas de todos os huds dos menus
 	"recursos/texturas/huds/tx2d_minimapa1on.png", 
 	"recursos/texturas/huds/tx2d_minimapa1off.png", 
 	"recursos/texturas/huds/tx2d_semente.png" 
 };
 
-static c8 *modelPropFile[NUMPROPS]=
+static c8 *pathPropsModels[NUMPROPS]=
 { // Modelos 3d dos objetos estáticos do cenário
 	"recursos/modelos/prop3d_arvore.3ds",
 	"recursos/modelos/prop3d_arvore2.3ds",
@@ -267,7 +267,7 @@ static c8 *modelPropFile[NUMPROPS]=
 	"recursos/modelos/prop3d_cactus.3ds"
 };
 
-static c8 *texturePropFile[NUMPROPS]=
+static c8 *pathTextureProps[NUMPROPS]=
 { // Modelos 3d dos objetos estáticos do cenário
 	"recursos/texturas/prop3d_arvore.png",
 	"recursos/texturas/prop3d_arvore2.png",
