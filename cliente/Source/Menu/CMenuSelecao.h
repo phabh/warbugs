@@ -2,31 +2,6 @@
 
 #include "CMenu.h"
 
-struct SPersonagemSelecao
-{
-	int _id;
-	char *_nome;
-	int _nivel;
-
-	int _agilidade;
-	int _destreza;
-	int _forca;
-	int _instinto;
-	int _resistencia;
-
-	int _taxaAtaque;
-	int _tempoCarga;
-	int _defesa;
-	int _ataqueCorporal;
-	int _danoCorporal;
-	int _raioAtaque;
-	int _raioDano;
-
-	int _idModelo;
-	int _idTextura;
-	int _idHud;
-};
-
 class CMenuSelecao : public CMenu
 {
 
@@ -39,6 +14,10 @@ private:
 	float _camCurrRotation;
 
 	ICameraSceneNode *_menuCamera;
+
+	CToonShader *_toonShader;
+
+	int _nSlotChars;
 
 	void graphicsDrawAddOn();
 	void updateHuds();

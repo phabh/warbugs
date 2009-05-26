@@ -11,6 +11,9 @@ private:
 	ISceneNode *_nodoSelecionado;
 	int _idPersonagem;
 	IParticleSystemSceneNode *_particula[RACASMAX];
+	ILightSceneNode *luz;
+
+	CToonShader *_toonShader;
 
 	void graphicsDrawAddOn();
 	void updateHuds();

@@ -22,7 +22,7 @@ void CGameData::loadStage(int stage)
 	case 0: // Carrega malhas dos personagens 3D
 		for(int i=0; i<NUM3DPERS; i++)
 		{			
-			dataGeometryChars[i] = _gerenciadorCena->getMesh(modelCharFile[i]);
+			dataGeometryChars[i] = _gerenciadorCena->getMesh(pathCharsModels[i]);
 			_dataLoaded++;
 			porcentagem = _dataLoaded/_totalLoading*100.0f;
 		}	          
@@ -31,7 +31,7 @@ void CGameData::loadStage(int stage)
 	case 1: // Carrega malhas dos itens 3D
 		for(int i=0; i<NUM3DITENS; i++)
 		{
-			dataGeometryItens[i] = _gerenciadorCena->getMesh(modelItemFile[i]);
+			dataGeometryItens[i] = _gerenciadorCena->getMesh(pathItensModels[i]);
 			_dataLoaded++;
 			porcentagem = _dataLoaded/_totalLoading*100.0f;
 		}	          
@@ -49,7 +49,7 @@ void CGameData::loadStage(int stage)
 	case 2: // Carrega texturas dos personagens 3D
 		for(int i=0; i<NUM3DPERS; i++)
 		{
-			dataTxChars[i] = _gerenciadorVideo->getTexture(textureCharFile[i]);
+			dataTxChars[i] = _gerenciadorVideo->getTexture(pathTextureModels[i]);
 			_dataLoaded++;
 			porcentagem = _dataLoaded/_totalLoading*100.0f;
 		}	          
@@ -58,7 +58,7 @@ void CGameData::loadStage(int stage)
 	case 3: // Carrega texturas dos itens 3D
 		for(int i=0; i<NUM3DITENS; i++)
 		{
-			dataTxItens[i] = _gerenciadorVideo->getTexture(textureItemFile[i]);
+			dataTxItens[i] = _gerenciadorVideo->getTexture(pathTextureItens[i]);
 			_dataLoaded++;
 			porcentagem = _dataLoaded/_totalLoading*100.0f;
 		}	          
@@ -76,7 +76,7 @@ void CGameData::loadStage(int stage)
 	case 4: // Carrega texturas dos Huds
 		for(int i=0; i<NUM2DOBJS; i++)
 		{
-			dataTx2DItens[i] = _gerenciadorVideo->getTexture(texture2DFile[i]);
+			dataTx2DItens[i] = _gerenciadorVideo->getTexture(pathTexture2D[i]);
 			_dataLoaded++;
 			porcentagem = _dataLoaded/_totalLoading*100.0f;
 		}	          
@@ -85,7 +85,7 @@ void CGameData::loadStage(int stage)
 	case 5: // Carrega as demais texturas dos Huds
 		for(int i=0; i<NUMMENUHUDS; i++)
 		{
-			dataTxHuds[i] = _gerenciadorVideo->getTexture(textureHudFile[i]);
+			dataTxHuds[i] = _gerenciadorVideo->getTexture(pathTextureHud[i]);
 			_dataLoaded++;
 			porcentagem = _dataLoaded/_totalLoading*100.0f;
 		}	          

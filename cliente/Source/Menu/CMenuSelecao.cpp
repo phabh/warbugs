@@ -10,13 +10,15 @@ CMenuSelecao::CMenuSelecao()
 
 bool CMenuSelecao::start(CGameCore *gameCore)
 {
-	gameCore->getAllManagers(_dispGrafico, _dispAudio, _gerEventos, _gerCena, _gerVideo, _gerHud, _gameConfig);
+	_gameCore = gameCore;
 
-	gameCore->loadGameScene(pathArquivoCena[MC_SELECAO]);
+	_gameCore->getAllManagers(_dispGrafico, _dispAudio, _gerEventos, _gerCena, _gerVideo, _gerHud, _gameConfig);
+
+	_gameCore->loadGameScene(pathArquivoCena[MC_SELECAO]);
 
 	_menuCamera = gameCore->createCamera( vector3df(0,0,0), vector3df(0,0,100), vector3df(0,0,0), 0, 179.0f/*true*/, true);
 
-	gameCore->playMusic(pathBackgroundSound[MM_SELECAO]);
+	_gameCore->playMusic(pathBackgroundSound[MM_SELECAO]);
 
 	_myID = _nextID = MN_SELECAOPERSONAGEM;
 
@@ -27,6 +29,47 @@ bool CMenuSelecao::start(CGameCore *gameCore)
 	_idPersonagem = -1;
 	_camRotation = 0;
 	_camCurrRotation = 0;
+
+	_gameCore->enviarPacote(PERSONAGENS_REQUEST, _gameCore->_meuLoginID);
+	_gameCore->receberPacote();
+
+	if(_gameCore->_nSlotChars > 0)
+	{
+		for(int i=0; i<_gameCore->_nSlotChars; i++)
+		{
+			_gameCore->_personagem[i] = _gerCena->addAnimatedMeshSceneNode(_gerCena->getMesh(pathCharsModels[_gameCore->_vectPersonagem[i]._idModelo]), 0, _gameCore->_vectPersonagem[i]._id );
+
+			_gameCore->_personagem[i]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+
+			//_toonShader->apply(_gameCore->_personagem[i], pathTextureModels[_gameCore->_vectPersonagem[i]._idTextura]);
+
+			switch (i)
+			{
+
+			case 1:
+				_gameCore->_personagem[i]->setPosition(vector3df(0,0,50));
+				_gameCore->_personagem[i]->setRotation(vector3df(0,0,0));
+				break;
+
+			case 2:
+				_gameCore->_personagem[i]->setPosition(vector3df(50,0,0));
+				_gameCore->_personagem[i]->setRotation(vector3df(0,90,0));
+				break;
+
+			case 3:
+				_gameCore->_personagem[i]->setPosition(vector3df(0,0,-50));
+				_gameCore->_personagem[i]->setRotation(vector3df(0,180,0));
+				break;
+
+			case 4:
+				_gameCore->_personagem[i]->setPosition(vector3df(-50,0,0));
+				_gameCore->_personagem[i]->setRotation(vector3df(0,270,0));
+				break;
+			}
+		}
+	}
+	else
+		_nextID = MN_CRIACAOPERSONAGEM;
 
 	return true;
 }
@@ -41,12 +84,10 @@ void CMenuSelecao::graphicsDrawAddOn()
 
 void CMenuSelecao::updateHuds()
 {
-
 	_gerHud->clear();
 
 	_gerHud->addButton(rect<s32>(440,500,540,540), 0, 3, L"Criar");
 
-	//if(_flags[OBJSELECTED])
 	_gerHud->addButton(rect<s32>(320,500,430,540), 0, 4, L"Jogar");
 
 	_gerHud->addButton(rect<s32>(140,10,240,50), 0, 5, L"<");
@@ -85,14 +126,12 @@ void CMenuSelecao::readCommands()
 			_camRotation+=90;
 			if(_camRotation > 360.0)
 				_camRotation -= 360.0;
-			//cout << "\n" << _camRotation;
 			break;
 
 		case 6:
 			_camRotation-=90;
 			if(_camRotation < 0.0)
 				_camRotation += 360.0;
-			//cout << "\n" << _camRotation;
 			break;
 
 		default:

@@ -34,7 +34,7 @@ class CBugMessage
 		char  * read(int s);
 		char    readByte(void);
 		short   readShort(void);
-		long    readLong(void);
+		int    readInt(void);
 		float   readFloat(void);
 		char  * readString(void);
 

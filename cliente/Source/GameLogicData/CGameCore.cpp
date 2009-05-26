@@ -8,6 +8,8 @@ CGameCore::CGameCore(int &startInit)
 
 	_connected = false;
 
+	_meuLoginID = -1;
+
 	_particleCount = 0;
 
 	strcpy(_myLogin, "");
@@ -88,7 +90,7 @@ IParticleSystemSceneNode* CGameCore::addPaticleNode(TypeParticle tipo, int tempo
 	case P_FOGO:
 
 		ps = _gerenciadorCena->addParticleSystemSceneNode(false);
- 
+
 		IParticleEmitter* emissor = ps->createBoxEmitter(
 			aabbox3d<f32>(-7, 0, -7, 7, 1, 7), // tamanho do box do emissor
 			vector3df(0.0f, 0.06f, 0.0f),      // direção inicial
@@ -113,7 +115,7 @@ IParticleSystemSceneNode* CGameCore::addPaticleNode(TypeParticle tipo, int tempo
 		ps->setMaterialFlag(EMF_ZWRITE_ENABLE, false);
 		ps->setMaterialTexture(0, _gerenciadorVideo->getTexture(pathParticleImage[P_FOGO]));
 		ps->setMaterialType(EMT_TRANSPARENT_VERTEX_ALPHA);
-		
+
 		ps->setID(_particleCount); 
 		_listaParticulas->addElement(ps, _particleCount);
 		_particleCount++;
@@ -234,9 +236,7 @@ void CGameCore::loadGameData()
 //-----------------------------------------------------------------------------------------------------------------
 
 bool CGameCore::conectar(char *login, char *password)
-{/*
-	char idPackage;
-
+{
 	strcpy(_myLogin, "");
 	strcpy(_myPassword, "");
 
@@ -250,6 +250,8 @@ bool CGameCore::conectar(char *login, char *password)
 	{
 		_gameSocket = new CBugSocketClient(SERVERHOST, SERVERPORT);
 
+		enviarPacote(LOGIN_REQUEST, _myLogin, _myPassword);
+		/*
 		// Monta pacote
 		_packageToSend.writeByte(LOGIN_REQUEST); // ID do pacote: LOGIN_REQUEST
 		_packageToSend.writeString(_myLogin);      // Param1: login
@@ -257,7 +259,10 @@ bool CGameCore::conectar(char *login, char *password)
 
 		// Envia pacote montado
 		_gameSocket->SendLine(_packageToSend);
+*/
 
+		receberPacote();
+		/*
 		// Recebe pacote de resposta
 		_gameSocket->ReceiveLine(_packageReceived);
 
@@ -307,15 +312,15 @@ bool CGameCore::conectar(char *login, char *password)
 			_gameSocket->SendLine(_packageToSend);
 			_gameSocket->Close();
 			_connected = false;
-		}
+		}*/
 	}
 	catch(...)
 	{
 		_connected = false;
 		cout << "\nNão foi possivel encontrar o servidor." << endl;
-	}*/
+	}
 
-	_connected = true; //retirar
+	//_connected = true; //retirar
 	return _connected;
 }
 
@@ -326,11 +331,30 @@ bool CGameCore::isConnected()
 	return _connected;
 }
 
+//--------------------------------------------------------------------------------------
+
+int CGameCore::getNSlotChars()
+{
+	return _nSlotChars;
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CGameCore::enviarPacote(int packageID)
+{
+	_packageToSend.init(_dataToSend, sizeof(_dataToSend));
+	_packageToSend.clear();
+
+	_packageToSend.writeByte(packageID);
+
+	_gameSocket->SendLine(_packageToSend);
+}
 //-----------------------------------------------------------------------------------------------------------------
 
 void CGameCore::enviarPacote(int packageID, int i1)
 {
 	_packageToSend.init(_dataToSend, sizeof(_dataToSend));
+	_packageToSend.clear();
 
 	_packageToSend.writeByte(packageID);
 	_packageToSend.writeLong(i1);
@@ -343,6 +367,7 @@ void CGameCore::enviarPacote(int packageID, int i1)
 void CGameCore::enviarPacote(int packageID, int i1, int i2)
 {
 	_packageToSend.init(_dataToSend, sizeof(_dataToSend));
+	_packageToSend.clear();
 
 	_packageToSend.writeByte(packageID);
 	_packageToSend.writeLong(i1);
@@ -356,6 +381,7 @@ void CGameCore::enviarPacote(int packageID, int i1, int i2)
 void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3)
 {
 	_packageToSend.init(_dataToSend, sizeof(_dataToSend));
+	_packageToSend.clear();
 
 	_packageToSend.writeByte(packageID);
 	_packageToSend.writeLong(i1);
@@ -370,6 +396,7 @@ void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3)
 void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, int i4)
 {
 	_packageToSend.init(_dataToSend, sizeof(_dataToSend));
+	_packageToSend.clear();
 
 	_packageToSend.writeByte(packageID);
 	_packageToSend.writeLong(i1);
@@ -385,6 +412,7 @@ void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, int i4)
 void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, int i4, int i5, int i6)
 {
 	_packageToSend.init(_dataToSend, sizeof(_dataToSend));
+	_packageToSend.clear();
 
 	_packageToSend.writeByte(packageID);
 	_packageToSend.writeLong(i1);
@@ -402,6 +430,7 @@ void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, int i4, int 
 void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9)
 {
 	_packageToSend.init(_dataToSend, sizeof(_dataToSend));
+	_packageToSend.clear();
 
 	_packageToSend.writeByte(packageID);
 	_packageToSend.writeLong(i1);
@@ -422,6 +451,7 @@ void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, int i4, int 
 void CGameCore::enviarPacote(int packageID, int i1, char *s1)
 {
 	_packageToSend.init(_dataToSend, sizeof(_dataToSend));
+	_packageToSend.clear();
 
 	_packageToSend.writeByte(packageID);
 	_packageToSend.writeLong(i1);
@@ -435,6 +465,7 @@ void CGameCore::enviarPacote(int packageID, int i1, char *s1)
 void CGameCore::enviarPacote(int packageID, int i1, float f1, float f2)
 {
 	_packageToSend.init(_dataToSend, sizeof(_dataToSend));
+	_packageToSend.clear();
 
 	_packageToSend.writeByte(packageID);
 	_packageToSend.writeLong(i1);
@@ -449,6 +480,7 @@ void CGameCore::enviarPacote(int packageID, int i1, float f1, float f2)
 void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, float f1, float f2)
 {
 	_packageToSend.init(_dataToSend, sizeof(_dataToSend));
+	_packageToSend.clear();
 
 	_packageToSend.writeByte(packageID);
 	_packageToSend.writeLong(i1);
@@ -465,6 +497,7 @@ void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, float f1, fl
 void CGameCore::enviarPacote(int packageID, char *s1, char *s2)
 {
 	_packageToSend.init(_dataToSend, sizeof(_dataToSend));
+	_packageToSend.clear();
 
 	_packageToSend.writeByte(packageID);
 	_packageToSend.writeString(s1);
@@ -474,3 +507,96 @@ void CGameCore::enviarPacote(int packageID, char *s1, char *s2)
 }
 
 //-----------------------------------------------------------------------------------------------------------------
+
+void CGameCore::receberPacote()
+{
+	//int numPers;
+
+	_packageReceived.clear();
+	_gameSocket->ReceiveLine(_packageReceived);
+
+	if(_packageReceived.getSize() != 0)
+	{
+		_packageReceived.beginReading();
+
+		switch(_packageReceived.readByte())
+		{
+
+		case SHOW_PERSONAGENS:
+
+			_nSlotChars = _packageReceived.readInt(); // número de personagens cadastrados
+
+			for(int i=0; i<_nSlotChars; i++)
+			{
+				_vectPersonagem[i]._id = _packageReceived.readInt();
+				_vectPersonagem[i]._nome = _packageReceived.readString();
+				_vectPersonagem[i]._nivel = _packageReceived.readInt();
+
+				_vectPersonagem[i]._agilidade = _packageReceived.readInt();
+				_vectPersonagem[i]._destreza = _packageReceived.readInt();
+				_vectPersonagem[i]._forca = _packageReceived.readInt();
+				_vectPersonagem[i]._instinto = _packageReceived.readInt();
+				_vectPersonagem[i]._resistencia = _packageReceived.readInt();
+
+				_vectPersonagem[i]._taxaAtaque = _packageReceived.readInt();
+				_vectPersonagem[i]._tempoCarga = _packageReceived.readInt();
+				_vectPersonagem[i]._defesa = _packageReceived.readInt();
+				_vectPersonagem[i]._ataqueCorporal = _packageReceived.readInt();
+				_vectPersonagem[i]._danoCorporal = _packageReceived.readInt();
+				_vectPersonagem[i]._raioAtaque = _packageReceived.readInt();
+				_vectPersonagem[i]._raioDano = _packageReceived.readInt();
+
+				_vectPersonagem[i]._idModelo = _packageReceived.readInt();
+				_vectPersonagem[i]._idTextura = _packageReceived.readInt();
+				_vectPersonagem[i]._idHud = _packageReceived.readInt();
+			}
+			break;
+
+		case LOGIN_OK:
+
+			_meuLoginID = _packageReceived.readInt();
+			cout << "\nConectado." << endl;
+			_connected = true;
+		break;
+
+		case  LOGIN_FAIL:
+
+				cout << "\nFalha ao conectar. Verificar login e senha." << endl;
+				enviarPacote(DISCONNECT);
+/*
+				_packageToSend.init(_dataToSend, PACKAGESIZE);
+				_packageToSend.writeByte(0);
+				_gameSocket->SendLine(_packageToSend);*/
+				_gameSocket->Close();
+				_connected = false;
+
+				break;
+
+		default:
+
+			// Erro desconhecido
+
+				cout << "\nMensagem inesperada do servidor" << endl;
+				enviarPacote(DISCONNECT);
+				/*
+				_packageToSend.init(_dataToSend, PACKAGESIZE);
+				_packageToSend.writeByte(0);
+				_gameSocket->SendLine(_packageToSend);*/
+				_gameSocket->Close();
+				_connected = false;
+		
+		};
+	}
+	else
+	{
+
+			cout << "\nMensagem vazia do servidor" << endl;
+			enviarPacote(DISCONNECT);/*
+			_packageToSend.init(_dataToSend, PACKAGESIZE);
+			_packageToSend.writeByte(0);
+			_gameSocket->SendLine(_packageToSend);*/
+			_gameSocket->Close();
+			_connected = false;
+
+	}
+}

@@ -1,6 +1,5 @@
 #pragma once
 
-//#include "Irrlicht.h"
 #include "GameSetup.h"
 #include "CDoubleList.h"
 #include "CPersonagem.h"

@@ -15,7 +15,32 @@
 #include "CGameData.h"
 #include "CGameLogic.h"
 
-#include "CToonShader.cpp"
+#include "CToonShader.h"
+
+struct SPersonagemSelecao
+{
+	int _id;
+	char *_nome;
+	int _nivel;
+
+	int _agilidade;
+	int _destreza;
+	int _forca;
+	int _instinto;
+	int _resistencia;
+
+	int _taxaAtaque;
+	int _tempoCarga;
+	int _defesa;
+	int _ataqueCorporal;
+	int _danoCorporal;
+	int _raioAtaque;
+	int _raioDano;
+
+	int _idModelo;
+	int _idTextura;
+	int _idHud;
+};
 
 class CGameCore
 {
@@ -60,11 +85,19 @@ private:
 	char _myLogin[15],
 		_myPassword[15];
 
+
+
 	bool _connected; // Identifica se o cliente está conectado ao servidor
 
 	int _particleCount;
 
 public:
+
+	int _nSlotChars;
+	int _meuLoginID;
+
+	SPersonagemSelecao _vectPersonagem[MAXSLOTPERSONAGEM];
+	IAnimatedMeshSceneNode *_personagem[MAXSLOTPERSONAGEM];
 
 	CGameCore(int &startInit);
 
@@ -83,6 +116,7 @@ public:
 	IParticleSystemSceneNode* addPaticleNode(TypeParticle tipo, int tempoVida, vector3df posicao, vector3df escala);
 	
 	void loadMenuScene(c8 *sceneFile);
+	int getNSlotChars();
 
 	void loadGameScene(c8 *sceneFile);
 
@@ -90,9 +124,9 @@ public:
 
 	bool conectar(char *login, char *password);
 
-	CBugMessage *receberPacote();
 	bool isConnected();
 
+	void enviarPacote(int packageID);
 	void enviarPacote(int packageID, int i1);
 	void enviarPacote(int packageID, int i1, int i2);
 	void enviarPacote(int packageID, int i1, int i2, int i3);
@@ -104,5 +138,5 @@ public:
 	void enviarPacote(int packageID, int i1, int i2, int i3, float f1, float f2);
 	void enviarPacote(int packageID, char *s1, char *s2);
 
-
+	void receberPacote();
 };
