@@ -3840,13 +3840,14 @@ CCenarioList * CDataManager::getListCenario()
 		CPeopleList * listaInimigos   = &getPersonagem( SOLDADO, ALLRACE, idcenario);
 		CPeopleList * listaPersonagem = new CPeopleList();
 		CPeopleList * listaNPC		  = new CPeopleList();
+		CPeopleList * listaVendedores = new CPeopleList();
 		CBolsaList * listaBolsas      = getListBolsa(idcenario);
 		CPortal * portalSul           = getPortal(idcenario,SUL);
 		CPortal * portalNorte		  = getPortal(idcenario,NORTE);
 		CPortal * portalOeste		  = getPortal(idcenario,OESTE);
 		CPortal * portalLeste		  = getPortal(idcenario,LESTE);
 
-		cenarioTemp = new CCenario(idcenario, listaPersonagem, listaInimigos, listaNPC, listaBolsas, portalNorte, portalSul, portalOeste, portalLeste);
+		cenarioTemp = new CCenario(idcenario, listaPersonagem, listaInimigos, listaNPC, listaVendedores, listaBolsas, portalNorte, portalSul, portalOeste, portalLeste);
 
 		listCenario->addCenario(cenarioTemp);
 

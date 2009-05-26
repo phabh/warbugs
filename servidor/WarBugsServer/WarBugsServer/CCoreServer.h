@@ -38,7 +38,7 @@ ref class CFrame
 			_data   = new char[1400];
 			_message = new CBugMessage();
 			_message->init(_data,1400);
-			strcpy(_message->_data,  mes._data);
+			memcpy(_message->_data,  mes._data, mes.getSize());
 			_message->setSize(mes.getSize());
 			_message->beginReading();
 			for(int i = 0; i < mes.getSize(); i++)
@@ -82,8 +82,6 @@ ref class CCoreServer
 		void            updateAll();
 
 		void			sendAllMessages();
-
-		void            verificaPlayers();
 
 	//	void            addPlayer(CJogador * jogador);
 	//	void			removePlayer(int idJogador);
