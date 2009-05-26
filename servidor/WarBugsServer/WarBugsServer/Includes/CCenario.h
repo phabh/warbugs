@@ -18,14 +18,17 @@ class CInimigo;
 #endif
 #include "CNPC.h"
 #include "CPortal.h"
+#include "CVendedor.h"
 
 #define _CCENARIO_H_
 class CCenario : public C3DObject
 {
 private:
+	CObjectCount *_contador;
 	CPeopleList *_jogadores;//Lista de personagens
 	CPeopleList *_inimigos;
 	CPeopleList *_npcs;
+	CPeopleList *_vendedores;
 	CBolsaList *_itens;//Lista de itens
 	CPortal *_saidaNorte;
 	CPortal *_saidaSul;
@@ -33,7 +36,7 @@ private:
 	CPortal *_saidaRight;
 public:
 
-	CCenario(int ID, CPeopleList *players, CPeopleList *monsters, CPeopleList *npcs, CBolsaList *bolsa, CPortal *saidaNorte, CPortal *saidaSul, CPortal *saidaLeft, CPortal *saidaRight);
+	CCenario(int ID, CPeopleList *players, CPeopleList *monsters, CPeopleList *npcs, CPeopleList *vendedores, CBolsaList *bolsa, CPortal *saidaNorte, CPortal *saidaSul, CPortal *saidaLeft, CPortal *saidaRight);
 	void enterScene();
 	int personagemCount();
 	int itemCount();
@@ -41,10 +44,14 @@ public:
 	CInimigo *getMonster(int idInimigo);
 	CNPC *getNpc(int idNpc);
 	CBolsa *getBag(int idBag);
+	CVendedor *getVendedor(int idVendedor);
+
 	CPersonagemJogador *getPlayerAt(int idJogador);
 	CInimigo *getMonsterAt(int idInimigo);
 	CNPC *getNpcAt(int idNpc);
 	CBolsa *getBagAt(int idBag);
+	CVendedor *getVendedorAt(int idVendedor);
+
 	CPortal *getExit(Direcoes idPortal);
 
 	void setExit(CPortal *newExit, Direcoes idPortal);
@@ -53,10 +60,13 @@ public:
 	void addMonster(CPersonagem *inimigo);
 	void addNpc(CPersonagem *npc);
 	void addBag(CBolsa *bolsa);
+	void addVendedor(CVendedor *vendedor);
 
 	CPersonagemJogador *removePlayer(int idJogador);
 	CInimigo *removeMonster(int idInimigo);
 	CNPC *removeNPC(int idNPC);
+	CBolsa *removeBag(int idBag);
+	CVendedor *removeVendedor(int idVendedor);
 
 	void update();
 };

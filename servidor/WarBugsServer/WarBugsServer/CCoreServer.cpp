@@ -101,7 +101,7 @@ void CCoreServer::readPackets()
 						//se fez login
 						if(_dataManager->doLogin(login,senha,*tempJogador))
 						{
-							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN_OK);
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN_OK,tempJogador->getID());
 							tempJogador->setSocket(_playersList->getElementAt(indexJogador)->getSocket());
 							_playersList->removeJogadorByPosition(indexJogador);
 							_playersList->addJogador(tempJogador);
@@ -112,8 +112,6 @@ void CCoreServer::readPackets()
 
 						}
 
-						//sendMessagesFrame(_playersList);
-
 						break;
 					}
 				case PERSONAGENS_REQUEST:  //ID PESSOA
@@ -121,11 +119,11 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int idJogador = mesRecebida.readLong();
+						int idJogador = mesRecebida.readInt();
 						
 						CPeopleList * tempList = &_dataManager->getPersonagemJogador(idJogador);
 
-						if(tempList != NULL)
+						if(tempList->size() > 0)
 						{
 							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOW_PERSONAGENS,tempList->size(),tempList);
 						}
@@ -141,8 +139,8 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idJogador = mesRecebida.readLong();
-						int    idRaca	 = mesRecebida.readLong();
+						int    idJogador = mesRecebida.readInt();
+						int    idRaca	 = mesRecebida.readInt();
 						char   nome[15];
 						strcpy(nome,mesRecebida.readString());
 						
@@ -172,7 +170,7 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida.readLong();		
+						int    idPersonagem = mesRecebida.readInt();		
 
 						break;
 					}
@@ -181,7 +179,7 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida.readLong();
+						int    idPersonagem = mesRecebida.readInt();
 						float  posX = mesRecebida.readFloat();
 						float  posZ = mesRecebida.readFloat();
 
@@ -194,8 +192,8 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida.readLong();
-						int    estado       = mesRecebida.readLong();
+						int    idPersonagem = mesRecebida.readInt();
+						int    estado       = mesRecebida.readInt();
 
 						_playersList->getElementAt(indexJogador)->getCharacter()->setState((EstadoPersonagem)estado);
 
@@ -206,9 +204,9 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida.readLong();
-						int    idAlvo       = mesRecebida.readLong();
-						int    idAtaque     = mesRecebida.readLong();
+						int    idPersonagem = mesRecebida.readInt();
+						int    idAlvo       = mesRecebida.readInt();
+						int    idAtaque     = mesRecebida.readInt();
 						float  posX         = mesRecebida.readFloat();
 						float  posZ         = mesRecebida.readFloat();
 
@@ -234,9 +232,9 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida.readLong();
-						int    idItem       = mesRecebida.readLong();
-						int    dinheiro     = mesRecebida.readLong();
+						int    idPersonagem = mesRecebida.readInt();
+						int    idItem       = mesRecebida.readInt();
+						int    dinheiro     = mesRecebida.readInt();
 
 						
 
@@ -247,8 +245,8 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida.readLong();
-						int    idItem       = mesRecebida.readLong();
+						int    idPersonagem = mesRecebida.readInt();
+						int    idItem       = mesRecebida.readInt();
 
 						CItem * tempItem = _playersList->getElementAt(indexJogador)->getCharacter()->getBolsa()->getItem(idItem);
 
@@ -261,8 +259,8 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida.readLong();
-						int    idItem       = mesRecebida.readLong();
+						int    idPersonagem = mesRecebida.readInt();
+						int    idItem       = mesRecebida.readInt();
 
 						CItem * tempItem = _playersList->getElementAt(indexJogador)->getCharacter()->getBolsa()->getItem(idItem);
 						CBolsa * tempBolsa = new CBolsa();
@@ -277,8 +275,8 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idBolsa		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida.readInt();
+						int    idBolsa		= mesRecebida.readInt();
 
 						_playersList->getElementAt(indexJogador)->getScene()->getBag(idBolsa);
 
@@ -289,7 +287,7 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idBolsa		= mesRecebida.readLong();
+						int    idBolsa		= mesRecebida.readInt();
 
 
 						break;
@@ -299,9 +297,9 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idBolsa		= mesRecebida.readLong();
-						int    idItem		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida.readInt();
+						int    idBolsa		= mesRecebida.readInt();
+						int    idItem		= mesRecebida.readInt();
 
 
 						break;
@@ -311,8 +309,8 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idBolsa		= mesRecebida.readLong();
-						int    idItem		= mesRecebida.readLong();
+						int    idBolsa		= mesRecebida.readInt();
+						int    idItem		= mesRecebida.readInt();
 
 
 						break;
@@ -322,9 +320,9 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idArma		= mesRecebida.readLong();
-						int    idArmadura	= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida.readInt();
+						int    idArma		= mesRecebida.readInt();
+						int    idArmadura	= mesRecebida.readInt();
 
 
 						break;
@@ -334,8 +332,8 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idAlvo		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida.readInt();
+						int    idAlvo		= mesRecebida.readInt();
 
 
 						break;
@@ -346,7 +344,7 @@ void CCoreServer::readPackets()
 						mesRecebida.readByte();
 
 						//-1 para todos
-						int    idPersonagem	= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida.readInt();
 						char * mensagem     = mesRecebida.readString();
 
 
@@ -357,9 +355,9 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idAlvo		= mesRecebida.readLong();
-						int    idShot		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida.readInt();
+						int    idAlvo		= mesRecebida.readInt();
+						int    idShot		= mesRecebida.readInt();
 						float  posX			= mesRecebida.readFloat();
 						float  posZ			= mesRecebida.readFloat();
 
@@ -371,7 +369,7 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida.readInt();
 
 
 						break;
@@ -381,15 +379,15 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    agilidade	= mesRecebida.readLong();
-						int    destreza		= mesRecebida.readLong();
-						int    forca		= mesRecebida.readLong();
-						int    instinto		= mesRecebida.readLong();
-						int    resistencia  = mesRecebida.readLong();
-						int    poder1		= mesRecebida.readLong();
-						int    poder2		= mesRecebida.readLong();
-						int    poder3		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida.readInt();
+						int    agilidade	= mesRecebida.readInt();
+						int    destreza		= mesRecebida.readInt();
+						int    forca		= mesRecebida.readInt();
+						int    instinto		= mesRecebida.readInt();
+						int    resistencia  = mesRecebida.readInt();
+						int    poder1		= mesRecebida.readInt();
+						int    poder2		= mesRecebida.readInt();
+						int    poder3		= mesRecebida.readInt();
 
 
 						break;
@@ -399,8 +397,8 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idQuest		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida.readInt();
+						int    idQuest		= mesRecebida.readInt();
 
 
 						break;
@@ -410,8 +408,8 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idNPC		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida.readInt();
+						int    idNPC		= mesRecebida.readInt();
 
 
 						break;
@@ -421,9 +419,9 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idNPC		= mesRecebida.readLong();
-						int    idItem		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida.readInt();
+						int    idNPC		= mesRecebida.readInt();
+						int    idItem		= mesRecebida.readInt();
 
 
 						break;
@@ -433,9 +431,9 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idNPC		= mesRecebida.readLong();
-						int    idItem		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida.readInt();
+						int    idNPC		= mesRecebida.readInt();
+						int    idItem		= mesRecebida.readInt();
 
 
 						break;
@@ -445,10 +443,10 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida.readLong();
-						int    idNPC		= mesRecebida.readLong();
-						int    idItem		= mesRecebida.readLong();
-						int    preco		= mesRecebida.readLong();
+						int    idPersonagem	= mesRecebida.readInt();
+						int    idNPC		= mesRecebida.readInt();
+						int    idItem		= mesRecebida.readInt();
+						int    preco		= mesRecebida.readInt();
 
 						
 						
@@ -459,8 +457,8 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int idPersonagem1 = mesRecebida.readLong();
-						int idPersonagem2 = mesRecebida.readLong();
+						int idPersonagem1 = mesRecebida.readInt();
+						int idPersonagem2 = mesRecebida.readInt();
 						
 						//CPersonagemJogador * tempPers = _playersList->getElementAt(indexJogador)->getScene()->
 
@@ -533,7 +531,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 	mes.init(data,sizeof(data));
 
 	mes.writeByte(idMensagem);
-	mes.writeLong(i1);
+	mes.writeInt(i1);
 	mes.writeFloat(f1);
 	mes.writeFloat(f2);
 
@@ -811,14 +809,14 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino,  
 
 	mes.writeByte(idMensagem);
 
-	mes.writeLong(p1->getID());
+	mes.writeInt(p1->getID());
 	mes.writeString(nome);
 	mes.writeFloat(p1->getPosition()->x);
 	mes.writeFloat(p1->getPosition()->z);
-	mes.writeLong(p1->getStats()->getPV());
-	mes.writeLong(p1->getStats()->getPM());
-	mes.writeLong(p1->getStats()->getMaxPV());
-	mes.writeLong(p1->getStats()->getMaxPM());
+	mes.writeInt(p1->getStats()->getPV());
+	mes.writeInt(p1->getStats()->getPM());
+	mes.writeInt(p1->getStats()->getMaxPV());
+	mes.writeInt(p1->getStats()->getMaxPM());
 	
 	//	AKI VAI TER QUE PREENCHER OS BUFFS CONFORME FOR, OLHA AE EDER
 	
@@ -858,11 +856,11 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino,  
 	//	END BUFF
 	
 
-	mes.writeLong(p1->getState());
-	mes.writeLong(race);
-	mes.writeLong(tipoClasse);
-	mes.writeLong(idWeapon);
-	mes.writeLong(idArmor);
+	mes.writeInt(p1->getState());
+	mes.writeInt(race);
+	mes.writeInt(tipoClasse);
+	mes.writeInt(idWeapon);
+	mes.writeInt(idArmor);
 	mes.writeFloat(p1->getDirection());
 	mes.writeFloat(p1->getMoveSpeed());
 
@@ -880,33 +878,33 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 	mes.writeByte(idMensagem);
 
-	mes.writeLong(i1);
+	mes.writeInt(i1);
 
 	for(int j = 0; j < i1; j++)
 	{
 		CPersonagemJogador * personagem = (CPersonagemJogador *)p1->getElementAt(j);
 		//Dados pessoais
-		mes.writeLong(personagem->getID());
+		mes.writeInt(personagem->getID());
 		mes.writeString(personagem->getName());
-		mes.writeLong(personagem->getLevel());
+		mes.writeInt(personagem->getLevel());
 		//Habilidades Primárias
-		mes.writeLong(personagem->getAGI());
-		mes.writeLong(personagem->getDES());
-		mes.writeLong(personagem->getFOR());
-		mes.writeLong(personagem->getINS());
-		mes.writeLong(personagem->getRES());
+		mes.writeInt(personagem->getAGI());
+		mes.writeInt(personagem->getDES());
+		mes.writeInt(personagem->getFOR());
+		mes.writeInt(personagem->getINS());
+		mes.writeInt(personagem->getRES());
 		//Habilidades Secundárias
-		mes.writeLong(personagem->getStats()->getAttackRate());
-		mes.writeLong(personagem->getStats()->getChargeTime());
-		mes.writeLong(personagem->getStats()->getDefense());
-		mes.writeLong(personagem->getStats()->getMeleeAttack());
-		mes.writeLong(personagem->getStats()->getMeleeDamage());
-		mes.writeLong(personagem->getStats()->getRangedAttack());
-		mes.writeLong(personagem->getStats()->getRangedDamage());
+		mes.writeInt(personagem->getStats()->getAttackRate());
+		mes.writeInt(personagem->getStats()->getChargeTime());
+		mes.writeInt(personagem->getStats()->getDefense());
+		mes.writeInt(personagem->getStats()->getMeleeAttack());
+		mes.writeInt(personagem->getStats()->getMeleeDamage());
+		mes.writeInt(personagem->getStats()->getRangedAttack());
+		mes.writeInt(personagem->getStats()->getRangedDamage());
 		//3D
-		mes.writeLong(personagem->getModel());
-		mes.writeLong(personagem->get3DTexture());
-		mes.writeLong(personagem->get2DTexture());
+		mes.writeInt(personagem->getModel());
+		mes.writeInt(personagem->get3DTexture());
+		mes.writeInt(personagem->get2DTexture());
 	}
 
 	sendMessage(toAll, idCenario, destino, mes);	
@@ -921,8 +919,8 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 	mes.writeByte(idMensagem);
 
-	mes.writeLong(i1);
-	mes.writeLong(i2);
+	mes.writeInt(i1);
+	mes.writeInt(i2);
 	mes.writeFloat(f1);
 	mes.writeFloat(f2);
 
@@ -937,16 +935,16 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 	mes.writeByte(idMensagem);
 
-	mes.writeLong(i1);
-	mes.writeLong(i2);
-	mes.writeLong(i3);
-	mes.writeLong(i4);
-	mes.writeLong(i5);
-	mes.writeLong(i6);
-	mes.writeLong(i7);
-	mes.writeLong(i8);
-	mes.writeLong(i9);
-	mes.writeLong(i10);
+	mes.writeInt(i1);
+	mes.writeInt(i2);
+	mes.writeInt(i3);
+	mes.writeInt(i4);
+	mes.writeInt(i5);
+	mes.writeInt(i6);
+	mes.writeInt(i7);
+	mes.writeInt(i8);
+	mes.writeInt(i9);
+	mes.writeInt(i10);
 
 	sendMessage(toAll, idCenario, destino, mes);
 }
@@ -958,8 +956,8 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 	mes.init(data,sizeof(data));
 
 	mes.writeByte(idMensagem);
-
-	mes.writeLong(i1);
+///
+	mes.writeInt(i1);
 
 	sendMessage(toAll, idCenario, destino, mes);
 }
@@ -972,8 +970,8 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 	mes.writeByte(idMensagem);
 
-	mes.writeLong(i1);
-	mes.writeLong(i2);
+	mes.writeInt(i1);
+	mes.writeInt(i2);
 
 	sendMessage(toAll, idCenario, destino, mes);
 }
@@ -986,9 +984,9 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 	mes.writeByte(idMensagem);
 
-	mes.writeLong(i1);
-	mes.writeLong(i2);
-	mes.writeLong(i3);
+	mes.writeInt(i1);
+	mes.writeInt(i2);
+	mes.writeInt(i3);
 
 	sendMessage(toAll, idCenario, destino, mes);
 }
@@ -1012,15 +1010,15 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 	mes.writeByte(idMensagem);
 
-	mes.writeLong(i1);
-	mes.writeLong(i2);
-	mes.writeLong(i3);
-	mes.writeLong(i4);
-	mes.writeLong(i5);
-	mes.writeLong(i6);
-	mes.writeLong(i7);
-	mes.writeLong(i8);
-	mes.writeLong(i9);
+	mes.writeInt(i1);
+	mes.writeInt(i2);
+	mes.writeInt(i3);
+	mes.writeInt(i4);
+	mes.writeInt(i5);
+	mes.writeInt(i6);
+	mes.writeInt(i7);
+	mes.writeInt(i8);
+	mes.writeInt(i9);
 	
 	sendMessage(toAll, idCenario, destino, mes);
 }
@@ -1033,12 +1031,12 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 	mes.writeByte(idMensagem);
 
-	mes.writeLong(i1);
-	mes.writeLong(i2);
-	mes.writeLong(i3);
-	mes.writeLong(i4);
-	mes.writeLong(i5);
-	mes.writeLong(i6);
+	mes.writeInt(i1);
+	mes.writeInt(i2);
+	mes.writeInt(i3);
+	mes.writeInt(i4);
+	mes.writeInt(i5);
+	mes.writeInt(i6);
 
 	sendMessage(toAll, idCenario, destino, mes);
 }
@@ -1066,12 +1064,12 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 	for(int i = 0; i < 30; i++)
 	{
-		mes.writeLong(v1[i]);
+		mes.writeInt(v1[i]);
 	}
 
 	for(int i = 0; i < 30; i++)
 	{
-		mes.writeLong(v2[i]);
+		mes.writeInt(v2[i]);
 	}
 
 	sendMessage(toAll, idCenario, destino, mes);
@@ -1131,18 +1129,3 @@ void CCoreServer::sendAllMessages()
 	sendMessagesFrame(_playersList);
 }
 
-void CCoreServer::verificaPlayers()
-{
-	for(int i = 0; i < _playersList->size(); i++)
-	{
-
-		try{
-			_playersList->getElementAt(i)->getSocket()->ReceiveBytes();
-		}
-		catch(...)
-		{
-				_playersList->removeJogadorByPosition(i);			
-		}
-	}
-
-}

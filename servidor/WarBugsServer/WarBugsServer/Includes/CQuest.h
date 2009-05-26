@@ -33,7 +33,7 @@ private:
 	int _recompensaXP;
 	CLealdade *_recompensaLealdade;
 public:
-	CQuest();
+	CQuest(CPersonagemJogador *jogador);
 
 	//Getters
 	CPersonagemJogador *getPlayer();
