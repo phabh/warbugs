@@ -45,6 +45,11 @@ static c8 *pathFonts[NUMHUDFONTS] =
 	"recursos/fonts/mplus8.xml",
 	"recursos/fonts/mplus12.xml" 
 };
+
+static c8 *pathParticleImage[NUMPARTICLETYPES] =
+{
+	"recursos/texturas/particulas/fire.bmp"
+};
 //-----------------------------------------------------------------------------------------
 // Nomes de arquivos
 
@@ -251,4 +256,22 @@ static c8 *textureHudFile[NUMMENUHUDS]=
 	"recursos/texturas/huds/tx2d_minimapa1on.png", 
 	"recursos/texturas/huds/tx2d_minimapa1off.png", 
 	"recursos/texturas/huds/tx2d_semente.png" 
+};
+
+static c8 *modelPropFile[NUMPROPS]=
+{ // Modelos 3d dos objetos estáticos do cenário
+	"recursos/modelos/prop3d_arvore.3ds",
+	"recursos/modelos/prop3d_arvore2.3ds",
+	"recursos/modelos/prop3d_skydome.3ds",
+	"recursos/modelos/prop3d_coluna.3ds",
+	"recursos/modelos/prop3d_cactus.3ds"
+};
+
+static c8 *texturePropFile[NUMPROPS]=
+{ // Modelos 3d dos objetos estáticos do cenário
+	"recursos/texturas/prop3d_arvore.png",
+	"recursos/texturas/prop3d_arvore2.png",
+	"recursos/texturas/prop3d_skydome.png",
+	"recursos/texturas/prop3d_coluna.png",
+	"recursos/texturas/prop3d_cactus.png"
 };

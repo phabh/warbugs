@@ -8,6 +8,8 @@ CGameCore::CGameCore(int &startInit)
 
 	_connected = false;
 
+	_particleCount = 0;
+
 	strcpy(_myLogin, "");
 	strcpy(_myPassword, "");
 
@@ -70,8 +72,57 @@ CGameCore::CGameCore(int &startInit)
 		//_gameSkin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_MENU);    // itens de menu
 		//_gameSkin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_TOOLTIP); // tooltips
 	}
+
+	_listaParticulas = new CListaParticulas();
 }
 
+//-----------------------------------------------------------------------------------------------------------------
+
+IParticleSystemSceneNode* CGameCore::addPaticleNode(TypeParticle tipo, int tempoVida, vector3df posicao, vector3df escala)
+{
+
+	IParticleSystemSceneNode* ps = NULL;
+
+	switch(tipo)
+	{
+	case P_FOGO:
+
+		ps = _gerenciadorCena->addParticleSystemSceneNode(false);
+ 
+		IParticleEmitter* emissor = ps->createBoxEmitter(
+			aabbox3d<f32>(-7, 0, -7, 7, 1, 7), // tamanho do box do emissor
+			vector3df(0.0f, 0.06f, 0.0f),      // direção inicial
+			80, 100,                           // taxa de emissão
+			SColor(0, 255, 255, 255),          // cor mais escura
+			SColor(0, 255, 255, 255),          // cor mais clara
+			(u32)tempoVida*0.4/*800*/, tempoVida/*2000*/, 0,                      // idade mínima, máxima e ângulo
+			dimension2df(10.f, 10.f),          // tamanho mínimo
+			dimension2df(20.f, 20.f));         // tamanho máximo
+
+		ps->setEmitter(emissor);
+		emissor->drop();
+
+		IParticleAffector* efeito = ps->createFadeOutParticleAffector();
+		ps->addAffector(efeito);
+		efeito->drop();
+
+		ps->setPosition(posicao);
+		ps->setScale(escala);
+
+		ps->setMaterialFlag(EMF_LIGHTING, false);
+		ps->setMaterialFlag(EMF_ZWRITE_ENABLE, false);
+		ps->setMaterialTexture(0, _gerenciadorVideo->getTexture(pathParticleImage[P_FOGO]));
+		ps->setMaterialType(EMT_TRANSPARENT_VERTEX_ALPHA);
+		
+		ps->setID(_particleCount); 
+		_listaParticulas->addElement(ps, _particleCount);
+		_particleCount++;
+
+		break;
+	};
+
+	return ps;
+}
 //-----------------------------------------------------------------------------------------------------------------
 
 void CGameCore::drop()
@@ -151,16 +202,16 @@ void CGameCore::loadGameScene(c8* sceneFile)
 ICameraSceneNode* CGameCore::createCamera( vector3df posicao, vector3df target, vector3df rotacao, ISceneNode *parent, float angulo/*bool isOrtogonal*/, bool bind)
 {
 	_gameCamera = _gerenciadorCena->addCameraSceneNode(parent, posicao, target);
-	
+
 	_gameCamera->bindTargetAndRotation(bind);
 
 	_gameCamera->setRotation(rotacao);
-/*
+	/*
 	if(angulo != 180.0f)
-		_gameCamera->setFOV(PI / ( 180.0f / (180.0f - angulo)));
+	_gameCamera->setFOV(PI / ( 180.0f / (180.0f - angulo)));
 	else
-		_gameCamera->setFOV(PI / ( 180.0f / (180.0f - 179.0f)));
-*/
+	_gameCamera->setFOV(PI / ( 180.0f / (180.0f - 179.0f)));
+	*/
 	return _gameCamera;
 }
 
@@ -183,7 +234,7 @@ void CGameCore::loadGameData()
 //-----------------------------------------------------------------------------------------------------------------
 
 bool CGameCore::conectar(char *login, char *password)
-{
+{/*
 	char idPackage;
 
 	strcpy(_myLogin, "");
@@ -262,8 +313,9 @@ bool CGameCore::conectar(char *login, char *password)
 	{
 		_connected = false;
 		cout << "\nNão foi possivel encontrar o servidor." << endl;
-	}
+	}*/
 
+	_connected = true; //retirar
 	return _connected;
 }
 

@@ -46,6 +46,7 @@ const int MAPMAXCOL  = 50;   // Número máximo de colunas por cenário
 const int TAMQUADRANTE = 44; // Tamanho de cada quadrante em pixels
 const int NUMCENARIOS = 10;  // Número de cenários no jogo
 const int NUMPROPS = 50; // Número de props do jogo (arvore, templos, flores, etc..)
+const int NUMPARTICLETYPES = 1; // Número de tipos de partículas (fogo, fumaça,...)
 
 // Bolsa
 const int BOLSAMAXITENS = 9; // Número máximo de itens na bolsa de um personagem
@@ -127,6 +128,9 @@ enum TypeMoon {LUANULL, LUABESOURO, LUAVESPA, LUAESCORPIAO, LUAARANHA, LUALOUVAA
 enum TypeTxScenes {TXCENA_0, TXCENA_1, TXCENA_2, TXCENA_3, TXCENA_4, TXCENA_5, TXCENA_6, TXCENA_7, TXCENA_BUMP, TXCENA_COUNT};
 
 enum TypeGameScene {GAMESCENE_01, GAMESCENE_02, GAMESCENE_03, GAMESCENE_04, GAMESCENE_05, GAMESCENE_06, GAMESCENE_07, GAMESCENE_08, GAMESCENE_09, GAMESCENE_10};
+
+enum TypeParticle {P_FOGO};
+
 
 // Personagem
 enum TypeRaceChars {NONERACE, ALLRACE, ARANHA, BESOURO, ESCORPIAO, LOUVADEUS, VESPA, CUPIM, FORMIGA, BARBEIRO, BARATA, TATUBOLINHA, LIBELULA, PERCEVEJO, ABELHA, LAGARTIXA, CALANGO, SAPO, JOANINHA, CAMALEAO};

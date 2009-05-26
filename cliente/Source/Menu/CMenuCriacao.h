@@ -10,6 +10,7 @@ private:
 	ICameraSceneNode *_menuCamera;
 	ISceneNode *_nodoSelecionado;
 	int _idPersonagem;
+	IParticleSystemSceneNode *_particula[RACASMAX];
 
 	void graphicsDrawAddOn();
 	void updateHuds();
@@ -20,5 +21,4 @@ public:
 
 	CMenuCriacao();
 	bool start(CGameCore *gameCore);
-
 };
