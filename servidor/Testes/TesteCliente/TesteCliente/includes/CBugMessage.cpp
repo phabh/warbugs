@@ -193,9 +193,9 @@ short CBugMessage::readShort(void)
 	Lê um long do vetor e atualiza a posição de leitura
 	@return -> o long lido
 */
-long CBugMessage::readLong(void)
+int CBugMessage::readInt(void)
 {
-	long c = -1;
+	int c = -1;
 
 	if(_readCount+4 <= _size)
 		memcpy(&c, &_data[_readCount], 4);

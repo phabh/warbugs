@@ -9,64 +9,59 @@ using namespace std;
 enum TYPE_MESSAGE 
 {
 	//MENSAGENS RECEBIDAS
-	LOGIN = 33,
+	LOGIN_OK = 33, // se o login foi OK
+	LOGIN_FAIL, //se o login falhou por algum motivo
 	SHOW_PERSONAGENS, //QTD PERSONAGENS QUE O JOGADOR POSSUI, E OS PERSONAGENS
-	ENTER_CENARIO,//id cenario, POSICAO X, POSICAO Z
-	MOVE_PLAYER, //id jogador, POSICAO X, POSICAO Z
+	CREATE_PLAYER_OK, //o player foi criado com sucesso
+	CREATE_PLAYER_FAIL, //não foi possível criar o player
+	ENTER_CENARIO,//id cenario, POSICAO X, POSICAO Z, qtd Inimigos, qtdNPC, qtdVendedores, qtdPersonagensJogadores, qtdBolsa
 	ADD_PERSONAGEM, //atributos do outros persoangens NPC, Jogadores
 	ADD_BOLSA,//id bolsa, POSICAO X, POSICAO Z, estado bolsa
+	UPDATE_POSITION, //ID PERSONAGEM, POSICAO X, POSICAO Z
+	UPDATE_ESTADO, //IDPERSONAGEM, ESTADO
+	UPDATE_ATACK, //ID PERSONAGEM, ID ALVO, ID ATAQUE
 	OPENED_BOLSA, //ID BOLSA, ITENS DA BOLSA -1 se não houver nada
 	CLOSED_BOLSA, //ID BOLSA
-	CHANGE_BUFFS, //ID BUFF, ESTADO
-	SET_ESTADO, //ID PERSONAGEM, ESTADO, ULTIMO ESTADO
+	UPDATE_EQUIP, //ID PERSONAGEM, ID ARMA, ID ARMADURA
 	SHOW_DAMAGE, //ID PERSONAGEM , DANO
-	RECEIVE_ITEM, //id do item, qtd dinheiro
+	CHAT, // MENSAGEM
 	REMOVE_ITEM,  //ID ITEM, QTD DINHEIRO
+	ADD_ITEM, //id do item, qtd dinheiro
 	PRICE_ITEM, //ID ITEM, PRECO
+	CHANGE_BUFFS, //ID BUFF, ESTADO
 	CHANGE_MONEY, //quantidade
 	CHANGE_BONUS, //HABILIDADES PRIMARIAS E SECUNDARIAS DO JOGADOR EM ORDEM ALFABETICA
 	UPDATE_PVPPNIVEL,  //ID PERSONAGEM, PONTOS VIDA, PONTOS PODER, NIVEL, PP_MAX, PV_MAX
-	UPDATE_EQUIP, //ID PERSONAGEM, ID ARMA, ID ARMADURA
 	UPDATE_DIRVEL, //ID PERSONAGEM, DIRECAO, VELOCIDADE
 	ADD_QUEST, //ID QUEST, QUANTIDADE DE ITENS QUE TENHO QUE OBTER
 	UPDATE_QUEST, //ID QUEST, QUANTIDADE QUE CONSEGUI, QUANTIDADE DE ITENS QUE TENHO QUE OBTER
 	QUEST_OK, //IDQUEST, PARABENS
-	CHAT, // MENSAGEM
 	UPDATE_BOLSA, // ATUALIZA BOLSA DO PERSONAGEM 9 IDS
 	SHOW_SHOP, //ID ITENS[30], PRECO [30]
 	UPDATE_XP, //XP, XP_MAX
 	SHOT, //IDSHOT, POSICAO X E POSICAO Z INICIAL, E ID ALVO
 	REMOVE_PERSONAGEM, //ID PERSONAGEM
 	UPDATE_LEVEL,//NIVEL, QTD PONTOS DISTRIBUIR HABILIDADES PRIMARIAS, QTD PONTOS SKILL(PODER)
+	REMOVE_BOLSA, // ID BOLSA
 
 	//ENVIADAS
 	LOGIN_REQUEST, //LOGIN, SENHA
-	REQUEST_PERSONAGENS, //ID PESSOA
+	PERSONAGENS_REQUEST, //ID PESSOA
 	CREATE_PERSONAGEM, //ID RACA, NOME
 	PLAY, //ID PERSONAGEM
 	SEND_POSITION, //ID PERSONAGEM, POSICAO X, POSICAO Z
 	SEND_ESTADO, //IDPERSONAGEM, ESTADO
 	SEND_ATACK, //ID PERSONAGEM, ID ALVO, ID ATAQUE, POSICAO X E POSICAO Z ALVO CHÃO //PODE SER PODER OU ATAQUE NORMAL
-	SEND_ITEM,  //ID PERSONAGEM, ID ITEM, DINHEIRO
-	USE_ITEM, //IDPERSONAGEM, IDITEM
-	DROP_ITEM, //IDPERSONAGEM, IDITEM
-	ACCEPT_TRADE, //ID PERSONAGEM, ID FREGUES, ID ITEM MEU, DINHEIRO MEU, ID ITEM FREGUES, DINHEIRO FREGUES
 	OPEN_BOLSA, //ID PERSONAGEM, ID BOLSA
 	CLOSE_BOLSA, //ID BOLSA
+	SEND_EQUIP, //ID PERSONAGEM, ID ARMA, ID ARMADURA
+	SEND_TARGET, //ID PERSONAGEM, ID ALVO
+	USE_ITEM, //IDPERSONAGEM, IDITEM
+	DROP_ITEM, //IDPERSONAGEM, IDITEM
+	SEND_MESSAGE, //ID PERSONAGEMDESTINO, MENSAGEM
+	SEND_ITEM,  //ID PERSONAGEM, ID ITEM, DINHEIRO
 	GET_ITEM_BOLSA, //ID PERSONAGEM, ID BOLSA, ID ITEM
 	INSERT_ITEM_BOLSA, //ID BOLSA, ID ITEM
-
-	TRADE_REQUEST, //ID PERSONAGEM, ID FREGUES
-	TRADE_REQUEST_ACCEPTED, //ID PERSONAGEM, ID FREGUES
-	TRADE_REQUEST_REFUSED, //ID PERSONAGEM, ID FREGUES
-	TRADE_CHANGED, //ID PERSONAGEM, ID FREGUES, idItemPersonagem, idItemFregues, qtdDinheiroPersonagem, qtdDinheiroFregues
-	TRADE_ACCEPTED, //ID PERSONAGEM
-	TRADE_REFUSED, //ID PERSONAGEM, ID FREGUES
-	TRADE_CONCLUDE, //ID PERSONAGEM, ID FREGUES
-
-	EQUIP_ITEM, //ID PERSONAGEM, ID ARMA, ID ARMADURA
-	SET_TARGET, //ID PERSONAGEM, ID ALVO
-	SEND_MESSAGE, //ID DESTINO, MENSAGEM
 	START_SHOT, //ID PERSONAGEM, ID ALVO, IDSHOT, POSICAO X E POSICAO Z INICIAL
 	REQUEST_FULL_STATUS, //ID PERSONAGEM
 	SEND_BONUS_POINTS, //ID PERSONAGEM,VETOR EM ORDEM ALFABETICA COM QTD PONTOS DA HABILIDADE PRIMARIA USADA E A QUANTIDADE DE PONTOS DE SKILL(PODER)[PODER1,PODER2,PODER3]
@@ -75,12 +70,13 @@ enum TYPE_MESSAGE
 	BUY_ITEM, //IDPERSONAGEM, IDNPC VENDEDOR, ID ITEM
 	REQUEST_PRICE_ITEM, //ID PERSONAGEM, ID NPCVENDEDOR, ID ITEM
 	SELL_ITEM, //IDPERSOANGEM, ID NPCVENDEDOR, ID ITEM, PRECO
-	UPDATE_ALL, //ATUALIZA O PERSONAGEM COMPLETO
-
-//FALHAS
-	LOGIN_FAIL,
-	CREATE_PLAYER_FAIL,
-	SELECT_PLAYER_FAIL
+	TRADE_REQUEST, //ID PERSONAGEM, ID FREGUES
+	TRADE_REQUEST_ACCEPTED, //ID PERSONAGEM, ID FREGUES
+	TRADE_REQUEST_REFUSED, //ID PERSONAGEM, ID FREGUES
+	TRADE_CHANGED, //ID PERSONAGEM, ID FREGUES, idItemPersonagem, idItemFregues, qtdDinheiroPersonagem, qtdDinheiroFregues
+	TRADE_ACCEPTED, //ID PERSONAGEM
+	TRADE_REFUSED, //ID PERSONAGEM, ID FREGUES
+	TRADE_CONCLUDE //ID PERSONAGEM, ID FREGUES
 };
 
 #define PORT 30003
@@ -118,29 +114,70 @@ int main()
 			cout<<"\nDigite a senha: ";
 			cin.getline(senha,15);
 
-
 			mesEnv.writeByte(LOGIN_REQUEST); // requisição de login
 			mesEnv.writeString(login);       // login
 			mesEnv.writeString(senha);		 // senha
-			
+
 			//Envia a mensagem
 			_socketClient->SendLine(mesEnv);
+
+
 
 			cout<<"\nRecebendo Pacote...";
 			//recebe o pacote
 			_socketClient->ReceiveLine(mesRec);
 
 			cout<<"\nRecebeu Pacote";
+			int idJogador;
 			if(mesRec.getSize() != 0)
 			{
-				//começa a ler o pacote
-				mesRec.beginReading();
-
-
-			
-				cout<<"\nPacote Recebido = "<< mesRec.readByte(); //le o id da mensagem
-				cout<<"\nPacote Recebido = "<< mesRec.readByte(); //le o id da mensagem
+				cout<<"\nidMensagem = "<< mesRec.readByte(); //le o id da mensagem
+				idJogador = mesRec.readInt();
+				cout<<"\nidJogador = "<< idJogador; //le o id da mensagem
 				//cout<<"\nPacote Recebido = "<< mesRec.readString(); //e por ae vai =D
+			}
+
+
+			mesEnv.clear();
+			mesEnv.writeByte(PERSONAGENS_REQUEST); // requisição de login
+			mesEnv.writeLong(idJogador);
+
+			//Envia a mensagem
+			_socketClient->SendLine(mesEnv);
+
+
+
+			cout<<"\nRecebendo Pacote...";
+			//recebe o pacote
+			mesRec.clear();
+			_socketClient->ReceiveLine(mesRec);
+
+			cout<<"\nRecebeu Pacote";
+			if(mesRec.getSize() != 0)
+			{
+				cout<<"\nPacote Recebido = "<< mesRec.readByte(); //le o id da mensagem
+				cout<<"\nPacote Recebido = "<< mesRec.readInt(); //le o id da mensagem
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				cout<<"\nPacote Recebido = "<<mesRec.readString();
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				//Habilidades Primárias
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				//Habilidades Secundárias
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				//3D
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				cout<<"\nPacote Recebido = "<<mesRec.readInt();
 			}
 		}
 
