@@ -11,9 +11,9 @@
 
 #include "CQuest.h"
 
-CQuest::CQuest()
+CQuest::CQuest(CPersonagemJogador *jogador)
 {
-	_jogador = new CPersonagemJogador();
+	_jogador = jogador;
 	_itemNecessario = I_NONE;
 	_inimigoNecessario = M_NONE;
 	_qtdNecessaria = 0;

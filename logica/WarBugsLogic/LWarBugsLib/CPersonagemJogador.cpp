@@ -35,7 +35,7 @@ CPersonagemJogador::CPersonagemJogador()
 	_xpToNextLv = 0;
 	_pontoDistribuir = 0;
 	_lealdade = new CLealdade();
-	_quest = new CQuest();
+	_quest = new CQuest(this);
 	//_party = new irr::core::array<CPersonagemJogador*>();
 	//_friends = new irr::core::array<CPersonagemJogador*>();
 	_jogadorID = 0;
@@ -468,7 +468,7 @@ void CPersonagemJogador::leaveParty(CPersonagemJogador *lider)
 //Quest
 void CPersonagemJogador::acceptQuest(CQuest *quest)
 {
-	_quest = new CQuest();
+	_quest = new CQuest(this);
 	_quest->setPlayer(quest->getPlayer());
 	_quest->setRequestedItem(quest->getRequestedItem());
 	_quest->setRequestedEnemy(quest->getRequestedEnemy());
