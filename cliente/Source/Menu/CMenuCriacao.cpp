@@ -10,13 +10,15 @@ CMenuCriacao::CMenuCriacao()
 
 bool CMenuCriacao::start(CGameCore *gameCore)
 {
-	gameCore->getAllManagers(_dispGrafico, _dispAudio, _gerEventos, _gerCena, _gerVideo, _gerHud, _gameConfig);
+	_gameCore = gameCore;
 
-	gameCore->loadGameScene(pathArquivoCena[MC_CRIACAO]);
+	_gameCore->getAllManagers(_dispGrafico, _dispAudio, _gerEventos, _gerCena, _gerVideo, _gerHud, _gameConfig);
 
-	_menuCamera = gameCore->createCamera( vector3df(0,50,0), vector3df(0,0,50), vector3df(0,0,0), 0, 179.0f/*true*/, true);
+	_gameCore->loadGameScene(pathArquivoCena[MC_CRIACAO]);
 
-	gameCore->playMusic(pathBackgroundSound[MM_SELECAO]);
+	_menuCamera = gameCore->createCamera( vector3df(0,0,0), vector3df(0,0,100), vector3df(0,0,0), 0, 179.0f/*true*/, true);
+
+	_gameCore->playMusic(pathBackgroundSound[MM_CRIACAO]);
 	
 	_myID = _nextID = MN_CRIACAOPERSONAGEM;
 	_nodoSelecionado = 0;
@@ -24,6 +26,8 @@ bool CMenuCriacao::start(CGameCore *gameCore)
 
 	_menuFlag[OBJSELECTED] = false;
 	_menuFlag[HUDUPDATED] = false;
+
+	_particula[0] = _gameCore->addPaticleNode(P_FOGO, 2000, vector3df(0,0,50), vector3df(1,1,1));
 
 	return true;
 }

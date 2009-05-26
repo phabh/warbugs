@@ -32,6 +32,11 @@ private:
 
 	ICameraSceneNode *_gameCamera;
 
+	typedef CDoubleList<IParticleSystemSceneNode> CListaParticulas;
+	CListaParticulas  *_listaParticulas;
+
+	//IParticleSystemSceneNode *_particleSystem[5000];
+
 	IGUISkin *_gameSkin;
 	IGUIFont *_gameFont[NUMHUDFONTS];
 
@@ -57,6 +62,8 @@ private:
 
 	bool _connected; // Identifica se o cliente está conectado ao servidor
 
+	int _particleCount;
+
 public:
 
 	CGameCore(int &startInit);
@@ -72,6 +79,8 @@ public:
 	void getAllManagers(IrrlichtDevice*&dispGrafico, ISoundEngine*&dispAudio, CGerEventos*&gerEventos, ISceneManager*&gerCena, IVideoDriver*&gerVideo, IGUIEnvironment*&gerHud, TypeCfg &gameCfg); 
 
 	void playMusic( char* soundFile, bool looped = true, bool startPaused = false, bool track = false, E_STREAM_MODE modo = ESM_AUTO_DETECT, bool efeitos = false);
+
+	IParticleSystemSceneNode* addPaticleNode(TypeParticle tipo, int tempoVida, vector3df posicao, vector3df escala);
 	
 	void loadMenuScene(c8 *sceneFile);
 
