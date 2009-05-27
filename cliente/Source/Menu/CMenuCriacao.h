@@ -11,7 +11,8 @@ private:
 	ISceneNode *_nodoSelecionado;
 	int _idPersonagem;
 	IParticleSystemSceneNode *_particula[RACASMAX];
-	ILightSceneNode *luz;
+	
+	ILightSceneNode *_luz;
 
 	CToonShader *_toonShader;
 

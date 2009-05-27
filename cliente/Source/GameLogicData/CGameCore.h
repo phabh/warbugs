@@ -95,6 +95,7 @@ public:
 
 	int _nSlotChars;
 	int _meuLoginID;
+	int _meuPersonagemID;
 
 	SPersonagemSelecao _vectPersonagem[MAXSLOTPERSONAGEM];
 	IAnimatedMeshSceneNode *_personagem[MAXSLOTPERSONAGEM];
