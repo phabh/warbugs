@@ -9,6 +9,7 @@ CGameCore::CGameCore(int &startInit)
 	_connected = false;
 
 	_meuLoginID = -1;
+	_meuPersonagemID = -1;
 
 	_particleCount = 0;
 

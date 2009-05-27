@@ -15,6 +15,8 @@ private:
 
 	ICameraSceneNode *_menuCamera;
 
+	ILightSceneNode *_luz;
+
 	CToonShader *_toonShader;
 
 	int _nSlotChars;

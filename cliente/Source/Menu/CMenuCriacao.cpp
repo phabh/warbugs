@@ -29,9 +29,9 @@ bool CMenuCriacao::start(CGameCore *gameCore)
 
 	_particula[0] = _gameCore->addPaticleNode(P_FOGO, 2000, vector3df(0,0,50), vector3df(1,1,1));
 
-	luz = _gerCena->addLightSceneNode(0, vector3df(0,50,0/*500,500,500*/), SColorf(1.0f, 0.6f, 0.7f, 1.0f), 1200.0f);
+	_luz = _gerCena->addLightSceneNode(0, vector3df(0,50,0/*500,500,500*/), SColorf(1.0f, 0.6f, 0.7f, 1.0f), 1200.0f);
 
-	_toonShader = new CToonShader(_dispGrafico,luz);
+	_toonShader = new CToonShader(_dispGrafico, _luz);
 
 	return true;
 }

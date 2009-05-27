@@ -30,11 +30,17 @@ bool CMenuSelecao::start(CGameCore *gameCore)
 	_camRotation = 0;
 	_camCurrRotation = 0;
 
+	_luz = _gerCena->addLightSceneNode(0, vector3df(0,50,0/*500,500,500*/), SColorf(1.0f, 0.6f, 0.7f, 1.0f), 1200.0f);
+
+	_toonShader = new CToonShader(_dispGrafico, _luz);
+
 	_gameCore->enviarPacote(PERSONAGENS_REQUEST, _gameCore->_meuLoginID);
 	_gameCore->receberPacote();
 
 	if(_gameCore->_nSlotChars > 0)
 	{
+		
+
 		for(int i=0; i<_gameCore->_nSlotChars; i++)
 		{
 			_gameCore->_personagem[i] = _gerCena->addAnimatedMeshSceneNode(_gerCena->getMesh(pathCharsModels[_gameCore->_vectPersonagem[i]._idModelo]), 0, _gameCore->_vectPersonagem[i]._id );
@@ -86,36 +92,9 @@ void CMenuSelecao::updateHuds()
 {
 	_gerHud->clear();
 
-<<<<<<< .mine
-				case 5:
-					_camRotation+=72;
-					if(_camRotation > 360.0)
-						_camRotation -= 360.0;
-					//cout << "\n" << _camRotation;
-				break;
-=======
 	_gerHud->addButton(rect<s32>(440,500,540,540), 0, 3, L"Criar");
->>>>>>> .r195
 
-<<<<<<< .mine
-<<<<<<< .mine
-				case 6:
-					_camRotation-=72;
-					if(_camRotation < 0.0)
-						_camRotation += 360.0;
-					//cout << "\n" << _camRotation;
-				break;
-			
-				default:
-					cout << "\nID de botao desconhecido." << endl;
-			};
-		}
-=======
-	//if(_flags[OBJSELECTED])
-=======
->>>>>>> .r209
 	_gerHud->addButton(rect<s32>(320,500,430,540), 0, 4, L"Jogar");
->>>>>>> .r195
 
 	_gerHud->addButton(rect<s32>(140,10,240,50), 0, 5, L"<");
 	_gerHud->addButton(rect<s32>(540,10,640,50), 0, 6, L">");
@@ -128,6 +107,8 @@ void CMenuSelecao::updateHuds()
 void CMenuSelecao::readCommands()
 {
 
+	int slotPersonagem = 0;
+
 	if(_gerEventos->isKeyDown(KEY_ESCAPE))
 	{
 		_nextID = MN_SAIDA;
@@ -139,6 +120,7 @@ void CMenuSelecao::readCommands()
 		// Trata os cliques em botões
 		switch (_gerEventos->getEventCallerByID())
 		{
+
 		case 3:
 			_nextID = MN_CRIACAOPERSONAGEM;
 			return;
@@ -149,14 +131,14 @@ void CMenuSelecao::readCommands()
 			return;
 			break;
 
-		case 5:
-			_camRotation+=90;
+		case 5: // 
+			_camRotation += 90;
 			if(_camRotation > 360.0)
 				_camRotation -= 360.0;
 			break;
 
 		case 6:
-			_camRotation-=90;
+			_camRotation -= 90;
 			if(_camRotation < 0.0)
 				_camRotation += 360.0;
 			break;
@@ -203,7 +185,7 @@ void CMenuSelecao::updateGraphics()
 
 	if(	_camRotation != _camCurrRotation )
 	{
-		if(delta < 2)
+		if(delta < 5)
 			_camCurrRotation = _camRotation;
 		else
 		{
@@ -215,7 +197,7 @@ void CMenuSelecao::updateGraphics()
 		}
 	}
 
-	_menuCamera->setRotation(vector3df(0,_camCurrRotation,0));
+	_menuCamera->setRotation(vector3df(0, _camCurrRotation, 0));
 }
 
 //-----------------------------------------------------------------------------------------------------------------
