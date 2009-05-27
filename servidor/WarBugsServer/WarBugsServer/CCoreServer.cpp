@@ -59,6 +59,8 @@ void CCoreServer::readPackets()
 			CJogador * newJogador = new CJogador();
 			newJogador->setSocket(newConnection);
 			_playersList->addJogador(newJogador);
+			newJogador = NULL;
+			delete newJogador;
 		}
 		
 	}
@@ -67,23 +69,23 @@ void CCoreServer::readPackets()
 	{
 
 		//recebe a mensagem do socket 
+		mesRecebida.clear();
 		_playersList->getElementAt(indexJogador)->getSocket()->ReceiveLine(mesRecebida);
-
+		//_playersList->getElementAt(indexJogador)->getSocket()->ReceiveLine(mesRecebida);
+		
 		tipoMensagem = 0;
 
 		mesRecebida.beginReading();
 		tipoMensagem = mesRecebida.readByte();	
 
-		if(tipoMensagem == 0)
-		{
-			_playersList->getElementAt(indexJogador)->getSocket()->Close();
-			_playersList->removeJogadorByPosition(indexJogador);
-			return;
-		}
-		
-
 		switch(tipoMensagem)
 		{
+				case DISCONNECT:
+					{
+						_playersList->getElementAt(indexJogador)->getSocket()->Close();
+						_playersList->removeJogadorByPosition(indexJogador);
+						break;
+					}
 		
 				case LOGIN_REQUEST: //LOGIN, SENHA
 					{
@@ -96,7 +98,7 @@ void CCoreServer::readPackets()
 						strcpy(login,mesRecebida.readString());
 						strcpy(senha,mesRecebida.readString());
 						
-						CJogador * tempJogador = new CJogador;
+						CJogador * tempJogador = new CJogador();
 
 						//se fez login
 						if(_dataManager->doLogin(login,senha,*tempJogador))
@@ -111,6 +113,8 @@ void CCoreServer::readPackets()
 							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN_FAIL);
 
 						}
+						tempJogador = NULL;
+						delete tempJogador;
 
 						break;
 					}
