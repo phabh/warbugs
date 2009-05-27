@@ -177,7 +177,6 @@ CJogador *CPlayerList::getJogador(int IDJogador)
 CJogador *CPlayerList::getElementAt(int index)
 {
 	SPlayerElemento *temp = _first;
-	index = index - 1;
 	while(index > 0)
 	{
 		temp = temp->next;

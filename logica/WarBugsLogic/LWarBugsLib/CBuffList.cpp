@@ -197,7 +197,6 @@ CBuff *CBuffList::getBuff(CBuff *buff)
 CBuff *CBuffList::getElementAt(int index)
 {
 	SBuffElemento *temp = _first;
-	index = index - 1;
 	while(index > 0)
 	{
 		temp = temp->next;

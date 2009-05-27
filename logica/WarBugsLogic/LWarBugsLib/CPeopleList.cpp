@@ -176,7 +176,6 @@ CPersonagem *CPeopleList::getPersonagem(int IDpersonagem)
 CPersonagem *CPeopleList::getElementAt(int index)
 {
 	SCharElemento *temp = _first;
-	index = index - 1;
 	while(index > 0)
 	{
 		temp = temp->next;
