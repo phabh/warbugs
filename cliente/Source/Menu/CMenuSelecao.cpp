@@ -86,9 +86,36 @@ void CMenuSelecao::updateHuds()
 {
 	_gerHud->clear();
 
+<<<<<<< .mine
+				case 5:
+					_camRotation+=72;
+					if(_camRotation > 360.0)
+						_camRotation -= 360.0;
+					//cout << "\n" << _camRotation;
+				break;
+=======
 	_gerHud->addButton(rect<s32>(440,500,540,540), 0, 3, L"Criar");
+>>>>>>> .r195
 
+<<<<<<< .mine
+<<<<<<< .mine
+				case 6:
+					_camRotation-=72;
+					if(_camRotation < 0.0)
+						_camRotation += 360.0;
+					//cout << "\n" << _camRotation;
+				break;
+			
+				default:
+					cout << "\nID de botao desconhecido." << endl;
+			};
+		}
+=======
+	//if(_flags[OBJSELECTED])
+=======
+>>>>>>> .r209
 	_gerHud->addButton(rect<s32>(320,500,430,540), 0, 4, L"Jogar");
+>>>>>>> .r195
 
 	_gerHud->addButton(rect<s32>(140,10,240,50), 0, 5, L"<");
 	_gerHud->addButton(rect<s32>(540,10,640,50), 0, 6, L">");
