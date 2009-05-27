@@ -132,9 +132,7 @@ void CGameCore::drop()
 {
 	if(_connected)
 	{
-		_packageToSend.init(_dataToSend, PACKAGESIZE);
-		_packageToSend.writeByte(0);
-		_gameSocket->SendLine(_packageToSend);
+		enviarPacote(DISCONNECT);
 		_gameSocket->Close();
 	}
 	_dispositivoGrafico->drop(); // Deleta o dispositivo grafico da memória
@@ -260,7 +258,7 @@ bool CGameCore::conectar(char *login, char *password)
 
 		// Envia pacote montado
 		_gameSocket->SendLine(_packageToSend);
-*/
+		*/
 
 		receberPacote();
 		/*
@@ -270,49 +268,49 @@ bool CGameCore::conectar(char *login, char *password)
 		// Se o pacote conter dados
 		if(_packageReceived.getSize() > 0)
 		{
-			_packageReceived.beginReading();
+		_packageReceived.beginReading();
 
-			idPackage = _packageReceived.readByte();
+		idPackage = _packageReceived.readByte();
 
-			// Sucesso
-			if(idPackage == LOGIN_OK)
-			{
-				cout << "\nConectado." << endl;
-				_connected = true;
-			}
+		// Sucesso
+		if(idPackage == LOGIN_OK)
+		{
+		cout << "\nConectado." << endl;
+		_connected = true;
+		}
 
-			// Falha
-			else if(idPackage == LOGIN_FAIL)
-			{
-				cout << "\nFalha ao conectar. Verificar login e senha." << endl;
-				_packageToSend.init(_dataToSend, PACKAGESIZE);
-				_packageToSend.writeByte(0);
-				_gameSocket->SendLine(_packageToSend);
-				_gameSocket->Close();
-				_connected = false;
-			}
+		// Falha
+		else if(idPackage == LOGIN_FAIL)
+		{
+		cout << "\nFalha ao conectar. Verificar login e senha." << endl;
+		_packageToSend.init(_dataToSend, PACKAGESIZE);
+		_packageToSend.writeByte(0);
+		_gameSocket->SendLine(_packageToSend);
+		_gameSocket->Close();
+		_connected = false;
+		}
 
-			// Erro desconhecido
-			else
-			{
-				cout << "\nMensagem inesperada do servidor" << endl;
-				_packageToSend.init(_dataToSend, PACKAGESIZE);
-				_packageToSend.writeByte(0);
-				_gameSocket->SendLine(_packageToSend);
-				_gameSocket->Close();
-				_connected = false;
-			}
+		// Erro desconhecido
+		else
+		{
+		cout << "\nMensagem inesperada do servidor" << endl;
+		_packageToSend.init(_dataToSend, PACKAGESIZE);
+		_packageToSend.writeByte(0);
+		_gameSocket->SendLine(_packageToSend);
+		_gameSocket->Close();
+		_connected = false;
+		}
 		}
 
 		// Pacote recebido está vazio
 		else
 		{
-			cout << "\nMensagem vazia do servidor" << endl;
-			_packageToSend.init(_dataToSend, PACKAGESIZE);
-			_packageToSend.writeByte(0);
-			_gameSocket->SendLine(_packageToSend);
-			_gameSocket->Close();
-			_connected = false;
+		cout << "\nMensagem vazia do servidor" << endl;
+		_packageToSend.init(_dataToSend, PACKAGESIZE);
+		_packageToSend.writeByte(0);
+		_gameSocket->SendLine(_packageToSend);
+		_gameSocket->Close();
+		_connected = false;
 		}*/
 	}
 	catch(...)
@@ -558,46 +556,46 @@ void CGameCore::receberPacote()
 			_meuLoginID = _packageReceived.readInt();
 			cout << "\nConectado." << endl;
 			_connected = true;
-		break;
+			break;
 
 		case  LOGIN_FAIL:
 
-				cout << "\nFalha ao conectar. Verificar login e senha." << endl;
-				enviarPacote(DISCONNECT);
-/*
-				_packageToSend.init(_dataToSend, PACKAGESIZE);
-				_packageToSend.writeByte(0);
-				_gameSocket->SendLine(_packageToSend);*/
-				_gameSocket->Close();
-				_connected = false;
-
-				break;
-
-		default:
-
-			// Erro desconhecido
-
-				cout << "\nMensagem inesperada do servidor" << endl;
-				enviarPacote(DISCONNECT);
-				/*
-				_packageToSend.init(_dataToSend, PACKAGESIZE);
-				_packageToSend.writeByte(0);
-				_gameSocket->SendLine(_packageToSend);*/
-				_gameSocket->Close();
-				_connected = false;
-		
-		};
-	}
-	else
-	{
-
-			cout << "\nMensagem vazia do servidor" << endl;
-			enviarPacote(DISCONNECT);/*
+			cout << "\nFalha ao conectar. Verificar login e senha." << endl;
+			enviarPacote(DISCONNECT);
+			/*
 			_packageToSend.init(_dataToSend, PACKAGESIZE);
 			_packageToSend.writeByte(0);
 			_gameSocket->SendLine(_packageToSend);*/
 			_gameSocket->Close();
 			_connected = false;
+
+			break;
+
+		default:
+
+			// Erro desconhecido
+
+			cout << "\nMensagem inesperada do servidor" << endl;
+			enviarPacote(DISCONNECT);
+			/*
+			_packageToSend.init(_dataToSend, PACKAGESIZE);
+			_packageToSend.writeByte(0);
+			_gameSocket->SendLine(_packageToSend);*/
+			_gameSocket->Close();
+			_connected = false;
+
+		};
+	}
+	else
+	{
+
+		cout << "\nMensagem vazia do servidor" << endl;
+		enviarPacote(DISCONNECT);/*
+								 _packageToSend.init(_dataToSend, PACKAGESIZE);
+								 _packageToSend.writeByte(0);
+								 _gameSocket->SendLine(_packageToSend);*/
+		_gameSocket->Close();
+		_connected = false;
 
 	}
 }
