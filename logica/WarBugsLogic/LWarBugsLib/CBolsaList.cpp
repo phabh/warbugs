@@ -177,7 +177,6 @@ CBolsa *CBolsaList::getBolsa(int IDbolsa)
 CBolsa *CBolsaList::getElementAt(int index)
 {
 	SBagElemento *temp = _first;
-	index = index - 1;
 	while(index > 0)
 	{
 		temp = temp->next;

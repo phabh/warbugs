@@ -177,7 +177,6 @@ CCenario *CCenarioList::getCenario(int IDCenario)
 CCenario *CCenarioList::getElementAt(int index)
 {
 	SCenarioElemento *temp = _first;
-	index = index - 1;
 	while(index > 0)
 	{
 		temp = temp->next;

@@ -178,7 +178,6 @@ CItem *CBolsa::getItem(int IDItem)
 CItem *CBolsa::getElementAt(int index)
 {
 	SElemento *temp = _first;
-	index = index - 1;
 	while(index > 0)
 	{
 		temp = temp->next;
