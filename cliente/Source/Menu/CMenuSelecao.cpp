@@ -39,35 +39,35 @@ bool CMenuSelecao::start(CGameCore *gameCore)
 
 	if(_gameCore->_nSlotChars > 0)
 	{
-		
-
 		for(int i=0; i<_gameCore->_nSlotChars; i++)
 		{
 			_gameCore->_personagem[i] = _gerCena->addAnimatedMeshSceneNode(_gerCena->getMesh(pathCharsModels[_gameCore->_vectPersonagem[i]._idModelo]), 0, _gameCore->_vectPersonagem[i]._id );
 
 			_gameCore->_personagem[i]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 
-			//_toonShader->apply(_gameCore->_personagem[i], pathTextureModels[_gameCore->_vectPersonagem[i]._idTextura]);
+			_toonShader->apply(_gameCore->_personagem[i], pathTextureModels[_gameCore->_vectPersonagem[i]._idTextura]);
+
+			_gameCore->_personagem[i]->setAnimationSpeed(0);
 
 			switch (i)
 			{
 
-			case 1:
+			case 0:
 				_gameCore->_personagem[i]->setPosition(vector3df(0,0,50));
 				_gameCore->_personagem[i]->setRotation(vector3df(0,0,0));
 				break;
 
-			case 2:
+			case 1:
 				_gameCore->_personagem[i]->setPosition(vector3df(50,0,0));
 				_gameCore->_personagem[i]->setRotation(vector3df(0,90,0));
 				break;
 
-			case 3:
+			case 2:
 				_gameCore->_personagem[i]->setPosition(vector3df(0,0,-50));
 				_gameCore->_personagem[i]->setRotation(vector3df(0,180,0));
 				break;
 
-			case 4:
+			case 3:
 				_gameCore->_personagem[i]->setPosition(vector3df(-50,0,0));
 				_gameCore->_personagem[i]->setRotation(vector3df(0,270,0));
 				break;
