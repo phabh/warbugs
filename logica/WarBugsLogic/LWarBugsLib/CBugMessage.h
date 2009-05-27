@@ -26,7 +26,7 @@ class CBugMessage
 
 		void    writeByte(char c);
 		void    writeShort(short c);
-		void    writeLong(long c);
+		void    writeInt(int c);
 		void    writeFloat(float c);
 		void    writeString(char *s);
 		void    beginReading(void);
@@ -34,7 +34,7 @@ class CBugMessage
 		char  * read(int s);
 		char    readByte(void);
 		short   readShort(void);
-		long    readLong(void);
+		int	    readInt(void);
 		float   readFloat(void);
 		char  * readString(void);
 
