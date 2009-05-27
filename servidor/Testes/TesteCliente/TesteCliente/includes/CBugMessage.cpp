@@ -88,7 +88,7 @@ void CBugMessage::writeShort(short c)
 	Escreve um long no vetor
 	@param c-> long a ser escrito
 */
-void CBugMessage::writeLong(long c)
+void CBugMessage::writeInt(int c)
 {
 	char *buf;
 	buf = getNewPoint(4);

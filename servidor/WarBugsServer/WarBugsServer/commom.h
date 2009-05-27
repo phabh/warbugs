@@ -22,6 +22,8 @@ public:
 /*Identificador de Mensagens*/
 enum TYPE_MESSAGE 
 {
+	DISCONNECT = 0,
+	PING,
 	//MENSAGENS RECEBIDAS
 	LOGIN_OK = 33, // se o login foi OK
 	LOGIN_FAIL, //se o login falhou por algum motivo

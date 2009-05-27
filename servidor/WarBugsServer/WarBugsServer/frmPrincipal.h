@@ -264,6 +264,7 @@ namespace WarBugsServer {
 			this->btKicar->TabIndex = 3;
 			this->btKicar->Text = L"Kicar";
 			this->btKicar->UseVisualStyleBackColor = true;
+			this->btKicar->Click += gcnew System::EventHandler(this, &frmPrincipal::btKicar_Click);
 			// 
 			// gbServer
 			// 
@@ -294,6 +295,7 @@ namespace WarBugsServer {
 			this->gridJogadores->Location = System::Drawing::Point(3, 6);
 			this->gridJogadores->Name = L"gridJogadores";
 			this->gridJogadores->ReadOnly = true;
+			this->gridJogadores->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
 			this->gridJogadores->Size = System::Drawing::Size(637, 414);
 			this->gridJogadores->TabIndex = 0;
 			// 
@@ -608,12 +610,15 @@ namespace WarBugsServer {
 
 		}
 #pragma endregion
-	private: System::Void frmPrincipal_Load(System::Object^  sender, System::EventArgs^  e) {
+	private: System::Void frmPrincipal_Load(System::Object^  sender, System::EventArgs^  e) 
+			 {
 
 			 }
-	private: System::Void toolStripStatusLabel1_Click(System::Object^  sender, System::EventArgs^  e) {
+	private: System::Void toolStripStatusLabel1_Click(System::Object^  sender, System::EventArgs^  e) 
+			 {
 			 }
-	private: System::Void btConectar_Click(System::Object^  sender, System::EventArgs^  e) {
+	private: System::Void btConectar_Click(System::Object^  sender, System::EventArgs^  e) 
+			 {
 			
 			_dataBase = NULL;
 			_dataBase = new CDataBase(toChar2(txtHost->Text),toChar2(txtBD->Text),toChar2(txtLogin->Text),toChar2(txtSenha->Text));
@@ -637,17 +642,21 @@ namespace WarBugsServer {
 			return target;
 		}
 
-private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  e) {
+private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  e) 
+		 {
 			this->barStatusBD->Text = L"Status BD: "+( _dataBase->isConnected() ? "ON":"OFF");
 
 			_coreServer->readPackets();
 
-			gridJogadores->Rows->Clear();
+			if(gridJogadores->Rows->Count > _coreServer->getPlayers()->size())
+				gridJogadores->Rows->Clear();
 
 			while(gridJogadores->Rows->Count < _coreServer->getPlayers()->size())
 			{ 
 				gridJogadores->Rows->Add();
 			}
+
+			
 
 
 
@@ -683,7 +692,8 @@ private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  
 		 }
 
 
-private: System::Void btExecutar_Click(System::Object^  sender, System::EventArgs^  e) {
+private: System::Void btExecutar_Click(System::Object^  sender, System::EventArgs^  e) 
+		 {
 			 if(_dataBase->insertNow(toChar2(txtSQL->Text)))
 			 {
 				 System::Windows::Forms::MessageBox::Show(L"OK, Feito!",L"Mensagem - OK");
@@ -693,7 +703,8 @@ private: System::Void btExecutar_Click(System::Object^  sender, System::EventArg
 				 System::Windows::Forms::MessageBox::Show(L"É... Deu pau!",L"Mensagem - Erro");			 
 			 }
 		 }
-private: System::Void btConsultar_Click(System::Object^  sender, System::EventArgs^  e) {
+private: System::Void btConsultar_Click(System::Object^  sender, System::EventArgs^  e) 
+		 {
 				TDadosBD ^ dados = gcnew ArrayList();
 				unsigned int numCampos;
 				unsigned int numRegs;
@@ -726,6 +737,29 @@ private: System::Void btConsultar_Click(System::Object^  sender, System::EventAr
 						indexRegs++;
 					} 			
 				}
+		 }
+private: System::Void btKicar_Click(System::Object^  sender, System::EventArgs^  e) 
+		 {
+
+			 char c[1400];
+			 CBugMessage m;
+			 m.init(c,1400);
+
+			 m.writeByte(DISCONNECT);
+
+			 int i = 0;
+			 for(i = 0; i < gridJogadores->Rows->Count; i++)
+			 {
+				 if(gridJogadores->Rows[i]->Selected)
+				 {
+					 gridJogadores->Rows->RemoveAt(i);
+					 _coreServer->getPlayers()->getElementAt(i)->getSocket()->SendLine(m);
+					 _coreServer->getPlayers()->getElementAt(i)->getSocket()->Close();
+					 _coreServer->getPlayers()->removeJogadorByPosition(i);
+				 }
+			 }
+			 gridJogadores->Rows->Clear();
+
 		 }
 };
 }
