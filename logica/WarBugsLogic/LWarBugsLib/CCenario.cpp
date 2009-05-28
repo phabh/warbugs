@@ -166,17 +166,18 @@ CBolsa *CCenario::removeBag(int idBag)
 }
 CVendedor *CCenario::removeVendedor(int idVendedor)
 {
-	CVendedor *temp = (CVendedor*)_jogadores->removePersonagem(idVendedor);
+	CVendedor *temp = (CVendedor*)_vendedores->removePersonagem(idVendedor);
 	_contador->removeID(temp->getSceneID());
 	return(temp);
 	//return((CVendedor*)_vendedores->removePersonagem(idVendedor));
 }
 void CCenario::update()
 {
-	for(int i = 0; i < max(_jogadores->size() , max(_inimigos->size(), _npcs->size())); i=i+1)
+	for(int i = 0; i < max(max(_jogadores->size(), _vendedores->size()) , max(_inimigos->size(), _npcs->size())); i=i+1)
 	{
 		if(i < _inimigos->size())	getMonsterAt(i)->update();
 		if(i < _jogadores->size())  getPlayerAt(i)->update();
 		if(i < _npcs->size())		getNpcAt(i)->update();
+		if(i < _vendedores->size())	getVendedorAt(i)->update();
 	}
 }
