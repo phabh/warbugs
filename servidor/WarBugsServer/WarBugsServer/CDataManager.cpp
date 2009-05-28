@@ -4689,10 +4689,13 @@ void CDataManager::updatePersonagem(int id, int nivel, int xp)
 {}
 
 //Inserções
-void CDataManager::insertPersonagemJogador(CPersonagemJogador * p1)
+void CDataManager::insertPersonagemJogador(CPersonagemJogador * p1, int idJogador)
 {
 	System::String ^ query;
 	System::String ^ temp;
+	
+	p1->setID(numPersonagens());
+
 	temp = gcnew System::String(p1->getName());
 
 	int tempRaca = p1->getRace();
@@ -4710,7 +4713,7 @@ void CDataManager::insertPersonagemJogador(CPersonagemJogador * p1)
 			+"`PGLEALESCORPIAO`,`PGLEALLOUVA`,`PGLEALVESPA`,`PGIDARMOR`,"
 			+"`PGIDWEAPON`,`PGX`,`PGZ`,`PGY`,`PGIDTEXTURA`,`PGIDMODELO`,"
 			+"`PGBONUSPOINTSPRIMARIAS`,`PGBONUSPOINTSPODER`,`PGISBASE`,`PGIDHUD`)"
-			+" VALUES ("+numPersonagens()+",\""+temp+"\","+p1->getLevel()+","+p1->getMoney()
+			+" VALUES ("+p1->getID()+",\""+temp+"\","+p1->getLevel()+","+p1->getMoney()
 			+","+p1->getXP()+","+p1->getMaxXP()+","+p1->getStats()->getPV()
 			+","+p1->getStats()->getMaxPV()+","+p1->getStats()->getPM()+","+p1->getStats()->getMaxPM()
 			+","+p1->getDirection()+","+p1->getMoveSpeed()+","+tempRaca+","+p1->getRespawnTime()
@@ -4729,13 +4732,32 @@ void CDataManager::insertPersonagemJogador(CPersonagemJogador * p1)
 	if(_dataBase->insertNow(toChar(query)))
 	{
 		texto = L"Personagem '"+temp+"' Incluído com sucesso";
+
+		query = L"INSERT INTO JOGADOR_PERSONAGEM "
+				+" VALUES ("+p1->getID()+","+idJogador+")";
+
+		
+		//se não for inserido com sucesso
+		if(_dataBase->insertNow(toChar(query)))
+		{
+			texto = L"Personagem '"+temp+"' Incluído com sucesso";
+		}
+		else
+		{
+			texto = L"Não foi possivel incluir o personagem '"+temp+"'.";
+		}
+
+		WarBugsLog::_log->Items->Add(texto);	
+
 	}
 	else
 	{
 		texto = L"Não foi possivel incluir o personagem '"+temp+"'.";
 	}
 
-	WarBugsLog::_log->Items->Add(texto);			
+	WarBugsLog::_log->Items->Add(texto);
+
+
 
 }
 
