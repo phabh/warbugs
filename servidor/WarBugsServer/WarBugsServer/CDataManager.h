@@ -73,7 +73,7 @@ public:
 	void updatePersonagem(int id, int nivel, int xp);
 
 	//Inserções
-	void insertPersonagemJogador(CPersonagemJogador * p1);
+	void insertPersonagemJogador(CPersonagemJogador * p1, int idJogador);
 	void insertPersonagem(CPeopleList p1);
 };
 #endif

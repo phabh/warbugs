@@ -160,9 +160,11 @@ void CCoreServer::readPackets()
 
 								//_cenarioList->addPlayer(tempJogador);
 
+								_dataManager->insertPersonagemJogador(((CPersonagemJogador *)tempList->getElementAt(0)),_playersList->getElementAt(indexJogador)->getID());
+
 								_playersList->getElementAt(indexJogador)->setCharacter((CPersonagemJogador *)tempList->getElementAt(0));
-	
-								_dataManager->insertPersonagemJogador(((CPersonagemJogador *)tempList->getElementAt(0)));
+
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)CREATE_PLAYER_OK);
 
 								//insert em personagens do novo personagem e insert em personagem_jogador da vinculação de 1 com o outro;
 						}
