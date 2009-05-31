@@ -17,6 +17,8 @@ private:
 	float _totalLoading; // Total de elementos a carregar na memória
 	float _dataLoaded;   // Total de elementos carregados
 
+public:
+
 	ITexture *dataTxScenes[NUMCENARIOS], // Texturas dos cenários
 			 *dataTxProps[NUMPROPS],	 // Texturas dos objetos estáticos do cenário
 			 *dataTxHuds[NUMMENUHUDS],   // Texturas dos huds
@@ -27,8 +29,6 @@ private:
 	IAnimatedMesh *dataGeometryChars[NUM3DPERS],  // Malha animada 3D dos personagens
 				  *dataGeometryItens[NUM3DITENS], // Malha animada 3D dos itens
 				  *dataGeometryProps[NUMPROPS];   // Malha animada 3D dos objetos estáticos do cenário
-
-public:
 
 	CGameData(IrrlichtDevice *grafico);
 	void loadStage(int stage);

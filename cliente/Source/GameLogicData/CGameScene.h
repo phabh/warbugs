@@ -12,7 +12,7 @@ struct SPortal
 	SQuadrante _quadrante;
 };
 
-class CGameLogic 
+class CGameScene
 {
 	private:
  
@@ -32,7 +32,7 @@ class CGameLogic
 	 
 	public:
 	
-	CGameLogic();
+	CGameScene();
 
 	void loadStaticData(int idCenario);
 

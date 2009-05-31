@@ -8,8 +8,8 @@ CGameCore::CGameCore(int &startInit)
 
 	_connected = false;
 
-	_meuLoginID = -1;
-	_meuPersonagemID = -1;
+	_myUserID = -1;
+	_myCharID = -1;
 
 	_particleCount = 0;
 
@@ -77,6 +77,9 @@ CGameCore::CGameCore(int &startInit)
 	}
 
 	_listaParticulas = new CListaParticulas();
+
+	_gameData = new CGameData(_dispositivoGrafico);
+	_gameScene = new CGameScene();
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -216,18 +219,24 @@ ICameraSceneNode* CGameCore::createCamera( vector3df posicao, vector3df target, 
 	return _gameCamera;
 }
 
+//-----------------------------------------------------------------------------------------------------------------
+
+void CGameCore::createLight(ISceneNode *parent, vector3df posicao, f32 raio)
+{
+	_luz = _gerenciadorCena->addLightSceneNode(parent, posicao, SColorf(1.0f, 0.6f, 0.7f, 1.0f), raio);
+}
 
 //-----------------------------------------------------------------------------------------------------------------
 
 void CGameCore::loadGameData()
 {
-	_Data = new CGameData(_dispositivoGrafico);
+	//_Data = new CGameData(_dispositivoGrafico);
 
 	int estagio = 0; // estágio de loading
 
 	while(estagio < 6) // Carrega elementos do jogo
 	{
-		_Data->loadStage(estagio);
+		_gameData->loadStage(estagio);
 		estagio++;
 	}
 }
@@ -250,68 +259,8 @@ bool CGameCore::conectar(char *login, char *password)
 		_gameSocket = new CBugSocketClient(SERVERHOST, SERVERPORT);
 
 		enviarPacote(LOGIN_REQUEST, _myLogin, _myPassword);
-		/*
-		// Monta pacote
-		_packageToSend.writeByte(LOGIN_REQUEST); // ID do pacote: LOGIN_REQUEST
-		_packageToSend.writeString(_myLogin);      // Param1: login
-		_packageToSend.writeString(_myPassword);   // Param2: senha
-
-		// Envia pacote montado
-		_gameSocket->SendLine(_packageToSend);
-		*/
 
 		receberPacote();
-		/*
-		// Recebe pacote de resposta
-		_gameSocket->ReceiveLine(_packageReceived);
-
-		// Se o pacote conter dados
-		if(_packageReceived.getSize() > 0)
-		{
-		_packageReceived.beginReading();
-
-		idPackage = _packageReceived.readByte();
-
-		// Sucesso
-		if(idPackage == LOGIN_OK)
-		{
-		cout << "\nConectado." << endl;
-		_connected = true;
-		}
-
-		// Falha
-		else if(idPackage == LOGIN_FAIL)
-		{
-		cout << "\nFalha ao conectar. Verificar login e senha." << endl;
-		_packageToSend.init(_dataToSend, PACKAGESIZE);
-		_packageToSend.writeByte(0);
-		_gameSocket->SendLine(_packageToSend);
-		_gameSocket->Close();
-		_connected = false;
-		}
-
-		// Erro desconhecido
-		else
-		{
-		cout << "\nMensagem inesperada do servidor" << endl;
-		_packageToSend.init(_dataToSend, PACKAGESIZE);
-		_packageToSend.writeByte(0);
-		_gameSocket->SendLine(_packageToSend);
-		_gameSocket->Close();
-		_connected = false;
-		}
-		}
-
-		// Pacote recebido está vazio
-		else
-		{
-		cout << "\nMensagem vazia do servidor" << endl;
-		_packageToSend.init(_dataToSend, PACKAGESIZE);
-		_packageToSend.writeByte(0);
-		_gameSocket->SendLine(_packageToSend);
-		_gameSocket->Close();
-		_connected = false;
-		}*/
 	}
 	catch(...)
 	{
@@ -319,8 +268,29 @@ bool CGameCore::conectar(char *login, char *password)
 		cout << "\nNão foi possivel encontrar o servidor." << endl;
 	}
 
-	//_connected = true; //retirar
 	return _connected;
+}
+
+//--------------------------------------------------------------------------------------
+
+void CGameCore::initToonShader()
+{
+	if(_luz!= NULL && _dispositivoGrafico != NULL)
+		_toonShader = new CToonShader(_dispositivoGrafico, _luz);
+}
+
+//--------------------------------------------------------------------------------------
+
+IAnimatedMesh* CGameCore::getMAnimMesh(int idMesh)
+{
+	return _gameData->dataGeometryChars[idMesh];
+}
+
+//--------------------------------------------------------------------------------------
+
+ITexture* CGameCore::getMTexture(int idTexture)
+{
+	return _gameData->dataTxChars[idTexture];
 }
 
 //--------------------------------------------------------------------------------------
@@ -332,9 +302,9 @@ bool CGameCore::isConnected()
 
 //--------------------------------------------------------------------------------------
 
-int CGameCore::getNSlotChars()
+int CGameCore::getNumCharSlots()
 {
-	return _nSlotChars;
+	return _numMyChars;
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -509,93 +479,94 @@ void CGameCore::enviarPacote(int packageID, char *s1, char *s2)
 
 void CGameCore::receberPacote()
 {
-	//int numPers;
-
 	_packageReceived.clear();
 	_gameSocket->ReceiveLine(_packageReceived);
 
-	if(_packageReceived.getSize() != 0)
+	if(_packageReceived.getSize() != 0) // Se o pacote não extiver vazio
 	{
 		_packageReceived.beginReading();
 
-		switch(_packageReceived.readByte())
+		switch(_packageReceived.readByte()) // Lê o byte de identificação do pacote
 		{
 
-		case SHOW_PERSONAGENS:
+		case SHOW_PERSONAGENS: // CODIGO: MOSTRAR PERSONAGENS DO JOGADOR
 
-			_nSlotChars = _packageReceived.readInt(); // número de personagens cadastrados
+ 			_numMyChars = _packageReceived.readInt(); // número de personagens cadastrados
 
-			for(int i=0; i<_nSlotChars; i++)
+			for(int i=0; i<_numMyChars; i++)
 			{
-				_vectPersonagem[i]._id = _packageReceived.readInt();
-				_vectPersonagem[i]._nome = _packageReceived.readString();
-				_vectPersonagem[i]._nivel = _packageReceived.readInt();
+				_myStructChar[i]._id = _packageReceived.readInt();
+				_myStructChar[i]._nome = _packageReceived.readString();
+				_myStructChar[i]._nivel = _packageReceived.readInt();
 
-				_vectPersonagem[i]._agilidade = _packageReceived.readInt();
-				_vectPersonagem[i]._destreza = _packageReceived.readInt();
-				_vectPersonagem[i]._forca = _packageReceived.readInt();
-				_vectPersonagem[i]._instinto = _packageReceived.readInt();
-				_vectPersonagem[i]._resistencia = _packageReceived.readInt();
+				_myStructChar[i]._agilidade = _packageReceived.readInt();
+				_myStructChar[i]._destreza = _packageReceived.readInt();
+				_myStructChar[i]._forca = _packageReceived.readInt();
+				_myStructChar[i]._instinto = _packageReceived.readInt();
+				_myStructChar[i]._resistencia = _packageReceived.readInt();
 
-				_vectPersonagem[i]._taxaAtaque = _packageReceived.readInt();
-				_vectPersonagem[i]._tempoCarga = _packageReceived.readInt();
-				_vectPersonagem[i]._defesa = _packageReceived.readInt();
-				_vectPersonagem[i]._ataqueCorporal = _packageReceived.readInt();
-				_vectPersonagem[i]._danoCorporal = _packageReceived.readInt();
-				_vectPersonagem[i]._raioAtaque = _packageReceived.readInt();
-				_vectPersonagem[i]._raioDano = _packageReceived.readInt();
+				_myStructChar[i]._taxaAtaque = _packageReceived.readInt();
+				_myStructChar[i]._tempoCarga = _packageReceived.readInt();
+				_myStructChar[i]._defesa = _packageReceived.readInt();
+				_myStructChar[i]._ataqueCorporal = _packageReceived.readInt();
+				_myStructChar[i]._danoCorporal = _packageReceived.readInt();
+				_myStructChar[i]._raioAtaque = _packageReceived.readInt();
+				_myStructChar[i]._raioDano = _packageReceived.readInt();
 
-				_vectPersonagem[i]._idModelo = _packageReceived.readInt();
-				_vectPersonagem[i]._idTextura = _packageReceived.readInt();
-				_vectPersonagem[i]._idHud = _packageReceived.readInt();
+				_myStructChar[i]._idModelo = _packageReceived.readInt();
+				_myStructChar[i]._idTextura = _packageReceived.readInt();
+				_myStructChar[i]._idHud = _packageReceived.readInt();
+
+				_myChar[i] = _gerenciadorCena->addAnimatedMeshSceneNode( getMAnimMesh(_myStructChar[i]._idModelo), 0, _myStructChar[i]._id );
+				_toonShader->apply( _myChar[i], pathTextureModels[_myStructChar[i]._idTextura] );
+
+				switch (i)
+				{
+				case 0:
+					_myChar[i]->setPosition(vector3df(-50,0,0));
+					_myChar[i]->setRotation(vector3df(0,0,0));
+					break;
+
+				case 1:
+					_myChar[i]->setPosition(vector3df(50,0,0));
+					_myChar[i]->setRotation(vector3df(0,0,0));
+					break;
+				};
 			}
+
 			break;
 
-		case LOGIN_OK:
+		case LOGIN_OK: // CODIGO: LOGIN EFETUADO COM SUCESSO
 
-			_meuLoginID = _packageReceived.readInt();
+			_myUserID = _packageReceived.readInt();
 			cout << "\nConectado." << endl;
 			_connected = true;
+
 			break;
 
-		case  LOGIN_FAIL:
+		case  LOGIN_FAIL: // CODIGO: FALHA NA AUTENTICAÇÃO DO LOGIN
 
 			cout << "\nFalha ao conectar. Verificar login e senha." << endl;
 			enviarPacote(DISCONNECT);
-			/*
-			_packageToSend.init(_dataToSend, PACKAGESIZE);
-			_packageToSend.writeByte(0);
-			_gameSocket->SendLine(_packageToSend);*/
 			_gameSocket->Close();
 			_connected = false;
 
 			break;
 
-		default:
+		default: // CODIGO: MENSAGEM NÃO IDENTIFICADA, DESCONECTAR
 
-			// Erro desconhecido
-
-			cout << "\nMensagem inesperada do servidor" << endl;
+			cout << "\nMensagem desconhecida do servidor." << endl;
 			enviarPacote(DISCONNECT);
-			/*
-			_packageToSend.init(_dataToSend, PACKAGESIZE);
-			_packageToSend.writeByte(0);
-			_gameSocket->SendLine(_packageToSend);*/
 			_gameSocket->Close();
 			_connected = false;
 
 		};
 	}
-	else
+	else // CODIGO: SERVIDOR NÃO RESPONDE
 	{
-
-		cout << "\nMensagem vazia do servidor" << endl;
-		enviarPacote(DISCONNECT);/*
-								 _packageToSend.init(_dataToSend, PACKAGESIZE);
-								 _packageToSend.writeByte(0);
-								 _gameSocket->SendLine(_packageToSend);*/
+		cout << "\nServidor não responde." << endl;
+		enviarPacote(DISCONNECT);
 		_gameSocket->Close();
 		_connected = false;
-
 	}
 }

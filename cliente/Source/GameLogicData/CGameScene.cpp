@@ -1,15 +1,15 @@
-#include "CGameLogic.h"
+#include "CGameScene.h"
 
 //-----------------------------------------------------------------------------------------------------------------
 
-CGameLogic::CGameLogic()
+CGameScene::CGameScene()
 {
 	_listaPersonagens = new CListaPersonagem();
 }
 
 //-----------------------------------------------------------------------------------------------------------------
 
-void CGameLogic::addBolsa(int idBolsa, float posX, float posZ)
+void CGameScene::addBolsa(int idBolsa, float posX, float posZ)
 {
 	// Inclui uma bolsa no cenário do cliente
 	SBolsa bolsaTemp;
@@ -24,26 +24,26 @@ void CGameLogic::addBolsa(int idBolsa, float posX, float posZ)
 
 //-----------------------------------------------------------------------------------------------------------------
 
-void CGameLogic::addPersonagem( CPersonagem *personagem )
+void CGameScene::addPersonagem( CPersonagem *personagem )
 {
 	_listaPersonagens->addElement(personagem, personagem->getId());
 }
 
 //-----------------------------------------------------------------------------------------------------------------
 
-void CGameLogic::atualizar()
+void CGameScene::atualizar()
 {
 }
 
 //-----------------------------------------------------------------------------------------------------------------
 
-void CGameLogic::inicializar()
+void CGameScene::inicializar()
 {
 }
 
 //-----------------------------------------------------------------------------------------------------------------
 
-void CGameLogic::removeBolsa(int idBolsa)
+void CGameScene::removeBolsa(int idBolsa)
 {
 	// Remove uma bolsa do cenário do cliente
 	//_listaBolsas->remove(idBolsa);
@@ -51,20 +51,20 @@ void CGameLogic::removeBolsa(int idBolsa)
 
 //-----------------------------------------------------------------------------------------------------------------
 
-void CGameLogic::removePersonagem( CPersonagem *personagem )
+void CGameScene::removePersonagem( CPersonagem *personagem )
 {
 	_listaPersonagens->removeElement(personagem->getId());
 }
 
 //-----------------------------------------------------------------------------------------------------------------
 
-void CGameLogic::resetar()
+void CGameScene::resetar()
 {
 }
 
 //-----------------------------------------------------------------------------------------------------------------
 
-void CGameLogic::setHorario(long hora)
+void CGameScene::setHorario(long hora)
 {
 	// Cenário do cliente recebe a hora do cenário do servidor
 	_horario = hora;
@@ -72,7 +72,7 @@ void CGameLogic::setHorario(long hora)
 
 //-----------------------------------------------------------------------------------------------------------------
 
-void CGameLogic::setLua(int idLua)
+void CGameScene::setLua(int idLua)
 {
 	// Cenário do cliente recebe a lua corrente do cenário do servidor
 	_luaCorrente = (TypeMoon)idLua;
