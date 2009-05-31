@@ -13,6 +13,7 @@
 
 CArmor::CArmor()
 {
+	setID(-1);
 	_raca = ALLRACE;
 	_defesa = 0;
 	_durabilidade = 0;
@@ -20,6 +21,7 @@ CArmor::CArmor()
 }
 CArmor::CArmor(TypeItens nome, EstadoItem estado, int preco, bool isdropable, Raca raca, int def, int dur, int nM)
 {
+	setID(-1);
 	setNome(nome);
 	setEstado(estado);
 	setPrice(preco);

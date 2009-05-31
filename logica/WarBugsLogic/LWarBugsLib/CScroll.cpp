@@ -13,6 +13,7 @@
 
 CScroll::CScroll()
 {
+	setID(-1);
 	_bModificador = 0;
 	_bDanoMin = 0;
 	_bDanoMax = 0;
@@ -24,6 +25,7 @@ CScroll::CScroll()
 //Métodos da CObject
 CScroll::CScroll(TypeItens nome, EstadoItem estado, int preco, bool isdropable, int mod, int danM, int danX, int spd, int rng, int def, int dur)
 {
+	setID(-1);
 	setNome(nome);
 	setEstado(estado);
 	setPrice(preco);

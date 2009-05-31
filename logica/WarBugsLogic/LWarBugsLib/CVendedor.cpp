@@ -13,6 +13,7 @@
 
 CVendedor::CVendedor()
 {
+	setID(-1);
 	coordenada = new Ponto();
 	dinheiro = 0;
 	baseMoveSpeed = 0;
@@ -33,6 +34,7 @@ CVendedor::CVendedor()
 }
 CVendedor::CVendedor(EstadoPersonagem estado, int dinheiro, CBolsa *inventario, Ponto *ancora)
 {
+	setID(-1);
 	_ancora = ancora;
 	setState(estado);
 	setMoney(dinheiro);

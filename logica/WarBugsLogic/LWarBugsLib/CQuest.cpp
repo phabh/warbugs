@@ -13,6 +13,7 @@
 
 CQuest::CQuest(CPersonagemJogador *jogador)
 {
+	setID(-1);
 	_jogador = jogador;
 	_itemNecessario = I_NONE;
 	_inimigoNecessario = M_NONE;
