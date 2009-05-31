@@ -63,7 +63,7 @@ const int MAXITENSVENDEDOR = 30; // Número máximo de itens do vendedor
 
 // Menu
 const int NUMMENUCENA = 3; // número de menus com cenas irr a carregar
-const int MAXSLOTPERSONAGEM = 4; // número máximo de slots de personagem de um jogador
+const int MAXSLOTPERSONAGEM = 2; // número máximo de slots de personagem de um jogador
 
 // Hud
 const int NUMROLETAOPCOES = 6; // número de opções na roleta

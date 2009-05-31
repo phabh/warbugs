@@ -110,7 +110,7 @@ static c8 *pathTextureModels[NUM3DPERS]=
 	"recursos/texturas/tx3d_aranha_mae.png", 
 	"recursos/texturas/tx3d_aranha_filhote.png", 
 	"recursos/texturas/tx3d_besouro_lider.png", 
-	"recursos/texturas/besouro.jpg",//tx3d_besouro_jogador.png", 
+	"recursos/texturas/tx3d_besouro_jogador.png", 
 	"recursos/texturas/tx3d_besouro_soldado.png", 
 	"recursos/texturas/tx3d_besouro_vendedor.png", 
 	"recursos/texturas/tx3d_besouro_mae.png", 

@@ -7,8 +7,10 @@ CToonShader::CToonShader( IrrlichtDevice *device, ILightSceneNode *light )
 	_dispositivo = device;
 	_gerVideo = _dispositivo->getVideoDriver();
 	_gerCena = _dispositivo->getSceneManager();
+	
+	_luz = light;
 
-	_lightPosition = light->getAbsolutePosition();
+	//_lightPosition = light->getAbsolutePosition();
 
 	_camera = _gerCena->getActiveCamera();
 }
@@ -21,8 +23,10 @@ CToonShader::~CToonShader()
 
 //-----------------------------------------------------------------------------------------
 
-void CToonShader::apply(::ISceneNode/*IAnimatedMeshSceneNode*/ *modelo, c8 *textura)
+void CToonShader::apply(ISceneNode/*IAnimatedMeshSceneNode*/ *modelo, c8 *textura)
 {
+	modelo->setMaterialFlag( EMF_NORMALIZE_NORMALS, true );
+
 	modelo->getMaterial(0).setTexture(0, _gerVideo->getTexture(textura));
 	modelo->getMaterial(0).setTexture(1, _gerVideo->getTexture("recursos/texturas/layercell.png"));
 	modelo->getMaterial(0).TextureLayer[1].BilinearFilter = false;
@@ -47,7 +51,7 @@ void CToonShader::OnSetConstants(IMaterialRendererServices* servicos, s32 dados)
 
 	vector3df lightPosOS;
 
-	invWorld.transformVect(lightPosOS, _lightPosition);
+	invWorld.transformVect(lightPosOS, _luz->getAbsolutePosition()/*_lightPosition*/);
 	servicos->setVertexShaderConstant("mLightPos", &lightPosOS.X, 3);
 
 	vector3df camPosOS;
