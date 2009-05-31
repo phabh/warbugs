@@ -112,9 +112,9 @@ void CPersonagem::setName(char *name)
 	if(sizeof(nome) >= strlen(name))
 		strcpy_s(nome, name);
 }
-void CPersonagem::setRace(Raca raca)
+void CPersonagem::setRace(Raca newraca)
 {
-	raca = raca;
+	raca = newraca;
 }
 void CPersonagem::setType(TypeClassChars novotipo)
 {
