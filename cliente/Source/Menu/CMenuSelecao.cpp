@@ -16,8 +16,12 @@ bool CMenuSelecao::start(CGameCore *gameCore)
 
 	_gameCore->loadGameScene(pathArquivoCena[MC_SELECAO]);
 
-	_menuCamera = gameCore->createCamera( vector3df(0,0,0), vector3df(0,0,100), vector3df(0,0,0), 0, 179.0f/*true*/, true);
+	_menuCamera = _gameCore->createCamera( vector3df(0,0,0), vector3df(0,0,100), vector3df(0,0,0), 0, 179.0f/*true*/, true);
 
+	_gameCore->createLight(_menuCamera, vector3df(0,0,0), 1200.0f);
+	
+	_gameCore->initToonShader();
+	
 	_gameCore->playMusic(pathBackgroundSound[MM_SELECAO]);
 
 	_myID = _nextID = MN_SELECAOPERSONAGEM;
@@ -30,52 +34,12 @@ bool CMenuSelecao::start(CGameCore *gameCore)
 	_camRotation = 0;
 	_camCurrRotation = 0;
 
-	_luz = _gerCena->addLightSceneNode(0, vector3df(0,50,0/*500,500,500*/), SColorf(1.0f, 0.6f, 0.7f, 1.0f), 1200.0f);
+	_gameCore->enviarPacote(PERSONAGENS_REQUEST, _gameCore->_myUserID);
 
-	_toonShader = new CToonShader(_dispGrafico, _luz);
-
-	_gameCore->enviarPacote(PERSONAGENS_REQUEST, _gameCore->_meuLoginID);
 	_gameCore->receberPacote();
 
-	if(_gameCore->_nSlotChars > 0)
-	{
-		for(int i=0; i<_gameCore->_nSlotChars; i++)
-		{
-			_gameCore->_personagem[i] = _gerCena->addAnimatedMeshSceneNode(_gerCena->getMesh(pathCharsModels[_gameCore->_vectPersonagem[i]._idModelo]), 0, _gameCore->_vectPersonagem[i]._id );
-
-			_gameCore->_personagem[i]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-
-			_toonShader->apply(_gameCore->_personagem[i], pathTextureModels[_gameCore->_vectPersonagem[i]._idTextura]);
-
-			_gameCore->_personagem[i]->setAnimationSpeed(0);
-
-			switch (i)
-			{
-
-			case 0:
-				_gameCore->_personagem[i]->setPosition(vector3df(0,0,50));
-				_gameCore->_personagem[i]->setRotation(vector3df(0,0,0));
-				break;
-
-			case 1:
-				_gameCore->_personagem[i]->setPosition(vector3df(50,0,0));
-				_gameCore->_personagem[i]->setRotation(vector3df(0,90,0));
-				break;
-
-			case 2:
-				_gameCore->_personagem[i]->setPosition(vector3df(0,0,-50));
-				_gameCore->_personagem[i]->setRotation(vector3df(0,180,0));
-				break;
-
-			case 3:
-				_gameCore->_personagem[i]->setPosition(vector3df(-50,0,0));
-				_gameCore->_personagem[i]->setRotation(vector3df(0,270,0));
-				break;
-			}
-		}
-	}
-	else
-		_nextID = MN_CRIACAOPERSONAGEM;
+	if(_gameCore->_numMyChars == 0) // Se não possuo personagem algum
+		_nextID = MN_CRIACAOPERSONAGEM; // Ir direto ao menu de criação
 
 	return true;
 }
@@ -92,12 +56,12 @@ void CMenuSelecao::updateHuds()
 {
 	_gerHud->clear();
 
-	_gerHud->addButton(rect<s32>(440,500,540,540), 0, 3, L"Criar");
-
+	_gerHud->addButton(rect<s32>(440,500,540,540), 0, 2 , L"Criar");
+	_gerHud->addButton(rect<s32>(440,500,540,540), 0, 3, L"Remover");
 	_gerHud->addButton(rect<s32>(320,500,430,540), 0, 4, L"Jogar");
 
-	_gerHud->addButton(rect<s32>(140,10,240,50), 0, 5, L"<");
-	_gerHud->addButton(rect<s32>(540,10,640,50), 0, 6, L">");
+	//_gerHud->addButton(rect<s32>(140,10,240,50), 0, 5, L"<");
+	//_gerHud->addButton(rect<s32>(540,10,640,50), 0, 6, L">");
 
 	_menuFlag[HUDUPDATED] = true;
 }
