@@ -2,11 +2,13 @@
 
 CBolsa::CBolsa(void)
 {
+	setID(-1);
 	_first = new SElemento();
 	_size = 0;
 }
 CBolsa::CBolsa(CItem *item)
 {
+	setID(-1);
 	_first = new SElemento();
 	_first->valor = item;
 	_first->next = NULL;

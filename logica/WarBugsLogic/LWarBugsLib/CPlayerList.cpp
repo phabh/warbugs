@@ -2,11 +2,13 @@
 
 CPlayerList::CPlayerList(void)
 {
+	setID(-1);
 	_first = new SPlayerElemento();
 	_size = 0;
 }
 CPlayerList::CPlayerList(CJogador *Jogador)
 {
+	setID(-1);
 	_first = new SPlayerElemento();
 	_first->valor = Jogador;
 	_first->next = NULL;

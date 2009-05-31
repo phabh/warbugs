@@ -2,6 +2,7 @@
 
 CJogador::CJogador(void)
 {
+	setID(-1);
 }
 char *CJogador::getName()
 {

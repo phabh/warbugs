@@ -15,6 +15,7 @@
 
 CPersonagem::CPersonagem()
 {
+	setID(-1);
 	dinheiro = 0;
 	baseMoveSpeed = 0;
 	habilidadesPrimarias = new CHabilidades();

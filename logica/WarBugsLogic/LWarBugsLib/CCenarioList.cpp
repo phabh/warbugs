@@ -2,11 +2,13 @@
 
 CCenarioList::CCenarioList(void)
 {
+	setID(-1);
 	_first = new SCenarioElemento();
 	_size = 0;
 }
 CCenarioList::CCenarioList(CCenario *Cenario)
 {
+	setID(-1);
 	_first = new SCenarioElemento();
 	_first->valor = Cenario;
 	_first->next = NULL;

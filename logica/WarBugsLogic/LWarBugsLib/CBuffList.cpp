@@ -3,11 +3,13 @@
 
 CBuffList::CBuffList(void)
 {
+	setID(-1);
 	_first = new SBuffElemento();
 	_size = 0;
 }
 CBuffList::CBuffList(CBuff *Buff)
 {
+	setID(-1);
 	_first = new SBuffElemento();
 	_first->valor = Buff;
 	_first->next = NULL;

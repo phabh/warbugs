@@ -13,6 +13,7 @@
 
 CPersonagemJogador::CPersonagemJogador()
 {
+	setID(-1);
 	coordenada = new Ponto();
 	dinheiro = 0;
 	baseMoveSpeed = 0;

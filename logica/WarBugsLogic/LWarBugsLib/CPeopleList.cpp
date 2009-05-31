@@ -2,11 +2,13 @@
 
 CPeopleList::CPeopleList(void)
 {
+	setID(-1);
 	_first = new SCharElemento();
 	_size = 0;
 }
 CPeopleList::CPeopleList(CPersonagem *personagem)
 {
+	setID(-1);
 	_first = new SCharElemento();
 	_first->valor = personagem;
 	_first->next = NULL;

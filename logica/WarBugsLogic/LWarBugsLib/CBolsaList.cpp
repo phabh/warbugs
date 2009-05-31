@@ -2,11 +2,13 @@
 
 CBolsaList::CBolsaList(void)
 {
+	setID(-1);
 	_first = new SBagElemento();
 	_size = 0;
 }
 CBolsaList::CBolsaList(CBolsa *bolsa)
 {
+	setID(-1);
 	_first = new SBagElemento();
 	_first->valor = bolsa;
 	_first->next = NULL;

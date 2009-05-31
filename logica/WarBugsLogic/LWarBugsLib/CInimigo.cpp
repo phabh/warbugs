@@ -13,6 +13,7 @@
 
 CInimigo::CInimigo()
 {
+	setID(-1);
 	coordenada = new Ponto();
 	dinheiro = 0;
 	baseMoveSpeed = 0;
@@ -26,6 +27,7 @@ CInimigo::CInimigo()
 }
 CInimigo::CInimigo(CCenario *cenario)
 {
+	setID(-1);
 	_cenario = cenario;
 }
 CCenario *CInimigo::getScene()

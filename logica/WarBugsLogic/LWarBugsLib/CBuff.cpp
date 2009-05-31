@@ -15,6 +15,7 @@
 
 CBuff::CBuff()
 {
+	setID(-1);
 	_duracao = 0;
 	_indiceImagem = -1;
 	_indiceEfeito = -1;
@@ -26,6 +27,7 @@ CBuff::CBuff()
 }
 CBuff::CBuff(TipoBuff tipo, int dur, /*int img, int efc,*/ int val1, int val2, int val3)
 {
+	setID(-1);
 	_tipoBuff = tipo;
 	//_indiceEfeito = efc;
 	//_indiceImagem = img;

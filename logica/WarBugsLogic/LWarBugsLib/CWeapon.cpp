@@ -13,6 +13,7 @@
 
 CWeapon::CWeapon()
 {
+	setID(-1);
 	_raca = ALLRACE;
 	_modificador = 0;
 	_danoMin = 0;
@@ -25,6 +26,7 @@ CWeapon::CWeapon()
 //Métodos da CObject
 CWeapon::CWeapon(TypeItens nome, EstadoItem estado, int preco, bool isdropable, Raca raca, int mod, int danM, int danX, int spd, int rng, int dur, int nM)
 {
+	setID(-1);
 	setNome(nome);
 	setEstado(estado);
 	setPrice(preco);
