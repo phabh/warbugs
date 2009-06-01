@@ -704,7 +704,7 @@ private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  
 
 			
 			//Atualiza os Server
-			//_coreServer->updateAll();
+			_coreServer->updateAll();
 
 			//Envia mensagens para os clientes
 			_coreServer->sendAllMessages();
