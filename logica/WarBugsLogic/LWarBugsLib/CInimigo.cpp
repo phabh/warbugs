@@ -24,23 +24,15 @@ CInimigo::CInimigo()
 	habilidadesSecundarias = new CHabilidadesSecundarias();
 	bonusSecundario = new CBonusSecundario();
 	status = new CBuffList();
-	_cenario = NULL;
-}
-CCenario *CInimigo::getScene()
-{
-	return(_cenario);
-}
-void CInimigo::setScene(CCenario *newScene)
-{
-	_cenario = newScene;
+	cenario = NULL;
 }
 void CInimigo::takeDecision()
 {
-	for(int i = 0; i < _cenario->personagemCount(); i = i + 1)
+	for(int i = 0; i < cenario->personagemCount(); i = i + 1)
 	{
-		if(this->getDistanceToPoint(_cenario->getPlayerAt(i)->getPosition()) <= MAXMELEERANGE)
+		if(this->getDistanceToPoint(cenario->getPlayerAt(i)->getPosition()) <= MAXMELEERANGE)
 		{
-			this->setTarget(_cenario->getPlayerAt(i));
+			this->setTarget(cenario->getPlayerAt(i));
 		}
 		else
 		{
