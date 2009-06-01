@@ -7,8 +7,9 @@ class CMenuSelecao : public CMenu
 
 private:
 
-	int _idPersonagem;
-	ISceneNode *_nodoSelecionado;
+	int _idChar;
+	//int _numChars;
+	ISceneNode *_nodeChar;
 
 	float _camRotation;
 	float _camCurrRotation;
