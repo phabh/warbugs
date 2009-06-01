@@ -8,12 +8,17 @@ using namespace std;
 /*Identificador de Mensagens*/
 enum TYPE_MESSAGE 
 {
+	DISCONNECT = 0,
+	PING,
+	END_FRAME,
 	//MENSAGENS RECEBIDAS
 	LOGIN_OK = 33, // se o login foi OK
 	LOGIN_FAIL, //se o login falhou por algum motivo
 	SHOW_PERSONAGENS, //QTD PERSONAGENS QUE O JOGADOR POSSUI, E OS PERSONAGENS
 	CREATE_PLAYER_OK, //o player foi criado com sucesso
 	CREATE_PLAYER_FAIL, //não foi possível criar o player
+	DELETE_PLAYER_OK,	
+	DELETE_PLAYER_FAIL,
 	ENTER_CENARIO,//id cenario, POSICAO X, POSICAO Z, qtd Inimigos, qtdNPC, qtdVendedores, qtdPersonagensJogadores, qtdBolsa
 	ADD_PERSONAGEM, //atributos do outros persoangens NPC, Jogadores
 	ADD_BOLSA,//id bolsa, POSICAO X, POSICAO Z, estado bolsa
@@ -48,6 +53,7 @@ enum TYPE_MESSAGE
 	LOGIN_REQUEST, //LOGIN, SENHA
 	PERSONAGENS_REQUEST, //ID PESSOA
 	CREATE_PERSONAGEM, //ID RACA, NOME
+	DELETE_PERSONAGEM,
 	PLAY, //ID PERSONAGEM
 	SEND_POSITION, //ID PERSONAGEM, POSICAO X, POSICAO Z
 	SEND_ESTADO, //IDPERSONAGEM, ESTADO
@@ -79,7 +85,33 @@ enum TYPE_MESSAGE
 	TRADE_CONCLUDE //ID PERSONAGEM, ID FREGUES
 };
 
+enum Raca 
+{
+	NONERACE, 
+	ALLRACE, 
+	ARANHA, 
+	BESOURO, 
+	ESCORPIAO, 
+	LOUVADEUS, 
+	VESPA, 
+	CUPIM, 
+	FORMIGA, 
+	BARBEIRO, 
+	BARATA, 
+	TATUBOLINHA, 
+	LIBELULA, 
+	PERCEVEJO, 
+	ABELHA, 
+	LAGARTIXA, 
+	CALANGO, 
+	SAPO, 
+	JOANINHA, 
+	CAMALEAO
+};
+
 #define PORT 30003
+#define NUMCONNECTIONS 54
+#define NUMPERSONAGEMJOGADOR 2
 
 int main()
 {
@@ -140,7 +172,7 @@ int main()
 
 			mesEnv.clear();
 			mesEnv.writeByte(PERSONAGENS_REQUEST); // requisição de login
-			mesEnv.writeLong(idJogador);
+			mesEnv.writeInt(idJogador);
 
 			//Envia a mensagem
 			_socketClient->SendLine(mesEnv);
@@ -155,31 +187,59 @@ int main()
 			cout<<"\nRecebeu Pacote";
 			if(mesRec.getSize() != 0)
 			{
-				cout<<"\nPacote Recebido = "<< mesRec.readByte(); //le o id da mensagem
-				cout<<"\nPacote Recebido = "<< mesRec.readInt(); //le o id da mensagem
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				cout<<"\nPacote Recebido = "<<mesRec.readString();
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				//Habilidades Primárias
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				//Habilidades Secundárias
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				//3D
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
-				cout<<"\nPacote Recebido = "<<mesRec.readInt();
+				mesRec.readByte(); //le o id da mensagem
+
+				if(mesRec.readInt() > 0)
+				{
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					cout<<"\nPacote Recebido = "<<mesRec.readString();
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					//Habilidades Primárias
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					//Habilidades Secundárias
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					//3D
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+					cout<<"\nPacote Recebido = "<<mesRec.readInt();
+
+					mesEnv.clear();
+					mesEnv.writeByte(DELETE_PERSONAGEM); // requisição de login
+					mesEnv.writeInt(idJogador);
+					mesEnv.writeInt(19);
+					mesEnv.writeString("VespaPita");
+					_socketClient->SendLine(mesEnv);
+
+				}
+				else
+				{
+					mesEnv.clear();
+					mesEnv.writeByte(CREATE_PERSONAGEM); // requisição de login
+					mesEnv.writeInt(idJogador);
+					mesEnv.writeInt((int)VESPA);
+					mesEnv.writeString("VespaPita");
+					_socketClient->SendLine(mesEnv);
+				}
+
+				cout<<"\nRecebendo Pacote...";
+				//recebe o pacote
+				mesRec.clear();
+				_socketClient->ReceiveLine(mesRec);
+				cout<<"\nPacote Recebido = "<<mesRec.readByte();
 			}
 		}
+
+
 
 	}catch(...)
 	{
