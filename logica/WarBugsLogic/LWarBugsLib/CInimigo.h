@@ -27,7 +27,6 @@ private:
 	//Objeto de ia
 public:
 	CInimigo();
-	CInimigo(CCenario *cenario);
 
 	CCenario *getScene();
 

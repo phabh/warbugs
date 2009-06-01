@@ -15,6 +15,7 @@ CInimigo::CInimigo()
 {
 	setID(-1);
 	coordenada = new Ponto();
+	destino = new Ponto();
 	dinheiro = 0;
 	baseMoveSpeed = 0;
 	habilidadesPrimarias = new CHabilidades();
@@ -24,11 +25,6 @@ CInimigo::CInimigo()
 	bonusSecundario = new CBonusSecundario();
 	status = new CBuffList();
 	_cenario = NULL;
-}
-CInimigo::CInimigo(CCenario *cenario)
-{
-	setID(-1);
-	_cenario = cenario;
 }
 CCenario *CInimigo::getScene()
 {
@@ -51,7 +47,7 @@ void CInimigo::takeDecision()
 			this->setTarget(NULL);
 		}
 	}
-	switch((clock()%8)+1)
+	switch((clock()%8))
 	{
 	case 0:
 		destino->x = destino->x - QUADRANTESIZE;
