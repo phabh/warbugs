@@ -37,7 +37,7 @@ public:
 	CPeopleList           getPersonagemJogador(int idJogador);
 	CPeopleList			  getPersonagem(int idTipoPersonagem, int idRaca, bool personagemBase);
 	CPeopleList			  getPersonagem(int idTipoPersonagem, int idRaca);
-	CPeopleList			  getPersonagem(int idTipoPersonagem, int idRaca, int idCenario);
+	CPeopleList			* getPersonagem(int idTipoPersonagem, int idRaca, int idCenario);
 	
 	//Obter Itens
 	CItem   * getItem(int id);

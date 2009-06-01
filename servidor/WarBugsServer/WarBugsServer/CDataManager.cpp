@@ -121,17 +121,17 @@ CPersonagem * CDataManager::getPersonagem(int id)
 				//FICA PRA DEPOIS
 				((CPersonagemJogador *)personagem)->setPlayer(-1);
 
-				float posX = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString());
-				float posZ = (float)System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString());
+				float posX = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGX")]->ToString()));
+				float posZ = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGZ")]->ToString()));
 
 				((CPersonagemJogador *)personagem)->setPosition(posX, posZ);
 
-				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+				float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-				((CPersonagemJogador *)personagem)->setMoveSpeed(dado[0]);
+				((CPersonagemJogador *)personagem)->setMoveSpeed(tempVel);
 
-				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-				((CPersonagemJogador *)personagem)->setDirection(dado[0]);
+				float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+				((CPersonagemJogador *)personagem)->setDirection(tempDir);
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 				((CPersonagemJogador *)personagem)->setRespawnTime(dado[0]);
@@ -227,12 +227,12 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 							((CInimigo *)personagem)->setPosition(posX, posZ);
 
-							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+							float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-							((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+							((CInimigo *)personagem)->setMoveSpeed(tempVel);
 
-							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-							((CInimigo *)personagem)->setDirection(dado[0]);
+							float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+							((CInimigo *)personagem)->setDirection(tempDir);
 
 							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 							((CInimigo *)personagem)->setRespawnTime(dado[0]);
@@ -309,12 +309,12 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 							((CNPC *)personagem)->setPosition(posX, posZ);
 
-							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+							float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-							((CNPC *)personagem)->setMoveSpeed(dado[0]);
+							((CNPC *)personagem)->setMoveSpeed(tempVel);
 
-							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-							((CNPC *)personagem)->setDirection(dado[0]);
+							float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+							((CNPC *)personagem)->setDirection(tempDir);
 
 							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 							((CNPC *)personagem)->setRespawnTime(dado[0]);
@@ -394,12 +394,12 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 				((CNPC *)personagem)->setPosition(posX, posZ);
 
-				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+				float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-				((CNPC *)personagem)->setMoveSpeed(dado[0]);
+				((CNPC *)personagem)->setMoveSpeed(tempVel);
 
-				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-				((CNPC *)personagem)->setDirection(dado[0]);
+				float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+				((CNPC *)personagem)->setDirection(tempDir);
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 				((CNPC *)personagem)->setRespawnTime(dado[0]);
@@ -475,12 +475,12 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 				((CVendedor *)personagem)->setPosition(posX, posZ);
 
-				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+				float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-				((CVendedor *)personagem)->setMoveSpeed(dado[0]);
+				((CVendedor *)personagem)->setMoveSpeed(tempVel);
 
-				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-				((CVendedor *)personagem)->setDirection(dado[0]);
+				float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+				((CVendedor *)personagem)->setDirection(tempDir);
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 				((CVendedor *)personagem)->setRespawnTime(dado[0]);
@@ -720,12 +720,12 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 					((CInimigo *)personagem)->setPosition(posX, posZ);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+					float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-					((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+					((CInimigo *)personagem)->setMoveSpeed(tempVel);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-					((CInimigo *)personagem)->setDirection(dado[0]);
+					float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+					((CInimigo *)personagem)->setDirection(tempDir);
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 					((CInimigo *)personagem)->setRespawnTime(dado[0]);
@@ -800,12 +800,12 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 					((CNPC *)personagem)->setPosition(posX, posZ);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+					float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-					((CNPC *)personagem)->setMoveSpeed(dado[0]);
+					((CNPC *)personagem)->setMoveSpeed(tempVel);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-					((CNPC *)personagem)->setDirection(dado[0]);
+					float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+					((CNPC *)personagem)->setDirection(tempDir);
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 					((CNPC *)personagem)->setRespawnTime(dado[0]);
@@ -958,12 +958,12 @@ CPeopleList CDataManager::getPersonagemJogador(int idJogador)
 
 		((CPersonagemJogador *)personagem)->setPosition(posX, posZ);
 
-		dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+		float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-		((CPersonagemJogador *)personagem)->setMoveSpeed(dado[0]);
+		((CPersonagemJogador *)personagem)->setMoveSpeed(tempVel);
 
-		dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-		((CPersonagemJogador *)personagem)->setDirection(dado[0]);
+		float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+		((CPersonagemJogador *)personagem)->setDirection(tempDir);
 
 		dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 		((CPersonagemJogador *)personagem)->setRespawnTime(dado[0]);
@@ -1148,12 +1148,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 					((CPersonagemJogador *)personagem)->setPosition(posX, posZ);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+					float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-					((CPersonagemJogador *)personagem)->setMoveSpeed(dado[0]);
+					((CPersonagemJogador *)personagem)->setMoveSpeed(tempVel);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-					((CPersonagemJogador *)personagem)->setDirection(dado[0]);
+					float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+					((CPersonagemJogador *)personagem)->setDirection(tempDir);
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 					((CPersonagemJogador *)personagem)->setRespawnTime(dado[0]);
@@ -1249,12 +1249,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 								((CInimigo *)personagem)->setPosition(posX, posZ);
 
-								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+								float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-								((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+								((CInimigo *)personagem)->setMoveSpeed(tempVel);
 
-								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-								((CInimigo *)personagem)->setDirection(dado[0]);
+								float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+								((CInimigo *)personagem)->setDirection(tempDir);
 
 								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 								((CInimigo *)personagem)->setRespawnTime(dado[0]);
@@ -1331,12 +1331,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 								((CNPC *)personagem)->setPosition(posX, posZ);
 
-								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+								float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-								((CNPC *)personagem)->setMoveSpeed(dado[0]);
+								((CNPC *)personagem)->setMoveSpeed(tempVel);
 
-								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-								((CNPC *)personagem)->setDirection(dado[0]);
+								float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+								((CNPC *)personagem)->setDirection(tempDir);
 
 								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 								((CNPC *)personagem)->setRespawnTime(dado[0]);
@@ -1416,12 +1416,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 					((CNPC *)personagem)->setPosition(posX, posZ);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+					float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-					((CNPC *)personagem)->setMoveSpeed(dado[0]);
+					((CNPC *)personagem)->setMoveSpeed(tempVel);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-					((CNPC *)personagem)->setDirection(dado[0]);
+					float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+					((CNPC *)personagem)->setDirection(tempDir);
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 					((CNPC *)personagem)->setRespawnTime(dado[0]);
@@ -1497,12 +1497,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 					((CVendedor *)personagem)->setPosition(posX, posZ);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+					float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-					((CVendedor *)personagem)->setMoveSpeed(dado[0]);
+					((CVendedor *)personagem)->setMoveSpeed(tempVel);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-					((CVendedor *)personagem)->setDirection(dado[0]);
+					float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+					((CVendedor *)personagem)->setDirection(tempDir);
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 					((CVendedor *)personagem)->setRespawnTime(dado[0]);
@@ -1742,12 +1742,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 						((CInimigo *)personagem)->setPosition(posX, posZ);
 
-						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+						float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-						((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+						((CInimigo *)personagem)->setMoveSpeed(tempVel);
 
-						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-						((CInimigo *)personagem)->setDirection(dado[0]);
+						float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+						((CInimigo *)personagem)->setDirection(tempDir);
 
 						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 						((CInimigo *)personagem)->setRespawnTime(dado[0]);
@@ -1822,12 +1822,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 						((CNPC *)personagem)->setPosition(posX, posZ);
 
-						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+						float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-						((CNPC *)personagem)->setMoveSpeed(dado[0]);
+						((CNPC *)personagem)->setMoveSpeed(tempVel);
 
-						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-						((CNPC *)personagem)->setDirection(dado[0]);
+						float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+						((CNPC *)personagem)->setDirection(tempDir);
 
 						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 						((CNPC *)personagem)->setRespawnTime(dado[0]);
@@ -1891,8 +1891,11 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 	@param idCenario-> cenario onde ele está
 	@return -> lista de personagem
 */
-CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int idCenario)
+CPeopleList * CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int idCenario)
 {
+
+	CPeopleList * tempList = new CPeopleList();
+
 	TDadosBD ^ dados      = gcnew TDadosBD();
 	TDadosBD ^ nomeCampos = gcnew TDadosBD();
 	unsigned int numRegs   = 0;
@@ -1912,13 +1915,11 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 		
 	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
 
-	CPeopleList Lista;
-	
 	if(numRegs == 0 || numCampos == 0)
 	{
 		System::String ^texto = L"Não foi encontrado o Tipo de Personagem "+idTipoPersonagem+" no cenário "+idCenario;
 		WarBugsLog::_log->Items->Add(texto);		
-		return Lista;	
+		return tempList;	
 	}
 
 	for(int i = 0; i < (int)numCampos; i++)
@@ -2005,12 +2006,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 					((CPersonagemJogador *)personagem)->setPosition(posX, posZ);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+					float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-					((CPersonagemJogador *)personagem)->setMoveSpeed(dado[0]);
+					((CPersonagemJogador *)personagem)->setMoveSpeed(tempVel);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-					((CPersonagemJogador *)personagem)->setDirection(dado[0]);
+					float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+					((CPersonagemJogador *)personagem)->setDirection(tempDir);
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 					((CPersonagemJogador *)personagem)->setRespawnTime(dado[0]);
@@ -2106,12 +2107,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 								((CInimigo *)personagem)->setPosition(posX, posZ);
 
-								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+								float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-								((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+								((CInimigo *)personagem)->setMoveSpeed(tempVel);
 
-								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-								((CInimigo *)personagem)->setDirection(dado[0]);
+								float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+								((CInimigo *)personagem)->setDirection(tempDir);
 
 								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 								((CInimigo *)personagem)->setRespawnTime(dado[0]);
@@ -2188,12 +2189,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 								((CNPC *)personagem)->setPosition(posX, posZ);
 
-								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+								float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-								((CNPC *)personagem)->setMoveSpeed(dado[0]);
+								((CNPC *)personagem)->setMoveSpeed(tempVel);
 
-								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-								((CNPC *)personagem)->setDirection(dado[0]);
+								float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+								((CNPC *)personagem)->setDirection(tempDir);
 
 								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 								((CNPC *)personagem)->setRespawnTime(dado[0]);
@@ -2273,12 +2274,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 					((CNPC *)personagem)->setPosition(posX, posZ);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+					float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-					((CNPC *)personagem)->setMoveSpeed(dado[0]);
+					((CNPC *)personagem)->setMoveSpeed(tempVel);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-					((CNPC *)personagem)->setDirection(dado[0]);
+					float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+					((CNPC *)personagem)->setDirection(tempDir);
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 					((CNPC *)personagem)->setRespawnTime(dado[0]);
@@ -2354,12 +2355,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 					((CVendedor *)personagem)->setPosition(posX, posZ);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+					float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-					((CVendedor *)personagem)->setMoveSpeed(dado[0]);
+					((CVendedor *)personagem)->setMoveSpeed(tempVel);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-					((CVendedor *)personagem)->setDirection(dado[0]);
+					float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+					((CVendedor *)personagem)->setDirection(tempDir);
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 					((CVendedor *)personagem)->setRespawnTime(dado[0]);
@@ -2600,12 +2601,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 						((CInimigo *)personagem)->setPosition(posX, posZ);
 
-						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+						float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-						((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+						((CInimigo *)personagem)->setMoveSpeed(tempVel);
 
-						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-						((CInimigo *)personagem)->setDirection(dado[0]);
+						float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+						((CInimigo *)personagem)->setDirection(tempDir);
 
 						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 						((CInimigo *)personagem)->setRespawnTime(dado[0]);
@@ -2680,12 +2681,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 						((CNPC *)personagem)->setPosition(posX, posZ);
 
-						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+						float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-						((CNPC *)personagem)->setMoveSpeed(dado[0]);
+						((CNPC *)personagem)->setMoveSpeed(tempVel);
 
-						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-						((CNPC *)personagem)->setDirection(dado[0]);
+						float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+						((CNPC *)personagem)->setDirection(tempDir);
 
 						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 						((CNPC *)personagem)->setRespawnTime(dado[0]);
@@ -2736,10 +2737,10 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 			dados->RemoveAt(0);
 		}
 
-		Lista.addPersonagem(personagem);
+		tempList->addPersonagem(personagem);
 	}
 
-	return Lista;	
+	return tempList;	
 }
 
 	
@@ -2861,12 +2862,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 					((CPersonagemJogador *)personagem)->setPosition(posX, posZ);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+					float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-					((CPersonagemJogador *)personagem)->setMoveSpeed(dado[0]);
-					
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-					((CPersonagemJogador *)personagem)->setDirection(dado[0]);
+					((CPersonagemJogador *)personagem)->setMoveSpeed(tempVel);
+
+					float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+					((CPersonagemJogador *)personagem)->setDirection(tempDir);
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 					((CPersonagemJogador *)personagem)->setRespawnTime(dado[0]);
@@ -2962,12 +2963,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 								((CInimigo *)personagem)->setPosition(posX, posZ);
 
-								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+								float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-								((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+								((CInimigo *)personagem)->setMoveSpeed(tempVel);
 
-								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-								((CInimigo *)personagem)->setDirection(dado[0]);
+								float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+								((CInimigo *)personagem)->setDirection(tempDir);
 
 								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 								((CInimigo *)personagem)->setRespawnTime(dado[0]);
@@ -3044,12 +3045,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 								((CNPC *)personagem)->setPosition(posX, posZ);
 
-								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+								float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-								((CNPC *)personagem)->setMoveSpeed(dado[0]);
+								((CNPC *)personagem)->setMoveSpeed(tempVel);
 
-								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-								((CNPC *)personagem)->setDirection(dado[0]);
+								float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+								((CNPC *)personagem)->setDirection(tempDir);
 
 								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 								((CNPC *)personagem)->setRespawnTime(dado[0]);
@@ -3129,12 +3130,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 					((CNPC *)personagem)->setPosition(posX, posZ);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+					float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-					((CNPC *)personagem)->setMoveSpeed(dado[0]);
+					((CNPC *)personagem)->setMoveSpeed(tempVel);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-					((CNPC *)personagem)->setDirection(dado[0]);
+					float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+					((CNPC *)personagem)->setDirection(tempDir);
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 					((CNPC *)personagem)->setRespawnTime(dado[0]);
@@ -3210,12 +3211,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 					((CVendedor *)personagem)->setPosition(posX, posZ);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+					float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-					((CVendedor *)personagem)->setMoveSpeed(dado[0]);
+					((CVendedor *)personagem)->setMoveSpeed(tempVel);
 
-					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-					((CVendedor *)personagem)->setDirection(dado[0]);
+					float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+					((CVendedor *)personagem)->setDirection(tempDir);
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 					((CVendedor *)personagem)->setRespawnTime(dado[0]);
@@ -3455,12 +3456,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 						((CInimigo *)personagem)->setPosition(posX, posZ);
 
-						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+						float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-						((CInimigo *)personagem)->setMoveSpeed(dado[0]);
+						((CInimigo *)personagem)->setMoveSpeed(tempVel);
 
-						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-						((CInimigo *)personagem)->setDirection(dado[0]);
+						float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+						((CInimigo *)personagem)->setDirection(tempDir);
 
 						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 						((CInimigo *)personagem)->setRespawnTime(dado[0]);
@@ -3535,12 +3536,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 						((CNPC *)personagem)->setPosition(posX, posZ);
 
-						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
+						float tempVel = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString()));
 
-						((CNPC *)personagem)->setMoveSpeed(dado[0]);
+						((CNPC *)personagem)->setMoveSpeed(tempVel);
 
-						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
-						((CNPC *)personagem)->setDirection(dado[0]);
+						float tempDir = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString()));
+						((CNPC *)personagem)->setDirection(tempDir);
 
 						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
 						((CNPC *)personagem)->setRespawnTime(dado[0]);
@@ -4009,23 +4010,27 @@ CCenarioList * CDataManager::getListCenario()
 		dados->RemoveAt(0);
 	}	
 
-	CCenario * cenarioTemp;
-	
 	for(int i = 0; i < (int)numRegs; i++)
 	{
 
 		int idcenario = System::Int32::Parse(dados[nomeCampos->IndexOf(L"CNID")]->ToString());
-		CPeopleList * listaInimigos   = &getPersonagem( SOLDADO, ALLRACE, idcenario);
+		
+		CPeopleList * listaInimigos = getPersonagem( SOLDADO, ALLRACE, idcenario);
 		CPeopleList * listaPersonagem = new CPeopleList();
-		CPeopleList * listaNPC		  = new CPeopleList();
+		CPeopleList * listaNPC = new CPeopleList();
 		CPeopleList * listaVendedores = new CPeopleList();
-		CBolsaList * listaBolsas      = getListBolsa(idcenario);
-		CPortal * portalSul           = getPortal(idcenario,SUL);
-		CPortal * portalNorte		  = getPortal(idcenario,NORTE);
-		CPortal * portalOeste		  = getPortal(idcenario,OESTE);
-		CPortal * portalLeste		  = getPortal(idcenario,LESTE);
+		CBolsaList  * listaBolsas = getListBolsa(idcenario);
+		CPortal * portalSul = getPortal(idcenario,SUL);
+		CPortal * portalNorte = getPortal(idcenario,NORTE);
+		CPortal * portalOeste = getPortal(idcenario,OESTE);
+		CPortal * portalLeste = getPortal(idcenario,LESTE);
 
-		cenarioTemp = new CCenario(idcenario, listaPersonagem, listaInimigos, listaNPC, listaVendedores, listaBolsas, portalNorte, portalSul, portalOeste, portalLeste);
+		CCenario * cenarioTemp = new CCenario(idcenario, listaPersonagem, listaInimigos, listaNPC, listaVendedores, listaBolsas, portalNorte, portalSul, portalOeste, portalLeste);
+
+		for(int k = 0; k < listaInimigos->size(); k++)
+		{
+			cenarioTemp->getMonsterAt(k)->setScene(cenarioTemp);
+		}
 
 		listCenario->addCenario(cenarioTemp);
 
@@ -4331,7 +4336,7 @@ CBolsa CDataManager::getBolsaTipoItem(int Tipo)
 */
 CBolsaList * CDataManager::getListBolsa(int idCenario)
 {
-	CBolsaList * listaBolsa;
+	CBolsaList * listaBolsa = new CBolsaList();
 
 	TDadosBD ^ dados      = gcnew TDadosBD();
 	TDadosBD ^ nomeCampos = gcnew TDadosBD();
@@ -4353,7 +4358,7 @@ CBolsaList * CDataManager::getListBolsa(int idCenario)
 	{
 		System::String ^texto = L"Não foi encontrado as bolsas do cenário "+idCenario;
 		WarBugsLog::_log->Items->Add(texto);		
-		return NULL;	
+		return listaBolsa;	
 	}
 
 	for(int i = 0; i < (int)numCampos; i++)
@@ -4597,11 +4602,11 @@ CBolsaList * CDataManager::getListBolsa(int idCenario)
 
 			}
 
-			dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"BSX")]->ToString());
-			dado[1] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"BSY")]->ToString());
-			dado[2] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"BSZ")]->ToString());
+			float tempX = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"BSX")]->ToString()));
+			float tempY = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"BSY")]->ToString()));
+			float tempZ = float(System::Double::Parse(dados[nomeCampos->IndexOf(L"BSZ")]->ToString()));
 
-			bolsa.setPosition(dado[0],dado[2]);
+			bolsa.setPosition(tempX,tempZ);
 
 			bolsa.addItem(item);
 
@@ -4682,7 +4687,7 @@ CJogador CDataManager::getJogador(char * login)
 */
 CPortal * CDataManager::getPortal(int idCenario, Direcoes direcao)
 {
-	CPortal * portal;
+	CPortal * portal = new CPortal();
 
 	TDadosBD ^ dados      = gcnew TDadosBD();
 	TDadosBD ^ nomeCampos = gcnew TDadosBD();
@@ -4713,12 +4718,12 @@ CPortal * CDataManager::getPortal(int idCenario, Direcoes direcao)
 
 	portal = new CPortal(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PTID")]->ToString()),
 						 System::Int32::Parse(dados[nomeCampos->IndexOf(L"PTIDCENARIODEST")]->ToString()),
-						 System::Double::Parse(dados[nomeCampos->IndexOf(L"PTDESTX")]->ToString()),
-					     System::Double::Parse(dados[nomeCampos->IndexOf(L"PTDESTZ")]->ToString()));
+						 float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PTDESTX")]->ToString())),
+					     float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PTDESTZ")]->ToString())));
 
 
-	portal->setPosition(System::Double::Parse(dados[nomeCampos->IndexOf(L"PTLOCX")]->ToString()),
-					   System::Double::Parse(dados[nomeCampos->IndexOf(L"PTLOCZ")]->ToString()));
+	portal->setPosition(float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PTLOCX")]->ToString())),
+					   float(System::Double::Parse(dados[nomeCampos->IndexOf(L"PTLOCZ")]->ToString())));
 
 
 
@@ -4998,6 +5003,8 @@ int CDataManager::qtdPersonagemJogador(int idJogador)
 
 	query = L"SELECT COUNT(PGID) FROM JOGADOR_PERSONAGEM WHERE JDID = "+idJogador;
 
+	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
+
 	if(numRegs == 0 || numCampos == 0)
 	{
 		System::String ^texto = L"Não foi possível contar os Personagens do Jogador "+idJogador;
@@ -5034,8 +5041,8 @@ bool CDataManager::deletePersonagemJogador(int idJogador, int idPersonagem, char
 
 
 	query = L"DELETE FROM JOGADOR_PERSONAGEM JP"
-			+"USING JOGADOR_PERSONAGEM JP, PERSONAGEM P"
-			+"WHERE JP.PGID = P.PGID AND JP.JDID = "+idJogador
+			+" USING JOGADOR_PERSONAGEM JP, PERSONAGEM P"
+			+" WHERE JP.PGID = P.PGID AND JP.JDID = "+idJogador
 			+" AND P.PGID = "+idPersonagem
 			+" AND P.PGNOME = '"+temp+"'";
 
@@ -5077,7 +5084,7 @@ System::String ^ CDataManager::pointFormat(System::String ^ d1)
 {
 	char * c = toChar(d1);
 
-	for(int i = 0; i < strlen(c); i++)
+	for(int i = 0; i < (int)strlen(c); i++)
 	{
 		if(c[i] == ',')
 		{

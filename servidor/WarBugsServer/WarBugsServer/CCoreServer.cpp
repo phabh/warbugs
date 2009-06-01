@@ -95,8 +95,8 @@ void CCoreServer::readPackets()
 						char login[15];
 						char senha[15];
 
-						strcpy(login,mesRecebida.readString());
-						strcpy(senha,mesRecebida.readString());
+						strcpy_s(login,sizeof(login),mesRecebida.readString());
+						strcpy_s(senha,sizeof(senha),mesRecebida.readString());
 						
 						CJogador * tempJogador = new CJogador();
 
@@ -146,7 +146,7 @@ void CCoreServer::readPackets()
 						int    idJogador = mesRecebida.readInt();
 						int    idRaca	 = mesRecebida.readInt();
 						char   nome[15];
-						strcpy(nome,mesRecebida.readString());
+						strcpy_s(nome,sizeof(nome),mesRecebida.readString());
 						
 						if(_dataManager->qtdPersonagemJogador(idJogador) >= NUMPERSONAGEMJOGADOR) 
 						{
@@ -188,7 +188,7 @@ void CCoreServer::readPackets()
 						int    idJogador	 = mesRecebida.readInt();
 						int    idPersonagem	 = mesRecebida.readInt();
 						char   nome[15];
-						strcpy(nome,mesRecebida.readString());
+						strcpy_s(nome,sizeof(nome),mesRecebida.readString());
 						
 						if(_dataManager->qtdPersonagemJogador(idJogador) <= 0)
 						{
