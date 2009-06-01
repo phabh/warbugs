@@ -10,6 +10,10 @@
 #ifndef _CPERSONAGEM_H_
 
 #include <math.h>
+#ifndef _CCENARIO_H_
+class CCenario;
+#endif
+
 #include "CHabilidadesSecundarias.h"
 	//#include "CWarBugObject.h"
 	//#include "CEquipamento.h"
@@ -50,6 +54,7 @@ protected:
 	CHabilidades *habilidadesPrimarias;
 	CBonusPrimario *bonusPrimario;
 	CPersonagem *alvo;
+	CCenario *cenario;
 public:
 
 	CPersonagem();
@@ -74,6 +79,7 @@ public:
 	CHabilidades *getBaseStats();
 	CBonusPrimario *getBaseBonus();
 	CPersonagem *getTarget();
+	CCenario *getScene();
 	
 	void setName(char *name);
 	void setRace(Raca raca);
@@ -90,6 +96,8 @@ public:
 	void setBaseBonus(CBonus *bonus);
 	void setBonus(CBonus *bonus);
 	void setTarget(CPersonagem *alvo);
+	void setScene(CCenario *newScene);
+
 	void addMoney(int value);
 	//Outros métodos
 	void move();

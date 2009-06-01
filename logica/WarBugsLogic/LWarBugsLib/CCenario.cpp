@@ -22,6 +22,35 @@ CCenario::CCenario(int ID,
 	_saidaSul = saidaSul;
 	_saidaLeft = saidaLeft;
 	_saidaRight = saidaRight;
+
+	if(!_jogadores->isEmpty())
+	{
+		for(int i = 0; i < _jogadores->size(); i=i+1)
+		{
+			((CPersonagemJogador*)(_jogadores->getElementAt(i)))->setScene(this);
+		}
+	}
+	if(!_inimigos->isEmpty())
+	{
+		for(int i = 0; i < _inimigos->size(); i=i+1)
+		{
+			((CInimigo*)(_inimigos->getElementAt(i)))->setScene(this);
+		}
+	}
+	if(!_npcs->isEmpty())
+	{
+		for(int i = 0; i < _npcs->size(); i=i+1)
+		{
+			((CNPC*)(_npcs->getElementAt(i)))->setScene(this);
+		}
+	}
+	if(!_vendedores->isEmpty())
+	{
+		for(int i = 0; i < _vendedores->size(); i=i+1)
+		{
+			((CVendedor*)(_vendedores->getElementAt(i)))->setScene(this);
+		}
+	}
 }
 void CCenario::enterScene()
 {
@@ -115,16 +144,19 @@ void CCenario::addPlayer(CPersonagem *jogador)
 {
 	jogador->setSceneID(_contador->giveID());
 	_jogadores->addPersonagem(jogador);
+	((CPersonagemJogador*)jogador)->setScene(this);
 }
 void CCenario::addMonster(CPersonagem *inimigo)
 {
 	inimigo->setSceneID(_contador->giveID());
 	_inimigos->addPersonagem(inimigo);
+	((CInimigo*)inimigo)->setScene(this);
 }
 void CCenario::addNpc(CPersonagem *npc)
 {
 	npc->setSceneID(_contador->giveID());
 	_npcs->addPersonagem(npc);
+	((CNPC*)npc)->setScene(this);
 }
 void CCenario::addBag(CBolsa *bolsa)
 {
@@ -135,6 +167,7 @@ void CCenario::addVendedor(CVendedor *vendedor)
 {
 	vendedor->setSceneID(_contador->giveID());
 	_vendedores->addPersonagem(vendedor);
+	((CVendedor*)vendedor)->setScene(this);
 }
 //
 CPersonagemJogador *CCenario::removePlayer(int idJogador)

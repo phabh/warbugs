@@ -22,15 +22,10 @@ class CCenario;
 #define _CINIMIGO_H_
 class CInimigo : public CPersonagem{
 private:
-	CCenario *_cenario;
 	//Lista de divisores de xp
 	//Objeto de ia
 public:
 	CInimigo();
-
-	CCenario *getScene();
-
-	void setScene(CCenario *newScene);
 
 	void takeDecision();
 

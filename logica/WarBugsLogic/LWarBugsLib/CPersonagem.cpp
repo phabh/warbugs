@@ -107,6 +107,10 @@ CPersonagem *CPersonagem::getTarget()
 {
 	return(alvo);
 }
+CCenario *CPersonagem::getScene()
+{
+	return(cenario);
+}
 //Setters
 void CPersonagem::setName(char *name)
 {
@@ -168,6 +172,10 @@ void CPersonagem::setBonus(CBonus *bonus)
 void CPersonagem::setTarget(CPersonagem *Alvo)
 {
 	alvo = Alvo;
+}
+void CPersonagem::setScene(CCenario *newScene)
+{
+	cenario = newScene;
 }
 void CPersonagem::setBaseBonus(CBonus *bonus)
 {
