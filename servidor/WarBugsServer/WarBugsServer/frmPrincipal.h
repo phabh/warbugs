@@ -644,98 +644,130 @@ namespace WarBugsServer {
 
 private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  e) 
 		 {
+		
 			this->barStatusBD->Text = L"Status BD: "+( _dataBase->isConnected() ? "ON":"OFF");
 
 			_coreServer->readPackets();
 
+			
 			if(gridJogadores->Rows->Count > _coreServer->getPlayers()->size())
+			{
 				gridJogadores->Rows->Clear();
+			}
 
 			while(gridJogadores->Rows->Count < _coreServer->getPlayers()->size())
-			{ 
-				gridJogadores->Rows->Add();
+			{
+				gridJogadores->Rows->Add(_coreServer->getPlayers()->size());
+			}
+
+			String ^ temp2;
+			String ^ temp3;
+			String ^ temp4;
+
+			for(int i = 0; i < _coreServer->getPlayers()->size(); i++)
+			{
+
+
+				try
+				{
+					temp2 = gcnew String(_coreServer->getPlayers()->getElementAt(i)->getName());
+				}
+				catch(...)
+				{
+					temp2 = L"";
+				}
+
+				try
+				{
+					temp3 = gcnew String(_coreServer->getPlayers()->getElementAt(i)->getCharacter()->getName());
+				}
+				catch(...)
+				{
+					temp3 = L"";
+				}
+
+				try
+				{
+					temp4 = gcnew String(L""+_coreServer->getPlayers()->getElementAt(i)->getScene()->getID());
+				}
+				catch(...)
+				{
+					temp4 = L"";
+				}
+
+				//primeira coluna
+				gridJogadores->Rows[i]->Cells[0]->Value = i+1;
+				gridJogadores->Rows[i]->Cells[1]->Value = temp2;
+				gridJogadores->Rows[i]->Cells[2]->Value = temp3;
+				gridJogadores->Rows[i]->Cells[3]->Value = temp4;
 			}
 
 			
-
-
-
-			//atualização da aba de Jogadores On Line
-			for(int i = 0; i < _coreServer->getPlayers()->size(); i++)
-			{
-				//primeira coluna
-				gridJogadores->Rows[i]->Cells[0]->Value = i+1;
-
-				//gridJogadores->Rows[i]->Cells[1]->Value = _coreServer->getPlayers()->getElementAt(i)->getID();
-				
-				if(_coreServer->getPlayers()->getElementAt(i)->getName() != NULL)
-					gridJogadores->Rows[i]->Cells[1]->Value = gcnew String(_coreServer->getPlayers()->getElementAt(i)->getName());
-/*
-				if(_coreServer->getPlayers()->getElementAt(i)->getCharacter() != NULL)
-					gridJogadores->Rows[i]->Cells[2]->Value = gcnew String(_coreServer->getPlayers()->getElementAt(i)->getCharacter()->getName());
-
-				if(_coreServer->getPlayers()->getElementAt(i)->getScene() != NULL)
-					gridJogadores->Rows[i]->Cells[4]->Value = gcnew String(L""+_coreServer->getPlayers()->getElementAt(i)->getScene()->getID());
-*/
-
-			}
-
-	//		_coreServer->verificaPlayers();
-
 			//Atualiza os Server
 			//_coreServer->updateAll();
 
 			//Envia mensagens para os clientes
 			_coreServer->sendAllMessages();
-	
-
 		 }
 
 
 private: System::Void btExecutar_Click(System::Object^  sender, System::EventArgs^  e) 
 		 {
-			 if(_dataBase->insertNow(toChar2(txtSQL->Text)))
+			 try
 			 {
-				 System::Windows::Forms::MessageBox::Show(L"OK, Feito!",L"Mensagem - OK");
+				 if(_dataBase->insertNow(toChar2(txtSQL->Text)))
+				 {
+					 System::Windows::Forms::MessageBox::Show(L"OK, Feito!",L"Mensagem - OK");
+				 }
+				 else
+				 {
+					 System::Windows::Forms::MessageBox::Show(L"É... Deu pau!",L"Mensagem - Erro");			 
+				 }
 			 }
-			 else
+			 catch(...)
 			 {
-				 System::Windows::Forms::MessageBox::Show(L"É... Deu pau!",L"Mensagem - Erro");			 
+				System::Windows::Forms::MessageBox::Show(L"É... Deu pau! Não foi dos bons não.",L"Mensagem - Erro");
 			 }
 		 }
 private: System::Void btConsultar_Click(System::Object^  sender, System::EventArgs^  e) 
 		 {
-				TDadosBD ^ dados = gcnew ArrayList();
-				unsigned int numCampos;
-				unsigned int numRegs;
-				unsigned int indexCampos = 0, indexRegs = 0;
-				gridResultados->Columns->Clear();
-				
-				if(_dataBase->selectNow(toChar2(txtSQL->Text), numCampos, numRegs, dados))
-				{
-
-					for(indexCampos = 0; indexCampos < numCampos; indexCampos++)
+			 try{
+					TDadosBD ^ dados = gcnew ArrayList();
+					unsigned int numCampos;
+					unsigned int numRegs;
+					unsigned int indexCampos = 0, indexRegs = 0;
+					gridResultados->Columns->Clear();
+					
+					if(_dataBase->selectNow(toChar2(txtSQL->Text), numCampos, numRegs, dados))
 					{
-						String ^ text = dados[0]->ToString();
-						gridResultados->Columns->Add(L"_"+text,L""+text);
-						dados->RemoveAt(0);
-					}
 
-					gridResultados->Rows->Add(numRegs);
-
-
-					while (numRegs > indexRegs)
-					{
 						for(indexCampos = 0; indexCampos < numCampos; indexCampos++)
 						{
-							char * s = toChar2(dados[0]->ToString()) != NULL ? toChar2(dados[0]->ToString()): "NULL";
-							String ^ text = gcnew String(s);
-							gridResultados->Rows[indexRegs]->Cells[indexCampos]->Value = text;
+							String ^ text = dados[0]->ToString();
+							gridResultados->Columns->Add(L"_"+text,L""+text);
 							dados->RemoveAt(0);
 						}
 
-						indexRegs++;
-					} 			
+						gridResultados->Rows->Add(numRegs);
+
+
+						while (numRegs > indexRegs)
+						{
+							for(indexCampos = 0; indexCampos < numCampos; indexCampos++)
+							{
+								char * s = toChar2(dados[0]->ToString()) != NULL ? toChar2(dados[0]->ToString()): "NULL";
+								String ^ text = gcnew String(s);
+								gridResultados->Rows[indexRegs]->Cells[indexCampos]->Value = text;
+								dados->RemoveAt(0);
+							}
+
+							indexRegs++;
+						} 			
+					}
+				}
+				catch(...)
+				{
+					System::Windows::Forms::MessageBox::Show(L"É... Deu pau! Preocupa não um dia resolve.",L"Mensagem - Erro");
 				}
 		 }
 private: System::Void btKicar_Click(System::Object^  sender, System::EventArgs^  e) 

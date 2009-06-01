@@ -24,12 +24,15 @@ enum TYPE_MESSAGE
 {
 	DISCONNECT = 0,
 	PING,
+	END_FRAME,
 	//MENSAGENS RECEBIDAS
 	LOGIN_OK = 33, // se o login foi OK
 	LOGIN_FAIL, //se o login falhou por algum motivo
 	SHOW_PERSONAGENS, //QTD PERSONAGENS QUE O JOGADOR POSSUI, E OS PERSONAGENS
 	CREATE_PLAYER_OK, //o player foi criado com sucesso
 	CREATE_PLAYER_FAIL, //não foi possível criar o player
+	DELETE_PLAYER_OK,	
+	DELETE_PLAYER_FAIL,
 	ENTER_CENARIO,//id cenario, POSICAO X, POSICAO Z, qtd Inimigos, qtdNPC, qtdVendedores, qtdPersonagensJogadores, qtdBolsa
 	ADD_PERSONAGEM, //atributos do outros persoangens NPC, Jogadores
 	ADD_BOLSA,//id bolsa, POSICAO X, POSICAO Z, estado bolsa
@@ -64,6 +67,7 @@ enum TYPE_MESSAGE
 	LOGIN_REQUEST, //LOGIN, SENHA
 	PERSONAGENS_REQUEST, //ID PESSOA
 	CREATE_PERSONAGEM, //ID RACA, NOME
+	DELETE_PERSONAGEM,
 	PLAY, //ID PERSONAGEM
 	SEND_POSITION, //ID PERSONAGEM, POSICAO X, POSICAO Z
 	SEND_ESTADO, //IDPERSONAGEM, ESTADO
@@ -97,5 +101,6 @@ enum TYPE_MESSAGE
 
 #define PORT 30003
 #define NUMCONNECTIONS 54
+#define NUMPERSONAGEMJOGADOR 2
 
 #endif

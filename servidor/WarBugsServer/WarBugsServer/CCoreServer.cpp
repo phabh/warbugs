@@ -148,6 +148,13 @@ void CCoreServer::readPackets()
 						char   nome[15];
 						strcpy(nome,mesRecebida.readString());
 						
+						if(_dataManager->qtdPersonagemJogador(idJogador) >= NUMPERSONAGEMJOGADOR) 
+						{
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)CREATE_PLAYER_FAIL);
+							break;
+						}
+
+
 						CPeopleList * tempList = &_dataManager->getPersonagem((int)JOGADOR,idRaca,true);
 
 						if(tempList == NULL)
@@ -158,25 +165,57 @@ void CCoreServer::readPackets()
 						{
 								((CPersonagemJogador *)tempList->getElementAt(0))->setName(nome);
 
-								//_cenarioList->addPlayer(tempJogador);
+								if(_dataManager->insertPersonagemJogador(((CPersonagemJogador *)tempList->getElementAt(0)),_playersList->getElementAt(indexJogador)->getID()))
+								{
 
-								_dataManager->insertPersonagemJogador(((CPersonagemJogador *)tempList->getElementAt(0)),_playersList->getElementAt(indexJogador)->getID());
+									_playersList->getElementAt(indexJogador)->setCharacter((CPersonagemJogador *)tempList->getElementAt(0));
 
-								_playersList->getElementAt(indexJogador)->setCharacter((CPersonagemJogador *)tempList->getElementAt(0));
-
-								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)CREATE_PLAYER_OK);
-
-								//insert em personagens do novo personagem e insert em personagem_jogador da vinculação de 1 com o outro;
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)CREATE_PLAYER_OK);
+								}
+								else
+								{
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)CREATE_PLAYER_FAIL);
+								}
 						}
 
 						break;
 					}
+				case DELETE_PERSONAGEM: //ID JOGADOR, IDPERSONAGEM, NOME PERSONAGEM
+					{
+						mesRecebida.beginReading();
+						mesRecebida.readByte();
+
+						int    idJogador	 = mesRecebida.readInt();
+						int    idPersonagem	 = mesRecebida.readInt();
+						char   nome[15];
+						strcpy(nome,mesRecebida.readString());
+						
+						if(_dataManager->qtdPersonagemJogador(idJogador) <= 0)
+						{
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)DELETE_PLAYER_FAIL);
+						}
+						else
+						{
+							//se não foi possível deletar
+							if(!_dataManager->deletePersonagemJogador(idJogador,idPersonagem,nome))
+							{
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)DELETE_PLAYER_FAIL);
+							}
+							else
+							{
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)DELETE_PLAYER_OK);
+							}
+						}
+
+						break;
+					}
+
 				case PLAY: //ID PERSONAGEM
 					{
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida.readInt();		
+						int    idPersonagem = mesRecebida.readInt();
 
 						break;
 					}
@@ -1096,6 +1135,18 @@ void CCoreServer::sendMessagesFrame(CPlayerList * cList)
 			{
 				for(int index = 0; index < cList->size(); index++)
 				{
+					if(frame->_idCenario == -1)
+					{
+						try{
+							cList->getElementAt(index)->getSocket()->SendLine(*frame->_message);
+						}
+						catch(...)
+						{
+							cList->removeJogadorByPosition(index);
+							index--;
+						}
+					}
+					else
 					if(frame->_idCenario == cList->getElementAt(index)->getScene()->getID())
 					{
 						try{
@@ -1104,18 +1155,20 @@ void CCoreServer::sendMessagesFrame(CPlayerList * cList)
 						catch(...)
 						{
 							cList->removeJogadorByPosition(index);
+							index--;
 						}
 					}
 				}
 			}
 			else
 			{
+
 				try{
 					frame->_socket->SendLine(*frame->_message);
 				}
 				catch(...)
 				{
-					System::String ^ texto = L"Não foi possivel manda a mensagem!";
+					System::String ^ texto = L"Não foi possivel mandar a mensagem!";
 					WarBugsLog::_log->Items->Add(texto);
 				}
 			}

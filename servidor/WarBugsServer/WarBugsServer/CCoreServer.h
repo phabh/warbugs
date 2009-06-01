@@ -83,10 +83,6 @@ ref class CCoreServer
 
 		void			sendAllMessages();
 
-	//	void            addPlayer(CJogador * jogador);
-	//	void			removePlayer(int idJogador);
-	//	void			removePlayers();
-
 		//mensagens para enviar para o cliente
 		/*
 			funcoes para enviar mensagem para o cliente
