@@ -56,6 +56,8 @@ atribuir IDs diferentes e únicos aos mesmos
 CObjectCount::CObjectCount()
 {
 	_objCount = 0;
+	_bufferSize = 0;
+	_buffer = new int[1];
 }
 /*int giveID()
  *incrementa o contador e retorna o valor que possuia no inicio do método

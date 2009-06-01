@@ -44,11 +44,11 @@ void CCenarioList::addCenario(CCenario *Cenario)
 		temp->next = nodo;
 		nodo->prev = temp;
 		_size = _size + 1;
-		temp = NULL;
-		delete temp;
+		//temp = NULL;
+		//delete temp;
 	}
-	nodo = NULL;
-	delete nodo;
+	//nodo = NULL;
+	//delete nodo;
 }
 CCenario *CCenarioList::removeCenarioByPosition(int pos)
 {
