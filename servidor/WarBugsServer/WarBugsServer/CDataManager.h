@@ -66,6 +66,9 @@ public:
 	long  numPersonagens();
 	long  numBolsas();
 	long  numItens();
+	int   qtdPersonagemJogador(int idJogador);
+	System::String ^ pointFormat(System::String ^ d1);
+
 
 	//ATUALIZAÇÕES
 	//Personagem
@@ -73,7 +76,10 @@ public:
 	void updatePersonagem(int id, int nivel, int xp);
 
 	//Inserções
-	void insertPersonagemJogador(CPersonagemJogador * p1, int idJogador);
+	bool insertPersonagemJogador(CPersonagemJogador * p1, int idJogador);
 	void insertPersonagem(CPeopleList p1);
+
+	//deletes
+	bool deletePersonagemJogador(int idJogador, int idPersoangem, char * nomePersonagem);
 };
 #endif

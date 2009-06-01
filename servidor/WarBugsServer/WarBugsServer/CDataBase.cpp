@@ -1,4 +1,5 @@
 #include "CDataBase.h"
+#include "commom.h"
 
 //Metodos
 
@@ -111,8 +112,11 @@ bool CDataBase::insertNow(char *query)
 	if(_connected)	
 	{
 		if(strlen(query) > 0)
-		{			
-			resultado = mysql_query(_connection,query) == 0;
+		{
+			int res = mysql_query(_connection,query);
+			resultado =  res == 0;
+
+			WarBugsLog::_log->Items->Add(gcnew System::String(mysql_error(_connection)));
 		}
 	}
 

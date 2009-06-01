@@ -128,7 +128,13 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
-				((CPersonagemJogador *)personagem)->setSpeed(dado[0]);
+				((CPersonagemJogador *)personagem)->setMoveSpeed(dado[0]);
+
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+				((CPersonagemJogador *)personagem)->setDirection(dado[0]);
+
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+				((CPersonagemJogador *)personagem)->setRespawnTime(dado[0]);
 
 				//FICA PRA DEPOIS
 				((CPersonagemJogador *)personagem)->setTarget(NULL);
@@ -225,6 +231,12 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 							((CInimigo *)personagem)->setMoveSpeed(dado[0]);
 
+							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+							((CInimigo *)personagem)->setDirection(dado[0]);
+
+							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+							((CInimigo *)personagem)->setRespawnTime(dado[0]);
+
 							//FICA PRA DEPOIS
 							((CInimigo *)personagem)->setTarget(NULL);
 
@@ -300,6 +312,12 @@ CPersonagem * CDataManager::getPersonagem(int id)
 							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 							((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+							((CNPC *)personagem)->setDirection(dado[0]);
+
+							dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+							((CNPC *)personagem)->setRespawnTime(dado[0]);
 
 							//FICA PRA DEPOIS
 							((CNPC *)personagem)->setTarget(NULL);
@@ -380,6 +398,12 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 				((CNPC *)personagem)->setMoveSpeed(dado[0]);
 
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+				((CNPC *)personagem)->setDirection(dado[0]);
+
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+				((CNPC *)personagem)->setRespawnTime(dado[0]);
+
 				//FICA PRA DEPOIS
 				((CNPC *)personagem)->setTarget(NULL);
 
@@ -454,6 +478,12 @@ CPersonagem * CDataManager::getPersonagem(int id)
 				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 				((CVendedor *)personagem)->setMoveSpeed(dado[0]);
+
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+				((CVendedor *)personagem)->setDirection(dado[0]);
+
+				dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+				((CVendedor *)personagem)->setRespawnTime(dado[0]);
 
 				//FICA PRA DEPOIS
 				((CVendedor *)personagem)->setTarget(NULL);
@@ -694,6 +724,12 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 					((CInimigo *)personagem)->setMoveSpeed(dado[0]);
 
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+					((CInimigo *)personagem)->setDirection(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+					((CInimigo *)personagem)->setRespawnTime(dado[0]);
+
 					//FICA PRA DEPOIS
 					((CInimigo *)personagem)->setTarget(NULL);
 
@@ -767,6 +803,12 @@ CPersonagem * CDataManager::getPersonagem(int id)
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 					((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+					((CNPC *)personagem)->setDirection(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+					((CNPC *)personagem)->setRespawnTime(dado[0]);
 
 					//FICA PRA DEPOIS
 					((CNPC *)personagem)->setTarget(NULL);
@@ -918,7 +960,13 @@ CPeopleList CDataManager::getPersonagemJogador(int idJogador)
 
 		dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
-		((CPersonagemJogador *)personagem)->setSpeed(dado[0]);
+		((CPersonagemJogador *)personagem)->setMoveSpeed(dado[0]);
+
+		dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+		((CPersonagemJogador *)personagem)->setDirection(dado[0]);
+
+		dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+		((CPersonagemJogador *)personagem)->setRespawnTime(dado[0]);
 
 		((CPersonagemJogador *)personagem)->setTarget(NULL);
 
@@ -1102,7 +1150,13 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
-					((CPersonagemJogador *)personagem)->setSpeed(dado[0]);
+					((CPersonagemJogador *)personagem)->setMoveSpeed(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+					((CPersonagemJogador *)personagem)->setDirection(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+					((CPersonagemJogador *)personagem)->setRespawnTime(dado[0]);
 
 					//FICA PRA DEPOIS
 					((CPersonagemJogador *)personagem)->setTarget(NULL);
@@ -1199,6 +1253,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 								((CInimigo *)personagem)->setMoveSpeed(dado[0]);
 
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+								((CInimigo *)personagem)->setDirection(dado[0]);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+								((CInimigo *)personagem)->setRespawnTime(dado[0]);
+
 								//FICA PRA DEPOIS
 								((CInimigo *)personagem)->setTarget(NULL);
 
@@ -1274,6 +1334,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 								((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+								((CNPC *)personagem)->setDirection(dado[0]);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+								((CNPC *)personagem)->setRespawnTime(dado[0]);
 
 								//FICA PRA DEPOIS
 								((CNPC *)personagem)->setTarget(NULL);
@@ -1354,6 +1420,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 					((CNPC *)personagem)->setMoveSpeed(dado[0]);
 
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+					((CNPC *)personagem)->setDirection(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+					((CNPC *)personagem)->setRespawnTime(dado[0]);
+
 					//FICA PRA DEPOIS
 					((CNPC *)personagem)->setTarget(NULL);
 
@@ -1428,6 +1500,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 					((CVendedor *)personagem)->setMoveSpeed(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+					((CVendedor *)personagem)->setDirection(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+					((CVendedor *)personagem)->setRespawnTime(dado[0]);
 
 					//FICA PRA DEPOIS
 					((CVendedor *)personagem)->setTarget(NULL);
@@ -1668,6 +1746,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 						((CInimigo *)personagem)->setMoveSpeed(dado[0]);
 
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+						((CInimigo *)personagem)->setDirection(dado[0]);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+						((CInimigo *)personagem)->setRespawnTime(dado[0]);
+
 						//FICA PRA DEPOIS
 						((CInimigo *)personagem)->setTarget(NULL);
 
@@ -1741,6 +1825,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 						((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+						((CNPC *)personagem)->setDirection(dado[0]);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+						((CNPC *)personagem)->setRespawnTime(dado[0]);
 
 						//FICA PRA DEPOIS
 						((CNPC *)personagem)->setTarget(NULL);
@@ -1917,7 +2007,13 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
-					((CPersonagemJogador *)personagem)->setSpeed(dado[0]);
+					((CPersonagemJogador *)personagem)->setMoveSpeed(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+					((CPersonagemJogador *)personagem)->setDirection(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+					((CPersonagemJogador *)personagem)->setRespawnTime(dado[0]);
 
 					//FICA PRA DEPOIS
 					((CPersonagemJogador *)personagem)->setTarget(NULL);
@@ -2014,6 +2110,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 								((CInimigo *)personagem)->setMoveSpeed(dado[0]);
 
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+								((CInimigo *)personagem)->setDirection(dado[0]);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+								((CInimigo *)personagem)->setRespawnTime(dado[0]);
+
 								//FICA PRA DEPOIS
 								((CInimigo *)personagem)->setTarget(NULL);
 
@@ -2089,6 +2191,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 								((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+								((CNPC *)personagem)->setDirection(dado[0]);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+								((CNPC *)personagem)->setRespawnTime(dado[0]);
 
 								//FICA PRA DEPOIS
 								((CNPC *)personagem)->setTarget(NULL);
@@ -2169,6 +2277,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 					((CNPC *)personagem)->setMoveSpeed(dado[0]);
 
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+					((CNPC *)personagem)->setDirection(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+					((CNPC *)personagem)->setRespawnTime(dado[0]);
+
 					//FICA PRA DEPOIS
 					((CNPC *)personagem)->setTarget(NULL);
 
@@ -2243,6 +2357,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 					((CVendedor *)personagem)->setMoveSpeed(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+					((CVendedor *)personagem)->setDirection(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+					((CVendedor *)personagem)->setRespawnTime(dado[0]);
 
 					//FICA PRA DEPOIS
 					((CVendedor *)personagem)->setTarget(NULL);
@@ -2484,6 +2604,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 
 						((CInimigo *)personagem)->setMoveSpeed(dado[0]);
 
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+						((CInimigo *)personagem)->setDirection(dado[0]);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+						((CInimigo *)personagem)->setRespawnTime(dado[0]);
+
 						//FICA PRA DEPOIS
 						((CInimigo *)personagem)->setTarget(NULL);
 
@@ -2557,6 +2683,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int id
 						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 						((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+						((CNPC *)personagem)->setDirection(dado[0]);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+						((CNPC *)personagem)->setRespawnTime(dado[0]);
 
 						//FICA PRA DEPOIS
 						((CNPC *)personagem)->setTarget(NULL);
@@ -2731,7 +2863,13 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
-					((CPersonagemJogador *)personagem)->setSpeed(dado[0]);
+					((CPersonagemJogador *)personagem)->setMoveSpeed(dado[0]);
+					
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+					((CPersonagemJogador *)personagem)->setDirection(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+					((CPersonagemJogador *)personagem)->setRespawnTime(dado[0]);
 
 					//FICA PRA DEPOIS
 					((CPersonagemJogador *)personagem)->setTarget(NULL);
@@ -2828,6 +2966,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 								((CInimigo *)personagem)->setMoveSpeed(dado[0]);
 
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+								((CInimigo *)personagem)->setDirection(dado[0]);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+								((CInimigo *)personagem)->setRespawnTime(dado[0]);
+
 								//FICA PRA DEPOIS
 								((CInimigo *)personagem)->setTarget(NULL);
 
@@ -2903,6 +3047,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 								((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+								((CNPC *)personagem)->setDirection(dado[0]);
+
+								dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+								((CNPC *)personagem)->setRespawnTime(dado[0]);
 
 								//FICA PRA DEPOIS
 								((CNPC *)personagem)->setTarget(NULL);
@@ -2983,6 +3133,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 					((CNPC *)personagem)->setMoveSpeed(dado[0]);
 
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+					((CNPC *)personagem)->setDirection(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+					((CNPC *)personagem)->setRespawnTime(dado[0]);
+
 					//FICA PRA DEPOIS
 					((CNPC *)personagem)->setTarget(NULL);
 
@@ -3057,6 +3213,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 					((CVendedor *)personagem)->setMoveSpeed(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+					((CVendedor *)personagem)->setDirection(dado[0]);
+
+					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+					((CVendedor *)personagem)->setRespawnTime(dado[0]);
 
 					//FICA PRA DEPOIS
 					((CVendedor *)personagem)->setTarget(NULL);
@@ -3297,6 +3459,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 						((CInimigo *)personagem)->setMoveSpeed(dado[0]);
 
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+						((CInimigo *)personagem)->setDirection(dado[0]);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+						((CInimigo *)personagem)->setRespawnTime(dado[0]);
+
 						//FICA PRA DEPOIS
 						((CInimigo *)personagem)->setTarget(NULL);
 
@@ -3370,6 +3538,12 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGVELOCIDADE")]->ToString());
 
 						((CNPC *)personagem)->setMoveSpeed(dado[0]);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGDIRECAO")]->ToString());
+						((CNPC *)personagem)->setDirection(dado[0]);
+
+						dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGTEMPORESPAW")]->ToString());
+						((CNPC *)personagem)->setRespawnTime(dado[0]);
 
 						//FICA PRA DEPOIS
 						((CNPC *)personagem)->setTarget(NULL);
@@ -3666,7 +3840,9 @@ CWeapon * CDataManager::getWeaponEquiped(int idPersonagem)
 	{
 		System::String ^texto = L"Não foi encontrado o equipamento do Personagem "+idPersonagem;
 		WarBugsLog::_log->Items->Add(texto);		
-		return NULL;	
+		arma = new CWeapon();
+		arma->setID(-1);
+		return arma;	
 	}
 
 	for(int i = 0; i < (int)numCampos; i++)
@@ -3748,7 +3924,9 @@ CArmor * CDataManager::getArmorEquiped(int idPersonagem)
 	{
 		System::String ^texto = L"Não foi encontrado a Armadura do Personagem "+idPersonagem;
 		WarBugsLog::_log->Items->Add(texto);		
-		return NULL;	
+		armadura = new CArmor();
+		armadura->setID(-1);
+		return armadura;	
 	}
 
 	for(int i = 0; i < (int)numCampos; i++)
@@ -4651,7 +4829,6 @@ long  CDataManager::numItens()
 	long result = 0;
 	
 	TDadosBD ^ dados      = gcnew TDadosBD();
-	TDadosBD ^ nomeCampos = gcnew TDadosBD();
 
 	unsigned int numRegs   = 0;
 	unsigned int numCampos = 0;
@@ -4671,7 +4848,6 @@ long  CDataManager::numItens()
 
 	for(int i = 0; i < (int)numCampos; i++)
 	{
-		nomeCampos->Add(dados[0]);
 		dados->RemoveAt(0);
 	}
 
@@ -4689,8 +4865,10 @@ void CDataManager::updatePersonagem(int id, int nivel, int xp)
 {}
 
 //Inserções
-void CDataManager::insertPersonagemJogador(CPersonagemJogador * p1, int idJogador)
+bool CDataManager::insertPersonagemJogador(CPersonagemJogador * p1, int idJogador)
 {
+	bool result = false;
+
 	System::String ^ query;
 	System::String ^ temp;
 	
@@ -4700,30 +4878,67 @@ void CDataManager::insertPersonagemJogador(CPersonagemJogador * p1, int idJogado
 
 	int tempRaca = p1->getRace();
 
+	System::String ^ moveSpeed = L""+p1->getMoveSpeed();
+	moveSpeed = pointFormat(moveSpeed);
 
-	query = L"INSERT INTO `personagem` "
-		    +"(`PGID`,`PGNOME`,`PGNIVEL`,`PGDINHEIRO`,"
-			+"`PGEXPERIENCIA`,`PGEXPERIENCIAMAX`,`PGPONTOSVIDA`,"
-			+"`PGPONTOSVIDAMAX`,`PGPONTOSPODER`,`PGPONTOSPODERMAX`,"
-			+"`PGDIRECAO`,`PGVELOCIDADE`,`PGRACA`,`PGTEMPORESPAW`,"
-			+"`PGFORCA`,`PGAGILIDADE`,`PGDESTREZA`,`PGRESISTENCIA`,"
-			+"`PGINSTINTO`,`PGATAQUESDISTANCIA`,`PGATAQUESCORPO`,"
-			+"`PGDANOCORPO`,`PGDANODISTANCIA`,`PGDEFESA`,`PGTAXAATAQUE`,"
-			+"`PGTEMPOCARGA`,`PGTIPOPERSONAGEM`,`PGLEALARANHA`,`PGLEALBESOURO`,"
-			+"`PGLEALESCORPIAO`,`PGLEALLOUVA`,`PGLEALVESPA`,`PGIDARMOR`,"
-			+"`PGIDWEAPON`,`PGX`,`PGZ`,`PGY`,`PGIDTEXTURA`,`PGIDMODELO`,"
-			+"`PGBONUSPOINTSPRIMARIAS`,`PGBONUSPOINTSPODER`,`PGISBASE`,`PGIDHUD`)"
-			+" VALUES ("+p1->getID()+",\""+temp+"\","+p1->getLevel()+","+p1->getMoney()
-			+","+p1->getXP()+","+p1->getMaxXP()+","+p1->getStats()->getPV()
-			+","+p1->getStats()->getMaxPV()+","+p1->getStats()->getPM()+","+p1->getStats()->getMaxPM()
-			+","+p1->getDirection()+","+p1->getMoveSpeed()+","+tempRaca+","+p1->getRespawnTime()
-			+","+p1->getFOR()+","+p1->getAGI()+","+p1->getDES()+","+p1->getRES()
-			+","+p1->getINS()+","+p1->getStats()->getRangedAttack()+","+p1->getStats()->getMeleeAttack()
-			+","+p1->getStats()->getMeleeDamage()+","+p1->getStats()->getRangedDamage()+","+p1->getStats()->getDefense()+","+p1->getStats()->getAttackRate()
-			+","+p1->getStats()->getChargeTime()+","+(int)JOGADOR+","+p1->getLoyalty()->getLoyaltyToSpider()+","+p1->getLoyalty()->getLoyaltyToBeetle()
-			+","+p1->getLoyalty()->getLoyaltyToScorpion()+","+p1->getLoyalty()->getLoyaltyToMantis()+","+p1->getLoyalty()->getLoyaltyToWasp()+","+p1->getEquip()->armadura->getID()
-			+","+p1->getEquip()->arma->getID()+","+p1->getPosition()->x+","+p1->getPosition()->z+","+0+","+p1->get3DTexture()+","+p1->getModel()
-			+","+p1->getSkillPointsLeft()+","+p1->getPointsLeft()+",0,"+p1->get2DTexture()+")";
+	System::String ^ direction = L""+p1->getDirection();
+	direction = pointFormat(direction);
+
+	System::String ^ x = L""+p1->getPosition()->x;
+	x = pointFormat(x);
+
+	System::String ^ z = L""+p1->getPosition()->z;
+	z = pointFormat(z);
+
+
+	query = L"INSERT INTO PERSONAGEM "
+			//+"(PGID,PGNOME,PGNIVEL,PGDINHEIRO,PGEXPERIENCIA,PGEXPERIENCIAMAX,PGPONTOSVIDA,PGPONTOSVIDAMAX,"
+			//+"PGPONTOSPODER,PGPONTOSPODERMAX,PGDIRECAO,PGVELOCIDADE,PGRACA,PGTEMPORESPAW,PGFORCA,PGAGILIDADE,PGDESTREZA,"
+			//+"PGRESISTENCIA,PGINSTINTO,PGATAQUESDISTANCIA,PGATAQUESCORPO,PGDANOCORPO,PGDANODISTANCIA,PGDEFESA,PGTAXAATAQUE,"
+			//+"PGTEMPOCARGA,PGTIPOPERSONAGEM,PGLEALARANHA,PGLEALBESOURO,PGLEALESCORPIAO,PGLEALLOUVA,PGLEALVESPA,PGIDARMOR,"
+			//+"PGIDWEAPON,PGX,PGZ,PGY,PGIDTEXTURA,PGIDMODELO,PGBONUSPOINTSPRIMARIAS,PGBONUSPOINTSPODER,PGISBASE, PGIDHUD)"
+			+" VALUES ("+
+			p1->getID()+",\""+
+			temp+"\","+
+			p1->getLevel()+","+
+			p1->getMoney()+","+
+			p1->getXP()+","+
+			p1->getMaxXP()+","+
+			p1->getStats()->getPV()+","+
+			p1->getStats()->getMaxPV()+","+
+			p1->getStats()->getPM()+","+
+			p1->getStats()->getMaxPM()+","+
+			direction+","+
+			moveSpeed+","+
+			tempRaca+","+
+			p1->getRespawnTime()+","+
+			p1->getFOR()+","+
+			p1->getAGI()+","+
+			p1->getDES()+","+
+			p1->getRES()+","+
+			p1->getINS()+","+
+			p1->getStats()->getRangedAttack()+","+
+			p1->getStats()->getMeleeAttack()+","+
+			p1->getStats()->getMeleeDamage()+","+
+			p1->getStats()->getRangedDamage()+","+
+			p1->getStats()->getDefense()+","+
+			p1->getStats()->getAttackRate()+","+
+			p1->getStats()->getChargeTime()+","+
+			(int)JOGADOR+","+
+			p1->getLoyalty()->getLoyaltyToSpider()+","+
+			p1->getLoyalty()->getLoyaltyToBeetle()+","+
+			p1->getLoyalty()->getLoyaltyToScorpion()+","+
+			p1->getLoyalty()->getLoyaltyToMantis()+","+
+			p1->getLoyalty()->getLoyaltyToWasp()+","+
+			p1->getEquip()->armadura->getID()+","+
+			p1->getEquip()->arma->getID()+","+
+			x+","+
+			z+",0,"+
+			p1->get3DTexture()+","+
+			p1->getModel()+","+
+			p1->getPointsLeft()+","+
+			p1->getSkillPointsLeft()+",0,"+
+			p1->get2DTexture()+");";
 
 	
 	System::String ^texto;
@@ -4741,6 +4956,7 @@ void CDataManager::insertPersonagemJogador(CPersonagemJogador * p1, int idJogado
 		if(_dataBase->insertNow(toChar(query)))
 		{
 			texto = L"Personagem '"+temp+"' Incluído com sucesso";
+			result = true;
 		}
 		else
 		{
@@ -4757,9 +4973,120 @@ void CDataManager::insertPersonagemJogador(CPersonagemJogador * p1, int idJogado
 
 	WarBugsLog::_log->Items->Add(texto);
 
-
+	return result;
 
 }
 
 void CDataManager::insertPersonagem(CPeopleList p1)
 {}
+
+
+/*
+	Retorna a quantidade de persoangens que um jogador possui
+	@param idJogador-> id do jogador que será consultado
+*/
+int CDataManager::qtdPersonagemJogador(int idJogador)
+{
+	int result = 0;
+
+	TDadosBD ^ dados      = gcnew TDadosBD();
+
+	unsigned int numRegs   = 0;
+	unsigned int numCampos = 0;
+
+	System::String ^ query;
+
+	query = L"SELECT COUNT(PGID) FROM JOGADOR_PERSONAGEM WHERE JDID = "+idJogador;
+
+	if(numRegs == 0 || numCampos == 0)
+	{
+		System::String ^texto = L"Não foi possível contar os Personagens do Jogador "+idJogador;
+		WarBugsLog::_log->Items->Add(texto);		
+		return result;	
+	}	
+	
+	
+	for(int i = 0; i < (int)numCampos; i++)
+	{
+		dados->RemoveAt(0);
+	}
+
+	result = System::Int32::Parse(dados[0]->ToString());
+
+	return result;	
+}
+
+/*
+	Exclui um personagem que o jogador não desejar mais
+	@param idJogador -> id do jogador qe quer exluir o personagem
+	@param idPersonagem -> id do personagem que será exluido
+	@param nomePersonagem -> nome Personagem que será excluido
+	
+*/
+bool CDataManager::deletePersonagemJogador(int idJogador, int idPersonagem, char * nomePersonagem)
+{
+	bool result = false;
+
+	System::String ^ query;
+	System::String ^ temp;
+	
+	temp = gcnew System::String(nomePersonagem);
+
+
+	query = L"DELETE FROM JOGADOR_PERSONAGEM JP"
+			+"USING JOGADOR_PERSONAGEM JP, PERSONAGEM P"
+			+"WHERE JP.PGID = P.PGID AND JP.JDID = "+idJogador
+			+" AND P.PGID = "+idPersonagem
+			+" AND P.PGNOME = '"+temp+"'";
+
+	
+	System::String ^texto;
+
+	//se não for inserido com sucesso
+	if(_dataBase->deleteNow(toChar(query)))
+	{
+		query = L"DELETE FROM PERSONAGEM WHERE PGID = "+idPersonagem;
+		
+		//se não for inserido com sucesso
+		if(_dataBase->deleteNow(toChar(query)))
+		{
+			texto = L"Personagem '"+temp+"' excluido com sucesso";
+			result = true;
+		}
+		else
+		{
+			texto = L"Não foi possivel excluir o personagem '"+temp+"'.";
+		}
+
+	}
+	else
+	{
+		texto = L"Não foi possivel exluir o personagem '"+temp+"'.";
+	}
+
+	WarBugsLog::_log->Items->Add(texto);
+
+	return result;
+
+}
+
+/*
+	Transforma ',' em '.'
+*/
+System::String ^ CDataManager::pointFormat(System::String ^ d1)
+{
+	char * c = toChar(d1);
+
+	for(int i = 0; i < strlen(c); i++)
+	{
+		if(c[i] == ',')
+		{
+			c[i] = '.';
+		}
+	}
+
+	d1 = gcnew System::String(c);
+
+	return d1;
+
+}
