@@ -1,0 +1,195 @@
+DEMANDA: INTERESSE DE COMPRA OU VENDA DE UM ITEM
+
+AO INICIAR O SERVIDOR PELA PRIMEIRA VEZ, ZERAR:
+- glogal.maiorDemanda
+- global.menorDemanda
+- global.demanda[MAXTIPOITENS]
+
+//-----------------------------------------------------------------------------------------
+
+A CADA CICLO DE LUAS (na sexta lua - Neutra)
+
+void normalizarGlobais()
+{
+
+for(int i = 0; i < MAXTIPOITENS; i++)
+	global.demanda[MAXTIPOITENS] = normalizarDemanda(i);
+
+global.maiorDemanda = 100;
+global.menorDemanda = 0;
+
+}
+
+//-----------------------------------------------------------------------------------------
+
+Valores Globais:
+
+- glogal.maiorDemanda
+- global.menorDemanda
+_ global.demanda[MAXTIPOITENS] (interesse em cada tipo de item)
+_ global.precoBase[MAXTIPOITENS] (preço base para cada tipo de item)
+
+
+
+Valores Itens:
+
+- item.durabilidade (0 a 100)
+- item.tipoItem     (id do Tipo do item)
+
+
+
+Valores Jogador:
+
+jogador.lealdade[MAXRACAS]
+
+
+
+Valores Vendedor:
+
+vendedor.raca
+vendedor.metaCapital
+vendedor.sementes
+vendedor.numItens
+vendedor.listaItens       (0 a 30)
+vendedor.tempoSemVenda
+vendedor.defasagemRateada
+vendedor.defasagemCapital
+vendedor.valorTotalEstoque
+vendedor.precoBruto
+
+
+//-----------------------------------------------------------------------------------------
+
+PROCESSO DE PRECIFICAÇÃO
+
+
+SE (Jogador consultou o preço de um item para vendê-lo a um vendedor)
+
+global.demanda[item.tipoItem]++;
+
+if(global.demanda[item.tipoItem] > global.maiorDemanda)
+   global.maiorDemanda = global.demanda[item.tipoItem];
+
+
+SE (Jogador consultou o preço de um item para comprá-lo de um vendedor)
+
+
+demanda[item.tipoItem]--;
+
+if(global.demanda[item.tipoItem] < global.menorDemanda)
+   global.menorDemanda = global.demanda[item.tipoItem];
+
+
+// PARA O VENDEDOR CALCULAR O PREÇO DO ITEM:
+
+* Calcular a demanda normalizada do item consultado.
+
+//! (Função global) Normalizar a demanda do item
+float normalizarDemanda(item.tipoItem)
+{
+   int normalInferior;
+   float normalSuperior;
+
+   normalInferior = 0 - global.menorDemanda;
+   
+   normalSuperior = global.maiorDemanda + normalInferior;
+
+   return( (global.demanda[item.tipoItem]+normalInferior)*100/normalSuperior);   
+}
+
+* Calcular o valor do Estoque do Vendedor (vendedor.valorTotalEstoque)
+
+// !Calcula o capital retido em estoque
+float calcularEstoque()
+{
+   float somatorio = 0.0;
+   float demandaNormalizada = 0.0;
+   float durabilidade = 0.0;
+   int tipoItem = 0;
+
+   for(int i = 0; i < vendedor.numItens; i++)
+   {
+	tipoItem = vendedor.listaItens->getElementAt(i)->getTipo();
+	durabilidade = vendedor.listaItens->getElementAt(i)->getDurability();
+	demandaNormalizada = normalizarDemanda(tipoItem);
+	
+	somatorio += getPrecoBrutoItem(tipoItem, durabilidade, demandaNormalizada);
+   }
+
+   return (somatorio);
+}
+
+// !Calcula preço bruto de estoque usando tipo, durabilidade e demanda normalizada do item.
+float getPrecoBrutoItem( int tp, int dr, float dn )
+{
+   return = global.precoBase[tp] + ( global.precoBase[tp] * ((dr-50)/100) ) + ( global.precoBase[tp] * ((dn-50)/100) );
+}
+
+* Calcular a defasagem de capital entre o que o vendedor tem (dinheiro + itens de estoque) e sua meta de capital
+
+// !Calcula a defasagem de capital do vendedor (vendedor.defasagemCapital) = meta restante
+float calcularDefasagemCapital()
+{
+   return ( vendedor.metaCapital - (vendedor.sementes + vendedor.valorTotalEstoque) );
+}
+
+* Calcular a defasagem que será rateada por todos os itens
+
+// !Calcula a defasagem rateada para cada os itens (vendedor.defasagemRateada)
+float calcularDefasagemRateada()
+{
+   float rateio;
+
+   if(vendedor.numItens > 0) 
+ 	rateio = vendedor.defasagemCapital / vendedor.numItens;
+   else
+	rateio = vendedor.defasagemCapital;
+
+   if(rateio > 0)
+   	return (rateio);
+   else
+	return 0.1;
+}
+
+NO CASO DE O VENDEDOR ESTAR VENDENDO UM ITEM:
+
+* Calcular o preço de venda bruto do item
+
+// !Calcula o preço de venda bruto de um item (vendedor.precoBruto)
+float calcularPrecoVendaBruto(item)
+{
+   float demandaNormalizada = normalizarDemanda(item.tipoItem);
+   return ( getPrecoBrutoItem(item.tipoItem, item.durabilidade, demandaNormalizada) + vendedor.defasagemRateada );
+}
+
+* Calcular o preço de venda final do item
+// LEMBRAR DE ZERAR O TEMPO SEM VENDA DO VENDEDOR SEMPRE QUE PASSAR DE 10 HORAS SEM VENDER
+
+float calcularPrecoVendaFinal()
+{
+   return( vendedor.precoBruto - (vendedor.precoBruto*((jogador.lealdade[vendedor.raca]/50) + vendedor.tempoSemVenda)/100))) );
+}
+
+
+NO CASO DE O VENDEDOR ESTAR COMPRANDO UM ITEM:
+
+* Calcular o preço de compra bruto do item
+
+// !Calcula o preço de compra bruto de um item (vendedor.precoBruto)
+float calcularPrecoCompraBruto(item)
+{
+   float demandaNormalizada = normalizarDemanda(item.tipoItem);
+   return (global.precoBase[item.tipo]/2 + (global.precoBase[item.tipo]*((item.durabilidade-50)/100))+(global.precoBase[item.tipo]*((demandaNormalizada-50)/100)))+(vendedor.defasagemRateada/4);
+}
+
+* Calcular o preço de compra final do item
+// LEMBRAR DE ZERAR O TEMPO SEM VENDA DO VENDEDOR SEMPRE QUE PASSAR DE 10 HORAS SEM VENDER
+
+float calcularPrecoCompraFinal()
+{
+   return( vendedor.precoBruto + (vendedor.precoBruto*((jogador.lealdade[vendedor.raca]/50) + vendedor.tempoSemVenda)/100))) );
+}
+
+
+
+
