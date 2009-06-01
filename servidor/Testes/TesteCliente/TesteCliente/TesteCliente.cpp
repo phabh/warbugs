@@ -217,7 +217,7 @@ int main()
 					mesEnv.writeByte(DELETE_PERSONAGEM); // requisição de login
 					mesEnv.writeInt(idJogador);
 					mesEnv.writeInt(19);
-					mesEnv.writeString("VespaPita");
+					mesEnv.writeString("Himureta");
 					_socketClient->SendLine(mesEnv);
 
 				}
