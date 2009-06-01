@@ -181,7 +181,6 @@ void CGameCore::getAllManagers(IrrlichtDevice*&dispGrafico, ISoundEngine*&dispAu
 
 //-----------------------------------------------------------------------------------------------------------------
 
-
 void CGameCore::playMusic( char* soundFile, bool looped, bool startPaused, bool track, E_STREAM_MODE modo, bool efeitos)
 {
 	_gameMusic = _dispositivoAudio->play2D(soundFile, looped, startPaused, track, modo, efeitos);
@@ -201,6 +200,7 @@ void CGameCore::loadGameScene(c8* sceneFile)
 {
 	_gerenciadorCena->loadScene(sceneFile);
 }
+
 //-----------------------------------------------------------------------------------------------------------------
 
 ICameraSceneNode* CGameCore::createCamera( vector3df posicao, vector3df target, vector3df rotacao, ISceneNode *parent, float angulo/*bool isOrtogonal*/, bool bind)

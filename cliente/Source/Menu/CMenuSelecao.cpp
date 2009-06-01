@@ -29,8 +29,8 @@ bool CMenuSelecao::start(CGameCore *gameCore)
 	_menuFlag[HUDUPDATED]  = false;
 	_menuFlag[OBJSELECTED] = false;
 
-	_nodoSelecionado = 0;
-	_idPersonagem = -1;
+	_nodeChar = 0;
+	_idChar = -1;
 	_camRotation = 0;
 	_camCurrRotation = 0;
 
