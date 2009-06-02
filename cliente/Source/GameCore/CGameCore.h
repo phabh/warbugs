@@ -125,6 +125,7 @@ public:
 	void enviarPacote(int packageID, int i1);
 	void enviarPacote(int packageID, int i1, int i2);
 	void enviarPacote(int packageID, int i1, int i2, int i3);
+	void enviarPacote(int packageID, int i1, int i2, char *s1 );
 	void enviarPacote(int packageID, int i1, int i2, int i3, int i4);
 	void enviarPacote(int packageID, int i1, int i2, int i3, int i4, int i5, int i6);
 	void enviarPacote(int packageID, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9);
@@ -132,5 +133,5 @@ public:
 	void enviarPacote(int packageID, int i1, float f1, float f2);
 	void enviarPacote(int packageID, int i1, int i2, int i3, float f1, float f2);
 	void enviarPacote(int packageID, char *s1, char *s2);
-	void receberPacote();
+	int receberPacote();
 };

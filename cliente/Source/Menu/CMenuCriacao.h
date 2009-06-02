@@ -8,13 +8,16 @@ class CMenuCriacao : public CMenu
 private:
 
 	ICameraSceneNode *_menuCamera;
-	ISceneNode *_nodoSelecionado;
-	int _idPersonagem;
-	IParticleSystemSceneNode *_particula[RACASMAX];
-	
-	ILightSceneNode *_luz;
 
+	IParticleSystemSceneNode *_particula[RACASMAX];
+	ILightSceneNode *_luz;
 	CToonShader *_toonShader;
+
+	int _idChar;
+	int _tipoPersonagem;
+	ISceneNode *_nodeChar;
+	float _camRotation;
+	float _camCurrRotation;
 
 	void graphicsDrawAddOn();
 	void updateHuds();

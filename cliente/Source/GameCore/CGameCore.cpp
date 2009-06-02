@@ -96,14 +96,14 @@ IParticleSystemSceneNode* CGameCore::addPaticleNode(TypeParticle tipo, int tempo
 		ps = _gerenciadorCena->addParticleSystemSceneNode(false);
 
 		IParticleEmitter* emissor = ps->createBoxEmitter(
-			aabbox3d<f32>(-7, 0, -7, 7, 1, 7), // tamanho do box do emissor
-			vector3df(0.0f, 0.06f, 0.0f),      // direção inicial
+			aabbox3d<f32>(-5, 0, -5, 5, 0.2, 5), // tamanho do box do emissor
+			vector3df(0.0f, 0.05f, 0.0f),      // direção inicial
 			80, 100,                           // taxa de emissão
 			SColor(0, 255, 255, 255),          // cor mais escura
 			SColor(0, 255, 255, 255),          // cor mais clara
-			(u32)tempoVida*0.4/*800*/, tempoVida/*2000*/, 0,                      // idade mínima, máxima e ângulo
-			dimension2df(10.f, 10.f),          // tamanho mínimo
-			dimension2df(20.f, 20.f));         // tamanho máximo
+			(u32)tempoVida*0.4, tempoVida, 0,                      // idade mínima, máxima e ângulo
+			dimension2df(5.0f, 5.0f),          // tamanho mínimo
+			dimension2df(10.0f, 10.0f));         // tamanho máximo
 
 		ps->setEmitter(emissor);
 		emissor->drop();
@@ -347,6 +347,21 @@ void CGameCore::enviarPacote(int packageID, int i1, int i2)
 
 //-----------------------------------------------------------------------------------------------------------------
 
+void CGameCore::enviarPacote(int packageID, int i1, int i2, char *s1 )
+{
+	_packageToSend.init(_dataToSend, sizeof(_dataToSend));
+	_packageToSend.clear();
+
+	_packageToSend.writeByte(packageID);
+	_packageToSend.writeLong(i1);
+	_packageToSend.writeLong(i2);
+	_packageToSend.writeString(s1);
+
+	_gameSocket->SendLine(_packageToSend);	
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
 void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3)
 {
 	_packageToSend.init(_dataToSend, sizeof(_dataToSend));
@@ -477,8 +492,10 @@ void CGameCore::enviarPacote(int packageID, char *s1, char *s2)
 
 //-----------------------------------------------------------------------------------------------------------------
 
-void CGameCore::receberPacote()
+int CGameCore::receberPacote()
 {
+	int retorno = SUCESSO;
+
 	_packageReceived.clear();
 	_gameSocket->ReceiveLine(_packageReceived);
 
@@ -519,22 +536,50 @@ void CGameCore::receberPacote()
 
 				_myChar[i] = _gerenciadorCena->addAnimatedMeshSceneNode( getMAnimMesh(_myStructChar[i]._idModelo), 0, _myStructChar[i]._id );
 				_toonShader->apply( _myChar[i], pathTextureModels[_myStructChar[i]._idTextura] );
+				_myChar[i]->setAnimationSpeed(5);
 
 				switch (i)
 				{
 				case 0:
-					_myChar[i]->setPosition(vector3df(-50,0,0));
-					_myChar[i]->setRotation(vector3df(0,0,0));
+					_myChar[i]->setPosition(vector3df(-10,0,30));
+					_myChar[i]->setRotation(vector3df(0,80,0));
 					break;
 
 				case 1:
-					_myChar[i]->setPosition(vector3df(50,0,0));
-					_myChar[i]->setRotation(vector3df(0,0,0));
+					_myChar[i]->setPosition(vector3df(10,0,30));
+					_myChar[i]->setRotation(vector3df(0,100,0));
 					break;
 				};
 			}
 
 			break;
+
+		case  CREATE_PLAYER_OK: // CODIGO: CRIAÇÃO DE PERSONAGEM OK
+
+			cout << "\nPersonagem criado com sucesso." << endl;
+
+			break;
+
+		case  CREATE_PLAYER_FAIL: // CODIGO: CRIAÇÃO DE PERSONAGEM FALHOU
+
+			retorno = ERRO;
+			cout << "\nErro ao criar personagem." << endl;
+
+			break;
+
+		case  DELETE_PLAYER_OK: // CODIGO: REMOÇÃO DE PERSONAGEM OK
+
+			cout << "\nPersonagem excluido com sucesso." << endl;
+
+			break;
+
+		case  DELETE_PLAYER_FAIL: // CODIGO: REMOÇÃO DE PERSONAGEM FALHOU
+
+			retorno = ERRO;
+			cout << "\nErro ao excluir personagem." << endl;
+
+			break;
+
 
 		case LOGIN_OK: // CODIGO: LOGIN EFETUADO COM SUCESSO
 
@@ -550,6 +595,7 @@ void CGameCore::receberPacote()
 			enviarPacote(DISCONNECT);
 			_gameSocket->Close();
 			_connected = false;
+			retorno = ERRO;
 
 			break;
 
@@ -559,7 +605,7 @@ void CGameCore::receberPacote()
 			enviarPacote(DISCONNECT);
 			_gameSocket->Close();
 			_connected = false;
-
+			retorno = ERRO;
 		};
 	}
 	else // CODIGO: SERVIDOR NÃO RESPONDE
@@ -568,5 +614,8 @@ void CGameCore::receberPacote()
 		enviarPacote(DISCONNECT);
 		_gameSocket->Close();
 		_connected = false;
+		retorno = ERRO;
 	}
+
+	return retorno;
 }
