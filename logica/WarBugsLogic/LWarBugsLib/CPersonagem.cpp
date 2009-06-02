@@ -16,6 +16,8 @@
 CPersonagem::CPersonagem()
 {
 	setID(-1);
+	nivel = 1;
+	experiencia = 0;
 	dinheiro = 0;
 	baseMoveSpeed = 0;
 	habilidadesPrimarias = new CHabilidades();
@@ -27,6 +29,14 @@ CPersonagem::CPersonagem()
 	status = new CBuffList();
 }
 //Getters
+int CPersonagem::getLevel()
+{
+	return(nivel);
+}
+int CPersonagem::getXP()
+{
+	return(experiencia);
+}
 char *CPersonagem::getName()
 {
 	return(nome);
@@ -112,6 +122,14 @@ CCenario *CPersonagem::getScene()
 	return(cenario);
 }
 //Setters
+void CPersonagem::setLevel(int level)
+{
+	nivel = level;
+}
+void CPersonagem::setXP(int xp)
+{
+	experiencia = xp;
+}
 void CPersonagem::setName(char *name)
 {
 	if(sizeof(nome) >= strlen(name))
@@ -185,6 +203,10 @@ void CPersonagem::setBaseBonus(CBonus *bonus)
 void CPersonagem::addMoney(int value)
 {
 	dinheiro = dinheiro + value;
+}
+void CPersonagem::addXP(int value)
+{
+	experiencia = experiencia + value;
 }
 //Outros métodos
 void CPersonagem::move()

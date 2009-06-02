@@ -38,19 +38,23 @@ public:
 
 	CCenario(int ID, CPeopleList *players, CPeopleList *monsters, CPeopleList *npcs, CPeopleList *vendedores, CBolsaList *bolsa, CPortal *saidaNorte, CPortal *saidaSul, CPortal *saidaLeft, CPortal *saidaRight);
 	void enterScene();
-	int personagemCount();
+	int playerCount();
 	int itemCount();
+	int monsterCount();
+	int NPCCount();
+	int salesmanCount();
+
 	CPersonagemJogador *getPlayer(int idJogador);
 	CInimigo *getMonster(int idInimigo);
 	CNPC *getNpc(int idNpc);
 	CBolsa *getBag(int idBag);
-	CVendedor *getVendedor(int idVendedor);
+	CVendedor *getSalesman(int idVendedor);
 
-	CPersonagemJogador *getPlayerAt(int idJogador);
-	CInimigo *getMonsterAt(int idInimigo);
-	CNPC *getNpcAt(int idNpc);
-	CBolsa *getBagAt(int idBag);
-	CVendedor *getVendedorAt(int idVendedor);
+	CPersonagemJogador *getPlayerAt(int pos);
+	CInimigo *getMonsterAt(int pos);
+	CNPC *getNpcAt(int pos);
+	CBolsa *getBagAt(int pos);
+	CVendedor *getSalesmanAt(int pos);
 
 	CPortal *getExit(Direcoes idPortal);
 
@@ -60,13 +64,13 @@ public:
 	void addMonster(CPersonagem *inimigo);
 	void addNpc(CPersonagem *npc);
 	void addBag(CBolsa *bolsa);
-	void addVendedor(CVendedor *vendedor);
+	void addSalesman(CVendedor *vendedor);
 
 	CPersonagemJogador *removePlayer(int idJogador);
 	CInimigo *removeMonster(int idInimigo);
 	CNPC *removeNPC(int idNPC);
 	CBolsa *removeBag(int idBag);
-	CVendedor *removeVendedor(int idVendedor);
+	CVendedor *removeSalesman(int idVendedor);
 
 	void update();
 };

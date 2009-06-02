@@ -7,6 +7,9 @@
 *
 */
 
+#ifndef _CCENARIO_H_
+#include "CCenario.h"
+#endif
 
 #ifndef _CBUFF_CPP_
 #define _CBUFF_CPP_
@@ -21,17 +24,19 @@ CBuff::CBuff()
 	_indiceEfeito = -1;
 	_badBuff = false;
 	_tipoBuff = NORMAL;
+	_causador = NULL;
 	_valor1 = 0;
 	_valor2 = 0;
 	_valor3 = 0;
 }
-CBuff::CBuff(TipoBuff tipo, int dur, /*int img, int efc,*/ int val1, int val2, int val3)
+CBuff::CBuff(TipoBuff tipo, int dur, /*int img, int efc,*/ CPersonagem *origem, int val1, int val2, int val3)
 {
 	setID(-1);
 	_tipoBuff = tipo;
 	//_indiceEfeito = efc;
 	//_indiceImagem = img;
 	_duracao = dur;
+	_causador = origem;
 	switch(tipo)
 	{
 		case DESESPERO:
@@ -222,12 +227,24 @@ void CBuff::execute(CPersonagem *jogador, CBuffList *lista)
 	case VENENO:
 		if(jogador->getRES() < _valor2)
 		{
-			jogador->getStats()->addPV(((-1)*_valor1));
+			jogador->takeDamage((-1)*_valor1, _causador);//addPV(((-1)*_valor1));
 		}
 		break;
 	case DADIVA:
 		break;
 	case BERSERKER:
+		for(int i = 0; i < jogador->getScene()->playerCount(); i = i+1)
+		{
+			if(jogador->getDistanceToPoint(jogador->getScene()->getPlayerAt(i)->getPosition()) <= _valor1)
+				((jogador->getScene()->getPlayerAt(i)))->takeDamage((-1)*_valor1, jogador);//getStats()->addPV((-1)*_valor2);
+		}
+		for(int i = 0; i < jogador->getScene()->monsterCount(); i = i + 1)
+		{
+			if(jogador->getDistanceToPoint(jogador->getScene()->getMonsterAt(i)->getPosition()) <= _valor1)
+			{
+				((jogador->getScene()->getMonsterAt(i)))->takeDamage((-1)*_valor1, jogador);//->getStats()->addPV((-1)*_valor2);
+			}
+		}
 		break;
 	case STRIKE:
 		break;
@@ -236,7 +253,7 @@ void CBuff::execute(CPersonagem *jogador, CBuffList *lista)
 	case LENTO:
 		if(jogador->getFOR() < _valor3)
 		{
-			jogador->getStats()->addPV(((-1)*_valor2));
+			jogador->takeDamage((-1)*_valor2, _causador);//->getStats()->addPV(((-1)*_valor2));
 		}
 		break;
 	case STUN:

@@ -16,6 +16,8 @@ class CCenario;
 #endif
 #endif
 
+#include "CDivisorXP.h"
+
 //#include "CPersonagem.h"
 #include <time.h>
 
@@ -30,7 +32,7 @@ public:
 	void takeDecision();
 
 	void attack();
-	void takeDamage(int damage);
+	void takeDamage(int damage, CPersonagem *atkr);
 	void die();
 	void useItem(CItem *item);
 

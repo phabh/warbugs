@@ -3,6 +3,9 @@
 using namespace std;
 #include "Enumerators.h"
 #include "CJogador.h"
+	//#include "CWarBugObject.h"
+	//#include "CCenario.h"
+		//#include "CPersonagemJogador.h"
 
 typedef SCelula<CJogador> SPlayerElemento;
 

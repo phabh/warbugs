@@ -33,10 +33,14 @@ class CBuffList;
 #endif
 #endif
 
-
+#ifndef _CDIVXP_H_
+class CDivisorXP;
+#endif
 // ------------------------------------------------------------------------------------------------------------
 class CPersonagem : public C3DObject{
 protected:
+	int nivel;
+	int experiencia;
 	char nome[10];
 	Raca raca;
 	TypeClassChars tipo;
@@ -55,10 +59,13 @@ protected:
 	CBonusPrimario *bonusPrimario;
 	CPersonagem *alvo;
 	CCenario *cenario;
+	CDivisorXP *divisorxp;
 public:
 
 	CPersonagem();
 	//Getters e Setters
+	int getLevel();
+	int getXP();
 	char *getName();
 	Raca getRace();
 	TypeClassChars getType();
@@ -78,10 +85,12 @@ public:
 	CBuffList *getBuffs();
 	CHabilidades *getBaseStats();
 	CBonusPrimario *getBaseBonus();
+	
+	void setLevel(int level);
+	void setXP(int xp);
+	void setName(char *name);
 	CPersonagem *getTarget();
 	CCenario *getScene();
-	
-	void setName(char *name);
 	void setRace(Raca raca);
 	void setType(TypeClassChars novotipo);
 	void setRespawnTime(int newTime);
@@ -99,10 +108,11 @@ public:
 	void setScene(CCenario *newScene);
 
 	void addMoney(int value);
+	void addXP(int value);
 	//Outros métodos
 	void move();
 	virtual void attack()=0;
-	virtual void takeDamage(int damage)=0;
+	virtual void takeDamage(int damage, CPersonagem *atkr)=0;
 	virtual void die()=0;
 	virtual void useItem(CItem *item)=0;
 	//void useSkill(CPoder *skill);
