@@ -135,7 +135,7 @@ int main()
 		//se você executar o server que fiz provavelmente pode dar erro
 		//por não possuir o banco de dados, mas se não der erro ele irá
 		//conseguir ler as mensagens e falar que o usuário é invalido
-		CBugSocketClient * _socketClient = new CBugSocketClient("127.0.0.1",PORT);
+		CBugSocketClient * _socketClient = new CBugSocketClient("10.16.11.34",PORT);
 
 		while(true) //so pra testar
 		{
