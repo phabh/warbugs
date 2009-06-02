@@ -56,9 +56,14 @@ void CMenuSelecao::updateHuds()
 {
 	_gerHud->clear();
 
-	_gerHud->addButton(rect<s32>(440,500,540,540), 0, 2 , L"Criar");
-	_gerHud->addButton(rect<s32>(440,500,540,540), 0, 3, L"Remover");
-	_gerHud->addButton(rect<s32>(320,500,430,540), 0, 4, L"Jogar");
+	if(_gameCore->_numMyChars < 2)
+		_gerHud->addButton(rect<s32>(440,550,540,590), 0, 201 , L"Criar");
+
+	if(_gameCore->_numMyChars > 0)
+		_gerHud->addButton(rect<s32>(440,650,540,690), 0, 204, L"Jogar");
+
+	_gerHud->addButton(rect<s32>(240,550,340,590), 0, 202, L"Remover1");
+	_gerHud->addButton(rect<s32>(640,550,740,590), 0, 203, L"Remover2");
 
 	//_gerHud->addButton(rect<s32>(140,10,240,50), 0, 5, L"<");
 	//_gerHud->addButton(rect<s32>(540,10,640,50), 0, 6, L">");
@@ -85,27 +90,35 @@ void CMenuSelecao::readCommands()
 		switch (_gerEventos->getEventCallerByID())
 		{
 
-		case 3:
+		case 201:
+
 			_nextID = MN_CRIACAOPERSONAGEM;
 			return;
+
 			break;
 
-		case 4:
+		case 202: 
+
+			_gameCore->enviarPacote(DELETE_PERSONAGEM, _gameCore->_myUserID, _gameCore->_myStructChar[0]._id, _gameCore->_myStructChar[0]._nome );
+			
+			if(_gameCore->receberPacote() == SUCESSO)
+				this->start(_gameCore);
+
+			break;
+
+		case 203:
+
+			_gameCore->enviarPacote(DELETE_PERSONAGEM, _gameCore->_myUserID, _gameCore->_myStructChar[1]._id, _gameCore->_myStructChar[1]._nome );
+			
+			if(_gameCore->receberPacote() == SUCESSO)
+				this->start(_gameCore);
+
+			break;
+/*
+		case 204:
 			_nextID =  MN_JOGO;
 			return;
-			break;
-
-		case 5: // 
-			_camRotation += 90;
-			if(_camRotation > 360.0)
-				_camRotation -= 360.0;
-			break;
-
-		case 6:
-			_camRotation -= 90;
-			if(_camRotation < 0.0)
-				_camRotation += 360.0;
-			break;
+			break;*/
 
 		default:
 			cout << "\nID de botao desconhecido." << endl;
@@ -117,7 +130,7 @@ void CMenuSelecao::readCommands()
 	if(_gerEventos->isMouseButtonReleased(MBLEFT))
 	{
 		// Clique com o botao esquerdo
-
+/*
 		if(_menuFlag[OBJSELECTED])
 		{
 			_menuFlag[OBJSELECTED] = false; // Drop 3D
@@ -137,7 +150,7 @@ void CMenuSelecao::readCommands()
 				_menuFlag[OBJSELECTED] = true; // Get 3D
 				_menuFlag[HUDUPDATED] = false;
 			}
-		}		
+		}	*/	
 	}
 }
 
@@ -145,23 +158,6 @@ void CMenuSelecao::readCommands()
 
 void CMenuSelecao::updateGraphics()
 {
-	float delta = fabs(_camRotation - _camCurrRotation);
-
-	if(	_camRotation != _camCurrRotation )
-	{
-		if(delta < 5)
-			_camCurrRotation = _camRotation;
-		else
-		{
-			if(_camRotation > _camCurrRotation)
-				_camCurrRotation += 2*delta/50;
-
-			else if(_camRotation < _camCurrRotation)
-				_camCurrRotation -= 2*delta/50;
-		}
-	}
-
-	_menuCamera->setRotation(vector3df(0, _camCurrRotation, 0));
 }
 
 //-----------------------------------------------------------------------------------------------------------------

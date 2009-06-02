@@ -38,12 +38,12 @@ void CMenuLogin::updateHuds()
 	IGUIImage *img =_gerHud->addImage(rect<s32>(0, 0, _gerVideo->getScreenSize().Width, _gerVideo->getScreenSize().Height), 0, -1, L"");
 	img->setImage(_gerVideo->getTexture("recursos/texturas/huds/tx2d_bg_login.jpg"));
 	
-	Login = _gerHud->addEditBox(L"login", rect<s32>(300,500,400,520), true, 0, 10);
-	Password = _gerHud->addEditBox(L"senha", rect<s32>(300,530,400,550), true, 0, 20);
+	Login = _gerHud->addEditBox(L"fantini", rect<s32>(300,500,400,520), true, 0, 10);
+	Password = _gerHud->addEditBox(L"wurzelion", rect<s32>(300,530,400,550), true, 0, 20);
 	Login->setMax(15);
 	Password->setMax(15);
 	
-	_gerHud->addButton(rect<s32>(420,500,520,550), 0, 2, L"conectar");
+	_gerHud->addButton(rect<s32>(420,500,520,550), 0, 101, L"conectar");
 
 	_menuFlag[HUDUPDATED] = true;
 }
@@ -61,7 +61,7 @@ void CMenuLogin::readCommands()
 	if(_gerEventos->getEventCallerByElement(EGET_BUTTON_CLICKED))
 	{
 		// Trata os cliques em botões
-		if (_gerEventos->getEventCallerByID() == 2)
+		if (_gerEventos->getEventCallerByID() == 101)
 		{
 			// Clicou no botão conectar
 

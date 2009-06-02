@@ -106,7 +106,7 @@ const f32 defMusicVol = 1.0;
 //-----------------------------------------------------------------------------------------
 
 // Inicialização
-enum TypeStart {ERRO, SUCESSO};
+enum TypeReturn {ERRO, SUCESSO};
 
 
 // Menu
@@ -134,6 +134,8 @@ enum TypeParticle {P_FOGO};
 
 
 // Personagem
+enum TypePersonagemSelecao {S_ARANHA, S_BESOURO, S_ESCORPIAO, S_LOUVADEUS, S_VESPA, S_COUNT};
+
 enum TypeRaceChars {NONERACE, ALLRACE, ARANHA, BESOURO, ESCORPIAO, LOUVADEUS, VESPA, CUPIM, FORMIGA, BARBEIRO, BARATA, TATUBOLINHA, LIBELULA, PERCEVEJO, ABELHA, LAGARTIXA, CALANGO, SAPO, JOANINHA, CAMALEAO};
 
 enum TypeClassChars {NONECLASS, ALLCLASS, JOGADOR, SOLDADO, LIDER, VENDEDOR, MAE, FILHOTE};

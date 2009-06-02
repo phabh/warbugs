@@ -8,7 +8,6 @@ class CMenuSelecao : public CMenu
 private:
 
 	int _idChar;
-	//int _numChars;
 	ISceneNode *_nodeChar;
 
 	float _camRotation;
