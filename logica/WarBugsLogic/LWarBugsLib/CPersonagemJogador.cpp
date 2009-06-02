@@ -31,8 +31,6 @@ CPersonagemJogador::CPersonagemJogador()
 	setBaseStats(new CHabilidades());
 	setBaseBonus(new CBonusPrimario());
 	setBuffs(new CBuffList());
-	_nivel = 1;
-	_experiencia = 0;
 	_xpToNextLv = 0;
 	_pontoDistribuir = 0;
 	_lealdade = new CLealdade();
@@ -57,14 +55,7 @@ CPersonagemJogador::CPersonagemJogador()
 	_skillLevel[2] = 0;
 }
 //Getters e setters
-int CPersonagemJogador::getLevel()
-{
-	return(_nivel);
-}
-int CPersonagemJogador::getXP()
-{
-	return(_experiencia);
-}
+
 int CPersonagemJogador::getMaxXP()
 {
 	return(_xpToNextLv);
@@ -124,14 +115,6 @@ CBugSocket *CPersonagemJogador::getSocket()
 	return(_socketJogador);
 }
 //Setters
-void CPersonagemJogador::setLevel(int level)
-{
-	_nivel = level;
-}
-void CPersonagemJogador::setXP(int xp)
-{
-	_experiencia = xp;
-}
 void CPersonagemJogador::setXPToNextLv(int xp)
 {
 	_xpToNextLv = xp;
@@ -292,8 +275,8 @@ void CPersonagemJogador::equip(CItem *item)
 			{
 				CItem *temp = new CWeapon();
 				temp = _equip->arma;
-				_equip->arma = (CWeapon*)item;
 				inventario->addItem(temp);
+				_equip->arma = (CWeapon*)item;
 				temp = NULL;
 				delete temp;
 				if(_equip->arma->getRange() <= MAXMELEERANGE)
@@ -326,8 +309,8 @@ void CPersonagemJogador::equip(CItem *item)
 			{
 				CItem *temp = new CArmor();
 				temp = _equip->armadura;
-				_equip->armadura = (CArmor*)item;
 				inventario->addItem(temp);
+				_equip->armadura = (CArmor*)item;
 				temp = NULL;
 				delete temp;
 			}
@@ -483,35 +466,22 @@ void CPersonagemJogador::acceptQuest(CQuest *quest)
 void CPersonagemJogador::speakToPlayer(CPersonagemJogador *alvo){}
 void CPersonagemJogador::speakToNPC(CPersonagem *alvo){}
 //Batalha
-void CPersonagemJogador::takeDamage(int damage)
+void CPersonagemJogador::takeDamage(int damage, CPersonagem *atkr)
 {
 	habilidadesSecundarias->addPV((-1)*damage);
+	divisorxp->addAttacker(atkr, damage);
 }
 void CPersonagemJogador::attack()
 {
 	int testValue = 0;
 	if((this->getDistanceToPoint(alvo->getPosition()) <= _range))
 	{
-		if(_bareHands)
-		{
-			testValue = _ataque + ((rand()%_equip->arma->getMaxDamage())+_equip->arma->getMinDamage())/2;
-		}
-		else
-		{
-			testValue = _ataque;
-		}
+		testValue = _ataque;
 
 		if(testValue > alvo->getStats()->getDefense())
 		{
-			if(_bareHands)
-			{
-				testValue = _dano + ((rand()%_equip->arma->getMaxDamage())+_equip->arma->getMinDamage());
-			}
-			else
-			{
-				testValue = _dano;
-			}
-			alvo->takeDamage(testValue);
+			testValue = _dano;
+			alvo->takeDamage(testValue, this);
 		}
 	}
 }
@@ -519,11 +489,11 @@ void CPersonagemJogador::attack()
 void CPersonagemJogador::updateXP(){/*Acessa banco de dados pra atualizar _xpToNextLv*/}
 bool CPersonagemJogador::haveLevelUp()
 {
-	if(_experiencia >= _xpToNextLv)
+	if(experiencia >= _xpToNextLv)
 	{
 		_pontoDistribuir = _pontoDistribuir + 5;
-		_nivel = _nivel + 1;
-		if(_nivel%2 == 0)
+		nivel = nivel + 1;
+		if(nivel%2 == 0)
 		{
 			_skillPontoDistribuir = _skillPontoDistribuir + 1;
 		}
@@ -534,13 +504,13 @@ bool CPersonagemJogador::haveLevelUp()
 }
 bool CPersonagemJogador::haveLevelDown()
 {
-	if(_experiencia < 0)
+	if(experiencia < 0)
 	{
-		if(_nivel%2 == 0)
+		if(nivel%2 == 0)
 		{
 			_skillPontoDistribuir = _skillPontoDistribuir - 1;
 		}
-		_nivel = _nivel - 1;
+		nivel = nivel - 1;
 		 _pontoDistribuir = _pontoDistribuir - 5;
 		updateXP();
 		return(true);
@@ -586,7 +556,10 @@ void CPersonagemJogador::distibuteSkillPoints(int points, int skillIndex)
 		 _skillLevel[skillIndex] = _skillLevel[skillIndex] + points;
 	}
 }
-void CPersonagemJogador::die(){}
+void CPersonagemJogador::die()
+{
+	divisorxp->giveXP();
+}
 void CPersonagemJogador::update()
 {
 }

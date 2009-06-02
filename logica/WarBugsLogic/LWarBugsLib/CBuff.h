@@ -37,6 +37,7 @@ private:
 	int _indiceEfeito;
 	bool _badBuff;
 	TipoBuff _tipoBuff;
+	CPersonagem *_causador;
 
 	int _valor1;
 	int _valor2;
@@ -44,7 +45,7 @@ private:
 public:
 
 	CBuff();
-	CBuff(TipoBuff tipo, int dur, /*int img, int efc,*/ int val1 = 0, int val2 = 0, int val3 = 0);
+	CBuff(TipoBuff tipo, int dur, /*int img, int efc,*/ CPersonagem *origem, int val1 = 0, int val2 = 0, int val3 = 0);
 	TipoBuff getTipo();
 	int getTipoAsInt();
 	int getDuration();

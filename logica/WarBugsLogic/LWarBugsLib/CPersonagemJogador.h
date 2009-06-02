@@ -38,13 +38,14 @@ class CQuest;
 #endif
 #endif
 
+#include "CDivisorXP.h"
+
 #define _CPERSONAGEMJOGADOR_H_
 class CPersonagemJogador : public CPersonagem
 {
 	CBugSocket *_socketJogador;
-	int _nivel;
+	
 	int _skillLevel[3];
-	int _experiencia;
 	int _xpToNextLv;
 	int _pontoDistribuir;
 	int _skillPontoDistribuir;
@@ -73,8 +74,7 @@ public:
 
 	CPersonagemJogador();
 	//Getters
-	int getLevel();
-	int getXP();
+	
 	int getMaxXP();
 	int getAttack();
 	int getDamage();
@@ -90,8 +90,7 @@ public:
 	CBugSocket *getSocket();
 	
 	//Setters
-	void setLevel(int level);
-	void setXP(int xp);
+	
 	void setXPToNextLv(int xp);
 	void setPointsToDistribute(int points);
 	void setSkillPointsToDistribute(int value);
@@ -142,7 +141,7 @@ public:
 	void speakToPlayer(CPersonagemJogador *alvo);
 	void speakToNPC(CPersonagem *alvo);
 	//Batalha
-	void takeDamage(int damage);
+	void takeDamage(int damage, CPersonagem *atkr);
 	void attack();
 	//Level Up
 	void updateXP();

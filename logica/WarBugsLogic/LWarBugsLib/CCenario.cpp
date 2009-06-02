@@ -55,13 +55,25 @@ CCenario::CCenario(int ID,
 void CCenario::enterScene()
 {
 }
-int CCenario::personagemCount()
+int CCenario::playerCount()
 {
 	return(_jogadores->size());
 }
 int CCenario::itemCount()
 {
 	return(_itens->size());
+}
+int CCenario::monsterCount()
+{
+	return(_inimigos->size());
+}
+int CCenario::NPCCount()
+{
+	return(_npcs->size());
+}
+int CCenario::salesmanCount()
+{
+	return(_vendedores->size());
 }
 //
 CPersonagemJogador *CCenario::getPlayer(int idJogador)
@@ -80,7 +92,7 @@ CBolsa *CCenario::getBag(int idBag)
 {
 	return (_itens->getBolsa(idBag));
 }
-CVendedor *CCenario::getVendedor(int idVendedor)
+CVendedor *CCenario::getSalesman(int idVendedor)
 {
 	return((CVendedor*)_vendedores->getPersonagem(idVendedor));
 }
@@ -100,7 +112,7 @@ CBolsa *CCenario::getBagAt(int pos)
 {
 	return (_itens->getElementAt(pos));
 }
-CVendedor *CCenario::getVendedorAt(int idVendedor)
+CVendedor *CCenario::getSalesmanAt(int idVendedor)
 {
 	return((CVendedor*)_vendedores->getElementAt(idVendedor));
 }
@@ -163,7 +175,7 @@ void CCenario::addBag(CBolsa *bolsa)
 	bolsa->setSceneID(_contador->giveID());
 	_itens->addBag(bolsa);
 }
-void CCenario::addVendedor(CVendedor *vendedor)
+void CCenario::addSalesman(CVendedor *vendedor)
 {
 	vendedor->setSceneID(_contador->giveID());
 	_vendedores->addPersonagem(vendedor);
@@ -197,7 +209,7 @@ CBolsa *CCenario::removeBag(int idBag)
 	return(temp);
 	//return((CBolsa*)_itens->removeBolsa(idBag));
 }
-CVendedor *CCenario::removeVendedor(int idVendedor)
+CVendedor *CCenario::removeSalesman(int idVendedor)
 {
 	CVendedor *temp = (CVendedor*)_vendedores->removePersonagem(idVendedor);
 	_contador->removeID(temp->getSceneID());
@@ -211,6 +223,6 @@ void CCenario::update()
 		if(i < _inimigos->size())	getMonsterAt(i)->update();
 		if(i < _jogadores->size())  getPlayerAt(i)->update();
 		if(i < _npcs->size())		getNpcAt(i)->update();
-		if(i < _vendedores->size())	getVendedorAt(i)->update();
+		if(i < _vendedores->size())	getSalesmanAt(i)->update();
 	}
 }

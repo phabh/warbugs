@@ -28,7 +28,7 @@ CInimigo::CInimigo()
 }
 void CInimigo::takeDecision()
 {
-	for(int i = 0; i < cenario->personagemCount(); i = i + 1)
+	for(int i = 0; i < cenario->playerCount(); i = i + 1)
 	{
 		if(this->getDistanceToPoint(cenario->getPlayerAt(i)->getPosition()) <= MAXMELEERANGE)
 		{
@@ -78,12 +78,14 @@ void CInimigo::takeDecision()
 void CInimigo::attack()
 {
 }
-void CInimigo::takeDamage(int damage)
+void CInimigo::takeDamage(int damage, CPersonagem *atkr)
 {
 	this->getStats()->addPV((-1)*damage);
+	divisorxp->addAttacker(atkr, damage);
 }
 void CInimigo::die()
 {
+	divisorxp->giveXP();
 	if(getStats()->getPV() <= 0)
 	{
 		estado = MORTO;
