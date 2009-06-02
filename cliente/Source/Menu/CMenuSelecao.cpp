@@ -125,14 +125,14 @@ void CMenuSelecao::readCommands()
 		}
 		else
 		{
-			_idPersonagem = -1;
+			_idChar = -1;
 
-			_nodoSelecionado = _gerCena->getSceneCollisionManager()->getSceneNodeFromScreenCoordinatesBB(_dispGrafico->getCursorControl()->getPosition());
+			_nodeChar = _gerCena->getSceneCollisionManager()->getSceneNodeFromScreenCoordinatesBB(_dispGrafico->getCursorControl()->getPosition());
 
-			if (_nodoSelecionado)
-				_idPersonagem = _nodoSelecionado->getID();
+			if (_nodeChar)
+				_idChar = _nodeChar->getID();
 
-			if(_idPersonagem > 0)
+			if(_idChar > 0)
 			{
 				_menuFlag[OBJSELECTED] = true; // Get 3D
 				_menuFlag[HUDUPDATED] = false;
