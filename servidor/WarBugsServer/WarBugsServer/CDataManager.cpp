@@ -59,6 +59,8 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 	CPersonagem * personagem;
 
+	
+
 	switch(tipoPersonagem)
 	{
 			case JOGADOR: //Jogador
@@ -845,6 +847,7 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 	if(personagem != NULL)
 	{
+		personagem->setType((TypeClassChars) tipoPersonagem);
 		personagem->set2DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDHUD")]->ToString()));
 		personagem->set3DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDTEXTURA")]->ToString()));
 		personagem->set2DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDMODELO")]->ToString()));
@@ -1867,6 +1870,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool p
 
 		if(personagem != NULL)
 		{
+			personagem->setType((TypeClassChars) tipoPersonagem);
 			personagem->set2DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDHUD")]->ToString()));
 			personagem->set3DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDTEXTURA")]->ToString()));
 			personagem->setModel(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDMODELO")]->ToString()));
@@ -2726,6 +2730,7 @@ CPeopleList * CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int 
 
 		if(personagem != NULL)
 		{
+			personagem->setType((TypeClassChars) tipoPersonagem);
 			personagem->set2DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDHUD")]->ToString()));
 			personagem->set3DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDTEXTURA")]->ToString()));
 			personagem->setModel(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDMODELO")]->ToString()));
@@ -2800,6 +2805,8 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 				case JOGADOR: //Jogador
 				{
 					personagem = new CPersonagemJogador();
+
+
 
 					dado[0] = System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGID")]->ToString());
 
@@ -3581,6 +3588,7 @@ CPeopleList CDataManager::getPersonagem(int idTipoPersonagem, int idRaca)
 
 		if(personagem != NULL)
 		{
+			personagem->setType((TypeClassChars) tipoPersonagem);
 			personagem->set2DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDHUD")]->ToString()));
 			personagem->set3DTexture(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDTEXTURA")]->ToString()));
 			personagem->setModel(System::Int32::Parse(dados[nomeCampos->IndexOf(L"PGIDMODELO")]->ToString()));
@@ -4043,6 +4051,50 @@ CCenarioList * CDataManager::getListCenario()
 	
 
 	return listCenario;
+}
+
+/*
+	Retorna o id do cenário em que o jogador estava na última vez
+	@param idPersonagem -> id do Personagem que o jogador estava usando
+	@param idJogador -> Id do jogador
+	return id do cenario
+*/
+int	CDataManager::getCenarioId(int idPersonagem, int idJogador)
+{
+	int idCenario = -1;
+
+	CCenarioList * listCenario = new CCenarioList();
+
+	TDadosBD ^ dados      = gcnew TDadosBD();
+	TDadosBD ^ nomeCampos = gcnew TDadosBD();
+	unsigned int numRegs   = 0;
+	unsigned int numCampos = 0;
+	System::String ^ query;
+
+	query = L"SELECT C.CNID FROM CENARIO C, PERSONAGEM_CENARIO PC, JOGADOR_PERSONAGEM JP "
+		    +"WHERE PC.PGID = JP.PGID AND C.CNID  = PC.CNID AND "
+			+"JP.JDID = "+idJogador
+			+" AND JP.PGID = "+idPersonagem;
+
+	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
+
+
+	if(numRegs == 0 || numCampos == 0)
+	{
+		System::String ^texto = L"Não foi encontrado nenhum Cenário!";
+		WarBugsLog::_log->Items->Add(texto);		
+		return -1;	
+	}
+
+	for(int i = 0; i < (int)numCampos; i++)
+	{
+		nomeCampos->Add(dados[0]);
+		dados->RemoveAt(0);
+	}
+
+	idCenario = System::Int32::Parse(dados[0]->ToString);
+
+	return idCenario;
 }
 
 //Obter Bolsa
@@ -4961,6 +5013,24 @@ bool CDataManager::insertPersonagemJogador(CPersonagemJogador * p1, int idJogado
 		if(_dataBase->insertNow(toChar(query)))
 		{
 			texto = L"Personagem '"+temp+"' Incluído com sucesso";
+
+			if(p1->getRace() == BESOURO)
+			{
+				query = L"INSERT INTO ITEM_RELACIONAL(ITID, PGID) "
+						+" VALUES ("+(((int)I_MARTELO_GUERRA)-1)+","+p1->getID()+")";
+
+				
+				//se não for inserido com sucesso
+				if(_dataBase->insertNow(toChar(query)))
+				{
+					texto = L"item do Personagem '"+temp+"' Incluído com sucesso";
+				}
+				else
+				{
+					texto = L"Não foi possivel incluir item do personagem '"+temp+"'.";
+				}
+			}
+
 			result = true;
 		}
 		else
@@ -5049,9 +5119,22 @@ bool CDataManager::deletePersonagemJogador(int idJogador, int idPersonagem, char
 	
 	System::String ^texto;
 
-	//se não for inserido com sucesso
+	//se não for EXCLUIDO com sucesso
 	if(_dataBase->deleteNow(toChar(query)))
 	{
+		query = L"DELETE FROM ITEM_RELACIONAL WHERE PGID = "+idPersonagem;
+		
+		//se não for EXCLUIDO com sucesso
+		if(_dataBase->deleteNow(toChar(query)))
+		{
+			texto = L"Os Itens do personagem '"+temp+"' foram excluido com sucesso";
+			result = true;
+		}
+		else
+		{
+			texto = L"Não foi possivel excluir os itens do personagem '"+temp+"'.";
+		}
+
 		query = L"DELETE FROM PERSONAGEM WHERE PGID = "+idPersonagem;
 		
 		//se não for inserido com sucesso

@@ -167,9 +167,6 @@ void CCoreServer::readPackets()
 
 								if(_dataManager->insertPersonagemJogador(((CPersonagemJogador *)tempList->getElementAt(0)),_playersList->getElementAt(indexJogador)->getID()))
 								{
-
-									_playersList->getElementAt(indexJogador)->setCharacter((CPersonagemJogador *)tempList->getElementAt(0));
-
 									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)CREATE_PLAYER_OK);
 								}
 								else
@@ -215,7 +212,139 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem = mesRecebida.readInt();
+						int    idJogador	 = mesRecebida.readInt();
+						int    idPersonagem	 = mesRecebida.readInt();
+
+						CPersonagem * tempPersonagem = _dataManager->getPersonagem(idPersonagem);
+
+						int idCenario = -1;
+						int posCenario = -1;
+
+						if(tempPersonagem == NULL)
+						{
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);
+							break;
+						}
+						else
+						{
+							_playersList->getElementAt(indexJogador)->setCharacter(((CPersonagemJogador *) tempPersonagem));
+
+							idCenario = _dataManager->getCenarioId(idPersonagem,idJogador);
+
+							if(idCenario == -1)
+							{
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);
+								break;								
+							}
+
+							if(!_cenarioList->haveCenario(idCenario))
+							{
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);
+								break;								
+							}
+
+							for(int p = 0; p < _cenarioList->size(); p++)
+							{
+								if(_cenarioList->getElementAt(p)->getID() == idCenario)
+								{
+									posCenario = p;
+									p = _cenarioList->size();
+								}
+
+							}
+
+							if(posCenario == -1)
+							{
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);
+								break;								
+							}
+
+
+							//coloca o personagem no cenário
+							_cenarioList->getElementAt(posCenario)->addPlayer(tempPersonagem);
+
+							//manda o cenário em que o jogador está
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)ENTER_CENARIO, tempPersonagem->getSceneID(), tempPersonagem->getPosition()->x, tempPersonagem->getPosition()->z);
+
+							//manda para todos do cenário adicionar o novo personagem
+							sendMessage(true,_cenarioList->getElementAt(posCenario)->getID(),_playersList->getElementAt(indexJogador)->getSocket(),(int)ADD_PERSONAGEM, JOGADOR, tempPersonagem);
+
+							//manda para o player os inimigos
+							for(int p = 0; p < _cenarioList->getElementAt(posCenario)->monsterCount(); p++)
+							{
+								CInimigo * tempInimigo = _cenarioList->getElementAt(posCenario)->getMonsterAt(p);
+
+								if(tempInimigo == NULL)
+								{
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);	
+								}
+								else
+								{
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)ADD_PERSONAGEM, tempInimigo->getType(), tempInimigo);
+								}
+							}
+
+							//manda para o player os NPCS
+							for(int p = 0; p < _cenarioList->getElementAt(posCenario)->npcCount(); p++)
+							{
+								CNPC * tempNPC = _cenarioList->getElementAt(posCenario)->getNpcAt(p);
+
+								if(tempNPC == NULL)
+								{
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);	
+								}
+								else
+								{
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)ADD_PERSONAGEM, tempNPC->getType(), tempNPC);
+								}
+							}
+
+							//manda para o player as Bolsas
+							for(int p = 0; p < _cenarioList->getElementAt(posCenario)->bagCount(); p++)
+							{
+								CBolsa * tempBolsa = _cenarioList->getElementAt(posCenario)->getBagAt(p);
+
+								if(tempBolsa == NULL)
+								{
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);	
+								}
+								else
+								{
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)ADD_BOLSA, tempBolsa->getSceneID(), tempBolsa->getPosition()->x, tempBolsa->getPosition()->z);
+								}
+							}
+
+							//manda para o player os Vendedores
+							for(int p = 0; p < _cenarioList->getElementAt(posCenario)->salesmanCount(); p++)
+							{
+								CVendedor * tempVendedor = _cenarioList->getElementAt(posCenario)->getSalesmanAt(p);
+
+								if(tempVendedor == NULL)
+								{
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);	
+								}
+								else
+								{
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)ADD_PERSONAGEM, tempVendedor->getType(), tempVendedor);
+								}
+							}
+
+							//manda para o player os outros Players
+							for(int p = 0; p < _cenarioList->getElementAt(posCenario)->playerCount(); p++)
+							{
+								CPersonagemJogador * tempPersonagemJogador = _cenarioList->getElementAt(posCenario)->getPlayerAt(p);
+
+								if(tempPersonagemJogador == NULL)
+								{
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);	
+								}
+								else
+								{
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)ADD_PERSONAGEM, JOGADOR, tempPersonagemJogador);
+								}
+							}
+
+						}
 
 						break;
 					}
@@ -230,6 +359,8 @@ void CCoreServer::readPackets()
 
 						_playersList->getElementAt(indexJogador)->getCharacter()->setPosition(posX,posZ);
 
+						sendMessage(true,_playersList->getElementAt(indexJogador)->getScene()->getID(),_playersList->getElementAt(indexJogador)->getSocket(),(int)UPDATE_POSITION, _playersList->getElementAt(indexJogador)->getCharacter()->getSceneID(), _playersList->getElementAt(indexJogador)->getCharacter()->getPosition()->x, _playersList->getElementAt(indexJogador)->getCharacter()->getPosition()->z);
+
 						break;
 					}
 				case SEND_ESTADO: //IDPERSONAGEM, ESTADO
@@ -241,6 +372,8 @@ void CCoreServer::readPackets()
 						int    estado       = mesRecebida.readInt();
 
 						_playersList->getElementAt(indexJogador)->getCharacter()->setState((EstadoPersonagem)estado);
+
+						sendMessage(true,_playersList->getElementAt(indexJogador)->getScene()->getID(),_playersList->getElementAt(indexJogador)->getSocket(),(int)UPDATE_ESTADO, _playersList->getElementAt(indexJogador)->getCharacter()->getSceneID(), (int)_playersList->getElementAt(indexJogador)->getCharacter()->getState());
 
 						break;
 					}
@@ -258,17 +391,21 @@ void CCoreServer::readPackets()
 						CPersonagem * tempPersonagem = _playersList->getElementAt(indexJogador)->getScene()->getPlayer(idAlvo);
 						
 						if(tempPersonagem ==NULL)
-							CPersonagem * tempPersonagem = _playersList->getElementAt(indexJogador)->getScene()->getMonster(idAlvo);
+							tempPersonagem = _playersList->getElementAt(indexJogador)->getScene()->getMonster(idAlvo);
 							
 
 						if(tempPersonagem != NULL)
+						{
+							_playersList->getElementAt(indexJogador)->getCharacter()->setTarget(tempPersonagem);
+							_playersList->getElementAt(indexJogador)->getCharacter()->attack();
 
-						_playersList->getElementAt(indexJogador)->getCharacter()->setTarget(tempPersonagem);
-						_playersList->getElementAt(indexJogador)->getCharacter()->attack();
+						}
 
 						/*
 							posX e posZ não vi função para eles
 						*/
+
+						sendMessage(true,_playersList->getElementAt(indexJogador)->getScene()->getID(),_playersList->getElementAt(indexJogador)->getSocket(),(int)UPDATE_ATACK, _playersList->getElementAt(indexJogador)->getCharacter()->getSceneID(), _playersList->getElementAt(indexJogador)->getCharacter()->getTarget()->getSceneID(), idAtaque);
 
 						break;
 					}
@@ -311,7 +448,11 @@ void CCoreServer::readPackets()
 						CBolsa * tempBolsa = new CBolsa();
 						tempBolsa->addItem(tempItem);
 
-//						_playersList->getElementAt(indexJogador)->getScene()->addBag(tempBolsa);
+						tempBolsa->setPosition(_playersList->getElementAt(indexJogador)->getCharacter()->getPosition());
+
+						_playersList->getElementAt(indexJogador)->getScene()->addBag(tempBolsa);
+
+						sendMessage(true,_playersList->getElementAt(indexJogador)->getScene()->getID(),_playersList->getElementAt(indexJogador)->getSocket(),(int)UPDATE_ESTADO, _playersList->getElementAt(indexJogador)->getCharacter()->getSceneID(), (int)_playersList->getElementAt(indexJogador)->getCharacter()->getState());
 
 						break;
 					}

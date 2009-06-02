@@ -45,7 +45,8 @@ public:
 	CArmor  * getArmorEquiped(int idPersonagem);
 
 	//Obter Cenarios
-	CCenarioList * getListCenario();
+	CCenarioList  * getListCenario();
+	int				getCenarioId(int idPersonagem, int idJogador);
 
 	//Portal
 	CPortal * getPortal(int idCenario, Direcoes direcao);

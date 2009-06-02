@@ -33,6 +33,7 @@ enum TYPE_MESSAGE
 	CREATE_PLAYER_FAIL, //não foi possível criar o player
 	DELETE_PLAYER_OK,	
 	DELETE_PLAYER_FAIL,
+	PLAY_FAIL,
 	ENTER_CENARIO,//id cenario, POSICAO X, POSICAO Z, qtd Inimigos, qtdNPC, qtdVendedores, qtdPersonagensJogadores, qtdBolsa
 	ADD_PERSONAGEM, //atributos do outros persoangens NPC, Jogadores
 	ADD_BOLSA,//id bolsa, POSICAO X, POSICAO Z, estado bolsa
