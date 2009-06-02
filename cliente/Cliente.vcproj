@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="Cliente"
 	ProjectGUID="{828E4CB9-AB7C-4054-908B-E27EEC208C68}"
 	RootNamespace="Aula_1"
@@ -43,7 +43,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\Irrlicht\include&quot;;&quot;$(ProjectDir)\IrrKlang\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\Irrlicht\include&quot;;&quot;$(ProjectDir)\IrrKlang\include&quot;;&quot;$(ProjectDir)\Dsvt\include&quot;;&quot;$(ProjectDir)\Source\Setup&quot;;&quot;$(ProjectDir)\Source\Event&quot;;&quot;$(ProjectDir)\Source\DataStruct&quot;;&quot;$(ProjectDir)\Source\GameCore&quot;;&quot;$(ProjectDir)\Source\Hud&quot;;&quot;$(ProjectDir)\Source\Menu&quot;;&quot;$(ProjectDir)\Source\Network&quot;;&quot;$(ProjectDir)\Source\Shader&quot;;&quot;$(ProjectDir)\Source\Video&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
