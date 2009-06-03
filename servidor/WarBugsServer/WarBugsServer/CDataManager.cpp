@@ -4813,7 +4813,7 @@ bool  CDataManager::doLogin(char * login, char * senha, CJogador & jogador)
 }
 	
 //Micelandia
-long  CDataManager::numPersonagens()
+long  CDataManager::novoIdPersonagem()
 {
 	long result = 0;
 	
@@ -4825,7 +4825,7 @@ long  CDataManager::numPersonagens()
 
 	System::String ^ query;
 
-	query = L"SELECT COUNT(PGID) NOVOID FROM PERSONAGEM";
+	query = L"SELECT MAX(PGID) NOVOID FROM PERSONAGEM";
 
 	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
 
@@ -4844,10 +4844,10 @@ long  CDataManager::numPersonagens()
 
 	result = System::Int32::Parse(dados[0]->ToString());
 
-	return result;
+	return result+1;
 }
 
-long  CDataManager::numBolsas()
+long  CDataManager::novoIdBolsas()
 {
 	long result = 0;
 	
@@ -4859,7 +4859,7 @@ long  CDataManager::numBolsas()
 
 	System::String ^ query;
 
-	query = L"SELECT COUNT(BSID) NOVOID FROM BOLSA";
+	query = L"SELECT MAX(BSID) NOVOID FROM BOLSA";
 
 	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
 
@@ -4878,10 +4878,10 @@ long  CDataManager::numBolsas()
 
 	result = System::Int32::Parse(dados[0]->ToString());
 
-	return result;
+	return result+1;
 }
 
-long  CDataManager::numItens()
+long  CDataManager::novoIdItens()
 {
 	long result = 0;
 	
@@ -4892,7 +4892,7 @@ long  CDataManager::numItens()
 
 	System::String ^ query;
 
-	query = L"SELECT COUNT(ITID)NOVOID FROM ITEMBASE";
+	query = L"SELECT MAX(ITID)NOVOID FROM ITEMBASE";
 
 	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
 
@@ -4910,7 +4910,7 @@ long  CDataManager::numItens()
 
 	result = System::Int32::Parse(dados[0]->ToString());
 
-	return result;
+	return result+1;
 }
 
 //ATUALIZAÇÕES

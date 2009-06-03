@@ -412,20 +412,6 @@ void CCoreServer::readPackets()
 
 						break;
 					}
-				case SEND_ITEM:  //ID PERSONAGEM, ID ITEM, DINHEIRO
-					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
-
-						int    idJogador    = mesRecebida.readInt();
-						int    idPersonagem = mesRecebida.readInt();
-						int    idItem       = mesRecebida.readInt();
-						int    dinheiro     = mesRecebida.readInt();
-
-						
-
-						break;
-					}
 				case USE_ITEM: //IDPERSONAGEM, IDITEM
 					{
 						mesRecebida.beginReading();
@@ -458,7 +444,9 @@ void CCoreServer::readPackets()
 
 						_playersList->getElementAt(indexJogador)->getScene()->addBag(tempBolsa);
 
-						sendMessage(true,_playersList->getElementAt(indexJogador)->getScene()->getID(),_playersList->getElementAt(indexJogador)->getSocket(),(int)UPDATE_ESTADO, _playersList->getElementAt(indexJogador)->getCharacter()->getSceneID(), (int)_playersList->getElementAt(indexJogador)->getCharacter()->getState());
+						sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int) REMOVE_ITEM, tempItem->getID(), 0);
+
+						sendMessage(true,_playersList->getElementAt(indexJogador)->getScene()->getID(),_playersList->getElementAt(indexJogador)->getSocket(),(int)ADD_BOLSA, tempBolsa->getSceneID(),tempBolsa->getPosition()->x,tempBolsa->getPosition()->z);
 
 						break;
 					}
@@ -478,11 +466,40 @@ void CCoreServer::readPackets()
 							if(!tempBolsa->isOpen())
 							{
 								tempBolsa->setOpen(true);
-								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)OPENED_BOLSA, _playersList->getElementAt(indexJogador)->getCharacter()->getSceneID(), (int)_playersList->getElementAt(indexJogador)->getCharacter()->getState());								
-							
-							
+
+								int temp[10];
+
+								for(int p = 0; p < 10; p++)
+								{
+									if(tempBolsa->getElementAt(p) != NULL)
+									{
+										try{
+											temp[p] = tempBolsa->getElementAt(p)->getID();
+										} catch(...)
+										{
+											temp[p] = -1;
+										}
+									}
+									else
+									{
+										temp[p] = -1;
+									}
+								}
+
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)OPENED_BOLSA, tempBolsa->getSceneID(), temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7], temp[8], temp[9]);
+							}
+							else
+							{
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)OPEN_BOLSA_FAIL);
 							}
 						}
+						else
+						{
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)OPEN_BOLSA_FAIL);
+						}
+
+						tempBolsa = NULL;
+						delete tempBolsa;
 
 						break;
 					}
@@ -492,7 +509,26 @@ void CCoreServer::readPackets()
 						mesRecebida.readByte();
 
 						int    idBolsa		= mesRecebida.readInt();
+						
+						CBolsa * tempBolsa = _playersList->getElementAt(indexJogador)->getScene()->getBag(idBolsa);
 
+						if(tempBolsa == NULL)
+						{
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)CLOSED_BOLSA_FAIL);
+							tempBolsa = NULL;
+							delete tempBolsa;
+
+							break;
+						}
+
+						if(tempBolsa->isOpen())
+						{
+							tempBolsa->setOpen(false);
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)CLOSED_BOLSA, tempBolsa->getSceneID());
+						}
+
+						tempBolsa = NULL;
+						delete tempBolsa;
 
 						break;
 					}
@@ -501,10 +537,34 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
+						int    idJogador    = mesRecebida.readInt();
 						int    idPersonagem	= mesRecebida.readInt();
 						int    idBolsa		= mesRecebida.readInt();
 						int    idItem		= mesRecebida.readInt();
 
+						CItem * tempItem = NULL;
+						
+						try{
+							tempItem = _playersList->getElementAt(indexJogador)->getScene()->getBag(idBolsa)->removeItem(idItem);
+
+						}catch(...)
+						{
+							WarBugsLog::_log->Items->Add(gcnew System::String(L"Erro ao pegar item da Bolsa"));
+							break;	
+						}
+							
+						if(tempItem != NULL)
+						{
+							if(_playersList->getElementAt(indexJogador)->getCharacter()->getBolsa()->size() < MAXITENS)
+							{
+								_playersList->getElementAt(indexJogador)->getCharacter()->addItem(tempItem);
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)ADD_ITEM, tempItem->getID(), 0);
+							}
+							else
+							{
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)INVENTORY_FULL);
+							}
+						}
 
 						break;
 					}
@@ -516,6 +576,29 @@ void CCoreServer::readPackets()
 						int    idBolsa		= mesRecebida.readInt();
 						int    idItem		= mesRecebida.readInt();
 
+						CItem * tempItem = NULL;
+
+						try{
+							tempItem = _playersList->getElementAt(indexJogador)->getCharacter()->getBolsa()->removeItem(idItem);
+						}catch(...)
+						{
+							WarBugsLog::_log->Items->Add(gcnew System::String(L"Erro ao inserir o item na Bolsa"));
+							break;								
+						}
+
+						if(tempItem != NULL)
+						{
+							if(_playersList->getElementAt(indexJogador)->getScene()->getBag(idBolsa)->size() < MAXITENS)
+							{
+								_playersList->getElementAt(indexJogador)->getScene()->getBag(idBolsa)->addItem(tempItem);
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)REMOVE_ITEM, tempItem->getID(), 0);
+							}
+							else
+							{
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)INVENTORY_FULL);
+							}							
+						
+						}
 
 						break;
 					}
@@ -524,11 +607,46 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
+						int    idJogador    = mesRecebida.readInt();
 						int    idPersonagem	= mesRecebida.readInt();
 						int    idArma		= mesRecebida.readInt();
 						int    idArmadura	= mesRecebida.readInt();
 
+						CItem * tempArma = NULL;
+						CItem * tempArmadura = NULL;
 
+						try
+						{
+							if(idArma != -1 && _playersList->getElementAt(indexJogador)->getCharacter()->getEquip()->arma->getID() != idArma)
+							{
+								tempArma = _playersList->getElementAt(indexJogador)->getCharacter()->getBolsa()->removeItem(idArma);
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)REMOVE_ITEM, tempArma->getID(), 0);
+
+							}
+
+							if(idArmadura != -1 && _playersList->getElementAt(indexJogador)->getCharacter()->getEquip()->armadura->getID() != idArmadura)
+							{
+								tempArmadura = _playersList->getElementAt(indexJogador)->getCharacter()->getBolsa()->removeItem(idArmadura);
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)REMOVE_ITEM, tempArmadura->getID(), 0);
+							}
+						}
+						catch(...)
+						{
+							WarBugsLog::_log->Items->Add(gcnew System::String(L"Erro ao Equipar o personagem!"));
+							break;								
+						}
+
+						if(tempArma != NULL)
+						{
+							_playersList->getElementAt(indexJogador)->getCharacter()->equip(tempArma);
+						}
+
+						if(tempArmadura != NULL)
+						{
+							_playersList->getElementAt(indexJogador)->getCharacter()->equip(tempArmadura);
+						}
+
+						sendMessage(true,_playersList->getElementAt(indexJogador)->getScene()->getID(),_playersList->getElementAt(indexJogador)->getSocket(),(int)UPDATE_EQUIP, _playersList->getElementAt(indexJogador)->getCharacter()->getSceneID(), tempArmadura->getID(), tempArma->getID());
 						break;
 					}
 				case SEND_TARGET: //ID PERSONAGEM, ID ALVO
@@ -539,6 +657,19 @@ void CCoreServer::readPackets()
 						int    idPersonagem	= mesRecebida.readInt();
 						int    idAlvo		= mesRecebida.readInt();
 
+						CPersonagemJogador * alvo = NULL;
+
+						try
+						{
+							alvo = _playersList->getElementAt(indexJogador)->getScene()->getPlayer(idAlvo);
+							_playersList->getElementAt(indexJogador)->getCharacter()->setTarget(alvo);
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)UPDATE_TARGET, alvo->getSceneID());
+						}
+						catch(...)
+						{
+							WarBugsLog::_log->Items->Add(gcnew System::String(L"Erro ao setar o alvo!"));
+							break;						
+						}
 
 						break;
 					}
@@ -549,7 +680,20 @@ void CCoreServer::readPackets()
 
 						//-1 para todos
 						int    idPersonagem	= mesRecebida.readInt();
-						char * mensagem     = mesRecebida.readString();
+						char * mensagem;
+
+						strcpy_s(mensagem,mesRecebida.getSize(),mesRecebida.readString());
+
+						System::String ^ mes = gcnew System::String(L""+_playersList->getElementAt(indexJogador)->getCharacter()->getName()+": "+mensagem);
+
+						if(idPersonagem == -1)
+						{
+							sendMessage(true,_playersList->getElementAt(indexJogador)->getScene()->getID(),_playersList->getElementAt(indexJogador)->getSocket(),(int)CHAT, toChar(mes));
+						}
+						else
+						{
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)CHAT, toChar(mes));
+						}
 
 
 						break;
@@ -565,6 +709,7 @@ void CCoreServer::readPackets()
 						float  posX			= mesRecebida.readFloat();
 						float  posZ			= mesRecebida.readFloat();
 
+						sendMessage(true,_playersList->getElementAt(indexJogador)->getScene()->getID(),_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOT, idShot, posX, posZ, idAlvo);
 
 						break;
 					}
@@ -573,9 +718,31 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida.readInt();
+						int idJogador 	 = mesRecebida.readInt();
+						int idPersonagem = mesRecebida.readInt();
+						
+						int agilidade	= _playersList->getElementAt(indexJogador)->getCharacter()->getAGI();
+						int destreza	= _playersList->getElementAt(indexJogador)->getCharacter()->getDES();
+						int forca		= _playersList->getElementAt(indexJogador)->getCharacter()->getFOR();
+						int instinto	= _playersList->getElementAt(indexJogador)->getCharacter()->getINS();
+						int resistencia = _playersList->getElementAt(indexJogador)->getCharacter()->getRES();
 
+						int ataque		= _playersList->getElementAt(indexJogador)->getCharacter()->getAttack();
+						int dano		= _playersList->getElementAt(indexJogador)->getCharacter()->getDamage();
+						int defesa		= _playersList->getElementAt(indexJogador)->getCharacter()->getStats()->getDefense();
+						int velocidade  = _playersList->getElementAt(indexJogador)->getCharacter()->getStats()->getAttackRate();
 
+						int lealdade_aranha		= _playersList->getElementAt(indexJogador)->getCharacter()->getLoyalty()->getLoyaltyToSpider();
+						int lealdade_besouro	= _playersList->getElementAt(indexJogador)->getCharacter()->getLoyalty()->getLoyaltyToBeetle();
+						int lealdade_escorpiao	= _playersList->getElementAt(indexJogador)->getCharacter()->getLoyalty()->getLoyaltyToScorpion();
+						int lealdade_louva		= _playersList->getElementAt(indexJogador)->getCharacter()->getLoyalty()->getLoyaltyToMantis();
+						int lealdade_vespa		= _playersList->getElementAt(indexJogador)->getCharacter()->getLoyalty()->getLoyaltyToWasp();
+
+						int poder1 = _playersList->getElementAt(indexJogador)->getCharacter()->getSkillLevel(0);
+						int poder2 = _playersList->getElementAt(indexJogador)->getCharacter()->getSkillLevel(1);
+						int poder3 = _playersList->getElementAt(indexJogador)->getCharacter()->getSkillLevel(2);
+
+						sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOW_FULL_STATUS, agilidade, destreza, forca, instinto, resistência, ataque, dano, defesa, velocidade, lealdade_aranha, lealdade_besouro, lealdade_escorpiao, lealdade_louva, lealdade_vespa, poder1, poder2, poder3);
 						break;
 					}
 				case SEND_BONUS_POINTS: //ID PERSONAGEM,VETOR EM ORDEM ALFABETICA COM QTD PONTOS DA HABILIDADE PRIMARIA USADA E A QUANTIDADE DE PONTOS DE SKILL(PODER)[PODER1,PODER2,PODER3]
@@ -583,16 +750,50 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						int    idPersonagem	= mesRecebida.readInt();
+						int    idJogador	= mesRecebida.readInt();
+
 						int    agilidade	= mesRecebida.readInt();
 						int    destreza		= mesRecebida.readInt();
 						int    forca		= mesRecebida.readInt();
 						int    instinto		= mesRecebida.readInt();
 						int    resistencia  = mesRecebida.readInt();
+
 						int    poder1		= mesRecebida.readInt();
 						int    poder2		= mesRecebida.readInt();
 						int    poder3		= mesRecebida.readInt();
+						
+						_playersList->getElementAt(indexJogador)->getCharacter()->distibutePoints(agilidade, (int)AGI);
+						_playersList->getElementAt(indexJogador)->getCharacter()->distibutePoints(destreza, (int)DES);
+						_playersList->getElementAt(indexJogador)->getCharacter()->distibutePoints(forca, (int)FOR);
+						_playersList->getElementAt(indexJogador)->getCharacter()->distibutePoints(instinto, (int)INS);
+						_playersList->getElementAt(indexJogador)->getCharacter()->distibutePoints(resistencia, (int)RES);
 
+						_playersList->getElementAt(indexJogador)->getCharacter()->distibuteSkillPoints(poder1, 0);
+						_playersList->getElementAt(indexJogador)->getCharacter()->distibuteSkillPoints(poder2, 1);
+						_playersList->getElementAt(indexJogador)->getCharacter()->distibuteSkillPoints(poder3, 2);
+
+						int ataque		= _playersList->getElementAt(indexJogador)->getCharacter()->getAttack();
+						int dano		= _playersList->getElementAt(indexJogador)->getCharacter()->getDamage();
+						int defesa		= _playersList->getElementAt(indexJogador)->getCharacter()->getStats()->getDefense();
+						int velocidade  = _playersList->getElementAt(indexJogador)->getCharacter()->getStats()->getAttackRate();
+
+						int lealdade_aranha		= _playersList->getElementAt(indexJogador)->getCharacter()->getLoyalty()->getLoyaltyToSpider();
+						int lealdade_besouro	= _playersList->getElementAt(indexJogador)->getCharacter()->getLoyalty()->getLoyaltyToBeetle();
+						int lealdade_escorpiao	= _playersList->getElementAt(indexJogador)->getCharacter()->getLoyalty()->getLoyaltyToScorpion();
+						int lealdade_louva		= _playersList->getElementAt(indexJogador)->getCharacter()->getLoyalty()->getLoyaltyToMantis();
+						int lealdade_vespa		= _playersList->getElementAt(indexJogador)->getCharacter()->getLoyalty()->getLoyaltyToWasp();
+
+						poder1 = _playersList->getElementAt(indexJogador)->getCharacter()->getSkillLevel(0);
+						poder2 = _playersList->getElementAt(indexJogador)->getCharacter()->getSkillLevel(1);
+						poder3 = _playersList->getElementAt(indexJogador)->getCharacter()->getSkillLevel(2);
+
+						agilidade	= _playersList->getElementAt(indexJogador)->getCharacter()->getAGI();
+						destreza	= _playersList->getElementAt(indexJogador)->getCharacter()->getDES();
+						forca		= _playersList->getElementAt(indexJogador)->getCharacter()->getFOR();
+						instinto	= _playersList->getElementAt(indexJogador)->getCharacter()->getINS();
+						resistencia = _playersList->getElementAt(indexJogador)->getCharacter()->getRES();
+						
+						sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOW_FULL_STATUS, agilidade, destreza, forca, instinto, resistência, ataque, dano, defesa, velocidade, lealdade_aranha, lealdade_besouro, lealdade_escorpiao, lealdade_louva, lealdade_vespa, poder1, poder2, poder3);
 
 						break;
 					}
@@ -605,6 +806,7 @@ void CCoreServer::readPackets()
 						int    idQuest		= mesRecebida.readInt();
 
 
+
 						break;
 					}
 				case START_SHOP: //ID PERSONAGEM, ID NPC VENDEDOR
@@ -612,9 +814,23 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
+						int    idJogador	= mesRecebida.readInt();
 						int    idPersonagem	= mesRecebida.readInt();
 						int    idNPC		= mesRecebida.readInt();
 
+						char data[1400];
+						CBugMessage tempMes;
+						tempMes.init(data,sizeof(data));
+
+						CVendedor * tempVendedor = _playersList->getElementAt(indexJogador)->getScene()->getVendedor(idNPC);
+
+						tempMes.writeByte(SHOW_SHOP);
+						for(int p = 0; p < tempVendedor->getBolsa()->size(); p++)
+						{
+							tempMes.writeInt(tempVendedor->getBolsa()->getElementAt(p)->getID());
+						}
+
+						sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),tempMes);
 
 						break;
 					}
@@ -660,14 +876,21 @@ void CCoreServer::readPackets()
 					{
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
-
+						
+						int idJogador	  = mesRecebida.readInt();
 						int idPersonagem1 = mesRecebida.readInt();
 						int idPersonagem2 = mesRecebida.readInt();
 						
-						//CPersonagemJogador * tempPers = _playersList->getElementAt(indexJogador)->getScene()->
+						CPersonagemJogador * tempPers = _playersList->getElementAt(indexJogador)->getScene()->getPlayer(idPersonagem2);
 
-
-						//sendMessage(false,_playersList->getJogador(idJogador)->getSocket(),(int)TRADE_REQUEST,idPersonagem2);
+						if(!tempPers->isTradeOn())
+						{
+							sendMessage( false,-1, tempPers->getSocket(), (int)TRADE_REQUEST, idPersonagem2, idPersonagem1);
+						}
+						else
+						{
+							sendMessage( false, -1, _playersList->getElementAt(indexJogador)->getCharacter()->getSocket(), (int)TRADE_REQUEST_REFUSED, idPersonagem2, idPersonagem1);
+						}
 
 						break;
 					}
@@ -676,12 +899,34 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
+						int idJogador	  = mesRecebida.readInt();
+						int idPersonagem1 = mesRecebida.readInt();
+						int idPersonagem2 = mesRecebida.readInt();
+
+						_playersList->getElementAt(indexJogador)->getCharacter()->setTradeOn(true);
+						_playersList->getElementAt(indexJogador)->getCharacter()->setIDTrader(idPersonagem2);
+						
+						CPersonagemJogador * tempPers = _playersList->getElementAt(indexJogador)->getScene()->getPlayer(idPersonagem2);
+
+						sendMessage( false, -1,tempPers->getSocket(), (int)TRADE_REQUEST_ACCEPTED, idPersonagem2, idPersonagem1);
+
 						break;
 					}
 				case TRADE_REQUEST_REFUSED: //ID PERSONAGEM, ID FREGUES
 					{
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
+
+						int idJogador	  = mesRecebida.readInt();
+						int idPersonagem1 = mesRecebida.readInt();
+						int idPersonagem2 = mesRecebida.readInt();
+
+						_playersList->getElementAt(indexJogador)->getCharacter()->setTradeOn(false);
+						_playersList->getElementAt(indexJogador)->getCharacter()->setIDTrader(-1);
+						
+						CPersonagemJogador * tempPers = _playersList->getElementAt(indexJogador)->getScene()->getPlayer(idPersonagem2);
+
+						sendMessage( false, -1,tempPers->getSocket(), (int)TRADE_REQUEST_REFUSED, idPersonagem2, idPersonagem1);
 
 						break;
 					}
@@ -690,12 +935,81 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
+						int idJogador			= mesRecebida.readInt();
+						int idPersonagem1		= mesRecebida.readInt();
+						int idPersonagem2		= mesRecebida.readInt();
+						int idItemPersonagem1	= mesRecebida.readInt();
+						int idItemPersonagem2	= mesRecebida.readInt();
+						int dinheiroPersonagem1 = mesRecebida.readInt();
+						int dinheiroPersonagem2 = mesRecebida.readInt();
+						
+						_playersList->getElementAt(indexJogador)->getCharacter()->setIDTrader(idPersonagem2);
+						_playersList->getElementAt(indexJogador)->getCharacter()->setIDItemTrade(idItemPersonagem2);
+						_playersList->getElementAt(indexJogador)->getCharacter()->setIDMoneyTrade(dinheiroPersonagem2);
+						_playersList->getElementAt(indexJogador)->getCharacter()->setTradeConfirmated(false);
+
+						CPersonagemJogador * tempPers = _playersList->getElementAt(indexJogador)->getScene()->getPlayer(idPersonagem2);
+
+						tempPers->setIDTrader(idPersonagem1);
+						tempPers->setIDItemTrade(idItemPersonagem1);
+						tempPers->setIDMoneyTrade(dinheiroPersonagem1);
+						tempPers->setTradeConfirmated(false);
+
+						sendMessage( false, -1, tempPers->getSocket(), (int)TRADE_CHANGED, idPersonagem2, idPersonagem1, idItemPersonagem2, idItemPersonagem1, dinheiroPersonagem2, dinheiroPersonagem1);
+
 						break;
 					}
 				case TRADE_ACCEPTED: //ID PERSONAGEM
 					{
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
+
+						int idJogador			= mesRecebida.readInt();
+						int idPersonagem1		= mesRecebida.readInt();
+						int idPersonagem2		= mesRecebida.readInt();
+
+						_playersList->getElementAt(indexJogador)->getCharacter()->setTradeConfirmated(true);
+
+						CPersonagemJogador * tempPers = _playersList->getElementAt(indexJogador)->getScene()->getPlayer(idPersonagem2);
+
+						//se os dois envolvidos na troca confirmarem a troca
+						if(tempPers->isTradeConfirmated())
+						{
+							int idItem1   = _playersList->getElementAt(indexJogador)->getCharacter()->getIDItemTrade();
+							int dinheiro1 = _playersList->getElementAt(indexJogador)->getCharacter()->getIDMoneyTrade();
+
+							int idItem2   = tempPers->getIDItemTrade();
+							int dinheiro2 = tempPers->getIDMoneyTrade();
+
+							CItem * tempItem1 = _playersList->getElementAt(indexJogador)->getCharacter()->getBolsa()->removeItem(idItem1);
+							CItem * tempItem2 = tempPers->getBolsa()->removeItem(idItem2);
+
+							_playersList->getElementAt(indexJogador)->getCharacter()->addItem(tempItem2);
+							_playersList->getElementAt(indexJogador)->getCharacter()->addMoney(dinheiro2);
+
+							tempPers->addItem(tempItem1);
+							tempPers->addMoney(dinheiro1);
+
+							sendMessage( false, -1, _playersList->getElementAt(indexJogador)->getCharacter()->getSocket(), (int)TRADE_CONCLUDE, idPersonagem1, idPersonagem2, idItemPersonagem1, idItemPersonagem2, dinheiroPersonagem1, dinheiroPersonagem2);
+							sendMessage( false, -1, tempPers->getSocket(), (int)TRADE_CONCLUDE, idPersonagem2, idPersonagem1, idItemPersonagem2, idItemPersonagem1, dinheiroPersonagem2, dinheiroPersonagem1);
+
+							_playersList->getElementAt(indexJogador)->getCharacter()->setIDTrader(-1);
+							_playersList->getElementAt(indexJogador)->getCharacter()->setIDItemTrade(-1);
+							_playersList->getElementAt(indexJogador)->getCharacter()->setIDMoneyTrade(-1);
+							_playersList->getElementAt(indexJogador)->getCharacter()->setTradeConfirmated(false);
+							_playersList->getElementAt(indexJogador)->getCharacter()->setTradeOn(false);
+
+							tempPers->setIDTrader(-1);
+							tempPers->setIDItemTrade(-1);
+							tempPers->setIDMoneyTrade(-1);
+							tempPers->setTradeConfirmated(false);
+							tempPers->setTradeOn(false);
+					
+						}
+						else
+						{
+							sendMessage( false, -1, tempPers->getSocket(), (int)TRADE_ACCEPTED, idPersonagem2, idPersonagem1, idItemPersonagem2, idItemPersonagem1, dinheiroPersonagem2, dinheiroPersonagem1);
+						}
 
 						break;
 					}
@@ -704,15 +1018,30 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
-						break;
-					}
-				case TRADE_CONCLUDE: //ID PERSONAGEM, ID FREGUES
-					{
-						mesRecebida.beginReading();
-						mesRecebida.readByte();
+						int idJogador			= mesRecebida.readInt();
+						int idPersonagem1		= mesRecebida.readInt();
+						int idPersonagem2		= mesRecebida.readInt();
+
+						_playersList->getElementAt(indexJogador)->getCharacter()->setIDTrader(-1);
+						_playersList->getElementAt(indexJogador)->getCharacter()->setIDItemTrade(-1);
+						_playersList->getElementAt(indexJogador)->getCharacter()->setIDMoneyTrade(-1);
+						_playersList->getElementAt(indexJogador)->getCharacter()->setTradeConfirmated(false);
+						_playersList->getElementAt(indexJogador)->getCharacter()->setTradeOn(false);
+
+						CPersonagemJogador * tempPers = _playersList->getElementAt(indexJogador)->getScene()->getPlayer(idPersonagem2);
+
+						tempPers->setIDTrader(-1);
+						tempPers->setIDItemTrade(-1);
+						tempPers->setIDMoneyTrade(-1);
+						tempPers->setTradeConfirmated(false);
+						tempPers->setTradeOn(false);
+
+						sendMessage( false, -1, tempPers->getSocket(), (int)TRADE_REFUSED, idPersonagem2, idPersonagem1);
+						sendMessage( false, -1, _playersList->getElementAt(indexJogador)->getSocket(), (int)TRADE_REFUSED, idPersonagem2, idPersonagem1);
 
 						break;
-					}		
+					}
+
 		}//fim switch
 	
 	}
@@ -1224,6 +1553,35 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 	mes.writeInt(i8);
 	mes.writeInt(i9);
 	
+	sendMessage(toAll, idCenario, destino, mes);
+}
+
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10, int i11, int i12, int i13, int i14, int i15, int i16, int i17, int i18)
+{
+	char data[1400];
+	CBugMessage mes;
+	mes.init(data,sizeof(data));
+
+	mes.writeByte(idMensagem);
+
+	mes.writeInt(i1);
+	mes.writeInt(i2);
+	mes.writeInt(i3);
+	mes.writeInt(i4);
+	mes.writeInt(i5);
+	mes.writeInt(i6);
+	mes.writeInt(i7);
+	mes.writeInt(i8);
+	mes.writeInt(i9);
+	mes.writeInt(i10);
+	mes.writeInt(i11);
+	mes.writeInt(i12);
+	mes.writeInt(i13);
+	mes.writeInt(i14);
+	mes.writeInt(i15);
+	mes.writeInt(i16);
+	mes.writeInt(i17);
+	mes.writeInt(i18);	
 	sendMessage(toAll, idCenario, destino, mes);
 }
 

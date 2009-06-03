@@ -64,9 +64,9 @@ public:
 	bool  doLogin(char * login, char * senha, CJogador & jogador);
 	
 	//Micelandia
-	long  numPersonagens();
-	long  numBolsas();
-	long  numItens();
+	long  novoIdPersonagem();
+	long  novoIdBolsas();
+	long  novoIdItens();
 	int   qtdPersonagemJogador(int idJogador);
 	System::String ^ pointFormat(System::String ^ d1);
 
