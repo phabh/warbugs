@@ -25,6 +25,7 @@ public:
 	CLealdade();
 	CLealdade(int SPD, int BTL, int SCR, int MNT, int WSP);
 	CLealdade(CLealdade *base);
+	int getLoyaltyTo(Raca especie);
 	int getLoyaltyToSpider();
 	int getLoyaltyToBeetle();
 	int getLoyaltyToScorpion();

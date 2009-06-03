@@ -14,11 +14,13 @@
 CLoyaltyScroll::CLoyaltyScroll()
 {
 	setID(-1);
+	setDurability(100);
 	_bonus = new CLealdade();
 }
 CLoyaltyScroll::CLoyaltyScroll(TypeItens nome, EstadoItem estado, int preco, bool isdropable,int aranha, int besouro, int louvadeus, int escorpiao, int vespa)
 {
 	setID(-1);
+	setDurability(100);
 	setNome(nome);
 	setEstado(estado);
 	setPrice(preco);

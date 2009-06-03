@@ -15,6 +15,10 @@ CBolsa::CBolsa(CItem *item)
 	_first->prev = NULL;
 	_size = 1;
 }
+bool CBolsa::isOpen()
+{
+	return(_open);
+}
 bool CBolsa::isEmpty()
 {
 	return(_size == 0);
@@ -22,6 +26,10 @@ bool CBolsa::isEmpty()
 int CBolsa::size()
 {
 	return(_size);
+}
+void CBolsa::setOpen(bool isopen)
+{
+	_open = isopen;
 }
 void CBolsa::addItem(CItem *item)
 {

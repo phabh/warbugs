@@ -74,7 +74,7 @@ public:
 
 	CPersonagemJogador();
 	//Getters
-	
+	int getSkillLevel(int skillIndex);
 	int getMaxXP();
 	int getAttack();
 	int getDamage();

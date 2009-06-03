@@ -27,6 +27,7 @@ CCenario::CCenario(int ID,
 	{
 		for(int i = 0; i < _jogadores->size(); i=i+1)
 		{
+			_jogadores->getElementAt(i)->setSceneID(_contador->giveID());
 			((CPersonagemJogador*)(_jogadores->getElementAt(i)))->setScene(this);
 		}
 	}
@@ -34,6 +35,7 @@ CCenario::CCenario(int ID,
 	{
 		for(int i = 0; i < _inimigos->size(); i=i+1)
 		{
+			_inimigos->getElementAt(i)->setSceneID(_contador->giveID());
 			((CInimigo*)(_inimigos->getElementAt(i)))->setScene(this);
 		}
 	}
@@ -41,6 +43,7 @@ CCenario::CCenario(int ID,
 	{
 		for(int i = 0; i < _npcs->size(); i=i+1)
 		{
+			_npcs->getElementAt(i)->setSceneID(_contador->giveID());
 			((CNPC*)(_npcs->getElementAt(i)))->setScene(this);
 		}
 	}
@@ -48,7 +51,16 @@ CCenario::CCenario(int ID,
 	{
 		for(int i = 0; i < _vendedores->size(); i=i+1)
 		{
+			_vendedores->getElementAt(i)->setSceneID(_contador->giveID());
 			((CVendedor*)(_vendedores->getElementAt(i)))->setScene(this);
+		}
+	}
+	if(!_itens->isEmpty())
+	{
+		for(int i = 0; i < _itens->size(); i=i+1)
+		{
+			_itens->getElementAt(i)->setSceneID(_contador->giveID());
+			//_itens->getElementAt(i)->setScene(this);
 		}
 	}
 }
@@ -225,4 +237,4 @@ void CCenario::update()
 		if(i < _npcs->size())		getNpcAt(i)->update();
 		if(i < _vendedores->size())	getSalesmanAt(i)->update();
 	}
-}
+}	

@@ -14,6 +14,7 @@
 CConsumableItem::CConsumableItem()
 {
 	setID(-1);
+	setDurability(100);
 	_atributo = NENHUM;
 	_valor = 0;
 	_istemp = false;
@@ -22,6 +23,7 @@ CConsumableItem::CConsumableItem()
 CConsumableItem::CConsumableItem(TypeItens nome, EstadoItem estado, int preco, bool isdropable, Atrib att, int valor, bool istemp, int dur)
 {
 	setID(-1);
+	setDurability(100);
 	setNome(nome);
 	setEstado(estado);
 	setPrice(preco);

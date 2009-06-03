@@ -55,7 +55,17 @@ CPersonagemJogador::CPersonagemJogador()
 	_skillLevel[2] = 0;
 }
 //Getters e setters
-
+int CPersonagemJogador::getSkillLevel(int skillIndex)
+{
+	if((skillIndex > 0)&&(skillIndex < 3))
+	{
+		return(_skillLevel[skillIndex]);
+	}
+	else
+	{
+		return(-1);
+	}
+}
 int CPersonagemJogador::getMaxXP()
 {
 	return(_xpToNextLv);
