@@ -10,6 +10,7 @@ static c8 *pathConfig = "recursos/data/config.dat";
 
 static c8 *pathVideoAbertura = "recursos/videos/abertura.wmv";
 static c8 *pathVideoCreditos = "recursos/videos/creditos.wmv";
+static c8 *pathVideoLogo = "recursos/videos/logo.wmv";
 
 static c8 *pathArquivoCena[NUMMENUCENA] = 
 {

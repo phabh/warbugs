@@ -22,8 +22,6 @@ bool CMenuSelecao::start(CGameCore *gameCore)
 	
 	_gameCore->initToonShader();
 	
-	_gameCore->playMusic(pathBackgroundSound[MM_SELECAO]);
-
 	_myID = _nextID = MN_SELECAOPERSONAGEM;
 
 	_menuFlag[HUDUPDATED]  = false;
@@ -40,6 +38,13 @@ bool CMenuSelecao::start(CGameCore *gameCore)
 
 	if(_gameCore->_numMyChars == 0) // Se não possuo personagem algum
 		_nextID = MN_CRIACAOPERSONAGEM; // Ir direto ao menu de criação
+
+	CVideoTexture *_video = CVideoTexture::createVideoTexture(_dispGrafico, pathVideoLogo);
+	_video->setVolume(100);
+	_video->playCutscene();
+	_video->drop();
+
+	_gameCore->playMusic(pathBackgroundSound[MM_SELECAO]);
 
 	return true;
 }
