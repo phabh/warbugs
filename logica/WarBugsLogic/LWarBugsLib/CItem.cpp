@@ -39,6 +39,10 @@ int CItem::getPrice()
 {
 	return(_preco);
 }
+int CItem::getDurability()
+{
+	return(_durabilidade);
+}
 bool CItem::isDropable()
 {
 	return(_dropavel);
@@ -60,6 +64,24 @@ void CItem::setDropable(bool isdropable)
 {
 	_dropavel = isdropable;
 }
+void CItem::setDurability(int value)
+{
+	if(value > 0)
+	{
+		if(value <= 100)
+		{
+			_durabilidade = value;
+		}
+		else
+		{
+			_durabilidade = 100;
+		}
+	}
+	else
+	{
+		CItem::destroy(this);
+	}
+}
 //void setOwner(CPersonagem *newOwner){}
 //Métodos de manipulação de itens
 //virtual void use(CPersonagem *jogador)=0;
@@ -74,4 +96,9 @@ int CItem::getValue()
 {
 	return -1;
 }*/
+void CItem::destroy(CItem *item)
+{
+	item = NULL;
+	delete item;
+}
 #endif

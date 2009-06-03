@@ -39,6 +39,24 @@ CLealdade::CLealdade(CLealdade *base)
 	_louva = base->getLoyaltyToMantis();
 	_vespa = base->getLoyaltyToWasp();
 }
+int CLealdade::getLoyaltyTo(Raca especie)
+{
+	switch(especie)
+	{
+	case BESOURO:
+		return(getLoyaltyToBeetle());
+	case ARANHA:
+		return(getLoyaltyToSpider());
+	case ESCORPIAO:
+	    return(getLoyaltyToScorpion());
+	case LOUVADEUS:
+	    return(getLoyaltyToMantis());
+	case VESPA:
+	    return(getLoyaltyToWasp());
+	default:
+		return(0);
+	}
+}
 int CLealdade::getLoyaltyToSpider()
 {
 	return(_aranha);

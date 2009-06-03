@@ -14,9 +14,9 @@
 CArmor::CArmor()
 {
 	setID(-1);
+	setDurability(0);
 	_raca = ALLRACE;
 	_defesa = 0;
-	_durabilidade = 0;
 	_nivelMagico = 0;
 }
 CArmor::CArmor(TypeItens nome, EstadoItem estado, int preco, bool isdropable, Raca raca, int def, int dur, int nM)
@@ -28,7 +28,7 @@ CArmor::CArmor(TypeItens nome, EstadoItem estado, int preco, bool isdropable, Ra
 	setDropable(isdropable);
 	_raca = raca;
 	_defesa = def;
-	_durabilidade = dur;
+	setDurability(dur);
 	_nivelMagico = nM;
 }
 void CArmor::useScroll(CScroll *&scroll)
@@ -36,7 +36,7 @@ void CArmor::useScroll(CScroll *&scroll)
 	if(scroll != NULL)
 	{
 		_defesa = _defesa + scroll->getDef();
-		_durabilidade = _durabilidade + scroll->getDurability();
+		setDurability(getDurability() + scroll->getDurability());
 		if(scroll->getDef())
 		{
 			_nivelMagico = _nivelMagico + 1;
@@ -53,10 +53,6 @@ Raca CArmor::getRace()
 int CArmor::getDef()
 {
 	return(_defesa);
-}
-int CArmor::getDurability()
-{
-	return(_durabilidade);
 }
 int CArmor::getMagicLevel()
 {

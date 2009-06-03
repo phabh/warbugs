@@ -46,6 +46,92 @@ CVendedor::CVendedor(EstadoPersonagem estado, int dinheiro, CBolsa *inventario, 
 	setBaseBonus(new CBonusPrimario());
 	setBuffs(new CBuffList());
 }
+//Métodos da economia
+void CVendedor::plusDemand(int typeItem)
+{
+	if(typeItem < MAXITEMTYPES)
+	{
+		_itemDemanda[typeItem] = _itemDemanda[typeItem] + 1;
+		if(_itemDemanda[typeItem] > _maxDemanda)
+		{
+			_maxDemanda = _itemDemanda[typeItem];
+		}
+	}
+	else
+	{
+		//ERRO: Out of bounds
+	}
+}
+void CVendedor::plusOffer(int typeItem)
+{
+	if(typeItem < MAXITEMTYPES)
+	{
+		_itemOferta[typeItem] = _itemOferta[typeItem] + 1;
+		if(_itemOferta[typeItem] > _maxOferta)
+		{
+			_maxOferta = _itemOferta[typeItem];
+		}
+	}
+	else
+	{
+		//ERRO: Out of bounds
+	}
+}
+int CVendedor::normalizeDemand(int typeItem)
+{
+	if(typeItem < MAXITEMTYPES)
+	{
+		return((_itemDemanda[typeItem] + (0-_minDemanda))/((0-_minDemanda)+_maxDemanda));
+	}
+	else
+	{
+		return(0);
+		//ERRO: Out of bounds
+	}
+}
+int CVendedor::normalizeOffer(int typeItem)
+{
+	if(typeItem < MAXITEMTYPES)
+	{
+		return((_itemOferta[typeItem] + (0-_minOferta))/((0-_minOferta)+_maxOferta));
+	}
+	else
+	{
+		return(0);
+		//ERRO: Out of bounds
+	}
+}
+int CVendedor::stockValue(CItem *item)
+{
+	return(_precoBase[(int)item->getTipo()]+(_precoBase[(int)item->getTipo()]+((item->getDurability()-_MEDIANADURABILIDADE)/100))+(_precoBase[(int)item->getTipo()]+((normalizeDemand((int)item->getTipo())-_MEDIANADEMANDA)/100))+((normalizeOffer((int)item->getTipo())-_MEDIANAOFERTA)/100));
+}
+void CVendedor::setLeftToGoal()
+{
+	_restanteMeta = 0;
+	for(int i = 0; i < inventario->size(); i = i + 1)
+	{
+		_restanteMeta = _restanteMeta + stockValue(inventario->getElementAt(i));
+	}
+	_restanteMeta = _restanteMeta + getMoney();
+	_metaRateada = _restanteMeta/inventario->size();
+}
+int CVendedor::getSellingPrice(CItem *item)
+{
+	return(stockValue(item)*_metaRateada);
+}
+int CVendedor::getBuyPrice(CItem *item)
+{
+	return((_precoBase[(int)item->getTipo()]/2)+(_precoBase[(int)item->getTipo()]+((item->getDurability()-_MEDIANADURABILIDADE)/100))+(_precoBase[(int)item->getTipo()]+((normalizeDemand((int)item->getTipo())-_MEDIANADEMANDA)/100))+((normalizeOffer((int)item->getTipo())-_MEDIANAOFERTA)/100)+(_tecnicaDeMercado * _restanteMeta));
+}
+int CVendedor::getFinalPriceSell(CItem *item, CPersonagemJogador *jogador)
+{
+	return(getSellingPrice(item)-(getSellingPrice(item)*(jogador->getLoyalty()->getLoyaltyTo(this->getRace())/1000)*(_DESCONTOLEALDADE/100))-(getSellingPrice(item)*(_tempoSemVender/10)*(_DESCONTOTEMPO/100)));
+}
+int CVendedor::getFinalPriceBuy(CItem *item, CPersonagemJogador *jogador)
+{
+	return(getBuyPrice(item)-(getBuyPrice(item)*(jogador->getLoyalty()->getLoyaltyTo(this->getRace())/1000)*(_DESCONTOLEALDADE/100))-(getBuyPrice(item)*(_tempoSemVender/10)*(_DESCONTOTEMPO/100)));
+}
+//Outros métodos
 void CVendedor::takeDecision()
 {
 	if(this->getDistanceToPoint(_ancora) >= 100)
@@ -98,21 +184,25 @@ void CVendedor::speak()
 }
 void CVendedor::buy(CPersonagemJogador *vendedor, CItem *item)
 {
-	if((vendedor->haveItem(item)) && (getMoney() >= item->getPrice()/2))
+	int preco = getFinalPriceBuy(item, vendedor);
+	if((vendedor->haveItem(item)) && (getMoney() >= preco))
 	{
 		vendedor->getBolsa()->removeItem(item->getID());
-		vendedor->addMoney(item->getPrice()/2);
+		vendedor->addMoney(preco);
+		this->addMoney((-1)*preco);
 		getBolsa()->addItem(item);
 	}
 }
 void CVendedor::sell(CPersonagemJogador *comprador, CItem *item)
 {
-	if((getBolsa()->haveItem(item->getID())) && (comprador->getMoney() >= item->getPrice()))
+	int preco = getFinalPriceSell(item, comprador);
+	if((getBolsa()->haveItem(item->getID())) && (comprador->getMoney() >= preco))
 	{
 		getBolsa()->removeItem(item->getID());
-		comprador->addMoney((-1)*item->getPrice());
+		comprador->addMoney((-1)*preco);
+		this->addMoney(preco);
 		comprador->getBolsa()->addItem(item);
-	}
+	}	
 }
 void CVendedor::attack()
 {

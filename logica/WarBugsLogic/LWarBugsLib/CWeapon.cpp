@@ -14,19 +14,20 @@
 CWeapon::CWeapon()
 {
 	setID(-1);
+	setDurability(0);
 	_raca = ALLRACE;
 	_modificador = 0;
 	_danoMin = 0;
 	_danoMax = 0;
 	_velocidade = 0;
 	_alcance = 0;
-	_durabilidade = 0;
 	_nivelMagico = 0;
 }
 //Métodos da CObject
 CWeapon::CWeapon(TypeItens nome, EstadoItem estado, int preco, bool isdropable, Raca raca, int mod, int danM, int danX, int spd, int rng, int dur, int nM)
 {
 	setID(-1);
+	setDurability(dur);
 	setNome(nome);
 	setEstado(estado);
 	setPrice(preco);
@@ -37,7 +38,6 @@ CWeapon::CWeapon(TypeItens nome, EstadoItem estado, int preco, bool isdropable, 
 	_danoMax = danX;
 	_velocidade = spd;
 	_alcance = rng;
-	_durabilidade = dur;
 	_nivelMagico = nM;
 }
 //Outros métodos
@@ -50,7 +50,7 @@ void CWeapon::useScroll(CScroll *&scroll)
 		_danoMax = _danoMax + scroll->getMaxDamage();
 		_velocidade = _velocidade + scroll->getSpeed();
 		_alcance = _alcance + scroll->getRange();
-		_durabilidade = _durabilidade + scroll->getDurability();
+		setDurability(getDurability() + scroll->getDurability());
 		if((scroll->getMod())||
 			(scroll->getMinDamage())||
 			(scroll->getMaxDamage())||
@@ -87,10 +87,6 @@ int CWeapon::getSpeed()
 int CWeapon::getRange()
 {
 	return(_alcance);
-}
-int CWeapon::getDurability()
-{
-	return(_durabilidade);
 }
 int CWeapon::getMagicLevel()
 {
