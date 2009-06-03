@@ -353,6 +353,7 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
+						int    idJogador    = mesRecebida.readInt();
 						int    idPersonagem = mesRecebida.readInt();
 						float  posX = mesRecebida.readFloat();
 						float  posZ = mesRecebida.readFloat();
@@ -368,6 +369,7 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
+						int    idJogador    = mesRecebida.readInt();
 						int    idPersonagem = mesRecebida.readInt();
 						int    estado       = mesRecebida.readInt();
 
@@ -382,6 +384,7 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
+						int    idJogador    = mesRecebida.readInt();
 						int    idPersonagem = mesRecebida.readInt();
 						int    idAlvo       = mesRecebida.readInt();
 						int    idAtaque     = mesRecebida.readInt();
@@ -414,6 +417,7 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
+						int    idJogador    = mesRecebida.readInt();
 						int    idPersonagem = mesRecebida.readInt();
 						int    idItem       = mesRecebida.readInt();
 						int    dinheiro     = mesRecebida.readInt();
@@ -427,6 +431,7 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
+						int    idJogador    = mesRecebida.readInt();
 						int    idPersonagem = mesRecebida.readInt();
 						int    idItem       = mesRecebida.readInt();
 
@@ -441,6 +446,7 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
+						int    idJogador    = mesRecebida.readInt();
 						int    idPersonagem = mesRecebida.readInt();
 						int    idItem       = mesRecebida.readInt();
 
@@ -461,10 +467,22 @@ void CCoreServer::readPackets()
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
 
+						int    idJogador    = mesRecebida.readInt();
 						int    idPersonagem	= mesRecebida.readInt();
 						int    idBolsa		= mesRecebida.readInt();
 
-						_playersList->getElementAt(indexJogador)->getScene()->getBag(idBolsa);
+						CBolsa * tempBolsa = _playersList->getElementAt(indexJogador)->getScene()->getBag(idBolsa);
+
+						if(tempBolsa != NULL)
+						{
+							if(!tempBolsa->isOpen())
+							{
+								tempBolsa->setOpen(true);
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)OPENED_BOLSA, _playersList->getElementAt(indexJogador)->getCharacter()->getSceneID(), (int)_playersList->getElementAt(indexJogador)->getCharacter()->getState());								
+							
+							
+							}
+						}
 
 						break;
 					}
