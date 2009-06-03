@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CMenu.h"
-#include "CVideoTexture.h"
 
 class CMenuAbertura : public CMenu
 {

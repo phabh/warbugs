@@ -96,14 +96,14 @@ IParticleSystemSceneNode* CGameCore::addPaticleNode(TypeParticle tipo, int tempo
 		ps = _gerenciadorCena->addParticleSystemSceneNode(false);
 
 		IParticleEmitter* emissor = ps->createBoxEmitter(
-			aabbox3d<f32>(-5, 0, -5, 5, 0.2, 5), // tamanho do box do emissor
+			aabbox3d<f32>(-5, 0, -5, 5, 1, 5), // tamanho do box do emissor
 			vector3df(0.0f, 0.05f, 0.0f),      // direção inicial
 			80, 100,                           // taxa de emissão
 			SColor(0, 255, 255, 255),          // cor mais escura
 			SColor(0, 255, 255, 255),          // cor mais clara
 			(u32)tempoVida*0.4, tempoVida, 0,                      // idade mínima, máxima e ângulo
-			dimension2df(5.0f, 5.0f),          // tamanho mínimo
-			dimension2df(10.0f, 10.0f));         // tamanho máximo
+			dimension2df(5.0, 5.0),          // tamanho mínimo
+			dimension2df(10.0, 10.0));         // tamanho máximo
 
 		ps->setEmitter(emissor);
 		emissor->drop();
