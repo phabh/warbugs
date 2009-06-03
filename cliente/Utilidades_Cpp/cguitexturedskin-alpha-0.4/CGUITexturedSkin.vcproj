@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="CGUITexturedSkin"
 	ProjectGUID="{622C9DD7-0391-49FF-AF53-24F9D5A8EC53}"
 	RootNamespace="CGUITexturedSkin"
@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;D:\Documents and Settings\Fantini\Desktop\WARBUGS_SVN\cliente\Irrlicht\Include&quot;"
+				AdditionalIncludeDirectories="D:\Warbugs\cliente\Irrlicht\Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -75,7 +75,7 @@
 				OutputFile="CGUITexturedSkin.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;D:\Documents and Settings\Fantini\Desktop\WARBUGS_SVN\cliente\Irrlicht\Lib&quot;"
+				AdditionalLibraryDirectories="D:\Warbugs\cliente\Irrlicht\Lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/CGUITexturedSkin.pdb"
 				SubSystem="1"

@@ -63,18 +63,7 @@ CGameCore::CGameCore(int &startInit)
 
 	_dispositivoGrafico->setWindowCaption(tituloJanela.c_str());
 
-	_gameSkin = _gerenciadorHud->getSkin();
-	_gameFont[FONT_PEQUENA] = _gerenciadorHud->getFont(pathFonts[FONT_PEQUENA]);
-	_gameFont[FONT_GRANDE]	= _gerenciadorHud->getFont(pathFonts[FONT_GRANDE]);
-
-	if (_gameFont[FONT_PEQUENA] && _gameFont[FONT_GRANDE])
-	{
-		_gameSkin->setFont(_gameFont[FONT_PEQUENA], EGDF_DEFAULT); // font padrão
-		//_gameSkin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_BUTTON);  // botoes
-		_gameSkin->setFont(_gameFont[FONT_GRANDE], EGDF_WINDOW);  // Titulo da janela
-		//_gameSkin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_MENU);    // itens de menu
-		//_gameSkin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_TOOLTIP); // tooltips
-	}
+	loadSkin(HS_PADRAO);
 
 	_listaParticulas = new CListaParticulas();
 
@@ -138,6 +127,10 @@ void CGameCore::drop()
 		enviarPacote(DISCONNECT);
 		_gameSocket->Close();
 	}
+
+	for(int i = 0; i < CS_COUNT; i++)
+		_cutScene[i]->drop();
+
 	_dispositivoGrafico->drop(); // Deleta o dispositivo grafico da memória
 	_dispositivoAudio->drop();   // Deleta o dispositivo de audio da memória
 }
@@ -181,10 +174,52 @@ void CGameCore::getAllManagers(IrrlichtDevice*&dispGrafico, ISoundEngine*&dispAu
 
 //-----------------------------------------------------------------------------------------------------------------
 
+void CGameCore::loadSkin(int idSkin)
+{
+	IFileSystem* sistemaArquivos = _dispositivoGrafico->getFileSystem();
+
+	SImageGUISkinConfig hudCfg = LoadGUISkinFromFile(sistemaArquivos, _gerenciadorVideo, pathHudSkin[idSkin]);
+	
+	_gameSkin = new CHudImageSkin(_gerenciadorVideo, _gerenciadorHud->getSkin());
+
+	_gameSkin->loadConfig(hudCfg);
+
+	_gameFont[FONT_PEQUENA] = _gerenciadorHud->getFont(pathFonts[FONT_PEQUENA]);
+	_gameFont[FONT_GRANDE]	= _gerenciadorHud->getFont(pathFonts[FONT_GRANDE]);
+
+	if (_gameFont[FONT_PEQUENA] && _gameFont[FONT_GRANDE])
+	{
+		_gameSkin->setFont(_gameFont[FONT_PEQUENA], EGDF_DEFAULT); // font padrão
+		//_gameSkin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_BUTTON);  // botoes
+		_gameSkin->setFont(_gameFont[FONT_GRANDE], EGDF_WINDOW);  // Titulo da janela
+		//_gameSkin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_MENU);    // itens de menu
+		//_gameSkin->setFont(_gerenciadorHud->getBuiltInFont(), EGDF_TOOLTIP); // tooltips
+	}
+
+	_gerenciadorHud->setSkin(_gameSkin);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
 void CGameCore::playMusic( char* soundFile, bool looped, bool startPaused, bool track, E_STREAM_MODE modo, bool efeitos)
 {
 	_gameMusic = _dispositivoAudio->play2D(soundFile, looped, startPaused, track, modo, efeitos);
 	_dispositivoAudio->setSoundVolume(_gameConfig.parametrosAudio.volumeMusica);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+bool CGameCore::playCutScene( int idCutScene, int volume)
+{
+	if(volume > 100)
+		volume = 100;
+
+	if(volume < 0)
+		volume = 0;
+
+	_cutScene[idCutScene]->setVolume(volume);
+	
+	return _cutScene[idCutScene]->playCutscene();
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -239,6 +274,9 @@ void CGameCore::loadGameData()
 		_gameData->loadStage(estagio);
 		estagio++;
 	}
+
+	for(int i = 0; i < CS_COUNT; i++)
+		_cutScene[i] = CVideoTexture::createVideoTexture(_dispositivoGrafico, pathCutScene[i]);
 }
 
 //-----------------------------------------------------------------------------------------------------------------

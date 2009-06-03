@@ -6,7 +6,7 @@
 // CONSTANTES
 //-----------------------------------------------------------------------------------------
 
-const std::string SERVERHOST = "warbugs.ddns.com.br"; // IP do servidor
+const std::string SERVERHOST = "10.16.11.31"; // IP do servidor
 const int SERVERPORT = 30003;          // Porta do servidor
 
 const int PACKAGESIZE = 1400; // Tamanho do pacote de mensagens

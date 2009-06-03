@@ -8,15 +8,29 @@
 static c8 *pathMatrizSetup = "recursos/data/mtxadj.dat";
 static c8 *pathConfig = "recursos/data/config.dat";
 
-static c8 *pathVideoAbertura = "recursos/videos/abertura.wmv";
-static c8 *pathVideoCreditos = "recursos/videos/creditos.wmv";
-static c8 *pathVideoLogo = "recursos/videos/logo.wmv";
+static c8 *pathHudSkin[HS_COUNT] =
+{
+	"recursos/skins/guiskin0.cfg",
+	"recursos/skins/guiskin0.cfg",
+	"recursos/skins/guiskin0.cfg",
+	"recursos/skins/guiskin0.cfg",
+	"recursos/skins/guiskin0.cfg",
+	"recursos/skins/guiskin0.cfg",
+	"recursos/skins/guiskin0.cfg"
+};
 
 static c8 *pathArquivoCena[NUMMENUCENA] = 
 {
 	"recursos/cenas/login.irr",
 	"recursos/cenas/selecao.irr",
 	"recursos/cenas/criacao.irr" 
+};
+
+static c8 *pathCutScene[CS_COUNT] =
+{
+	"recursos/videos/abertura.wmv",
+	"recursos/videos/creditos.wmv",
+	"recursos/videos/logo.wmv"
 };
 
 static c8 *pathCenario[NUMCENARIOS] = 
@@ -212,51 +226,51 @@ static c8 *pathTextureItens[NUM3DITENS]=
 
 static c8 *pathTexture2D[NUM2DOBJS]=
 { // Texturas de todos os objetos 2d do jogo
-	"recursos/texturas/huds/tx2d_buzina.png",
-	"recursos/texturas/huds/tx2d_varinha.png",
-	"recursos/texturas/huds/tx2d_soco.png",
-	"recursos/texturas/huds/tx2d_bazuca.png",
-	"recursos/texturas/huds/tx2d_martelo_guerra.png",
-	"recursos/texturas/huds/tx2d_metralhadora.png",
-	"recursos/texturas/huds/tx2d_martelo_conan.png",
-	"recursos/texturas/huds/tx2d_katana.png",
-	"recursos/texturas/huds/tx2d_lançador_dardos.png",
-	"recursos/texturas/huds/tx2d_machado.png",
-	"recursos/texturas/huds/tx2d_palito_fosforo.png",
-	"recursos/texturas/huds/tx2d_vassoura.png",
-	"recursos/texturas/huds/tx2d_pu_dao.png",
-	"recursos/texturas/huds/tx2d_espingarda.png",
-	"recursos/texturas/huds/tx2d_mamona.png",
-	"recursos/texturas/huds/tx2d_estilingue.png",
-	"recursos/texturas/huds/tx2d_cartola.png",
-	"recursos/texturas/huds/tx2d_tenis.png",
-	"recursos/texturas/huds/tx2d_elmo_hercules.png",
-	"recursos/texturas/huds/tx2d_elmo_barbaro.png",
-	"recursos/texturas/huds/tx2d_oculos_escuros.png",
-	"recursos/texturas/huds/tx2d_gorro.png",
-	"recursos/texturas/huds/tx2d_cacetete.png",
-	"recursos/texturas/huds/tx2d_chapeu_palha.png",
-	"recursos/texturas/huds/tx2d_oculos_aviador.png",
-	"recursos/texturas/huds/tx2d_mascara_gas.png",
-	"recursos/texturas/huds/tx2d_passaporte.png",
-	"recursos/texturas/huds/tx2d_polpa_formiga.png",
-	"recursos/texturas/huds/tx2d_polpa_cupim.png",
-	"recursos/texturas/huds/tx2d_polpa_barata.png",
-	"recursos/texturas/huds/tx2d_polpa_tatu.png",
-	"recursos/texturas/huds/tx2d_asa_libelula.png",
-	"recursos/texturas/huds/tx2d_perfume_percevejo.png",
-	"recursos/texturas/huds/tx2d_pata_barbeiro.png",
-	"recursos/texturas/huds/tx2d_rabo_calango.png",
-	"recursos/texturas/huds/tx2d_ovo_lagartixa.png",
-	"recursos/texturas/huds/tx2d_lingua_sapo.png",
-	"recursos/texturas/huds/tx2d_lingua_camaleao.png" 
+	"recursos/huds/tx2d_buzina.png",
+	"recursos/huds/tx2d_varinha.png",
+	"recursos/huds/tx2d_soco.png",
+	"recursos/huds/tx2d_bazuca.png",
+	"recursos/huds/tx2d_martelo_guerra.png",
+	"recursos/huds/tx2d_metralhadora.png",
+	"recursos/huds/tx2d_martelo_conan.png",
+	"recursos/huds/tx2d_katana.png",
+	"recursos/huds/tx2d_lançador_dardos.png",
+	"recursos/huds/tx2d_machado.png",
+	"recursos/huds/tx2d_palito_fosforo.png",
+	"recursos/huds/tx2d_vassoura.png",
+	"recursos/huds/tx2d_pu_dao.png",
+	"recursos/huds/tx2d_espingarda.png",
+	"recursos/huds/tx2d_mamona.png",
+	"recursos/huds/tx2d_estilingue.png",
+	"recursos/huds/tx2d_cartola.png",
+	"recursos/huds/tx2d_tenis.png",
+	"recursos/huds/tx2d_elmo_hercules.png",
+	"recursos/huds/tx2d_elmo_barbaro.png",
+	"recursos/huds/tx2d_oculos_escuros.png",
+	"recursos/huds/tx2d_gorro.png",
+	"recursos/huds/tx2d_cacetete.png",
+	"recursos/huds/tx2d_chapeu_palha.png",
+	"recursos/huds/tx2d_oculos_aviador.png",
+	"recursos/huds/tx2d_mascara_gas.png",
+	"recursos/huds/tx2d_passaporte.png",
+	"recursos/huds/tx2d_polpa_formiga.png",
+	"recursos/huds/tx2d_polpa_cupim.png",
+	"recursos/huds/tx2d_polpa_barata.png",
+	"recursos/huds/tx2d_polpa_tatu.png",
+	"recursos/huds/tx2d_asa_libelula.png",
+	"recursos/huds/tx2d_perfume_percevejo.png",
+	"recursos/huds/tx2d_pata_barbeiro.png",
+	"recursos/huds/tx2d_rabo_calango.png",
+	"recursos/huds/tx2d_ovo_lagartixa.png",
+	"recursos/huds/tx2d_lingua_sapo.png",
+	"recursos/huds/tx2d_lingua_camaleao.png" 
 };
 
 static c8 *pathTextureHud[NUMMENUHUDS]=
 { // Texturas de todos os huds dos menus
-	"recursos/texturas/huds/tx2d_minimapa1on.png", 
-	"recursos/texturas/huds/tx2d_minimapa1off.png", 
-	"recursos/texturas/huds/tx2d_semente.png" 
+	"recursos/huds/tx2d_minimapa1on.png", 
+	"recursos/huds/tx2d_minimapa1off.png", 
+	"recursos/huds/tx2d_semente.png" 
 };
 
 static c8 *pathPropsModels[NUMPROPS]=
