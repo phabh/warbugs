@@ -39,10 +39,7 @@ bool CMenuSelecao::start(CGameCore *gameCore)
 	if(_gameCore->_numMyChars == 0) // Se não possuo personagem algum
 		_nextID = MN_CRIACAOPERSONAGEM; // Ir direto ao menu de criação
 
-	CVideoTexture *_video = CVideoTexture::createVideoTexture(_dispGrafico, pathVideoLogo);
-	_video->setVolume(100);
-	_video->playCutscene();
-	_video->drop();
+	_gameCore->playCutScene(CS_TRANSICAO, 100);
 
 	_gameCore->playMusic(pathBackgroundSound[MM_SELECAO]);
 
@@ -119,11 +116,11 @@ void CMenuSelecao::readCommands()
 				this->start(_gameCore);
 
 			break;
-/*
+
 		case 204:
 			_nextID =  MN_JOGO;
 			return;
-			break;*/
+			break;
 
 		default:
 			cout << "\nID de botao desconhecido." << endl;

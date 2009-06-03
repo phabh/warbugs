@@ -97,7 +97,7 @@ public:
 		if( m_dshow_player )
 			bReturn = m_dshow_player->update();
 
-		if( m_device->getVideoDriver()->getDriverType() != video::EDT_OPENGL && bReturn)
+		if( m_device->getVideoDriver()->getDriverType() != EDT_OPENGL && bReturn)
 			m_pTempTexture->regenerateMipMapLevels();
 
 		return bReturn;
@@ -142,7 +142,6 @@ public:
 		if( m_dshow_player )
 			m_dshow_player->setPosition(position);
 	}
-
 
 	//! setFrame
 	/*!

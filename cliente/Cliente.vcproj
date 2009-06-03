@@ -122,7 +122,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\Irrlicht\include&quot;;&quot;$(ProjectDir)\IrrKlang\include&quot;;&quot;$(ProjectDir)\Dsvt\include&quot;;&quot;$(ProjectDir)\Source\Setup&quot;;&quot;$(ProjectDir)\Source\Event&quot;;&quot;$(ProjectDir)\Source\DataStruct&quot;;&quot;$(ProjectDir)\Source\GameCore&quot;;&quot;$(ProjectDir)\Source\Hud&quot;;&quot;$(ProjectDir)\Source\Menu&quot;;&quot;$(ProjectDir)\Source\Network&quot;;&quot;$(ProjectDir)\Source\Shader&quot;;&quot;$(ProjectDir)\Source\Video&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\Irrlicht\include&quot;;&quot;$(ProjectDir)\IrrKlang\include&quot;;&quot;$(ProjectDir)\Dsvt\include&quot;;&quot;$(ProjectDir)\Source\Setup&quot;;&quot;$(ProjectDir)\Source\Event&quot;;&quot;$(ProjectDir)\Source\DataStruct&quot;;&quot;$(ProjectDir)\Source\GameCore&quot;;&quot;$(ProjectDir)\Source\Hud&quot;;&quot;$(ProjectDir)\Source\Menu&quot;;&quot;$(ProjectDir)\Source\Network&quot;;&quot;$(ProjectDir)\Source\Shader&quot;;&quot;$(ProjectDir)\Source\Video&quot;;&quot;$(ProjectDir)\Source\HudSkin&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -320,6 +320,34 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="HudSkin"
+				>
+				<File
+					RelativePath=".\Source\HudSkin\CHudConfigMap.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\HudSkin\CHudConfigReader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\HudSkin\CHudImageSkin.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\HudSkin\CHudProgressBar.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\HudSkin\CHudSkin.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\HudSkin\CHudSkinLoader.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -447,6 +475,34 @@
 				</File>
 				<File
 					RelativePath=".\Source\DataStruct\CTree.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="HudSkin"
+				>
+				<File
+					RelativePath=".\Source\HudSkin\CHudConfigMap.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\HudSkin\CHudConfigReader.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\HudSkin\CHudImageSkin.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\HudSkin\CHudProgressBar.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\HudSkin\CHudSkin.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\HudSkin\CHudSkinLoader.h"
 					>
 				</File>
 			</Filter>

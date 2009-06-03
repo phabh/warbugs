@@ -2,7 +2,6 @@
 
 #include "GameSetup.h"
 #include "CGameCore.h"
-#include "CVideoTexture.h"
 
 class CMenu
 {

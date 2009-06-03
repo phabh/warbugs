@@ -17,6 +17,10 @@
 
 #include "CToonShader.h"
 
+#include "CVideoTexture.h"
+
+#include "CHudSkin.h"
+
 struct SPersonagemSelecao
 {
 	int _id;
@@ -60,7 +64,8 @@ private:
 	typedef CDoubleList<IParticleSystemSceneNode> CListaParticulas;
 	CListaParticulas  *_listaParticulas;
 
-	IGUISkin *_gameSkin;
+	CHudImageSkin* _gameSkin;
+	//IGUISkin *_gameSkin;
 	IGUIFont *_gameFont[NUMHUDFONTS];
 
 	ISound* _gameMusic;
@@ -88,6 +93,9 @@ private:
 
 	CToonShader *_toonShader; // Classe de ToonShader
 
+	CVideoTexture *_cutScene[CS_COUNT];
+
+
 public:
 
 	CGameData *_gameData;
@@ -110,8 +118,10 @@ public:
 	ISoundEngine * getSoundDevice();
 	CGerEventos * getEventManager();
 	void initToonShader();
+	void loadSkin(int idSkin);
 	void getAllManagers(IrrlichtDevice*&dispGrafico, ISoundEngine*&dispAudio, CGerEventos*&gerEventos, ISceneManager*&gerCena, IVideoDriver*&gerVideo, IGUIEnvironment*&gerHud, TypeCfg &gameCfg); 
 	void playMusic( char* soundFile, bool looped = true, bool startPaused = false, bool track = false, E_STREAM_MODE modo = ESM_AUTO_DETECT, bool efeitos = false);
+	bool playCutScene( int idCutScene, int volume);
 	IParticleSystemSceneNode* addPaticleNode(TypeParticle tipo, int tempoVida, vector3df posicao, vector3df escala);
 	void loadMenuScene(c8 *sceneFile);
 	int getNumCharSlots();

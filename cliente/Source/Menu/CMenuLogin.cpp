@@ -40,6 +40,7 @@ void CMenuLogin::updateHuds()
 	
 	Login = _gerHud->addEditBox(L"fantini", rect<s32>(300,500,400,520), true, 0, 10);
 	Password = _gerHud->addEditBox(L"wurzelion", rect<s32>(300,530,400,550), true, 0, 20);
+	Password->setPasswordBox(true);
 	Login->setMax(15);
 	Password->setMax(15);
 	

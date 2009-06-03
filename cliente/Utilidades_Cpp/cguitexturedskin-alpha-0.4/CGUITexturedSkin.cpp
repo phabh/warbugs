@@ -289,6 +289,25 @@ bool CGUITexturedSkin::readSkinXml( const c8 * guiSkinXmlFile )
 					}
 				}
 			}
+
+			else if ( isNodeName( pXml, "progressBar" ) )	// progressBar
+			{
+				core::array< c8 * > nodeList;
+				nodeList.push_back( "imageCoord" );
+				s32 nodeDepth = 0;
+
+				for ( s32 findResult = findInterestedSubNode( pXml, nodeList, nodeDepth );
+						  findResult != -1;
+						  findResult = findInterestedSubNode( pXml, nodeList, nodeDepth ) )
+				{
+					if ( 0 == findResult )
+					{
+						skinTexCoords[::ESTC_PROGRESSBAR] = decodeImageCoord( pXml );
+						skinTexCoords[::ESTC_PROGRESSBAR_FILLED] = decodeImageCoord( pXml );
+					}
+				}
+			}
+
 			else if ( isNodeName( pXml, "tabBody" ) )		// Tab body
 			{
 				core::array< c8 * > nodeList;
@@ -692,13 +711,62 @@ void CGUITexturedSkin::draw3DTabBody(irr::gui::IGUIElement *element,bool border,
 }
 
 
+
 void CGUITexturedSkin::draw3DTabButton(IGUIElement *element, bool active, const core::rect<s32> &rect, const core::rect<s32> *clip, gui::EGUI_ALIGNMENT alignment)
 {
 	s32 buttonType = active ? ESTC_TAB_BUTTON_ACTIVE : ESTC_TAB_BUTTON_INACTIVE;
 	core::rect<s32> tabButton = skinTexCoords[buttonType];
-	pVideo->draw2DImage(pSkinTexture,rect,tabButton,0,0,true);
+	pVideo->draw2DImage(pSkinTexture, rect, tabButton, 0, 0, true);
 }
 
+void CGUITexturedSkin::drawHorizontalProgressBar( IGUIElement* element, const core::rect<s32>& rect, const core::rect<s32>* clip, f32 filledRatio, video::SColor fillColor )
+{
+	core::rect<s32> progressBar = skinTexCoords[ESTC_PROGRESSBAR];
+	core::rect<s32> progressBarFilled = skinTexCoords[ESTC_PROGRESSBAR_FILLED];
+	
+	pVideo->draw2DImage(pSkinTexture, rect, progressBar, 0, 0, true);
+	/*
+    if ( !Config.ProgressBar.Texture || !Config.ProgressBarFilled.Texture )
+    {
+        return;
+    }*/
+
+    // Draw empty progress bar
+   // drawElementStyle( Config.ProgressBar, rectangle, clip );
+
+
+    // Draw filled progress bar on top
+    if ( filledRatio < 0.0f )
+        filledRatio = 0.0f;
+    else
+    if ( filledRatio > 1.0f )
+        filledRatio = 1.0f;
+
+    if ( filledRatio > 0.0f )
+    {
+        s32 filledPixels = (s32)( filledRatio * rect.getSize().Width );
+        s32 height = rect.getSize().Height;
+
+        core::rect<s32> clipRect = clip? *clip:rect;
+
+        if ( filledPixels < height )
+        {
+            if ( clipRect.LowerRightCorner.X > rect.UpperLeftCorner.X + filledPixels )
+                clipRect.LowerRightCorner.X = rect.UpperLeftCorner.X + filledPixels;
+
+            filledPixels = height;
+        }
+
+        core::rect<s32> filledRect = core::rect<s32>( 
+            rect.UpperLeftCorner.X, 
+            rect.UpperLeftCorner.Y, 
+            rect.UpperLeftCorner.X + filledPixels, 
+            rect.LowerRightCorner.Y );
+        
+		pVideo->draw2DImage(pSkinTexture, rect, progressBarFilled, 0, 0, true);
+       // drawElementStyle( Config.ProgressBarFilled, filledRect, &clipRect, &fillColor );
+    }
+}
 
 void CGUITexturedSkin::draw3DToolBar(IGUIElement *element, const core::rect<s32> &rect, const core::rect<s32> *clip)
 {

@@ -13,6 +13,7 @@ CMenuAbertura::CMenuAbertura()
 bool CMenuAbertura::start(CGameCore *gameCore)
 {
 	gameCore->getAllManagers(_dispGrafico, _dispAudio, _gerEventos, _gerCena, _gerVideo, _gerHud, _gameConfig);
+	_gameCore = gameCore;
 
 	_myID = _nextID = MN_ABERTURA;
 
@@ -48,6 +49,7 @@ void CMenuAbertura::updateGraphics()
 	_video->setVolume(100);
 	_video->playCutscene();
 	_video->drop();*/
+	_gameCore->playCutScene(CS_ABERTURA, 100);
 
 	_nextID = MN_LOGIN;
 }

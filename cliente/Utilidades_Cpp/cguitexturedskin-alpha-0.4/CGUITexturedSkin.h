@@ -45,6 +45,8 @@ enum SKIN_TEXURE_COORD_ENUM
 	ESTC_WINDOW_RIGHT_EDGE,
 	ESTC_WINDOW_INTERIOR,
 	ESTC_WINDOW_TITLEBAR,
+	ESTC_PROGRESSBAR, // FANTINI
+	ESTC_PROGRESSBAR_FILLED, // FANTINI
 	ESTC_ENUM_COUNT
 };
 
@@ -111,12 +113,15 @@ protected:
 	virtual void SetSkinAlpha( u32 a );
 
 public:
+
 	CGUITexturedSkin(IGUIEnvironment * pEnv, irr::io::IFileSystem * ifs);
 	virtual ~CGUITexturedSkin();
 
 	// Assign a new skin definition to this skin. Can be done during runtime to
 	// change the skin.
 	bool setSkin(const irr::c8 * guiSkinXmlFile);
+
+	void drawHorizontalProgressBar( IGUIElement* element, const core::rect<s32>& rect, const core::rect<s32>* clip, f32 filledRatio, video::SColor fillColor );
 
 	// Implementation of IGUISkin interface
 	virtual void draw3DButtonPanePressed(irr::gui::IGUIElement*element,

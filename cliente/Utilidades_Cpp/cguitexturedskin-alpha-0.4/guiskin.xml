@@ -89,4 +89,7 @@
             <imageCoord>0,256,128,288</imageCoord>
         </titleBar>
     </window>
+    <progressBar>
+        <imageCoord>0,288,128,416</imageCoord>
+    </progressBar>
 </guiskin>

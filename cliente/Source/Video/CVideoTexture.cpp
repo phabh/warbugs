@@ -42,7 +42,6 @@ CVideoTexture::CVideoTexture( IrrlichtDevice *device,ITexture *texture)
     m_copy_buffer_size = 0;
 }
 
-
 CVideoTexture::CVideoTexture( IrrlichtDevice *device, const char* file, bool& bSuccess)
 {
     m_device = device;
@@ -65,7 +64,7 @@ CVideoTexture::CVideoTexture( IrrlichtDevice *device, const char* file, bool& bS
     m_copy_buffer_size = m_video_buffer_size;
 
     // Create texture
-    m_pTempTexture = device->getVideoDriver()->addTexture(core::dimension2d<s32>( m_dshow_player->getWidth(),
+    m_pTempTexture = device->getVideoDriver()->addTexture(dimension2d<s32>( m_dshow_player->getWidth(),
                                                         m_dshow_player->getHeight()),
                                                         "target",ECF_A8R8G8B8);
 
@@ -76,7 +75,7 @@ CVideoTexture::CVideoTexture( IrrlichtDevice *device, const char* file, bool& bS
         return;
     }
 
-    core::dimension2d<s32> size = m_pTempTexture->getSize();
+    dimension2d<s32> size = m_pTempTexture->getSize();
     u32 texture_size = size.Height * size.Width;
 
     m_pTempTexture->grab();
@@ -214,7 +213,6 @@ CVideoTexture::CVideoTexture( IrrlichtDevice *device, const char* file, bool& bS
     }
 }
 
-
 CVideoTexture::CVideoTexture( IrrlichtDevice *device, dsvt::ICaptureDevice *cap, bool& bSuccess)
 {
     m_device = device;
@@ -248,7 +246,7 @@ CVideoTexture::CVideoTexture( IrrlichtDevice *device, dsvt::ICaptureDevice *cap,
         return;
     }
 
-    core::dimension2d<s32> size = m_pTempTexture->getSize();
+    dimension2d<s32> size = m_pTempTexture->getSize();
     u32 texture_size = size.Height * size.Width;
 
     m_pTempTexture->grab();
@@ -399,8 +397,6 @@ CVideoTexture::~CVideoTexture()
     m_pTempTexture = 0;
 }
 
-
-
 // Create irrlicht video texture
 CVideoTexture* CVideoTexture::createVideoTexture( IrrlichtDevice *device, const char* file)
 {
@@ -418,7 +414,7 @@ CVideoTexture* CVideoTexture::createVideoTexture( IrrlichtDevice *device, const 
     }
 
     // Get Video Driver
-    irr::video::IVideoDriver *driver = device->getVideoDriver();
+    IVideoDriver *driver = device->getVideoDriver();
 
     // first try to get static texture
     ITexture *stTex = driver->getTexture( file );
@@ -459,8 +455,6 @@ CVideoTexture* CVideoTexture::createVideoTexture( IrrlichtDevice *device, const 
     return tmpTexture;
 }
 
-
-
 CVideoTexture* CVideoTexture::createCaptureTexture( IrrlichtDevice *device , dsvt::ICaptureDevice *cap )
 {
     if( !device)
@@ -490,8 +484,6 @@ CVideoTexture* CVideoTexture::createCaptureTexture( IrrlichtDevice *device , dsv
     return tmpTexture;
 }
 
-
-
 bool CVideoTexture::playCutscene( void )
 {
     stop();
@@ -500,8 +492,8 @@ bool CVideoTexture::playCutscene( void )
     bool bLoopMode = isLooping();
     setLoop(false);
 
-    video::IVideoDriver *drv = m_device->getVideoDriver();
-    core::rect<s32> viewport = drv->getViewPort();
+    IVideoDriver *drv = m_device->getVideoDriver();
+    rect<s32> viewport = drv->getViewPort();
 
     //Create event receiver
     class VideoEventReceiver : public irr::IEventReceiver
@@ -511,7 +503,7 @@ bool CVideoTexture::playCutscene( void )
 
             virtual bool OnEvent( const SEvent& event )
             {
-				if ( event.EventType == irr::EET_KEY_INPUT_EVENT && event.KeyInput.Key == KEY_ESCAPE)
+				if ( event.EventType == EET_KEY_INPUT_EVENT && event.KeyInput.Key == KEY_ESCAPE)
                     bQuit = true;
 
                 return false;
@@ -520,7 +512,7 @@ bool CVideoTexture::playCutscene( void )
 
 
 	//Get old Event receiver
-    irr::IEventReceiver *oldEvent = m_device->getEventReceiver();
+    IEventReceiver *oldEvent = m_device->getEventReceiver();
     VideoEventReceiver myEventReceiver;
     myEventReceiver.bQuit = false;
     m_device->setEventReceiver(&myEventReceiver);
@@ -555,26 +547,23 @@ bool CVideoTexture::playCutscene( void )
     return bIrrlichtRun;
 }
 
-
 bool CVideoTexture::drawBackground( )
 {
     IVideoDriver *drv = m_device->getVideoDriver();
-    //core::rect<s32> tsize = drv->getViewPort();
-    core::dimension2d<s32> ssize = drv->getCurrentRenderTargetSize();
-    core::dimension2d<s32> tsize = getSize();
+    //rect<s32> tsize = drv->getViewPort();
+    dimension2d<s32> ssize = drv->getCurrentRenderTargetSize();
+    dimension2d<s32> tsize = getSize();
 
-    drv->draw2DImage(m_pTempTexture,core::rect<s32>(0,0,ssize.Width,ssize.Height),
-                core::rect<s32>(0,0,tsize.Width,tsize.Height));
+    drv->draw2DImage(m_pTempTexture, rect<s32>(0, 0, ssize.Width, ssize.Height),
+                rect<s32>(0, 0, tsize.Width, tsize.Height));
 
     return false;
 }
-
 
 ITexture *CVideoTexture::getTexture()
 {
     return m_pTempTexture;
 }
-
 
 void CVideoTexture::RGB_32_To_A8R8G8B8( SFrameData& data )
 {
