@@ -23,7 +23,6 @@ private:
 	int _danoMax;
 	int _velocidade;
 	int _alcance;
-	int _durabilidade;
 	int _nivelMagico;
 
 public:
@@ -37,7 +36,6 @@ public:
 	int getMaxDamage();
 	int getSpeed();
 	int getRange();
-	int getDurability();
 	int getMagicLevel();
 
 	void initialize(CObjectCount *counter);

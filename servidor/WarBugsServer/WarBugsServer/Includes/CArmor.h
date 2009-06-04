@@ -18,7 +18,6 @@ class CArmor : public CItem
 private:
 	Raca _raca;
 	int _defesa;
-	int _durabilidade;
 	int _nivelMagico;
 
 public:
@@ -27,7 +26,6 @@ public:
 	void useScroll(CScroll *&scroll);
 	Raca getRace();
 	int getDef();
-	int getDurability();
 	int getMagicLevel();
 
 	int getValue();

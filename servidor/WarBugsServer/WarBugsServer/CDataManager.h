@@ -75,6 +75,10 @@ public:
 	//Personagem
 	void updatePersonagem(int id, float posX, float posZ);
 	void updatePersonagem(int id, int nivel, int xp);
+	void updatePersonagemJogador(CPersonagemJogador * p1);
+
+	//Bolsa
+	void updateBolsa(CBolsa * b1, int idCenario);
 
 	//Inserções
 	bool insertPersonagemJogador(CPersonagemJogador * p1, int idJogador);
@@ -82,5 +86,8 @@ public:
 
 	//deletes
 	bool deletePersonagemJogador(int idJogador, int idPersoangem, char * nomePersonagem);
+
+	/*Backup*/
+	void backupAll(CCenarioList * cenarioList);
 };
 #endif
