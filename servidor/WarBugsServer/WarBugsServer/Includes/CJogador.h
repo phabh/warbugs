@@ -4,8 +4,8 @@
 #include <iostream>
 using namespace std;
 #include "CWarBugObject.h"
-#include "CPersonagemJogador.h"
 #include "CCenario.h"
+	//#include "CPersonagemJogador.h"
 
 class CJogador : public CWarBugObject
 {

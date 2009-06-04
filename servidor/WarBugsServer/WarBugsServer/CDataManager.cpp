@@ -4092,7 +4092,7 @@ int	CDataManager::getCenarioId(int idPersonagem, int idJogador)
 		dados->RemoveAt(0);
 	}
 
-	idCenario = System::Int32::Parse(dados[0]->ToString);
+	idCenario = System::Int32::Parse(dados[0]->ToString());
 
 	return idCenario;
 }
@@ -4929,7 +4929,7 @@ bool CDataManager::insertPersonagemJogador(CPersonagemJogador * p1, int idJogado
 	System::String ^ query;
 	System::String ^ temp;
 	
-	p1->setID(numPersonagens());
+	p1->setID(novoIdPersonagem());
 
 	temp = gcnew System::String(p1->getName());
 
@@ -5179,4 +5179,343 @@ System::String ^ CDataManager::pointFormat(System::String ^ d1)
 
 	return d1;
 
+}
+
+/*
+	Salvará todas as informações que estão na memória, para o servidor
+*/
+void CDataManager::backupAll(CCenarioList * cenarioList)
+{
+
+	// 1. Salva Persoangens
+		// 1.1 Update do personagem e todas as suas variaveis
+	// 2. Salva Itens Personagens
+		// 2.1 Remove itens que não estão mais com o personagem
+		// 2.2 Atualiza os que ainda estão com ele(inclusive a durabilidade, mas no relacionamento)
+		// 2.3 Insere os novos itens que o persoangem possui
+	// 3. Salva Poderes do Personagem
+		// 3.1 Atualiza as informações dos poderes que o personagem possui
+	// 4. Salva Informações da formula de mercado se o personagem for o vendedor
+		// 4.1 Insere as informações que o vendedor possui naquele momento
+	// 5. Salva as bolsas
+		// 5.1 Remove as que não existirem mais
+		// 5.2 Atualiza as que ainda existirem
+		// 5.3 Insere as que não estão salvas
+	// 6. Salva o Cénario
+		// 6.1 Atualiza a Localização de todos os Personagens
+
+	for(int p = 0; p < cenarioList->size(); p++)
+	{
+		for(int a = 0; a < cenarioList->getElementAt(p)->playerCount(); a++)
+		{
+			updatePersonagemJogador(cenarioList->getElementAt(p)->getPlayerAt(a));		
+		}
+
+		for(int u = 0; u < cenarioList->getElementAt(p)->bagCount(); u++)
+		{
+			updateBolsa(cenarioList->getElementAt(p)->getBagAt(u);
+		}
+	
+	}
+
+
+}
+
+/*
+	Atualiza todas as bolsa que estiverem no cenário
+	param b1 -> bolsa que esrá atualizada no BD
+*/
+void CDataManager::updateBolsa(CBolsa * b1, int idCenario)
+{
+	System::String ^ query;
+
+	int tempItem[9][8];
+
+	query = L"DELETE FROM ITEM_RELACIONAL WHERE BSID = "+b1->getID();
+
+	_dataBase->deleteNow(toChar(query));
+
+	query = L"DELETE FROM BOLSA WHERE BSID = "+b1->getID();
+
+	_dataBase->deleteNow(toChar(query));
+
+	query = L"INSERT INTO BOLSA VALUES ("+novoIdBolsas()+","+pointFormat(L""+b1->getPosition()->x)+",0,"
+		+pointFormat(L""+b1->getPosition()->z)+","+idCenario+")";
+
+	_dataBase->insertNow(query);
+
+	
+	for(int p = 0; p < 9; p++)
+	{
+		if(b1->getElementAt(p) != NULL)
+		if(b1->getElementAt(p)->getID() != NULL)
+		{
+		
+			if(b1->getElementAt(p)->getTipo() == ARMA)
+			{
+				tempItem[p][0] = ((CWeapon *)b1->getElementAt(p))->getID();
+				tempItem[p][1] = ((CWeapon *)b1->getElementAt(p))->getDurability();
+				tempItem[p][2] = ((CWeapon *)b1->getElementAt(p))->getMod();
+				tempItem[p][3] = ((CWeapon *)b1->getElementAt(p))->getMinDamage();
+				tempItem[p][4] = ((CWeapon *)b1->getElementAt(p))->getMaxDamage();
+				tempItem[p][5] = ((CWeapon *)b1->getElementAt(p))->getSpeed();
+				tempItem[p][6] = ((CWeapon *)b1->getElementAt(p))->getRange();
+				tempItem[p][7] = ((CWeapon *)b1->getElementAt(p))->getMagicLevel();
+			}
+			else
+			if(b1->getElementAt(p)->getTipo() == ARMADURA)
+			{
+				tempItem[p][0] = ((CArmor *)b1->getElementAt(p))->getID();
+				tempItem[p][1] = ((CArmor *)b1->getElementAt(p))->getDurability();
+				tempItem[p][2] = ((CArmor *)b1->getElementAt(p))->getDef();
+				tempItem[p][3] = ((CArmor *)b1->getElementAt(p))->getMagicLevel();
+				tempItem[p][4] = 0;
+				tempItem[p][5] = 0;
+				tempItem[p][6] = 0;
+				tempItem[p][7] = 0;
+			}
+			else
+			{
+				tempItem[p][0] = b1->getElementAt(p)->getID();
+				tempItem[p][1] = b1->getElementAt(p)->getDurability();
+				tempItem[p][2] = 0;
+				tempItem[p][3] = 0;
+				tempItem[p][4] = 0;
+				tempItem[p][5] = 0;
+				tempItem[p][6] = 0;
+				tempItem[p][7] = 0;
+			}
+		}
+		else
+		{
+			tempItem[p][0] = -1;
+			tempItem[p][1] = 0;
+			tempItem[p][2] = 0;
+			tempItem[p][3] = 0;
+			tempItem[p][4] = 0;
+			tempItem[p][5] = 0;
+			tempItem[p][6] = 0;
+			tempItem[p][7] = 0;
+		}				
+	
+	}
+
+	//ARMA
+	//IRVALBONUS1 = DURABILIDADE DO ITEM
+	//IRVALBONUS2 = MODIFICADOR ARMA
+	//IRVALBONUS3 = DANO MINIMO
+	//IRVALBONUS4 = DANO MAXIMO
+	//IRVALBONUS5 = TAXA ATAQUE
+	//IRVALBONUS6 = ALCANCE
+	//IRVALBONUS7 = NIVEL MAGICO
+
+	//ARMADURA
+	//IRVALBONUS1 = DURABILIDADE DO ITEM
+	//IRVALBONUS2 = DEFESA
+	//IRVALBONUS3 = NIVEL MAGICO
+	//IRVALBONUS4 = 0
+	//IRVALBONUS5 = 0
+	//IRVALBONUS6 = 0
+	//IRVALBONUS7 = 0
+
+	for(int p = 0; p < 9; p++)
+	{
+		if(tempItem[p][0] != -1)
+		{
+			query = L"INSERT INTO ITEM_RELACIONAL(ITID, BSID, IRVALBONUS1, "
+					+"IRVALBONUS2, IRVALBONUS3, IRVALBONUS4, IRVALBONUS5,  "
+					+"IRVALBONUS6, IRVALBONUS7) VALUES ( "
+					+tempItem[p][0]+", "+b1->getID()+", "+tempItem[p][1]+", "
+					+tempItem[p][2]+", "+tempItem[p][3]+", "+tempItem[p][4]+", "
+					+tempItem[p][5]+", "+tempItem[p][6]+", "+tempItem[p][7]+")";
+
+			_dataBase->insertNow(toChar(query));
+		}
+	}
+
+
+}
+
+/*
+	Atualiza o personagem no BD, juntamente com seus itens e cenário onde ele está
+	param p1-> personagem que será atualizado	
+*/
+void CDataManager::updatePersonagemJogador(CPersonagemJogador * p1)
+{
+	//atualiza o personagem
+	System::String ^ query;
+
+	query = L"UPDATE PERSONAGEM SET "
+			+"  PGNIVEL = "+p1->getLevel()+
+			+", PGDINHEIRO = "+p1->getMoney()+
+			+", PGEXPERIENCIA = "+p1->getXP()+
+			+", PGEXPERIENCIAMAX = "+p1->getMaxXP()+
+			+", PGPONTOSVIDA = "+p1->getStats()->getPV()+
+			+", PGPONTOSVIDAMAX = "+p1->getStats()->getMaxPV()+
+			+", PGPONTOSPODER = "+p1->getStats()->getPM()+
+			+", PGPONTOSPODERMAX = "+p1->getStats()->getMaxPM()+
+			+", PGDIRECAO = "+pointFormat(L""+p1->getDirection())+
+			+", PGVELOCIDADE = "+pointFormat(L""+p1->getMoveSpeed())+
+			+", PGFORCA = "+p1->getFOR()+
+			+", PGAGILIDADE = "+p1->getAGI()+
+			+", PGDESTREZA = "+p1->getDES()+
+			+", PGRESISTENCIA = "+p1->getRES()+
+			+", PGINSTINTO = "+p1->getINS()+
+			+", PGATAQUEDISTANCIA = "+p1->getStats()->getRangedAttack()+
+			+", PGATAQUECORPO = "+p1->getStats()->getMeleeAttack()+
+			+", PGDANOCORPO = "+p1->getStats()->getMeleeDamage()+
+			+", PGDANODISTANCIA = "+p1->getStats()->getRangedDamage()+
+			+", PGDEFESA = "+p1->getStats()->getDefense()+
+			+", PGTAXAATAQUE = "+p1->getStats()->getAttackRate()+
+			+", PGTEMPOCARGA = "+p1->getStats()->getChargeTime()+
+			+", PGLEALARANHA = "+p1->getLoyalty()->getLoyaltyToSpider()+
+			+", PGLEALBESOURO = "+p1->getLoyalty()->getLoyaltyToBeetle()+
+			+", PGLEALESCORPIAO = "+p1->getLoyalty()->getLoyaltyToScorpion()+
+			+", PGLEALLOUVA = "+p1->getLoyalty()->getLoyaltyToMantis()+
+			+", PGLEALVESPA = "+p1->getLoyalty()->getLoyaltyToWasp()+
+			+", PGIDARMOR = "+(p1->getEquip()->armadura != NULL ? p1->getEquip()->armadura->getID() : -1)+
+			+", PGIDWEAPON = "+(p1->getEquip()->arma != NULL ? p1->getEquip()->arma->getID() : -1)+
+			+", PGX = "+p1->getPosition()->x+
+			+", PGZ = "+p1->getPosition()->z+
+			+", PGBONUSPOINTSPRIMARIAS = "+p1->getPointsLeft()+
+			+", PGBONUSPOINTSPODER = "+p1->getSkillPointsLeft()+
+			+"  WHERE PGID = "+p1->getID();
+
+	if(_dataBase->updateNow(toChar(query)))
+	{
+
+		//não esquecer que o item equipado também entra nesta lista
+		query = L"DELETE FROM ITEM_RELACIONAL WHERE PGID = "+p1->getID();
+				
+		//se exluiu os itens que não estavam com ele
+		if(_dataBase->deleteNow(toChar(query)))
+		{
+
+			int tempItem[11][8];
+
+			for(int p = 0; p < 11; p++)
+			{
+				if(p1->getBolsa()->getElementAt(p) != NULL)
+				if(p1->getBolsa()->getElementAt(p)->getID() != NULL)
+				{
+					tempItem[9][0] = p1->getBolsa()->getElementAt(p)->getID();
+					tempItem[9][1] = p1->getBolsa()->getElementAt(p)->getDurability();
+					tempItem[9][2] = 0;
+					tempItem[9][3] = 0;
+					tempItem[9][4] = 0;
+					tempItem[9][5] = 0;
+					tempItem[9][6] = 0;
+					tempItem[9][7] = 0;
+				}
+				else
+				{
+					tempItem[9][0] = -1;
+					tempItem[9][1] = 0;
+					tempItem[9][2] = 0;
+					tempItem[9][3] = 0;
+					tempItem[9][4] = 0;
+					tempItem[9][5] = 0;
+					tempItem[9][6] = 0;
+					tempItem[9][7] = 0;
+				}				
+			
+			}
+
+			if(p1->getEquip() != NULL)
+			if(p1->getEquip()->arma != NULL)
+			if(p1->getEquip()->arma->getID() != NULL)
+			{
+				tempItem[9][0] = p1->getEquip()->arma->getID();
+				tempItem[9][1] = p1->getEquip()->arma->getDurability();
+				tempItem[9][2] = p1->getEquip()->arma->getMod();
+				tempItem[9][3] = p1->getEquip()->arma->getMinDamage();
+				tempItem[9][4] = p1->getEquip()->arma->getMaxDamage();
+				tempItem[9][5] = p1->getEquip()->arma->getSpeed();
+				tempItem[9][6] = p1->getEquip()->arma->getRange();
+				tempItem[9][7] = p1->getEquip()->arma->getMagicLevel();
+			}
+			else
+			{
+				tempItem[9][0] = -1;
+				tempItem[9][1] = 0;
+				tempItem[9][2] = 0;
+				tempItem[9][3] = 0;
+				tempItem[9][4] = 0;
+				tempItem[9][5] = 0;
+				tempItem[9][6] = 0;
+				tempItem[9][7] = 0;
+			}
+
+			if(p1->getEquip() != NULL)
+			if(p1->getEquip()->armadura != NULL)
+			if(p1->getEquip()->armadura->getID() != NULL)
+			{
+				tempItem[10][0] = p1->getEquip()->armadura->getID();
+				tempItem[10][1] = p1->getEquip()->armadura->getDurability();
+				tempItem[10][2] = p1->getEquip()->armadura->getDef();
+				tempItem[10][3] = p1->getEquip()->armadura->getMagicLevel();
+				tempItem[10][4] = 0;
+				tempItem[10][5] = 0;
+				tempItem[10][6] = 0;
+				tempItem[10][7] = 0;
+
+			}
+			else
+			{
+				tempItem[10][0] = -1;
+				tempItem[10][1] = 0;
+				tempItem[10][2] = 0;
+				tempItem[10][3] = 0;
+				tempItem[10][4] = 0;
+				tempItem[10][5] = 0;
+				tempItem[10][6] = 0;
+				tempItem[10][7] = 0;
+			}
+
+			//ARMA
+			//IRVALBONUS1 = DURABILIDADE DO ITEM
+			//IRVALBONUS2 = MODIFICADOR ARMA
+			//IRVALBONUS3 = DANO MINIMO
+			//IRVALBONUS4 = DANO MAXIMO
+			//IRVALBONUS5 = TAXA ATAQUE
+			//IRVALBONUS6 = ALCANCE
+			//IRVALBONUS7 = NIVEL MAGICO
+
+			//ARMADURA
+			//IRVALBONUS1 = DURABILIDADE DO ITEM
+			//IRVALBONUS2 = DEFESA
+			//IRVALBONUS3 = NIVEL MAGICO
+			//IRVALBONUS4 = 0
+			//IRVALBONUS5 = 0
+			//IRVALBONUS6 = 0
+			//IRVALBONUS7 = 0
+
+			for(int p = 0; p < 11; p++)
+			{
+				if(tempItem[p][0] != -1)
+				{
+					query = L"INSERT INTO ITEM_RELACIONAL(ITID, PGID, IRVALBONUS1, "
+							+"IRVALBONUS2, IRVALBONUS3, IRVALBONUS4, IRVALBONUS5,  "
+							+"IRVALBONUS6, IRVALBONUS7) VALUES ( "
+							+tempItem[p][0]+", "+p1->getID()+", "+tempItem[p][1]+", "
+							+tempItem[p][2]+", "+tempItem[p][3]+", "+tempItem[p][4]+", "
+							+tempItem[p][5]+", "+tempItem[p][6]+", "+tempItem[p][7]+")";
+
+					_dataBase->insertNow(toChar(query));
+				}
+			}
+			
+			//DEPOIS DE DESCOBRIR COMO FUNCIONARÁ O SISTEMA DE PODER COLOCAREI A VINCULAÇÃO DELE AKI
+
+
+			//ATUALIZA O CENÁRIO NO JOGADOR SE ENCONTRA
+
+			query = L"UPDATE PERSONAGEM_CENARIO SET CNID = "+p1->getScene()->getSceneID()
+					+", PGID = "+p1->getID()+" WHERE PGID = "+p1->getID();
+
+			_dataBase->updateNow(toChar(query));
+
+		}
+	}
+			
 }

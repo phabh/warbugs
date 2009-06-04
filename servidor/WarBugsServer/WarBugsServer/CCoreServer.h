@@ -83,6 +83,8 @@ ref class CCoreServer
 
 		void			sendAllMessages();
 
+		void            backupAll();
+
 		//mensagens para enviar para o cliente
 		/*
 			funcoes para enviar mensagem para o cliente
@@ -105,6 +107,7 @@ ref class CCoreServer
 		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6);
 		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, char * mensagem);
 		static void		sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int v1[30], int v2[30]);
+		static void     sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10, int i11, int i12, int i13, int i14, int i15, int i16, int i17);
 		static void		sendMessagesFrame(CPlayerList * cList);
 };
 #endif

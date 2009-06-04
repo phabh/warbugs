@@ -1,4 +1,5 @@
 #include "CCoreServer.h"
+#include "FunctionsCommom.h"
 #include "CDataManager.h"
 #include <math.h>
 
@@ -285,7 +286,7 @@ void CCoreServer::readPackets()
 							}
 
 							//manda para o player os NPCS
-							for(int p = 0; p < _cenarioList->getElementAt(posCenario)->npcCount(); p++)
+							for(int p = 0; p < _cenarioList->getElementAt(posCenario)->NPCCount(); p++)
 							{
 								CNPC * tempNPC = _cenarioList->getElementAt(posCenario)->getNpcAt(p);
 
@@ -467,9 +468,9 @@ void CCoreServer::readPackets()
 							{
 								tempBolsa->setOpen(true);
 
-								int temp[10];
+								int temp[9];
 
-								for(int p = 0; p < 10; p++)
+								for(int p = 0; p < 9; p++)
 								{
 									if(tempBolsa->getElementAt(p) != NULL)
 									{
@@ -486,7 +487,7 @@ void CCoreServer::readPackets()
 									}
 								}
 
-								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)OPENED_BOLSA, tempBolsa->getSceneID(), temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7], temp[8], temp[9]);
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)OPENED_BOLSA, tempBolsa->getSceneID(), temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7], temp[8]);
 							}
 							else
 							{
@@ -514,7 +515,7 @@ void CCoreServer::readPackets()
 
 						if(tempBolsa == NULL)
 						{
-							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)CLOSED_BOLSA_FAIL);
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)CLOSE_BOLSA_FAIL);
 							tempBolsa = NULL;
 							delete tempBolsa;
 
@@ -684,7 +685,9 @@ void CCoreServer::readPackets()
 
 						strcpy_s(mensagem,mesRecebida.getSize(),mesRecebida.readString());
 
-						System::String ^ mes = gcnew System::String(L""+_playersList->getElementAt(indexJogador)->getCharacter()->getName()+": "+mensagem);
+						System::String ^ nome = gcnew System::String(_playersList->getElementAt(indexJogador)->getCharacter()->getName());
+						System::String ^ mensagemString = gcnew System::String(mensagem);
+						System::String ^ mes = gcnew System::String(L""+nome+": "+mensagemString);
 
 						if(idPersonagem == -1)
 						{
@@ -742,7 +745,7 @@ void CCoreServer::readPackets()
 						int poder2 = _playersList->getElementAt(indexJogador)->getCharacter()->getSkillLevel(1);
 						int poder3 = _playersList->getElementAt(indexJogador)->getCharacter()->getSkillLevel(2);
 
-						sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOW_FULL_STATUS, agilidade, destreza, forca, instinto, resistência, ataque, dano, defesa, velocidade, lealdade_aranha, lealdade_besouro, lealdade_escorpiao, lealdade_louva, lealdade_vespa, poder1, poder2, poder3);
+						sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOW_FULL_STATUS, agilidade, destreza, forca, instinto, resistencia, ataque, dano, defesa, velocidade, lealdade_aranha, lealdade_besouro, lealdade_escorpiao, lealdade_louva, lealdade_vespa, poder1, poder2, poder3);
 						break;
 					}
 				case SEND_BONUS_POINTS: //ID PERSONAGEM,VETOR EM ORDEM ALFABETICA COM QTD PONTOS DA HABILIDADE PRIMARIA USADA E A QUANTIDADE DE PONTOS DE SKILL(PODER)[PODER1,PODER2,PODER3]
@@ -793,7 +796,7 @@ void CCoreServer::readPackets()
 						instinto	= _playersList->getElementAt(indexJogador)->getCharacter()->getINS();
 						resistencia = _playersList->getElementAt(indexJogador)->getCharacter()->getRES();
 						
-						sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOW_FULL_STATUS, agilidade, destreza, forca, instinto, resistência, ataque, dano, defesa, velocidade, lealdade_aranha, lealdade_besouro, lealdade_escorpiao, lealdade_louva, lealdade_vespa, poder1, poder2, poder3);
+						sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOW_FULL_STATUS, agilidade, destreza, forca, instinto, resistencia, ataque, dano, defesa, velocidade, lealdade_aranha, lealdade_besouro, lealdade_escorpiao, lealdade_louva, lealdade_vespa, poder1, poder2, poder3);
 
 						break;
 					}
@@ -822,7 +825,7 @@ void CCoreServer::readPackets()
 						CBugMessage tempMes;
 						tempMes.init(data,sizeof(data));
 
-						CVendedor * tempVendedor = _playersList->getElementAt(indexJogador)->getScene()->getVendedor(idNPC);
+						CVendedor * tempVendedor = _playersList->getElementAt(indexJogador)->getScene()->getSalesman(idNPC);
 
 						tempMes.writeByte(SHOW_SHOP);
 						for(int p = 0; p < tempVendedor->getBolsa()->size(); p++)
@@ -967,6 +970,10 @@ void CCoreServer::readPackets()
 						int idJogador			= mesRecebida.readInt();
 						int idPersonagem1		= mesRecebida.readInt();
 						int idPersonagem2		= mesRecebida.readInt();
+						int idItem1;
+						int dinheiro1;
+						int idItem2;
+						int dinheiro2;
 
 						_playersList->getElementAt(indexJogador)->getCharacter()->setTradeConfirmated(true);
 
@@ -975,11 +982,11 @@ void CCoreServer::readPackets()
 						//se os dois envolvidos na troca confirmarem a troca
 						if(tempPers->isTradeConfirmated())
 						{
-							int idItem1   = _playersList->getElementAt(indexJogador)->getCharacter()->getIDItemTrade();
-							int dinheiro1 = _playersList->getElementAt(indexJogador)->getCharacter()->getIDMoneyTrade();
+							idItem1   = _playersList->getElementAt(indexJogador)->getCharacter()->getIDItemTrade();
+							dinheiro1 = _playersList->getElementAt(indexJogador)->getCharacter()->getIDMoneyTrade();
 
-							int idItem2   = tempPers->getIDItemTrade();
-							int dinheiro2 = tempPers->getIDMoneyTrade();
+							idItem2   = tempPers->getIDItemTrade();
+							dinheiro2 = tempPers->getIDMoneyTrade();
 
 							CItem * tempItem1 = _playersList->getElementAt(indexJogador)->getCharacter()->getBolsa()->removeItem(idItem1);
 							CItem * tempItem2 = tempPers->getBolsa()->removeItem(idItem2);
@@ -990,8 +997,8 @@ void CCoreServer::readPackets()
 							tempPers->addItem(tempItem1);
 							tempPers->addMoney(dinheiro1);
 
-							sendMessage( false, -1, _playersList->getElementAt(indexJogador)->getCharacter()->getSocket(), (int)TRADE_CONCLUDE, idPersonagem1, idPersonagem2, idItemPersonagem1, idItemPersonagem2, dinheiroPersonagem1, dinheiroPersonagem2);
-							sendMessage( false, -1, tempPers->getSocket(), (int)TRADE_CONCLUDE, idPersonagem2, idPersonagem1, idItemPersonagem2, idItemPersonagem1, dinheiroPersonagem2, dinheiroPersonagem1);
+							sendMessage( false, -1, _playersList->getElementAt(indexJogador)->getCharacter()->getSocket(), (int)TRADE_CONCLUDE, idPersonagem1, idPersonagem2, idItem1, idItem2, dinheiro1, dinheiro2);
+							sendMessage( false, -1, tempPers->getSocket(), (int)TRADE_CONCLUDE, idPersonagem2, idPersonagem1, idItem2, idItem1, dinheiro2, dinheiro1);
 
 							_playersList->getElementAt(indexJogador)->getCharacter()->setIDTrader(-1);
 							_playersList->getElementAt(indexJogador)->getCharacter()->setIDItemTrade(-1);
@@ -1008,7 +1015,7 @@ void CCoreServer::readPackets()
 						}
 						else
 						{
-							sendMessage( false, -1, tempPers->getSocket(), (int)TRADE_ACCEPTED, idPersonagem2, idPersonagem1, idItemPersonagem2, idItemPersonagem1, dinheiroPersonagem2, dinheiroPersonagem1);
+							sendMessage( false, -1, tempPers->getSocket(), (int)TRADE_ACCEPTED, idPersonagem2, idPersonagem1, idItem2, idItem1, dinheiro2, dinheiro1);
 						}
 
 						break;
@@ -1556,7 +1563,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 	sendMessage(toAll, idCenario, destino, mes);
 }
 
-void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10, int i11, int i12, int i13, int i14, int i15, int i16, int i17, int i18)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10, int i11, int i12, int i13, int i14, int i15, int i16, int i17)
 {
 	char data[1400];
 	CBugMessage mes;
@@ -1580,8 +1587,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 	mes.writeInt(i14);
 	mes.writeInt(i15);
 	mes.writeInt(i16);
-	mes.writeInt(i17);
-	mes.writeInt(i18);	
+	mes.writeInt(i17);	
 	sendMessage(toAll, idCenario, destino, mes);
 }
 
@@ -1705,3 +1711,25 @@ void CCoreServer::sendAllMessages()
 	sendMessagesFrame(_playersList);
 }
 
+
+/*
+	Salvará todas as informações que estão na memória, para o servidor
+*/
+void CCoreServer::backupAll()
+{
+
+	// 1. Salva Persoangens
+		// 1.1 Update do personagem e todas as suas variaveis
+	// 2. Salva Itens Personagens
+		// 2.1 Remove itens que não estão mais com o personagem
+		// 2.2 Atualiza os que ainda estão com ele(inclusive a durabilidade, mas no relacionamento)
+		// 2.3 Insere os novos itens que o persoangem possui
+	// 3. Salva Poderes do Personagem
+		// 3.1 Atualiza as informações dos poderes que o personagem possui
+	// 4. Salva Informações da formula de mercado se o personagem for o vendedor
+		// 4.1 Insere as informações que o vendedor possui naquele momento
+	// 5. Salva o Cénario
+		// 5.1 Atualiza a Localização de todos os Personagens
+
+	//
+}

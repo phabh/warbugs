@@ -11,13 +11,16 @@ class CBolsa : public C3DObject
 private:
 	SElemento *_first;
 	int _size;
+	bool _open;
 
 public:
 	CBolsa(void);
 	CBolsa(CItem * item);
 
+	bool isOpen();
 	bool isEmpty();
 	int size();
+	void setOpen(bool isopen);
 	void addItem(CItem *item);
 	CItem *removeItemByPosition(int pos);
 	CItem *removeItem(int ID);
