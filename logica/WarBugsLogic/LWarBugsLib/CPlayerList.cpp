@@ -50,7 +50,7 @@ void CPlayerList::addJogador(CJogador *Jogador)
 	nodo = NULL;
 	delete nodo;
 }
-CJogador *CPlayerList::removeJogadorByPosition(int pos)
+CJogador *CPlayerList::removeJogadorAt(int pos)
 {
 	SPlayerElemento *temp = _first;
 	if(pos < size())

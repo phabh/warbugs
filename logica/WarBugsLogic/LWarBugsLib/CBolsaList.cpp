@@ -50,7 +50,7 @@ void CBolsaList::addBag(CBolsa *bolsa)
 	nodo = NULL;
 	delete nodo;
 }
-CBolsa *CBolsaList::removeBolsaByPosition(int pos)
+CBolsa *CBolsaList::removeBagAt(int pos)
 {
 	SBagElemento *temp = _first;
 	if(pos < size())
@@ -91,12 +91,46 @@ CBolsa *CBolsaList::removeBolsaByPosition(int pos)
 		return(NULL);
 	}
 }
-CBolsa *CBolsaList::removeBolsa(int ID)
+CBolsa *CBolsaList::removeBag(int ID)
 {
 	SBagElemento *temp = _first;
 	while(temp->next != NULL)
 	{
 		if((temp->valor)->getID() == ID)
+		{
+			if(temp->prev != NULL)
+				(temp->prev)->next = temp->next;
+			else
+			{
+				_first = temp->next;
+				_first->next = (temp->next)->next;
+				_first->prev = NULL;
+			}
+
+			if(temp->next != NULL)
+				(temp->next)->prev = temp->prev;
+			else
+			{
+				(temp->prev)->next = NULL;
+			}
+			_size = _size - 1;
+			return(temp->valor);
+		}
+		else
+		{
+			temp = temp->next;
+		}
+	}
+	temp = NULL;
+	delete temp;
+	return(NULL);
+}
+CBolsa *CBolsaList::removeSceneBag(int ID)
+{
+	SBagElemento *temp = _first;
+	while(temp->next != NULL)
+	{
+		if((temp->valor)->getSceneID() == ID)
 		{
 			if(temp->prev != NULL)
 				(temp->prev)->next = temp->next;
@@ -158,12 +192,30 @@ CBolsa *CBolsaList::removeBolsa(int ID)
 	delete temp;
 	return(NULL);
 }*/
-CBolsa *CBolsaList::getBolsa(int IDbolsa)
+CBolsa *CBolsaList::getBag(int IDbolsa)
 {
 	SBagElemento *temp = _first;
 	while(temp->next != NULL)
 	{
 		if((temp->valor)->getID() == IDbolsa)
+		{
+			return(temp->valor);
+		}
+		else
+		{
+			temp = temp->next;
+		}
+	}
+	temp = NULL;
+	delete temp;
+	return(NULL);
+}
+CBolsa *CBolsaList::getSceneBag(int IDbolsa)
+{
+	SBagElemento *temp = _first;
+	while(temp->next != NULL)
+	{
+		if((temp->valor)->getSceneID() == IDbolsa)
 		{
 			return(temp->valor);
 		}
@@ -186,7 +238,7 @@ CBolsa *CBolsaList::getElementAt(int index)
 	}
 	return(temp->valor);
 }
-bool CBolsaList::haveBolsa(int ID)
+bool CBolsaList::haveBag(int ID)
 {
 	SBagElemento *temp = _first;
 	while(temp->next != NULL)

@@ -103,7 +103,7 @@ void CPoder::ariete(CPersonagemJogador *user, CPersonagem *target, int level)
 		user->getStats()->addPM(1);
 	}
 }
-void strike(CPersonagemJogador *user, int level)
+void CPoder::strike(CPersonagemJogador *user, int level)
 {
 	CBuff *temp;
 	if(user->getStats()->addPM(-1)&&(user->getStats()->getChargeTime() >= 50))
@@ -138,6 +138,27 @@ void strike(CPersonagemJogador *user, int level)
 		user->getStats()->addPM(1);
 	}
 }
+void CPoder::stealItem(CPersonagem *user, CPersonagem *target)
+{
+	int indexToSteal = (clock()%target->inventario->size());
+	CItem *temp;
+	if(user->tryAttack())
+	{
+		temp = target->inventario->removeItemAt(indexToSteal);
+		user->inventario->addItem(temp);
+	}
+	temp = NULL;
+	delete temp;
+}
+void CPoder::breakItem(CPersonagem *user, CPersonagem *target)
+{
+}
+void CPoder::lightSpeed(CPersonagem *user)
+{
+}
+void CPoder::explode(CPersonagem *user)
+{
+}
 //RaceTypes
 void CPoder::beetleSkills(CPersonagemJogador *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target)
 {
@@ -154,7 +175,29 @@ void CPoder::beetleSkills(CPersonagemJogador *user, TipoPoder skillIndex, int sk
 		break;
 	}
 }
-
+void CPoder::antSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target)
+{
+	switch(skillIndex)
+	{
+	case SK_STEAL:
+		stealItem(user, target);
+		break;
+	default:
+		break;
+	}
+}
+void CPoder::termiteSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL)
+{
+}
+void CPoder::shaverSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL)
+{
+}
+void CPoder::lizardSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL)
+{
+}
+void CPoder::ladybugSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL)
+{
+}
 void CPoder::cast(CPersonagem *user, Raca userRace, TipoPoder skillIndex, int skillLevel, CPersonagem *target)
 {
 	switch(userRace)

@@ -22,10 +22,12 @@ public:
 	int size();
 	void setOpen(bool isopen);
 	void addItem(CItem *item);
-	CItem *removeItemByPosition(int pos);
+	CItem *removeItemAt(int pos);
 	CItem *removeItem(int ID);
+	CItem *removeSceneItem(int sceneID);
 	//CItem *removeItem(CItem *item);
 	CItem *getItem(int IDItem);
+	CItem *getSceneItem(int sceneID);
 	CItem *getElementAt(int index);
 
 	bool haveItem(int ID);

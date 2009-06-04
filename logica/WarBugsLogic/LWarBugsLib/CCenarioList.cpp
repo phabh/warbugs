@@ -50,7 +50,7 @@ void CCenarioList::addCenario(CCenario *Cenario)
 	nodo = NULL;
 	delete nodo;
 }
-CCenario *CCenarioList::removeCenarioByPosition(int pos)
+CCenario *CCenarioList::removeCenarioAt(int pos)
 {
 	SCenarioElemento *temp = _first;
 	if(pos < size())

@@ -31,7 +31,7 @@ public:
 	void giveQuest (CPersonagemJogador *alvo);
 
 	void attack();
-	void takeDamage(int damage);
+	void takeDamage(int damage, CPersonagem *atkr);
 	void die();
 	void useItem(CItem *item);
 

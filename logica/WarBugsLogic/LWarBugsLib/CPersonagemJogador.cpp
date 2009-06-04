@@ -23,7 +23,7 @@ CPersonagemJogador::CPersonagemJogador()
 	habilidadesSecundarias = new CHabilidadesSecundarias();
 	bonusSecundario = new CBonusSecundario();
 	status = new CBuffList();
-	setState(PARADO);
+	setState(E_PARADO);
 	setMoney(0);
 	setBolsa(new CBolsa());
 	setStats(new CHabilidadesSecundarias());
@@ -481,7 +481,7 @@ void CPersonagemJogador::takeDamage(int damage, CPersonagem *atkr)
 	habilidadesSecundarias->addPV((-1)*damage);
 	divisorxp->addAttacker(atkr, damage);
 }
-void CPersonagemJogador::attack()
+bool CPersonagemJogador::tryAttack()
 {
 	int testValue = 0;
 	if((this->getDistanceToPoint(alvo->getPosition()) <= _range))
@@ -490,9 +490,23 @@ void CPersonagemJogador::attack()
 
 		if(testValue > alvo->getStats()->getDefense())
 		{
-			testValue = _dano;
-			alvo->takeDamage(testValue, this);
+			return(true);
 		}
+		else
+		{
+			return(false);
+		}
+	}
+	else
+	{
+		return(false);
+	}
+}
+void CPersonagemJogador::attack()
+{
+	if(tryAttack())
+	{
+		alvo->takeDamage(_dano, this);
 	}
 }
 //Level Up
@@ -572,5 +586,6 @@ void CPersonagemJogador::die()
 }
 void CPersonagemJogador::update()
 {
+	status->executeBuffs(this, this->status);
 }
 #endif

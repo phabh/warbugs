@@ -23,7 +23,7 @@ CVendedor::CVendedor()
 	habilidadesSecundarias = new CHabilidadesSecundarias();
 	bonusSecundario = new CBonusSecundario();
 	status = new CBuffList();	
-	setState(PARADO);
+	setState(E_PARADO);
 	setMoney(0);
 	setBolsa(new CBolsa());
 	setStats(new CHabilidadesSecundarias());
@@ -207,9 +207,10 @@ void CVendedor::sell(CPersonagemJogador *comprador, CItem *item)
 void CVendedor::attack()
 {
 }
-void CVendedor::takeDamage(int damage)
+void CVendedor::takeDamage(int damage, CPersonagem *atkr)
 {
 	this->getStats()->addPV((-1)*damage);
+	divisorxp->addAttacker(atkr, damage);
 }
 void CVendedor::die()
 {
@@ -219,6 +220,7 @@ void CVendedor::useItem(CItem *item)
 }
 void CVendedor::update()
 {
+	status->executeBuffs(this, this->status);
 	if((destino->x != this->getPosition()->x)||(destino->z != this->getPosition()->z))
 	{
 		this->move();

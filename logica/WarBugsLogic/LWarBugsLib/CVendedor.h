@@ -59,7 +59,7 @@ public:
 	void sell(CPersonagemJogador *comprador, CItem *item);
 
 	void attack();
-	void takeDamage(int damage);
+	void takeDamage(int damage, CPersonagem *atkr);
 	void die();
 	void useItem(CItem *item);
 

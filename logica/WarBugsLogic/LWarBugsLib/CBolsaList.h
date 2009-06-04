@@ -19,11 +19,13 @@ public:
 	bool isEmpty();
 	int size();
 	void addBag(CBolsa *Bolsa);
-	CBolsa *removeBolsaByPosition(int pos);
-	CBolsa *removeBolsa(int ID);
+	CBolsa *removeBagAt(int pos);
+	CBolsa *removeBag(int ID);
+	CBolsa *removeSceneBag(int sceneID);
 	//CBolsa *removeBolsa(CBolsa *Bolsa);
-	CBolsa *getBolsa(int IDBolsa);
+	CBolsa *getBag(int IDBolsa);
+	CBolsa *getSceneBag(int sceneID);
 	CBolsa *getElementAt(int index);
 
-	bool haveBolsa(int ID);
+	bool haveBag(int ID);
 };

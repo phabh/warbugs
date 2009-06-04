@@ -12,7 +12,7 @@
 
 #include "C3DObject.h"
 
-C3DObject::C3DObject()
+void C3DObject::initC3DObject()
 {
 	coordenada = NULL;
 	modelo = -1;
@@ -20,7 +20,7 @@ C3DObject::C3DObject()
 	textura3D = -1;
 	animacao = -1;
 }
-C3DObject::C3DObject(Ponto *posicao, int modeloID, int textura3DID, int animacaoID, int textura2DID)
+void C3DObject::initC3DObject(Ponto *posicao, int modeloID, int textura3DID, int animacaoID, int textura2DID)
 {
 	coordenada = posicao;
 	modelo = modeloID;
@@ -28,7 +28,7 @@ C3DObject::C3DObject(Ponto *posicao, int modeloID, int textura3DID, int animacao
 	textura3D = textura3DID;
 	animacao = animacaoID;
 }
-C3DObject::C3DObject(float x, float z, int modeloID, int textura3DID, int animacaoID, int textura2DID)
+void C3DObject::initC3DObject(float x, float z, int modeloID, int textura3DID, int animacaoID, int textura2DID)
 {
 	coordenada->x = x;
 	coordenada->z = z;
@@ -91,5 +91,4 @@ float C3DObject::getDistanceToPoint(Ponto *ponto)
 {
 	return(modulo(coordenada->x - ponto->x) + modulo(coordenada->z - ponto->z));
 }
-//Métodos CObject
 #endif
