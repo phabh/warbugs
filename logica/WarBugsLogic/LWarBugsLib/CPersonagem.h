@@ -111,6 +111,7 @@ public:
 	void addXP(int value);
 	//Outros métodos
 	void move();
+	virtual bool tryAttack()=0;
 	virtual void attack()=0;
 	virtual void takeDamage(int damage, CPersonagem *atkr)=0;
 	virtual void die()=0;

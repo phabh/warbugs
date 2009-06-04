@@ -142,6 +142,7 @@ public:
 	void speakToNPC(CPersonagem *alvo);
 	//Batalha
 	void takeDamage(int damage, CPersonagem *atkr);
+	bool tryAttack();
 	void attack();
 	//Level Up
 	void updateXP();

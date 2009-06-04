@@ -71,7 +71,7 @@ int CCenario::playerCount()
 {
 	return(_jogadores->size());
 }
-int CCenario::itemCount()
+int CCenario::bagCount()
 {
 	return(_itens->size());
 }
@@ -102,7 +102,7 @@ CNPC *CCenario::getNpc(int idNpc)
 }
 CBolsa *CCenario::getBag(int idBag)
 {
-	return (_itens->getBolsa(idBag));
+	return (_itens->getBag(idBag));
 }
 CVendedor *CCenario::getSalesman(int idVendedor)
 {
@@ -216,7 +216,7 @@ CNPC *CCenario::removeNPC(int idNPC)
 }
 CBolsa *CCenario::removeBag(int idBag)
 {
-	CBolsa *temp = (CBolsa*)_itens->removeBolsa(idBag);
+	CBolsa *temp = (CBolsa*)_itens->removeBag(idBag);
 	_contador->removeID(temp->getSceneID());
 	return(temp);
 	//return((CBolsa*)_itens->removeBolsa(idBag));

@@ -33,7 +33,7 @@ public:
 	bool isEmpty();
 	int size();
 	void addBuff(CBuff *Buff);
-	CBuff *removeBuffByPosition(int pos);
+	CBuff *removeBuffAt(int pos);
 	CBuff *removeBuff(int ID);
 	CBuff *removeBuff(CBuff *Buff);
 	CBuff *getBuff(int IDBuff);

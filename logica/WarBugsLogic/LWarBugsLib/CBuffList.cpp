@@ -51,7 +51,7 @@ void CBuffList::addBuff(CBuff *Buff)
 	nodo = NULL;
 	delete nodo;
 }
-CBuff *CBuffList::removeBuffByPosition(int pos)
+CBuff *CBuffList::removeBuffAt(int pos)
 {
 	SBuffElemento *temp = _first;
 	if(pos < size())

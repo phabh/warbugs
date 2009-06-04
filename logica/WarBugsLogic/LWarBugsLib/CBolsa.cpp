@@ -58,7 +58,7 @@ void CBolsa::addItem(CItem *item)
 	nodo = NULL;
 	delete nodo;
 }
-CItem *CBolsa::removeItemByPosition(int pos)
+CItem *CBolsa::removeItemAt(int pos)
 {
 	SElemento *temp = _first;
 	if(pos < size())
@@ -133,6 +133,40 @@ CItem *CBolsa::removeItem(int ID)
 	delete temp;
 	return(NULL);
 }
+CItem *CBolsa::removeSceneItem(int ID)
+{
+	SElemento *temp = _first;
+	while(temp->next != NULL)
+	{
+		if((temp->valor)->getSceneID() == ID)
+		{
+			if(temp->prev != NULL)
+				(temp->prev)->next = temp->next;
+			else
+			{
+				_first = temp->next;
+				_first->next = (temp->next)->next;
+				_first->prev = NULL;
+			}
+
+			if(temp->next != NULL)
+				(temp->next)->prev = temp->prev;
+			else
+			{
+				(temp->prev)->next = NULL;
+			}
+			_size = _size - 1;
+			return(temp->valor);
+		}
+		else
+		{
+			temp = temp->next;
+		}
+	}
+	temp = NULL;
+	delete temp;
+	return(NULL);
+}
 /*CItem *CBolsa::removeItem(CItem *item)
 {
 	SElemento *temp = _first;
@@ -173,6 +207,24 @@ CItem *CBolsa::getItem(int IDItem)
 	while(temp->next != NULL)
 	{
 		if((temp->valor)->getID() == IDItem)
+		{
+			return(temp->valor);
+		}
+		else
+		{
+			temp = temp->next;
+		}
+	}
+	temp = NULL;
+	delete temp;
+	return(NULL);
+}
+CItem *CBolsa::getSceneItem(int IDItem)
+{
+	SElemento *temp = _first;
+	while(temp->next != NULL)
+	{
+		if((temp->valor)->getSceneID() == IDItem)
 		{
 			return(temp->valor);
 		}

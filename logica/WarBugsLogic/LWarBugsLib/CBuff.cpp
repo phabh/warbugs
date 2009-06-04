@@ -247,6 +247,19 @@ void CBuff::execute(CPersonagem *jogador, CBuffList *lista)
 		}
 		break;
 	case STRIKE:
+		jogador->move();
+		for(int i = 0; i < jogador->getScene()->playerCount(); i = i+1)
+		{
+			if(jogador->getDistanceToPoint(jogador->getScene()->getPlayerAt(i)->getPosition()) <= MAXMELEERANGE)
+				((jogador->getScene()->getPlayerAt(i)))->takeDamage((-1)*_valor1, jogador);//getStats()->addPV((-1)*_valor2);
+		}
+		for(int i = 0; i < jogador->getScene()->monsterCount(); i = i + 1)
+		{
+			if(jogador->getDistanceToPoint(jogador->getScene()->getMonsterAt(i)->getPosition()) <= MAXMELEERANGE)
+			{
+				((jogador->getScene()->getMonsterAt(i)))->takeDamage((-1)*_valor1, jogador);//->getStats()->addPV((-1)*_valor2);
+			}
+		}
 		break;
 	case BACKSTAB:
 		break;

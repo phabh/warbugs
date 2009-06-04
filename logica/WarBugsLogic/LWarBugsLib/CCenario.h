@@ -39,7 +39,7 @@ public:
 	CCenario(int ID, CPeopleList *players, CPeopleList *monsters, CPeopleList *npcs, CPeopleList *vendedores, CBolsaList *bolsa, CPortal *saidaNorte, CPortal *saidaSul, CPortal *saidaLeft, CPortal *saidaRight);
 	void enterScene();
 	int playerCount();
-	int itemCount();
+	int bagCount();
 	int monsterCount();
 	int NPCCount();
 	int salesmanCount();

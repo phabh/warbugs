@@ -75,6 +75,27 @@ void CInimigo::takeDecision()
 		break;
 	}
 }
+bool CInimigo::tryAttack()
+{
+	int testValue = 0;
+	if((this->getDistanceToPoint(alvo->getPosition()) <= MAXMELEERANGE))
+	{
+		testValue = this->getStats()->getMeleeAttack();
+
+		if(testValue > alvo->getStats()->getDefense())
+		{
+			return(true);
+		}
+		else
+		{
+			return(false);
+		}
+	}
+	else
+	{
+		return(false);
+	}
+}
 void CInimigo::attack()
 {
 }
@@ -88,7 +109,7 @@ void CInimigo::die()
 	divisorxp->giveXP();
 	if(getStats()->getPV() <= 0)
 	{
-		estado = MORTO;
+		estado = E_MORTO;
 		respawn = ENEMYRESPAWNTIME;
 	}
 }
@@ -97,12 +118,13 @@ void CInimigo::useItem(CItem *item)
 }
 void CInimigo::update()
 {
+	status->executeBuffs(this, this->status);
 	if(respawn > 0)
 	{
 		respawn = respawn - 1;
 		if(respawn == 0)
 		{
-			estado = PARADO;
+			estado = E_PARADO;
 		}
 	}
 	else if(this->getTarget() != NULL)

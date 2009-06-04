@@ -204,10 +204,13 @@ enum TipoItem
 // ------------------------------------------------------------------------------------------------------------
 enum EstadoPersonagem
 {
-	PARADO,
-	ANDANDO,
-	MORTO,
-	FALANDO
+	E_PARADO,
+	E_ANDANDO,
+	E_ARIETE,
+	E_BERSERK,
+	E_STRIKE,
+	E_MORTO,
+	E_FALANDO
 };
 // ------------------------------------------------------------------------------------------------------------
 enum Direcoes 
@@ -222,7 +225,12 @@ enum TipoPoder
 {
 	SK_BERSERK_TORNADO, 
 	SK_ARIETE, 
-	SK_STRIKE
+	SK_STRIKE,
+	SK_STEAL,
+	SK_BREAK,
+	SK_STINK_GAS,
+	SK_LIGHT_SPEED,
+	SK_ATOMIC_EXPLOSION
 };
 // ------------------------------------------------------------------------------------------------------------
 /*DEFINES*/
