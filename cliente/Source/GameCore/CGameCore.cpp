@@ -31,7 +31,7 @@ CGameCore::CGameCore(int &startInit)
 	//_gameConfig->parametrosVideo.WindowSize.Height = 768;//desktop.bottom;
 	//_gameConfig->parametrosVideo.Fullscreen = true;
 
-	_dispositivoGrafico = createDevice(EDT_DIRECT3D9, 
+	_dispositivoGrafico = createDevice(EDT_OPENGL,//EDT_DIRECT3D9, 
 		_gameConfig.parametrosVideo.WindowSize, 
 		_gameConfig.parametrosVideo.Bits, 
 		_gameConfig.parametrosVideo.Fullscreen, 
