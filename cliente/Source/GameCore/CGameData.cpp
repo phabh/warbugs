@@ -3,7 +3,7 @@
 CGameData::CGameData(IrrlichtDevice *grafico)
 {
 	porcentagem = 0.0f;
-	_dataLoaded = 0.0f;
+	_dataLoaded = 0;
 
 	_dispositivo = grafico;
 
@@ -16,6 +16,8 @@ CGameData::CGameData(IrrlichtDevice *grafico)
 
 void CGameData::loadStage(int stage)
 {
+
+	
 	switch (stage) // Estágios de carregamento do jogo
 	{
 
@@ -24,7 +26,7 @@ void CGameData::loadStage(int stage)
 		{			
 			dataGeometryChars[i] = _gerenciadorCena->getMesh(pathCharsModels[i]);
 			_dataLoaded++;
-			porcentagem = _dataLoaded/_totalLoading*100.0f;
+			porcentagem = _dataLoaded/_totalLoading*100.00f;
 		}	          
 		break;
 
@@ -33,7 +35,7 @@ void CGameData::loadStage(int stage)
 		{
 			dataGeometryItens[i] = _gerenciadorCena->getMesh(pathItensModels[i]);
 			_dataLoaded++;
-			porcentagem = _dataLoaded/_totalLoading*100.0f;
+			porcentagem = _dataLoaded/_totalLoading*100.00f;
 		}	          
 		break;
 /*
@@ -51,7 +53,7 @@ void CGameData::loadStage(int stage)
 		{
 			dataTxChars[i] = _gerenciadorVideo->getTexture(pathTextureModels[i]);
 			_dataLoaded++;
-			porcentagem = _dataLoaded/_totalLoading*100.0f;
+			porcentagem = _dataLoaded/_totalLoading*100.00f;
 		}	          
 		break;
 
@@ -60,7 +62,7 @@ void CGameData::loadStage(int stage)
 		{
 			dataTxItens[i] = _gerenciadorVideo->getTexture(pathTextureItens[i]);
 			_dataLoaded++;
-			porcentagem = _dataLoaded/_totalLoading*100.0f;
+			porcentagem = _dataLoaded/_totalLoading*100.00f;
 		}	          
 		break;
 /*
@@ -78,7 +80,7 @@ void CGameData::loadStage(int stage)
 		{
 			dataTx2DItens[i] = _gerenciadorVideo->getTexture(pathTexture2D[i]);
 			_dataLoaded++;
-			porcentagem = _dataLoaded/_totalLoading*100.0f;
+			porcentagem = _dataLoaded/_totalLoading*100.00f;
 		}	          
 		break;
 
@@ -87,7 +89,7 @@ void CGameData::loadStage(int stage)
 		{
 			dataTxHuds[i] = _gerenciadorVideo->getTexture(pathTextureHud[i]);
 			_dataLoaded++;
-			porcentagem = _dataLoaded/_totalLoading*100.0f;
+			porcentagem = _dataLoaded/_totalLoading*100.00f;
 		}	          
 		break;
 	};

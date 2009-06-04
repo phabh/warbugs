@@ -44,12 +44,8 @@ void CMenuAbertura::readCommands()
 //-----------------------------------------------------------------------------------------------------------------
 
 void CMenuAbertura::updateGraphics() 
-{/*
-	_video = CVideoTexture::createVideoTexture(_dispGrafico, pathVideoAbertura);
-	_video->setVolume(100);
-	_video->playCutscene();
-	_video->drop();*/
-	_gameCore->playCutScene(CS_ABERTURA, 100);
+{
+	//_gameCore->playCutScene(CS_ABERTURA, 100);
 
 	_nextID = MN_LOGIN;
 }

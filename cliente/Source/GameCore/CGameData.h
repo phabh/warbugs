@@ -12,12 +12,13 @@ private:
 	IVideoDriver    *_gerenciadorVideo; 
 	ISceneManager   *_gerenciadorCena; 
 	IGUIEnvironment *_gerenciadorHud;
-
-	float porcentagem;   // Porcentagem de loading
-	float _totalLoading; // Total de elementos a carregar na memória
-	float _dataLoaded;   // Total de elementos carregados
+	
+	int _totalLoading; // Total de elementos a carregar na memória
+	int _dataLoaded;   // Total de elementos carregados
 
 public:
+
+	float porcentagem;   // Porcentagem de loading
 
 	ITexture *dataTxScenes[NUMCENARIOS], // Texturas dos cenários
 			 *dataTxProps[NUMPROPS],	 // Texturas dos objetos estáticos do cenário

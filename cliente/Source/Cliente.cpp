@@ -16,9 +16,10 @@ int main()
 
 	CGameCore *Warbugs = new CGameCore(feedbackInit); // Inicializa a engine e retorna o feedback
 
+
 	if(feedbackInit == SUCESSO)
 	{
-		Warbugs->loadGameData(); // Carrega os dados do jogo na memória
+		//Warbugs->loadGameData(); // Carrega os dados do jogo na memória
 
 		TypeMenuID nextMenu = MN_ABERTURA;
 

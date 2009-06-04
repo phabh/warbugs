@@ -48,6 +48,7 @@ bool CMenuCriacao::start(CGameCore *gameCore)
 
 void CMenuCriacao::graphicsDrawAddOn()
 {
+	_gameCore->contourAll(_gerCena->getRootSceneNode());
 }
 
 //-----------------------------------------------------------------------------------------------------------------
