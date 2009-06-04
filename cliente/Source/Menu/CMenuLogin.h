@@ -13,6 +13,8 @@ private:
 	char _login[15],
 		  _senha[15];
 
+	int _loadingStage;
+
 	void graphicsDrawAddOn();
 	void updateHuds();
 	void readCommands();

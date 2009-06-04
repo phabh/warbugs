@@ -31,13 +31,16 @@ CGameCore::CGameCore(int &startInit)
 	//_gameConfig->parametrosVideo.WindowSize.Height = 768;//desktop.bottom;
 	//_gameConfig->parametrosVideo.Fullscreen = true;
 
-	_dispositivoGrafico = createDevice(EDT_OPENGL,//EDT_DIRECT3D9, 
+	_dispositivoGrafico = createDevice(::EDT_OPENGL,//EDT_DIRECT3D9, 
 		_gameConfig.parametrosVideo.WindowSize, 
 		_gameConfig.parametrosVideo.Bits, 
 		_gameConfig.parametrosVideo.Fullscreen, 
 		_gameConfig.parametrosVideo.Stencilbuffer, 
 		_gameConfig.parametrosVideo.Vsync, 									
 		&_gerenciadorEventos);
+
+	sWidth = _gameConfig.parametrosVideo.WindowSize.Width;
+	sHeight = _gameConfig.parametrosVideo.WindowSize.Height;
 
 	if(!_dispositivoGrafico)
 	{
@@ -69,6 +72,9 @@ CGameCore::CGameCore(int &startInit)
 
 	_gameData = new CGameData(_dispositivoGrafico);
 	_gameScene = new CGameScene();
+
+	for(int i = 0; i < CS_COUNT; i++)
+		_cutScene[i] = CVideoTexture::createVideoTexture(_dispositivoGrafico, pathCutScene[i]);
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -118,6 +124,52 @@ IParticleSystemSceneNode* CGameCore::addPaticleNode(TypeParticle tipo, int tempo
 
 	return ps;
 }
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CGameCore::addContour(ISceneNode* oNode, f32 fThickness, SColor cColor)
+{
+	if(!oNode) 
+		return;
+
+	SMaterial tmat[MATERIAL_MAX_TEXTURES],
+		lmat;
+
+	lmat.DiffuseColor = lmat.SpecularColor = lmat.AmbientColor = lmat.EmissiveColor = cColor;
+	lmat.Lighting = true;
+	lmat.Wireframe = true;
+	lmat.Thickness = fThickness;
+	lmat.FrontfaceCulling = true;
+	lmat.BackfaceCulling = false;
+
+	for(u32 i=0; i<oNode->getMaterialCount(); i++)
+	{
+		tmat[i] = oNode->getMaterial(i);
+		oNode->getMaterial(i) = lmat;
+	}
+
+	oNode->render();
+
+	for(u32 i=0; i<oNode->getMaterialCount(); i++)
+		oNode->getMaterial(i) = tmat[i];
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CGameCore::contourAll(ISceneNode* node) 
+{ 
+	if (node->getType() == ESNT_MESH || node->getType() == ESNT_ANIMATED_MESH )
+	{
+		if( node->getAutomaticCulling() != EAC_OFF)
+			addContour(node);
+	}  
+	list<ISceneNode*>::ConstIterator begin = node->getChildren().begin(); 
+	list<ISceneNode*>::ConstIterator end   = node->getChildren().end(); 
+
+	for (; begin != end; ++begin) 
+		contourAll(*begin); 
+}
+
 //-----------------------------------------------------------------------------------------------------------------
 
 void CGameCore::drop()
@@ -179,7 +231,7 @@ void CGameCore::loadSkin(int idSkin)
 	IFileSystem* sistemaArquivos = _dispositivoGrafico->getFileSystem();
 
 	SImageGUISkinConfig hudCfg = LoadGUISkinFromFile(sistemaArquivos, _gerenciadorVideo, pathHudSkin[idSkin]);
-	
+
 	_gameSkin = new CHudImageSkin(_gerenciadorVideo, _gerenciadorHud->getSkin());
 
 	_gameSkin->loadConfig(hudCfg);
@@ -218,7 +270,7 @@ bool CGameCore::playCutScene( int idCutScene, int volume)
 		volume = 0;
 
 	_cutScene[idCutScene]->setVolume(volume);
-	
+
 	return _cutScene[idCutScene]->playCutscene();
 }
 
@@ -262,21 +314,37 @@ void CGameCore::createLight(ISceneNode *parent, vector3df posicao, f32 raio)
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-
+/*
 void CGameCore::loadGameData()
 {
-	//_Data = new CGameData(_dispositivoGrafico);
+//_Data = new CGameData(_dispositivoGrafico);
 
-	int estagio = 0; // estágio de loading
+_barraLoad = new CHudProgressBar(_gerenciadorHud->getRootGUIElement(), _gerenciadorHud, rect<s32>(10,150,610,180));
 
-	while(estagio < 6) // Carrega elementos do jogo
+_barraLoad->setProgress(0.0);
+
+int estagio = 0; // estágio de loading
+float progresso = 0.000;
+
+while(estagio < 6) // Carrega elementos do jogo
+{
+_gameData->loadStage(estagio);
+_barraLoad->setProgress(_gameData->porcentagem/100.00);
+estagio++;
+}
+
+_barraLoad->drop();	
+}*/
+
+void CGameCore::loadGameData(int stage)
+{
+	if(stage < LS_COUNT)
 	{
-		_gameData->loadStage(estagio);
-		estagio++;
+		_gameData->loadStage(stage);
+		_barraLoad->setProgress(_gameData->porcentagem/100.000);
 	}
-
-	for(int i = 0; i < CS_COUNT; i++)
-		_cutScene[i] = CVideoTexture::createVideoTexture(_dispositivoGrafico, pathCutScene[i]);
+	else if(stage == LS_COUNT)
+		_barraLoad->drop();
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -546,7 +614,7 @@ int CGameCore::receberPacote()
 
 		case SHOW_PERSONAGENS: // CODIGO: MOSTRAR PERSONAGENS DO JOGADOR
 
- 			_numMyChars = _packageReceived.readInt(); // número de personagens cadastrados
+			_numMyChars = _packageReceived.readInt(); // número de personagens cadastrados
 
 			for(int i=0; i<_numMyChars; i++)
 			{

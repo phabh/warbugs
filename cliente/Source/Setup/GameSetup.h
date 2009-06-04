@@ -78,7 +78,7 @@ const int AREABUSCA = LARGURABUSCA*LARGURABUSCA; // área de busca 10x10 quadrant
 // Game Data
 const int NUM3DITENS = 26; // Número de itens 3D no jogo
 const int NUM3DPERS = 44;  // Número de personagens 3D no jogo
-const int NUM2DOBJS = 38;  // Número de objetos 2D no jogo
+const int NUM2DOBJS = 39;  // Número de objetos 2D no jogo
 const int NUMMENUHUDS = 3; // Número de huds nos menus
 const int NUMMUSICAS = 4;  // Número de músicas do jogo
 
@@ -108,9 +108,10 @@ const f32 defMusicVol = 1.0;
 // Inicialização
 enum TypeReturn {ERRO, SUCESSO};
 
-
 // Menu
 enum TypeMenuID {MN_ABERTURA, MN_LOGIN, MN_SELECAOPERSONAGEM, MN_CRIACAOPERSONAGEM, MN_JOGO, MN_CREDITOS, MN_COUNT, MN_SAIDA, MN_ERRO};
+
+enum TypeLoadStage {LS_PERSONAGENS, LS_ITENS, LS_TXPERSONAGENS, LS_TXITENS, LS_HUDITENS, LS_HUDS, LS_COUNT};
 
 enum TypeMenuFlag {HUDUPDATED, OBJSELECTED, INVENTARIOON, CHATON, STATUSON, MAPAON, TRADEON, EQUIPON, SHOPON, BOLSAON, ALERTON, CONFIGON, FLAG_COUNT};
 

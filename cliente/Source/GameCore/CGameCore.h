@@ -96,7 +96,12 @@ private:
 	CVideoTexture *_cutScene[CS_COUNT];
 
 
+
 public:
+
+	int sWidth, sHeight;
+
+	CHudProgressBar* _barraLoad;
 
 	CGameData *_gameData;
 	CGameScene *_gameScene;
@@ -114,6 +119,7 @@ public:
 	CGameCore(int &startInit);
 	void drop();
 	void loadGameData();
+	void loadGameData(int stage);
 	IrrlichtDevice * getGraphicDevice();
 	ISoundEngine * getSoundDevice();
 	CGerEventos * getEventManager();
@@ -126,9 +132,13 @@ public:
 	void loadMenuScene(c8 *sceneFile);
 	int getNumCharSlots();
 	void loadGameScene(c8 *sceneFile);
+
 	ICameraSceneNode *createCamera( vector3df posicao, vector3df target = vector3df(0,0,100) , vector3df rotacao = vector3df(0,0,0), ISceneNode *parent = 0, f32 angulo = 179.0f/*bool isOrtogonal = true*/, bool bind = true);
 	void createLight(ISceneNode *parent, vector3df posicao, f32 raio);
-	
+
+	void addContour(ISceneNode* oNode, f32 fThickness = 3, SColor cColor = SColor(255,0,0,0));
+	void contourAll(ISceneNode* node);
+
 	bool conectar(char *login, char *password);
 	bool isConnected();
 	void enviarPacote(int packageID);
