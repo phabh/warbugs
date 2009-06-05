@@ -49,7 +49,6 @@ protected:
 	char nome[10];
 	Raca raca;
 	TypeClassChars tipo;
-	float baseMoveSpeed;
 	float direcao;
 	Ponto *destino;
 	EstadoPersonagem estado;
@@ -102,7 +101,6 @@ public:
 	void setType(TypeClassChars novotipo);
 	void setRespawnTime(int newTime);
 	void setDirection(float direction);
-	void setMoveSpeed(float newSpeed);
 	void setState(EstadoPersonagem newState);
 	void setMoney(int value);
 	void setBolsa(CBolsa *bolsa);
