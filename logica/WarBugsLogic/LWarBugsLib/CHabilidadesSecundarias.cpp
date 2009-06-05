@@ -40,15 +40,22 @@ CHabilidadesSecundarias::CHabilidadesSecundarias(int PV, int PM, int ATC, int AT
 CHabilidadesSecundarias::CHabilidadesSecundarias(CHabilidadesSecundarias *base)
 {
 	setID(-1);
-	_pv = base->getPV();
-	_pm = base->getPM();
-	_atqC = base->getMeleeAttack();
-	_atqD = base->getRangedAttack();
-	_danoC = base->getMeleeDamage();
-	_danoD = base->getRangedDamage();
-	_def = base->getDefense();
-	_atRt = base->getAttackRate();
-	_tc = base->getChargeTime();
+	if(base != NULL)
+	{
+		_pv = base->getPV();
+		_pm = base->getPM();
+		_atqC = base->getMeleeAttack();
+		_atqD = base->getRangedAttack();
+		_danoC = base->getMeleeDamage();
+		_danoD = base->getRangedDamage();
+		_def = base->getDefense();
+		_atRt = base->getAttackRate();
+		_tc = base->getChargeTime();
+	}
+	else
+	{
+		CHabilidadesSecundarias();
+	}
 }
 void CHabilidadesSecundarias::generate(CHabilidades *primarias, CEquipamento *equip)
 {
@@ -56,15 +63,33 @@ void CHabilidadesSecundarias::generate(CHabilidades *primarias, CEquipamento *eq
 	{
 		_pv = primarias->getRES() * 5;
 		_pm = primarias->getINS() * 5;
-		_atqC = primarias->getFOR() + equip->arma->getMod();
-		_danoC = (primarias->getFOR() * equip->arma->getMod());
-		if(equip->arma->getRange())
+		if(equip->arma != NULL)
 		{
-			_atqD = primarias->getDES() + equip->arma->getMod();
-			_danoD = (primarias->getDES() * equip->arma->getMod());
+			_atqC = primarias->getFOR() + equip->arma->getMod();
+			_danoC = (primarias->getFOR() * equip->arma->getMod());
+			if(equip->arma->getRange() > MAXMELEERANGE)
+			{
+				_atqD = primarias->getDES() + equip->arma->getMod();
+				_danoD = (primarias->getDES() * equip->arma->getMod());
+			}
+			_atRt = primarias->getAGI() + equip->arma->getSpeed();
 		}
-		_def = primarias->getRES() + (primarias->getAGI()/2);
-		_atRt = primarias->getAGI() + equip->arma->getSpeed();
+		else
+		{
+			_atqC = primarias->getFOR();
+			_danoC = primarias->getFOR();
+			_atqD = 0;
+			_danoD = 0;
+			_atRt = primarias->getAGI();
+		}
+		if(equip->armadura != NULL)
+		{
+			_def = primarias->getRES() + (primarias->getAGI()/2) + equip->armadura->getDef();
+		}
+		else
+		{
+			_def = primarias->getRES() + (primarias->getAGI()/2);
+		}
 		_tc = 100;
 	}
 	else

@@ -10,9 +10,14 @@
 #define _CPERSONAGEMJOGADOR_CPP_
 
 #include "CPersonagemJogador.h"
+#ifndef _CCENARIO_H_
+#include "CCenario.h"
+#endif
 
 CPersonagemJogador::CPersonagemJogador()
 {
+	initC3DObject();
+	initCPersonagem();
 	setID(-1);
 	coordenada = new Ponto();
 	dinheiro = 0;
@@ -31,7 +36,6 @@ CPersonagemJogador::CPersonagemJogador()
 	setBaseStats(new CHabilidades());
 	setBaseBonus(new CBonusPrimario());
 	setBuffs(new CBuffList());
-	_xpToNextLv = 0;
 	_pontoDistribuir = 0;
 	_lealdade = new CLealdade();
 	_quest = new CQuest(this);
@@ -66,10 +70,7 @@ int CPersonagemJogador::getSkillLevel(int skillIndex)
 		return(-1);
 	}
 }
-int CPersonagemJogador::getMaxXP()
-{
-	return(_xpToNextLv);
-}
+
 int CPersonagemJogador::getAttack()
 {
 	if(_range <= MAXMELEERANGE)
@@ -125,10 +126,6 @@ CBugSocket *CPersonagemJogador::getSocket()
 	return(_socketJogador);
 }
 //Setters
-void CPersonagemJogador::setXPToNextLv(int xp)
-{
-	_xpToNextLv = xp;
-}
 void CPersonagemJogador::setPointsToDistribute(int points)
 {
 	_pontoDistribuir = points;
@@ -221,15 +218,19 @@ void CPersonagemJogador::addItem(CItem *item)
 }
 void CPersonagemJogador::dropItem(CItem *item)
 {
+	CBolsa *temp = new CBolsa();
 	if((item->isDropable())&&(inventario->removeItem(item->getID()) != NULL))
 	{
-		item->setEstado(NOCHAO);
-		item->setPosition(this->getPosition());
+		temp->addItem(item);
+		temp->setPosition(this->getPosition());
+		getScene()->addBag(temp);
 	}
 	else
 	{
 		//ERRO: O ITEM NÃO ESTÁ NO INVENTRÁRIO
 	}
+	temp = NULL;
+	delete temp;
 }
 void CPersonagemJogador::useItem(CItem *item)
 {
@@ -256,17 +257,25 @@ void CPersonagemJogador::useItem(CItem *item)
 			//ERRO: EQUIPAMENTOS NÃO PODEM SER USADOS
 		}
 	}
+	else
+	{
+		//ERRO: NÃO PÓSSUI O ITEM INDICADO
+	}
 }
 void CPersonagemJogador::equip(CItem *item)
 {
+	//Possui o item?
 	if(this->haveItem(item))
 	{
+		//É arma?
 		if(item->getTipo() == ARMA)
 		{
-			if(_equip->arma == NULL)
+			//Estou equipado?
+			if(_equip->arma == NULL)//Se não estou equipado
 			{
 				_equip->arma = (CWeapon*)item;
 				item->setEstado(EQUIPADO);
+				habilidadesSecundarias->generate(habilidadesPrimarias, _equip);
 				if(_equip->arma->getRange() <= MAXMELEERANGE)
 				{
 					_ataque = habilidadesSecundarias->getMeleeAttack();
@@ -281,7 +290,7 @@ void CPersonagemJogador::equip(CItem *item)
 				_speed = _equip->arma->getSpeed();
 				_bareHands = false;
 			}
-			else if(inventario->size() < MAXITENS)
+			else if(inventario->size() < MAXITENS)//Se estou equipado e possuo espaço no inventário
 			{
 				CItem *temp = new CWeapon();
 				temp = _equip->arma;
@@ -289,6 +298,7 @@ void CPersonagemJogador::equip(CItem *item)
 				_equip->arma = (CWeapon*)item;
 				temp = NULL;
 				delete temp;
+				habilidadesSecundarias->generate(habilidadesPrimarias, _equip);
 				if(_equip->arma->getRange() <= MAXMELEERANGE)
 				{
 					_ataque = habilidadesSecundarias->getMeleeAttack();
@@ -314,6 +324,7 @@ void CPersonagemJogador::equip(CItem *item)
 			{
 				_equip->armadura = (CArmor*)item;
 				item->setEstado(EQUIPADO);
+				habilidadesSecundarias->generate(habilidadesPrimarias, _equip);
 			}
 			else if(inventario->size() < MAXITENS)
 			{
@@ -321,6 +332,7 @@ void CPersonagemJogador::equip(CItem *item)
 				temp = _equip->armadura;
 				inventario->addItem(temp);
 				_equip->armadura = (CArmor*)item;
+				habilidadesSecundarias->generate(habilidadesPrimarias, _equip);
 				temp = NULL;
 				delete temp;
 			}
@@ -341,17 +353,26 @@ void CPersonagemJogador::equip(CItem *item)
 }
 void CPersonagemJogador::unequip(CItem *item)
 {
-	if(_equip->arma == item)
+	if(_equip->arma->getID() == item->getID())
 	{
-		_equip->arma = NULL;
-		item->setEstado(NAMOCHILA);
-		_ataque = habilidadesPrimarias->getFOR();
-		_dano = habilidadesPrimarias->getFOR();
-		_range = MAXMELEERANGE;
-		_speed = habilidadesPrimarias->getAGI();
-		_bareHands = true;
+		if(inventario->size() < MAXITENS)
+		{
+			_equip->arma = NULL;
+			habilidadesSecundarias->generate(habilidadesPrimarias, _equip);
+			item->setEstado(NAMOCHILA);
+			inventario->addItem(item);
+			_ataque = habilidadesPrimarias->getFOR();
+			_dano = habilidadesPrimarias->getFOR();
+			_range = MAXMELEERANGE;
+			_speed = habilidadesPrimarias->getAGI();
+			_bareHands = true;
+		}
+		else
+		{
+			//ERRO: O INVENTÁRIO ESTÁ CHEIO
+		}
 	}
-	else if(_equip->armadura == item)
+	else if(_equip->armadura->getID() == item->getID())
 	{
 		_equip->arma = NULL;
 		item->setEstado(NAMOCHILA);
@@ -473,6 +494,7 @@ void CPersonagemJogador::acceptQuest(CQuest *quest)
 	_quest->setXPReward(quest->getXPReward());
 	_quest->setItemReward(quest->getItemReward());
 	_quest->setLoyaltyReward(quest->getLoyaltyReward());
+	_quest->beginQuest();
 }
 //Speaking
 void CPersonagemJogador::speakToPlayer(CPersonagemJogador *alvo){}
@@ -508,14 +530,21 @@ void CPersonagemJogador::attack()
 {
 	if(tryAttack())
 	{
-		alvo->takeDamage(_dano, this);
+		if(_bareHands)
+		{
+			alvo->takeDamage(_dano, this);
+		}
+		else
+		{
+			int dano = _dano +((clock()%(_equip->arma->getMaxDamage() - _equip->arma->getMinDamage()))+_equip->arma->getMinDamage());
+		}
 	}
 }
 //Level Up
 void CPersonagemJogador::updateXP(){/*Acessa banco de dados pra atualizar _xpToNextLv*/}
 bool CPersonagemJogador::haveLevelUp()
 {
-	if(experiencia >= _xpToNextLv)
+	if(experiencia >= xpToNextLv)
 	{
 		_pontoDistribuir = _pontoDistribuir + 5;
 		nivel = nivel + 1;

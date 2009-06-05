@@ -13,11 +13,16 @@
 
 #include "CBuff.h"
 
-CPersonagem::CPersonagem()
+#ifndef _CPODER_H_
+#include "CPoder.h"
+#endif
+
+void CPersonagem::initCPersonagem()
 {
 	setID(-1);
 	nivel = 1;
 	experiencia = 0;
+	xpToNextLv = 0;
 	dinheiro = 0;
 	baseMoveSpeed = 0;
 	habilidadesPrimarias = new CHabilidades();
@@ -36,6 +41,10 @@ int CPersonagem::getLevel()
 int CPersonagem::getXP()
 {
 	return(experiencia);
+}
+int CPersonagem::getMaxXP()
+{
+	return(xpToNextLv);
 }
 char *CPersonagem::getName()
 {
@@ -129,6 +138,10 @@ void CPersonagem::setLevel(int level)
 void CPersonagem::setXP(int xp)
 {
 	experiencia = xp;
+}
+void CPersonagem::setMaxXP(int xp)
+{
+	xpToNextLv = xp;
 }
 void CPersonagem::setName(char *name)
 {
@@ -233,5 +246,8 @@ void CPersonagem::move()
     setPosition(teste->x, teste->z);
 }
 //void CPersonagem::die(){}
-//void CPersonagem::useSkill(CPoder *skill){}
+void CPersonagem::useSkill(TipoPoder skill, int skillLevel)
+{
+	CPoder::cast(this, this->getRace(), skill, skillLevel, this->getTarget());
+}
 #endif
