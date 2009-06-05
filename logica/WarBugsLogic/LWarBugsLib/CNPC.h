@@ -30,6 +30,7 @@ public:
 	void speak(CPersonagemJogador *alvo);
 	void giveQuest (CPersonagemJogador *alvo);
 
+	bool tryAttack();
 	void attack();
 	void takeDamage(int damage, CPersonagem *atkr);
 	void die();
