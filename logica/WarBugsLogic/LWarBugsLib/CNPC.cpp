@@ -79,6 +79,10 @@ void CNPC::giveQuest(CPersonagemJogador *alvo)
 {
 	alvo->acceptQuest(_quest);
 }
+bool CNPC::tryAttack()
+{
+	return(true);
+}
 void CNPC::attack()
 {
 }

@@ -204,6 +204,10 @@ void CVendedor::sell(CPersonagemJogador *comprador, CItem *item)
 		comprador->getBolsa()->addItem(item);
 	}	
 }
+bool CVendedor::tryAttack()
+{
+	return(true);
+}
 void CVendedor::attack()
 {
 }
