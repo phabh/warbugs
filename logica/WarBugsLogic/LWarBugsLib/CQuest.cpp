@@ -153,6 +153,12 @@ bool CQuest::testItemPicked(CItem *item)
 		return(false);
 	}
 }
+void CQuest::beginQuest()
+{
+	_estado = Q_OPEN;
+	_monstrosDerrotados = 0;
+	_itensPossuidos = 0;
+}
 void CQuest::beginQuest(CPersonagemJogador *jogador, CPersonagem *npc, int itemID, int qtdItem, int monstID, int qtdMonst, int rewdXp, int rewdMny, CLealdade *rewdLdd, CItem *rewdItm)
 {
 	_estado = Q_OPEN;

@@ -17,6 +17,13 @@
 class CVendedor : public CPersonagem
 {
 private:
+	int _meta;
+	int _restanteMeta;
+	int _metaRateada;
+	int _tempoSemVender;
+	int _tecnicaDeMercado;
+	Ponto *_ancora;
+public:
 	static int _maxDemanda;
 	static int _minDemanda;
 	static int _maxOferta;
@@ -29,15 +36,7 @@ private:
 	static int _MEDIANADURABILIDADE;
 	static int _DESCONTOLEALDADE;
 	static int _DESCONTOTEMPO;
-	
 
-	int _meta;
-	int _restanteMeta;
-	int _metaRateada;
-	int _tempoSemVender;
-	int _tecnicaDeMercado;
-	Ponto *_ancora;
-public:
 	CVendedor();
 	CVendedor(EstadoPersonagem estado, int dinheiro, CBolsa *inventario, Ponto *ancora);
 

@@ -65,6 +65,7 @@ public:
 
 	bool testEnemyKilled(CPersonagem *personagem);
 	bool testItemPicked(CItem *item);
+	void beginQuest();
 	void beginQuest(CPersonagemJogador *jogador, CPersonagem *npc, int itemID, int qtdItem, int monstID, int qtdMonst, int rewdXp = 0, int rewdMny = 0, CLealdade *rewdLdd = new CLealdade(), CItem *rewdItm = NULL);
 	bool tryFinish();
 	void finishQuest();
