@@ -14,6 +14,7 @@
 #include "Enumerators.h"
 #include "CWarBugObject.h"
 #include "CBuff.h"
+#include <time.h>
 
 #include "CPersonagemJogador.h"
 
@@ -33,7 +34,7 @@ private:
 	//RaceTypes
 	static void beetleSkills(CPersonagemJogador *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL);
 
-	static void antSkills(CPersonagemJogador *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL);
+	static void antSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL);
 	static void termiteSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL);
 	static void shaverSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL);
 	static void lizardSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL);

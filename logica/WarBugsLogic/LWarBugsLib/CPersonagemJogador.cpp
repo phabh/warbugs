@@ -464,9 +464,11 @@ void CPersonagemJogador::acceptQuest(CQuest *quest)
 {
 	_quest = new CQuest(this);
 	_quest->setPlayer(quest->getPlayer());
+	_quest->setNPC(quest->getNPC());
 	_quest->setRequestedItem(quest->getRequestedItem());
 	_quest->setRequestedEnemy(quest->getRequestedEnemy());
-	_quest->setRequestedNumber(quest->getRequestedNumber());
+	_quest->setRequestedNumberOfItens(quest->getRequestedNumberOfItens());
+	_quest->setRequestedNumberOfEnemies(quest->getRequestedNumberOfEnemies());
 	_quest->setReward(quest->getReward());
 	_quest->setXPReward(quest->getXPReward());
 	_quest->setItemReward(quest->getItemReward());

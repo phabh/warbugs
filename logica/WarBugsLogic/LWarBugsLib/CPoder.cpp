@@ -140,12 +140,12 @@ void CPoder::strike(CPersonagemJogador *user, int level)
 }
 void CPoder::stealItem(CPersonagem *user, CPersonagem *target)
 {
-	int indexToSteal = (clock()%target->inventario->size());
+	int indexToSteal = (clock()%target->getBolsa()->size());
 	CItem *temp;
 	if(user->tryAttack())
 	{
-		temp = target->inventario->removeItemAt(indexToSteal);
-		user->inventario->addItem(temp);
+		temp = target->getBolsa()->removeItemAt(indexToSteal);
+		user->getBolsa()->addItem(temp);
 	}
 	temp = NULL;
 	delete temp;
@@ -186,16 +186,16 @@ void CPoder::antSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, 
 		break;
 	}
 }
-void CPoder::termiteSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL)
+void CPoder::termiteSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target)
 {
 }
-void CPoder::shaverSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL)
+void CPoder::shaverSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target)
 {
 }
-void CPoder::lizardSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL)
+void CPoder::lizardSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target)
 {
 }
-void CPoder::ladybugSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL)
+void CPoder::ladybugSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target)
 {
 }
 void CPoder::cast(CPersonagem *user, Raca userRace, TipoPoder skillIndex, int skillLevel, CPersonagem *target)
