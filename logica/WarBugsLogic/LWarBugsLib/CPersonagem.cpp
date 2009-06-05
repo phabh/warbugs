@@ -24,7 +24,6 @@ void CPersonagem::initCPersonagem()
 	experiencia = 0;
 	xpToNextLv = 0;
 	dinheiro = 0;
-	baseMoveSpeed = 0;
 	habilidadesPrimarias = new CHabilidades();
 	bonusPrimario = new CBonusPrimario();
 	inventario = new CBolsa();
@@ -68,7 +67,7 @@ float CPersonagem::getDirection()
 }
 float CPersonagem::getMoveSpeed()
 {
-	return(baseMoveSpeed+(float)(getAGI()/10.0f));
+	return(FPS+(float)(getAGI()/10.0f));
 }
 int CPersonagem::getFOR()
 {
@@ -167,10 +166,6 @@ void CPersonagem::setDirection(float direction)
 		direction = direction + 360;
 	}
 	direcao = direction;
-}
-void CPersonagem::setMoveSpeed(float newSpeed)
-{
-	baseMoveSpeed = newSpeed;
 }
 void CPersonagem::setState(EstadoPersonagem newState)
 {
