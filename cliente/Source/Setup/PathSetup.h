@@ -5,7 +5,7 @@
 //-----------------------------------------------------------------------------------------
 // Caminhos de arquivos específicos
 
-static c8 *pathMatrizSetup = "recursos/data/mtxadj.dat";
+static c8 *pathMatrizSetup = "recursos/data/mtxall.dat";
 static c8 *pathConfig = "recursos/data/config.dat";
 
 static c8 *pathHudSkin[HS_COUNT] =

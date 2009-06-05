@@ -10,19 +10,22 @@ CMenuJogo::CMenuJogo()
 
 bool CMenuJogo::start(CGameCore *gameCore)
 {
+	_gameCore = gameCore;
 
-	gameCore->getAllManagers(_dispGrafico, _dispAudio, _gerEventos, _gerCena, _gerVideo, _gerHud, _gameConfig);
+	_gameScene = _gameCore->_gameScene;
 
-	gameCore->loadGameScene(pathCenario[GAMESCENE_01]);
+	_gameCore->getAllManagers(_dispGrafico, _dispAudio, _gerEventos, _gerCena, _gerVideo, _gerHud, _gameConfig);
+
+	_gameCore->loadGameScene(pathCenario[GAMESCENE_01]);
 
 	_menuCamera = gameCore->createCamera( vector3df(0,0,0), vector3df(0,0,100), vector3df(0,0,0), 0, 179.0f/*true*/, false);
 
-	gameCore->playMusic(pathBackgroundSound[MM_JOGO]);
+	_gameCore->playMusic(pathBackgroundSound[MM_JOGO]);
 
 	_myID = _nextID = MN_JOGO;
 
-	_nodoSelecionado = 0;
-	_idPersonagem = -1;
+	//_nodoSelecionado = 0;
+	//_idPersonagem = -1;
 
 	for(int i=0; i<NUMFLAGSMENU; i++)
 		_menuFlag[i] = true;
@@ -82,10 +85,12 @@ bool CMenuJogo::start(CGameCore *gameCore)
 	_selector = _gerCena->createTerrainTriangleSelector(_terreno, 0);
 	_terreno->setTriangleSelector(_selector); 
 
-	cout << "\nIndex Count: " << _terreno->getIndexCount() << endl;
+	//cout << "\nIndex Count: " << _terreno->getIndexCount() << endl;
 	//_selector = _terreno->getTriangleSelector();
 
 	rotV = rotH = 0.0;
+
+	_gameCore->enviarPacote(START_GAME, _gameCore->_myUserID, _gameCore->_myCharID);
 
 	return (true);
 }

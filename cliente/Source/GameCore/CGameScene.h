@@ -16,33 +16,36 @@ class CGameScene
 {
 	private:
  
-	SMatriz _mapa;
+	SMatrix _cenario; // matriz de adjacências
 
-	//bool _mapa[MAPMAXLIN][MAPMAXCOL];
-
-	typedef CDoubleList<CPersonagem> CListaPersonagem;
-	CListaPersonagem  *_listaPersonagens;
+	typedef CDoubleList<CPersonagem> ListaPersonagem;
+	ListaPersonagem  *_listaPersonagens;
 	
-	long _horario;
-	int _id;
+	typedef CDoubleList<SBolsa> ListaBolsa;
+	ListaBolsa *_listaBolsas;
+
+	int _idCenario;
 	int _luaCorrente;
-	SBolsa _listaBolsas;
+
 	SPortal _portal[MAXPORTAIS];
 
-	 
 	public:
+
+	CArquivoMatrizes *_fileMtx;
 	
 	CGameScene();
+	void inicializar();
+	void atualizar();
+	void resetar();
 
+	SMatrix loadMyMatrix(int idScene);
 	void loadStaticData(int idCenario);
 
-	void addBolsa(int idBolsa, float posX, float posZ);
-	void addPersonagem(CPersonagem *personagem);
-	void atualizar();
-	void inicializar();
+	void addBolsa(SBolsa);
 	void removeBolsa(int idBolsa);
-	void removePersonagem(CPersonagem *personagem);
-	void resetar();
-	void setHorario(long hora);
+
+	void addPersonagem(CPersonagem *personagem);
+	void removePersonagem(int idPersonagem);
+
 	void setLua(int idLua);
 };

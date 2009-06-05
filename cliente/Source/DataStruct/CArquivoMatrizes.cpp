@@ -3,14 +3,14 @@
 #include "GameSetup.h"
 #include "PathSetup.h"
 
-struct SMatriz
+struct SMatrix
 {
-	bool mtzAdj[MAPMAXLIN][MAPMAXCOL];
+	bool isPassable[MAPMAXLIN][MAPMAXCOL];
 };
 
-struct SMatrizesCenario
+struct SAllMatrix
 {
-	SMatriz mapa[NUMCENARIOS];
+	SMatrix map[NUMCENARIOS];
 };
 
 class CArquivoMatrizes
@@ -18,43 +18,57 @@ class CArquivoMatrizes
 
 private:
 
-	SMatrizesCenario _allMaps;
+	SAllMatrix _cenarios;
+	bool isLoaded;
 
 public:
 
-	CArquivoMatrizes(){}
-
-	void updateMatriz( SMatriz matriz, int idMapa)
+	CArquivoMatrizes()
 	{
-		_allMaps.mapa[idMapa] = matriz;
+		isLoaded = false;
 	}
 
-	SMatriz loadMatriz(int idMapa)
+	void setMatriz( SMatrix matriz, int idMap)
 	{
-		loadAll();
-		return _allMaps.mapa[idMapa];
+		_cenarios.map[idMap] = matriz;
 	}
 
-	SMatrizesCenario loadAll()
+	SMatrix getMatrix(int idMap)
+	{
+		if(!isLoaded)
+			loadMatrix();
+
+		return _cenarios.map[idMap];
+	}
+
+	SAllMatrix loadMatrix()
 	{
 		ifstream load(pathMatrizSetup);
-		load.read( (char *)&_allMaps, sizeof(_allMaps));
-		return (_allMaps);
+		load.read( (char *)&_cenarios, sizeof(_cenarios));
+
+		isLoaded = true;
+
+		return (_cenarios);
 	}
 
-	void saveConfig()
+	void saveMatrix()
 	{
 		ofstream save(pathMatrizSetup);
-		save.write( (char *)&_allMaps, sizeof(_allMaps));
+		save.write( (char *)&_cenarios, sizeof(_cenarios));
+	}
+
+	void setAllPassable(int idMap)
+	{
+		for(int linha=0; linha<MAPMAXLIN; linha++)
+			for(int coluna=0; coluna<MAPMAXCOL; coluna++)
+				_cenarios.map[idMap].isPassable[linha][coluna] = true;
 	}
 
 	void reset()
 	{
-		for(int map=0; map<NUMCENARIOS; map++)
-			for(int linha=0; linha<MAPMAXLIN; linha++)
-				for(int coluna=0; coluna<MAPMAXCOL; coluna++)
-					_allMaps.mapa[map].mtzAdj[linha][coluna] = true;
+		for(int i=0; i<NUMCENARIOS; i++)
+			setAllPassable(i);
 
-		saveConfig();
+		saveMatrix();
 	}
 };
