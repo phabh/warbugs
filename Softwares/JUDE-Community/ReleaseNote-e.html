@@ -1,0 +1,2889 @@
+<html>
+<head>
+<title>JUDE/Community Release Notes</title>
+</head>
+
+<body bgcolor="#F0F8FF">
+<h1>JUDE/Community Release Notes</h1>
+
+<hr>
+<br>
+<a name=community5.3></a>
+<h2>JUDE/Community 5.3 (June 27, 2008)</h2>
+<ul>
+<li>Model Version: 28<br>
+JUDE project files (.jude) are upward compatible. If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+</ul>
+
+<h4>New functions</h4>
+
+<ul>
+  <li><b>Improvements on API</b><br>
+  <ul>
+     <li>Add getDirection() method to IParameter to get the information of Message Parameter Direction Kind
+     <li>Add isReadOnly() method to IElement to distinguish if the models are reference models or not
+     <li>Add getAttributesAsAssociation() and getAttributesAsClass() methods to IAssociationClass to get Association Class's information such as its Attributes and others
+     <li>Get information of Notes of Diagrams by using getComments() method in IDiagram
+     <li>Add a new API to ProjectAccessor to get information of reference models
+     <li>Add IUsage for Usages
+  </ul>
+</ul>
+
+<ul>
+  <li><b>Improvements on Menu structures</b>
+  <ul>
+    <li>The [Java] Menu is added under the [Tool]. Export/Import Java is available from this Menu.
+    <ul>
+      <li>[Tool] - [Java] - [Import Java]
+      <li>[Tool] - [Java] - [Export Java]
+      </ul>
+  </ul>
+</ul>
+
+<ul>
+  <li><b>Improvements on Sequence and Collaboration Diagrams</b>
+  <ul>
+    <li><b>Visibility Setting of multiple Messages</b>
+    <ul>
+      <li>You can select multiple messages and change the visibility setting all at once.
+    </ul>
+  </ul>
+  <ul>
+    <li><b>Name of Object made by Class</b>
+    <ul>
+      <li>Now Objects that are created by dragging Class from the Structure Tree to the Diagram will not have an initial name. </ul>
+  </ul>
+  <ul>
+    <li><b>Highlight on Object when creating messages (Sequence Diagram)</b>
+    <ul>
+      <li>Now Objects get highlighted when creating messages in Sequence Diagram.
+    </ul>
+  </ul>
+</ul>
+
+<ul>
+  <li><b>Anti-aliasing support</b>
+  <ul>
+    <li><b>Anti-aliasing is available by turning on following options.</b>
+    <ul>
+      <li>[Tool] - [System Properties] - [Diagram Editor] - [Rectangle Anti-aliasing]　(Default : OFF)
+      <li>[Tool] - [System Properties] - [Diagram Editor] - [Text Anti-aliasing]　(Default : OFF)
+      <li>[Tool] - [System Properties] - [Diagram Editor] - [Others Anti-aliasing]　(Default : ON)
+    </ul>
+  </ul>
+</ul>
+
+<ul>
+  <li><b>Improvement on [Import Java] feature</b>
+  <ul>
+    <li>Upon on importing Java source code, it keeps information of existing associations, generalizations and realizations of models.
+  </ul>
+</ul>
+
+<ul>
+  <li><b>Support Multiplicity of Attributes in Property View</b>
+  <ul>
+    <li>Now you can set Multiplicity for Attributes at [Base] tab of Attribute's Property.
+  </ul>
+</ul>
+
+<ul>
+  <li><b>Specify Initial Icon style for Interfaces</b>
+  <ul>
+    <li><b>You can specify which style of Icon to use for Interfaces, either circle or rectangle.</b>
+    <ul>
+      <li>[Tool] - [System Properties] - [Basic] - [Add Interface with normal notation (except adding by Interface Icon button)] (Default: OFF)
+    </ul>
+    <li><b>New [Interface (Normal)] button on the Tool bar</b>
+     <ul>
+      <li>Now you can choose which style of Icon you want to use when creating new Interfaces by selecting [Interface (Normal)] on the Tool Palette.
+          (Class Diagrams, Component Diagrams and Deployment Diagrams)
+       </ul>
+     </ul>
+</ul>
+
+<ul>
+  <li><b>Improvement on Size Adjustment</b>
+  <ul>
+    <li>An alert appears if model elements you select are not supported for the size adjustment.<br>
+  </ul>
+</ul>
+
+<ul>
+  <li><b>Improvement upon opening Project file</b>
+  <ul>
+    <li>When opening a project file that all diagrams are closed, the project view always opens to show the structure of the project file.</ul>
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<!-5.3->
+<li><b>Invalid models are created when the associationEnd of an object link was chosen and Ctrl + D was pressed.[3385]</b><br>
+<li><b>Undoing after setting ActivityGraph for SubActivityState creates invalid models. [3349]</b><br>
+<li><b>When changing the ActivityGraph for SubActivityState, it automatically changes the Activity Graph Name of the selected Activity Diagram. [3345]</b><br>
+<li><b>When copying Messages in Sequence Diagram, it loses the message operation. So pasted Messages will not have the operation.  [3344]</b><br>
+<li><b>Attributes and Operations disappear from the project when undoing after trying to move them to invalid area. [3336]</b><br>
+<li><b>Importing Java fails if the Java source is a constructor with template parameter. [3334]</b>
+<li><b>When importing Java source, a class will be created instead of interface at some cases. [3332]</b>
+<li><b>When opening CompositeStructure Diagram that was created with JUDE/Professional, Roll A and B should appear even if the Connector Type is not specified. [3322]</b><br>
+<li><b>In Sequence Diagrams, NoteAnchor connects at wrong position. [3319]</b><br>
+<li><b>The label of hyperlink on the pop-up menu does not appear properly when the hyperlink target is lost. [3315]</b><br>
+<li><b>In Search Pane, the kind shows wrong label sometimes. [3311]</b><br>
+<li><b>Independent model dialog shows outside of the JUDE Main Window. [3274]</b><br>
+<li><b>Pink line to assist the curve does not appear while drawing the curved line while the Depth Lock Mode is OFF. [3256]</b><br>
+<li><b>Actions do not get  pasted proper position in Activity Diagram. [2933]</b><br>
+<!-5.2.2->
+<li><b>An exception happens when doing copy &amp; paste Objects, Links and Messages all together to other Collaborations Diagrams. [3318]</b><br>
+<li><b>Pressing down [Ctrl + D] keys while selecting ExtentionPoint of UseCase in UseCase Diagram, creates invalid models. [3310]</b><br>
+<li><b>Pressing down [Ctrl + D] keys while selecting Entry, Do or Exit of ActionState in Activity Diagram, creates invalid models. [3308]</b><br>
+<li><b>Pressing down [Ctrl + D] keys while selecting state of ObjectFlowState in Activity Diagram, creates invalid models. [3305]</b><br>
+<!-5.3b1->
+<li><b>[Undo] does not work after inputting "n" in multiplicity of AssociationEnd. [3272]</b><br>
+<li><b>An exception happens when inputting a...b,c for AssociationEnd's multiplicity. [3270]</b>
+<li><b>When you type "int[][aaa]" for Attribute Type, it shows as "int[-100][aaa]. [3266]</b>
+<li><b>When setting [11] for Attribute Type, an unnamed class will be created. [3258]</b><br>
+<li><b>When you edit the object to "obj:Person" directly, a Person Class will be created but the type of Object becomes empty. [3255]</b><br>
+<li><b>An exception occurs when typing [,] for  two-dimensional arrays. [3251]</b><br>
+<li><b>After deleting ReplyMessage's name once, by double-clicking on where ReplyMessage's name would show, the old name comes back. [3246]</b><br>
+<li><b>Unable to add stereotypes to Entity, Boundary and control from its Pop-Up menu if they are shown in Stereotype Icon. [3241]</b><br>
+<li><b>The [Activitygraph Name] column of SubActivityState was shown in blank and white even though it was non-enterable. [3239]</b><br>
+<li><b>By moving the &lt;&lt;information&gt;&gt; Stereotype of Entity, Boundary and Control to the top, it collapses its own shape. [3237]</b><br>
+<li><b>When undoing after changing the Initial visibility option of Sequence, Collaboration Diagram, it throws an exception. [3234]</b><br>
+<li><b>Some Interfaces are imported as classes with realization. [3233]</b><br>
+<li><b>By cloning Attributes/Operations in the Structure Tree, cloned Attributes/Operations will have duplicated Stereotypes and constraints. [3228]</b><br>
+<li><b>When selecting [Set Role Name] from Association or Link Pop-Up Menu, the Name that was already set will be overwritten by default names. [3226]</b><br>
+<li><b>Parameters of Destroy Messages do not appear in the Diagram. [3225]</b><br>
+<li><b>IAttribute#getMultiplicity() does not return the attribute multiplicity. [3224]</b><br>
+<li><b>Unable to import Classes that have method's parameter with annotation by [Import Java]. [3221][3265]</b><br>
+<li><b>Unable to move plural Objects, ObjectFlowStates at once. [3210]</b><br>
+<li><b>JUDE did not have a detailed error message to specify the cause and solution when error happened during launching JUDE. [3209]</b><br>
+<li><b>Shadow appears in front of models (Entities, Controls and Boundaries) that are created by doing drag &amp; drop from the Structure Tree to Collaboration Diagram. [3202]</b><br>
+<li><b>It is difficult to select the end point of Associations and Messages. [3180]</b><br>
+<li><b>Adding new vertical partitions between existing ones will lose the points of NoteAnchor. [3085]</b><br>
+<li><b>Unnecessary information gets exported for Class/Attributes/Operations by exporting Java. [3079]</b><br>
+</ul>
+
+<h4>Existing Bugs</h4>
+<ul>
+	<li><b>When modifying a multiplicity of Associations directly, the entered multiplicity will be set as a Role name.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community5.2.2></a>
+<h2>JUDE/Community 5.2.2 (June 11, 2008)</h2>
+<ul>
+<li>Model Version: 27<br>
+If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>An exception happens when doing copy &amp; paste Objects, Links and Messages all together to other Collaborations Diagrams. [3318]</b><br>
+<li><b>Pressing down [Ctrl + D] keys while selecting ExtentionPoint of UseCase in UseCase Diagram, creates invalid models.[3310]</b><br>
+<li><b>Pressing down [Ctrl + D] keys while selecting Entry, Do or Exit of ActionState in Activity Diagram, creates invalid models. [3308]</b><br>
+<li><b>Pressing down [Ctrl + D] keys while selecting state of ObjectFlowState in Activity Diagram, creates invalid models. [3305]</b><br>
+<li><b>[Undo] does not work after inputting "n" in multiplicity of AssociationEnd. [3272]</b><br>
+<li><b>An exception happens when inputting a...b,c for AssociationEnd's multiplicity. [3270]</b>
+<li><b>When you type "int[][aaa]" for Attribute Type, it shows as "int[-100][aaa]. [3266]</b>
+<li><b>When setting [11] for Attribute Type, an unnamed class will be created. [3258]</b><br>
+<li><b>When you edit the object to "obj:Person" directly, a Person Class will be created but the type of Object becomes empty. [3255]</b><br>
+<li><b>An exception occurs when typing [,] for  two-dimensional arrays. [3251]</b><br>
+<li><b>After deleting ReplyMessage's name once, by double-clicking on where ReplyMessage's name would show, the old name comes back. [3246]</b><br>
+<li><b>Unable to add stereotypes to Entity, Boundary and control from its Pop-Up menu if they are shown in Stereotype Icon. [3241]</b><br>
+<li><b>The [Activitygraph Name] column of SubActivityState was shown in blank and white even though it was non-enterable. [3239]</b><br>
+<li><b>By moving the &lt;&lt;information&gt;&gt; Stereotype of Entity, Boundary and Control to the top, it collapses its own shape. [3237]</b><br>
+<li><b>When undoing after changing the Initial visibility option of Sequence, Collaboration Diagram, it throws an exception. [3234]</b><br>
+<li><b>Some Interfaces are imported as classes with realization. [3233]</b><br>
+<li><b>By cloning Attributes/Operations in the Structure Tree, cloned Attributes/Operations will have duplicated Stereotypes and constraints. [3228]</b><br>
+<li><b>When selecting [Set Role Name] from Association or Link Pop-Up Menu, the Name that was already set will be overwritten by default names. [3226]</b><br>
+<li><b>Parameters of Destroy Messages do not appear in the Diagram. [3225]</b><br>
+<li><b>IAttribute#getMultiplicity() does not return the attribute multiplicity. [3224]</b><br>
+<li><b>Unable to import Classes that have method's parameter with annotation by [Import Java]. [3221][3265]</b><br>
+<li><b>Unable to move plural Objects, ObjectFlowStates at once. [3210]</b><br>
+<li><b>JUDE did not have a detailed error message to specify the cause and solution when error happened during launching JUDE. [3209]</b><br>
+<li><b>Shadow appears in front of models (Entities, Controls and Boundaries) that are created by doing drag &amp; drop from the Structure Tree to Collaboration Diagram. [3202]</b><br>
+<li><b>It is difficult to select the end point of Associations and Messages. [3180]</b><br>
+<li><b>Adding new vertical partitions between existing ones will lose the points of NoteAnchor. [3085]</b><br>
+<li><b>Unnecessary information gets exported for Class/Attributes/Operations by exporting Java. [3079]</b><br>
+</ul>
+
+<h4>Existing Bugs</h4>
+<ul>
+	<li><b>When modifying a multiplicity of Associations directly, the entered multiplicity will be set as a Role name.</b>
+</ul>
+
+
+<hr>
+<br>
+<a name=community5.2.1></a>
+<h2>JUDE/Community 5.2.1 (February 22, 2008)</h2>
+<ul>
+<li>Model Version: 27<br>
+If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>In Mac OSX 10.5.x or later, during modifying Class names or other names in Diagram Editor, texts you currently type disapper. [3186]</b><br>
+<li><b>An exception occurs by moving Template Biding in some cases.[3181]</b><br>
+<li><b>An actual parameter is removed by cancelling to create a new class as an actual parameter of a template binding.[3179]</b><br>
+<li><b>An exception occurs in some cases after deleting all models and then undoing.[3177]</b><br>
+<li><b>A package cannot be resized smaller if a control with the icon notation is included.[3176]</b><br>
+<li><b>A package is resized bigger when a control with the icon notation is moved.[3175]</b><br>
+<li><b>An exception occurs by importing Java with template classes in some cases.[3172]</b><br>
+<li><b>UseCases are resized with the auto resize mode, OFF.[3171]</b><br>
+<li><b>A parameter name of an anonymous bound class is not updated when the parameter name is renamed.[3170]</b><br>
+<li><b>An anonymous bound class is not exported as Java skeleton codes if it is related with a generalization.[3167]</b><br>
+<li><b>Actual parameters of template parameters cannot be selected if it is related to a realization.[3166]</b><br>
+<li><b>Rubber band for the message name is not correct in collaboration diagrams.[3162][3164]</b><br>
+<li><b>An exception occurs when the association popup menu is displayed in some cases.[3159]</b><br>
+<li><b>A qualifier is overlapped on a class if there is a template parameter.[3156]</b><br>
+<li><b>A default value of template parameter is not set when cloning a template class[3155]</b><br>
+<li><b>Actual parameters of template bindings are not removed after importing Java source codes.[3153]</b><br>
+</ul>
+
+<h4>Existing Bugs</h4>
+<ul>
+	<li><b>When modifying a multiplicity of Associations directly, the entered multiplicity will be set as a Role name.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community5.2></a>
+<h2>JUDE/Community 5.2 (January 31th, 2008)</h2>
+<ul>
+<li>Model Version: 27<br>
+If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+</ul>
+
+<h4>New Functions</h4>
+<ul>
+  <li><b>Support Java 5.0 source code for [Import Java] feature</b>
+</ul>
+<ul>
+  <li><b>Template Class</b>
+    <ul>
+    <li><b>Template Parameters</b><br>
+      <ul>
+        <li>How to add Template parameter<br>
+        <ul>
+          <li>Select [Add Template Parameter] on Pop-up menu of Class or Structured Class in Diagram Editor.<br>
+          <li>Select [Add Template Parameter] on Pop-up menu of Template Parameter in Diagram Editor.<br>
+        </ul>
+      </ul>
+    </ul>
+    <ul>
+    <li><b>Template Class</b><br>
+      <ul>
+        <li>How to create Template Class<br>
+        <ul>
+          <li>You can create Template Class by adding Template Parameter to Class.<br>
+        </ul>
+        <li>Property View<br>
+        <ul>
+          <li>[Template Parameter] tab is newly added to the Property View of Class.<br>
+        </ul>
+        <li>Structure Tree<br>
+        <ul>
+          <li>Template Class is shown in the Structure Tree in following format : Name + < Template Signature >.<br>
+        </ul>
+      </ul>
+    </ul>
+    <ul>
+    <li><b>Template Binding</b><br>
+      <ul>
+        <li>How to create Bindings<br>
+        <ul>
+          <li>Select [Template Binding] on the tool bar then draw it from Class to Template Class in Diagram Editor.<br>
+        </ul>
+      </ul>
+    </ul>
+    <ul>
+    <li><b>Bound Class</b><br>
+      <ul>
+        <li>How to create Bound Class<br>
+        <ul>
+          <li>By adding a Template Binding between Template Class and Class, the Class turns into a Bound Class.<br>
+        </ul>
+      </ul>
+    </ul>
+    <ul>
+    <li><b>Anonymous Bound Class</b><br>
+      <ul>
+        <li>How to create Anonymous Bound Class<br>
+        <ul>
+          <li>Empty the name of Bound Class<br>
+          <li>Also you can create Anonymous Bound Class by setting following models.
+         <ul> 
+          <li>Attribute Type<br>
+          <li>Operation's Return Value Type<br>
+          <li>Operation's Parameter Type<br>
+          <li>Association End A and Target of Association End B<br>
+          <li>Object of Class, Activity, Sequence or Collaboration Diagram<br>
+        </ul>
+        <li>Structure Tree<br>
+        <ul>
+          <li>Displays + Type + < Template Signature > in Structure Tree<br>
+        </ul>
+      </ul>
+    </ul>
+    <ul>
+    <li><b>Set Anonymous Bound Class</b><br>
+      <ul>
+        <li>You can set Anonymous Bound Class by setting following models.<br>
+        <ul>
+          <li>Attribute Type<br>
+          <li>Operation's Return Value Type<br>
+          <li>Operation's Parameter Type<br>
+          <li>Association End A and Target of Association End B<br>
+          <li>Object of Class, Activity, Sequence or Collaboration Diagram<br>
+        </ul>
+      </ul>
+    </ul>
+    </ul>
+    <ul>
+    <li><b>Export Java</b><br>
+      <ul>
+        <li><b>Support Template Class</b><br>
+        <ul>
+          <li>[Tool] - [Export Java]<br>
+        </ul>
+      </ul>
+    </ul>
+    <ul>
+    <li><b>Import Java</b><br>
+      <ul>
+        <li><b>Support Template Class</b><br>
+        <ul>
+          <li>[Tool] - [Import Java]<br><br>
+        </ul>
+      </ul>
+    </ul>
+</ul>
+<ul>
+  <li><b>Create new project by importing Template</b>
+  <ul>
+      <li>Select [File] - [New By Template]<br>
+  </ul>
+  <ul>
+    <li><b>Customize Default Templates</b>
+      <ul>
+        <li>Create new project files ([File] - [New]) based on customized Templates.<br>
+        <ul>
+          <li>[Tool] - [System Properties] - [File] - [Create New Project By]<br>
+            <ul>
+              <li>Empty<br>
+              <li>User's Template<br>
+              <ul>
+                <li>Customized Template stored in %USER_HOME%/.jude/community/template/project<br>
+              </ul>
+              <li>JUDE's Built-in Templates<br>
+              <ul>
+                <li>JUDE's Built-in Templates stored in JUDE Install Folder/template/project<br>
+              </ul>
+            </ul>
+          <li>[Tool] - [System Properties] - [File] - [Template File]<br>
+        </ul>
+        <li><b>NOTE</b><br>
+        <ul>
+          <li><font color="red">Since ver 5.2, either of "JudeDefaultModel.jude" or "JudeDefaultModel_ja.jude" in JUDE Install folder and %USER_HOME%/.jude/community are no longer used
+              as Default Model.</font><br>
+        </ul>
+      </ul>
+  </ul>
+  <ul>
+    <li><b>Default Templates</b>
+      <ul>
+        <li>JUDE provides following default templates in JUDE install folder/template/project.
+        <ul>
+          <li>Java1.4.jude<br>
+          <li>Java5.jude<br><br>
+        </ul>
+      </ul>
+  </ul>
+</ul>
+<ul>
+  <li><b>Support curved line</b>
+      <ul>
+        <li>How to draw curved lines
+        <ul>
+          <li>Turn on the Curved line mode, click diagram element where you want curved line originate then click
+              points you want to have arcs (Up to two points), then click the object the line attaches to.
+        </ul>
+        <li>How to draw curved right angle lines
+        <ul>
+          <li>Turn on the Curve (Right Angle) line mode, click where you want curved line originate then click
+              a point you want to have a arc then click the object the line attaches to.
+        </ul>
+      </ul>
+      <ul>
+        <li>Curved lines are available for following lines.<br>
+        <ul>
+          <li>Associations<br>
+          <li>Generalizations<br>
+          <li>Realizations<br>
+          <li>Dependencies<br>
+          <li>Links<br>
+          <li>Extends<br>
+          <li>Includes<br>
+          <li>Transitions<br>
+          <li>NoteAnchors<br>
+        </ul>
+      </ul>
+      <ul>
+        <li>You can set the default line style for each diagram: [Default Line Style].
+        <li>You can set the line style on Tool bar of each diagram.<br>
+        <li>You can change the line style from Pop-Up menu of models.<br>
+        <ul>
+          <li>Normal Line<br>
+          <li>Right Angle Line<br>
+          <li>Curve Line<br>
+          <li>Curve Right Angle Line<br>
+        </ul>
+      </ul>
+</ul>
+<ul>
+  <li><b>Improvements on Class Diagram</b>
+  <ul>
+    <li><b>Support the Direction Kind of Operation parameter </b>
+      <ul>
+        <li>New tab [Operation Parameter Direction Kind] in the Property View of Operation.<br>
+        <li>New option [Operation Parameter Direction Kind Visibility] in [Extended Visibility] of Pop-Up Menu of Class's.<br>
+        <li>New option [Operation Parameter Direction Kind] in [Tool] - [System Properties] - [Visibility 1] (Default : OFF).<br>
+        <li>New option [Operation Parameter Direction Kind] in [Initial Visibility] Tab of Class Diagram.<br>
+      </ul>
+  </ul>
+  <ul>
+    <li><b>Synchronize the order of Attributes/Operations between the Structure Tree, Property View, and Diagram Editor.</b>
+  </ul>
+  <ul>
+    <li><b>Delete Attributes/Operations by [Delete] Key</b>
+      <ul>
+        <li>[Delete] key deletes Attributes/Operations in the Diagram Editor.<br>
+      </ul>
+    <li><b>Improved Pop-Up Menu of Class</b>
+      <ul>
+        <li>Organized menu on Pop-Up Menu of Class.<br><br>
+      </ul>  
+  </ul>
+</ul>
+<ul>
+  <li><b>Text in Multiple lines is available for following models.</b>
+      <ul>
+        <li>ActionState
+        <li>SubActivityState
+      </ul>
+</ul>
+<ul>
+  <li><b>Improvements on Pop-Up menu of Diagram Editor upon on using Java 5 or later </b>
+      <ul>
+        <li>Following menus are added.<br>
+        <ul>
+          <li>Close Left Tabs<br>
+          <li>Close Right Tabs<br>
+          <li>Delete<br>
+          <li>Print<br>
+        </ul>
+      </ul>
+</ul>
+<ul>
+  <li><b>You can open multiple diagrams at once by selecting them in the Structure Tree.</b>
+</ul>
+<ul>
+    <li><b>Delete Stereotype by [Delete] key</b>
+      <ul>
+        <li>[Delete] key deletes Stereotypes in the Diagram Editor.<br><br>
+      </ul>
+</ul>
+<ul>
+  <li><b>Improvements upon on adding Stereotypes from Pop-Up Menu</b>
+  <ul>
+    <li>You can edit Stereotypes right after adding them by Pop-Up Menu.<br><br>
+  </ul>
+</ul>
+<ul>
+  <li><b>Improvements on resizing Note</b>
+  <ul>
+    <li>It is easier to grab corners of Note to resize.<br><br>
+  </ul>
+</ul>
+<ul>
+  <li><b>Improvements on Tool Bar</b>
+  <ul>
+    <li>Make Toolbar menu activate every time creating new elements in the Diagram Editor always.<br><br>
+  </ul>
+</ul>
+<ul>
+  <li><b>Improvements on [Export Image]</b>
+  <ul>
+    <li>Let the dialog to choose the directory to save exported images have default name in it already.<br><br>
+  </ul>
+</ul>
+<ul>
+  <li><b>Improvements on API</b><br>
+     Model information of StateChart Diagrams are available. Please refer to API User Guide for detail.<br>
+     Go to [start] in Windows - [Program] - [JUDE Community] - [API User Guide] 
+   <ul>
+     <li>API of Class Diagram as now it supports Template Class
+     <li>Add "getActivityDiagram()" Method for IActivity.
+     <li>Add "isCallBehaviorAction(") Method for IAction. 
+     <li>Add "getStateMachineDiagram()" Method for IStateMachine.
+   </ul>
+</ul>
+<ul>
+  <li><b>Improvements on Performance</b>
+  <ul>
+    <li>Provides better performance upon the [Import Java] feature.
+    <li>Provides better performance when running JUDE with many diagrams open in the Diagram Editor.
+  </ul>
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>Class Selection dialog is displayed when setting a class as a type of an attribute if a class with the same name in the different package exists.[3143]</b>
+<li><b>Element tooltip in Search view is not displayed correctly.[3110]</b>
+<li><b>Same name parameters should not be created in same operation. [3104]</b>
+<li><b>The label of Transition in Statechart Diagram should not be able to break into more than one line. [3103]</b>
+<li><b>Message Parameter is not updated when operation is unspecified by moving message. [3101]</b>
+<li><b>JUDE loads different models when creating new project file depending on how JUDE is launched. [b3091]</b>
+<li><b>Object names are always shown in one line when opening Sequence Diagram. [3084]</b>
+<li><b>By resizing JUDE Window, the hidden Project View opens back.[3057]</b>
+
+<li><b>Creating Messages in Sequence Diagrams could freeze JUDE occasionally. [3077]</b>
+<li><b>You can select Object as Attribute's Type in its Property View. [3072]</b>
+<li><b>Deleted diagrams are still shown in [Search] view. [3068]</b>
+<li><b>An exception happens when importing Java that contains /***/ in its source. [3062]</b>
+<li><b>JUDE freezes when dragging the link of Object that has a link to itself and Note Anchor in Collaboration Diagram. [3060]</b>
+<li><b>No duplicate Project ID in creating new project.[3050]</b>
+<li><b>We can set Node as Attribute's type. [3045]</b>
+<li><b>Visibility of Attributes/Operations of Association Classes is not correct when dragging them onto the Diagram Editor. [3044]</b>
+<li><b>Compartments of Attributes/Operations are always shown in Association Classes despite the visibility setting. [3043]</b>
+<li><b>There is no item "Show namespace" in Pop-up Menu of models. [3040]</b>
+<li><b>When deleting Class that is set for Attribute Type, the Attribute Type will go back to "int", not the default type that is set in System Properties. [3039]</b>
+<li><b>Unable to add / "forward slash" symbol to Guard of Transition. [3038]</b>
+<li><b>Some settings of System Properties affect Model in Default Model. [3036]</b>
+<li><b>Event and Action cannot be modified correctly on Activity Diagram. [3030]</b>
+<li><b>Minimum size of Object in Collaboration Diagram is larger than previous version. [3029]</b>
+<li><b>An exception happens when creating new Class diagram after setting the multiplicity "*,*" to Associations. [3018]</b>
+<li><b>When importing Attribute lists as Associations with [Import Java] feature, it loses the multiplicity. [3015]</b>
+</ul>
+
+<h4>Existing Bugs</h4>
+<ul>
+	<li><b>When modifying a multiplicity of Associations directly, the entered multiplicity will be set as a Role name.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community5.1.1></a>
+<h2>JUDE/Community 5.1.1 (November 20th, 2007)</h2>
+<ul>
+	<li>Model Version: 26
+	If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+	<li><b>Cloning Activity Diagrams that contain ObjectFlowStates with BaseClass creates invalid models in cloned Activity Diagrams. [3027]</b>
+	<li><b>Unnecessary brackets are added to Guard of Transition by editing it directly. [2999]</b>
+
+	<li><b>Incorrect Alert dialog comes up when saving project file with invalid symbols in its name. [2994]</b>
+	<li><b>Default Size of Object is incorrect in Collaboration Diagrams. [2988]</b>
+</ul>
+
+<h4>Existing Bugs</h4>
+<ul>
+	<li><b>When modifying a multiplicity of Associations directly, the entered multiplicity will be set as a Role name.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community5.1></a>
+<h2>JUDE/Community 5.1 (October 2nd, 2007)</h2>
+<ul>
+<li>Model Version : 26<br>
+If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions. 
+</ul>
+
+<h4>New functions</h4>
+<ul>
+  <li><b>Gradation and Shadow</b>
+    <ul>
+      <li><b>Add gradation for Background of Diagram Editor and model elements</b>
+      <ul>
+        <li>[Tool] - [System Properties] - [Diagram Editor] - [Gradation (Background)]<br>
+        <li>[Tool] - [System Properties] - [Diagram Editor] - [Gradation (Element)]<br>
+      </ul>
+    </ul>
+    <ul>
+      <li><b>Drop shadows to model elements</b>
+      <ul>
+        <li>[Tool] - [System Properties] - [Diagram Editor] - [Show shadow on elements]<br>
+      </ul>
+    </ul>
+</ul>
+<ul>
+  <li><b>Improvements on Class Diagram</b>
+  <ul>
+    <li><b>New tab [Initial Visibility] is added to Diagram's property view.</b><br>
+    Now it is easy to set the visibility of each option from this tab per diagram.<br>
+      <ul>
+        <li>
+        The visibility option of diagram will be set based on the setting of [Tool] - [System Properties] - [Visibility 1 (Initial)]<br>
+      </ul>
+  </ul>
+  <ul>
+    <li><b>Create object by doing drop and drop class and holding Ctrl down from the structure tree to Diagram Editor.
+           An object will be created with selected class as its baseclass.</b>
+    <li><b>Copy and paste Attribute/Operation of class by Ctrl+C and Ctrl+V.</b>
+    <li><b>Move Attribute/Operation by cursor key on the Diagram Editor.</b>
+    <li><b>Add new Attribute/Operation one before one that is on focus by Shift+Enter.</b>
+    <li><b>Modify baseclass of object directly on the Diagram Editor.</b>
+</ul>
+</ul>
+<ul>
+  <li><b>Improvements on Sequence Diagram</b>
+  <ul>
+    <li><b>Modify baseclass of Object directly on the Diagram Editor.</b>
+    <li><b>Switch on/off of the visibility of Message Parameter Type.</b>
+    <li><b>New option to switch on/off of the [Message Parameter Type Initial Visibility] on the Property View of Diagram.</b>
+    <li><b>New option to switch on/off of the [Message Return Value Variable Initial Visibility] on the Property View of Diagram.</b>
+  </ul>
+</ul>
+<ul>
+  <li><b>Improvements on Collaboration Diagram</b>
+  <ul>
+    <li><b>Modify baseclass of Object directly on the Diagram Editor.</b>
+    <li><b>Switch on/off of the visibility of Message Parameter Type.</b>
+    <li><b>New option to switch on/off of the [Message Parameter Type Initial Visibility] on the Property View of Diagram.</b>
+    <li><b>New option to switch on/off of the [Message Return Value Variable Initial Visibility] on the Property View of Diagram.</b>
+    <li><b>New option to switch on/off of the [Message Return Value Initial Visibility] on the Property View of Diagram.</b>
+  </ul>
+</ul>
+<ul>
+  <li><b>Improvements on Deployment Diagram</b>
+  <ul>
+    <li><b>Modify baseclass of Object directly on the Diagram Editor.</b>
+    <li><b>Modify baseclass of NodeInstance directly on the Diagram Editor.</b>
+    <li><b>Modify baseclass of ComponentInstance directly on the Diagram Editor.</b>
+  </ul>
+</ul>
+<ul>
+  <li><b>Improvements on Property View</b>
+  <ul>
+    <li><b>Always show the property of model when creating new one.</b>
+  </ul>
+  <ul>
+    <li><b>Always show the selected Diagram's property.</b>
+  </ul>
+  <ul>
+    <li><b>Always show the property of Association when setting role name for Association.</b>
+  </ul>
+  <ul>
+    <li><b>Create new models by pressing [Enter] key onto..</b>
+    <ul>
+      <li><b>[Attribute] Tab of Class</b>
+      <li><b>[Operation] Tab of Class</b>
+      <li><b>[Extension Point] Tab of UseCase</b>
+      <li><b>[Internal Event] Tab of State</b>
+      <li><b>[Parameters] Tab of Operation</b>
+    </ul>
+  </ul>
+</ul>
+<ul>
+  <li><b>Improvements on color setting of Stereotype</b>
+  <ul>
+    <li><b>Apply the color change for stereotypes when changing it on System Properties.</b>
+  </ul>
+</ul>
+<ul>
+  <li><b>Improvements on API</b>
+  <ul>
+     <li><b>Add a new method to get Hyperlink information.</b>
+     <li><b>Add a new method to recognize the horizontal partition and vertical partition.</b>
+     <li><b>Get partitions in order by [getSubPartitions()] of IPartition.</b>
+  </ul>
+</ul>
+<ul>
+  <li><b>Improvements on System Properties</b>
+  <ul>
+  <li><b>Rearranged the structure by order.</b>
+  </ul>
+</ul>
+<ul>
+  <li><b>Made it easy to modify the text when creating new text.</b>
+</ul>
+
+<h4>Improvements on Performance</h4>
+<ul>
+<li><b>Improved to paste diagram images to StarSuite, OpenOffice in Solaris. [2937]</b>
+<li><b>Performance upon on editing a large UseCase Diagram with nested packages. [2927]</b>
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>Duplicated classes are created if you set default type of Attribute that starts with space in System Properties. [2962]</b>
+
+<li><b>Resizing name rect of lifeline causes exception[2950]</b>
+<li><b>Cannot resize lifeline's name after drag &amp; drop Actor, Entity, Boundary, Control from tree to Communication Diagram.[2948]</b>
+<li><b>Size of Lifeline is wrong after unspecifying the base class and renaming Lifeline.[2946]</b>
+<li><b>Cannot resize lifeline properly after renaming lifeline with the icon notation in the sequence diagram.[2945]</b>
+<li><b>Open(InputStream) method doesn't work for ProjectAccessor Class in API. [2936]</b>
+<li><b>Unable to open project files that contain reference models. [2919]</b>
+<li><b>Unable to adjust size for Object Nodes are created by doing drag and drop. [2915]</b>
+<li><b>Visibilities of Association in system properties are not applied. [2913] </b>
+<li><b>Unable to resize objects in Sequence Diagram. [2911]</b>
+<li><b>Icon notation problems in Collaboration diagram. [2910]</b>
+<li><b>There is no copy Menu on the Pop-Up menu when selecting more than one subactivity states. [2886]</b>
+<li><b>An exception occurs when clicking state or action state in the result after searching. [2884]</b>
+<li><b>Target Name is not shown properly on Dependency Tab in the Property View. [2882]</b>
+<li><b>Dragging the Actor name makes a distance between the Actor and actors Name. [2880]</b>
+<li><b>If the name of package or diagram starts with space, exporting HTML of them fails. [2843]</b>
+<li><b>Unable to delete UseCase/Unable to save the project file. [2808]</b>
+</ul>
+
+<h4>Existing Bugs</h4>
+<ul>
+<li><b>When modifying a multiplicity of Associations directly, the entered multiplicity will be set as a Role name.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community5.0.2></a>
+<h2>JUDE/Community 5.0.2 (July 4th, 2007)</h2>
+<ul>
+<li>Model Version: 25<br>
+If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>The shape of ActionState element is shown in UML 2.0 Notation. [2865]</b>
+<li><b>An exception happens when modifying the Sequence Diagram contains Return Message. [2863][2864]</b>
+<li><b>There is no Depth Lock Mode button on Tool bar of Sequence Diagram. [2862]</b>
+<li><b>Unable to move more than one element by pressing arrow keys. [2855]</b>
+</ul>
+
+<hr>
+<br>
+<a name=community5.0.1></a>
+<h2>JUDE/Community 5.0.1 (June 22nd, 2007)</h2>
+<ul>
+<li>Model Version: 25<br>
+If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>Labels of Models supported only in Professional version are not shown properly in Community version after doing [Search]. [2838][2839]</b>
+<li><b>Objects are not underlined in Class and Deployment and Sequence Diagram. [2836]</b>
+<li><b>Imports non-read-only files as read-only files. [2798]</b>
+<li><b>Resizing the Status element breaks the line down inside it. [2787]</b>
+<li><b>Property files get transferred to improper folder on MAC and Linux. [2772]</b>
+<li><b>The state of ObjectFlowState gets shown in more than one line when the Auto resize is off. [2767]</b>
+<li><b>Unable to modify the ObjectFlowStates that have the state in Diagram Editor. [2766]</b>
+<li><b>Unable to open the Hyperlinks of https/ftp. [2756]</b>
+</ul>
+
+<hr>
+<br>
+<a name=community5.0></a>
+<h2>JUDE/Community 5.0 (May 24th, 2007)</h2>
+<ul>
+<li>Model Version: 25<br>
+</ul>
+
+<h4>New Functions</h4>
+<ul>
+    <li><b>Lock files</b>
+  	  <ul>
+  	    <li>Set a lock when opening a project file.
+  	        Once the project file is locked, the project file will be opened in Read-only mode to other users.
+  	    <li>[Tool] - [System Properties] - [File] - [Set a lock when opening a project file]
+  	  </ul>
+</ul>
+<ul>
+  <li><b>Depth Lock Mode</b><br>
+  <ul>
+    <li>By turning on the [Depth Lock Mode] on the tool bar, it locks the layers of model elements in the Diagram Editor. (Default: on)
+  </ul>
+</ul>
+<ul>
+  <li><b>Improvements on Property View</b><br>
+  <ul>
+  <li>Opens the Property View of the diagram when creating a new diagram.<br>
+  </ul>
+</ul>
+<ul>
+  <li><b>Improvement on Class Diagram</b><br>
+  <ul>
+  <li><b>Attributes and Operations are transferable between Classes in the Diagram Editor</b><br>
+    <ul>
+    <li>[Tool] - [System Properties] - [Basic] - [Allow to transfer Attributes and Operations between Classes in the Diagram Editor]. (Default: on)<br><br>
+    </ul>
+  </ul>
+  <ul>
+  <li><b>New Shortcut keys for sorting order of Attributes and Operations</b><br>
+    <ul>
+    <li>[Ctrl + Upward Arrow cursor] brings the target Attributes/Operations up<br>
+    <li>[Ctrl + Downward Arrow cursor] brings the target Attributes/Operations down.<br><br>
+    </ul>
+  </ul>
+  <ul>
+  <li><b>Set the Default type of Attributes when creating new Attributes in Class Diagram</b><br>
+    <ul>
+    <li>[Tool]-[System Properties]-[Basic]-[Default Type of Attribute (i.e String -java.lang) (Default:int)<br><br>
+    </ul>
+  </ul>
+</ul>
+<ul>
+  <li><b>Improvement on Sequence Diagram</b><br>
+  <ul>
+  <li><b>Show Return Value of Messages</b><br>
+    <ul>
+    <li>Check on the [Message Return Value Visibility] option on target Message's Pop-Up Menu to show the Return Value of Message<br>
+    </ul>
+  <li><b>Show Object names always when creating messages</b><br>
+      </ul>
+</ul>
+<ul>
+  <li><b>Improvement on Activity Diagram</b><br>
+  <ul>
+    <li><b>SubActivity State</b><br>
+	<ul>
+	  <li>SubActivity State Menu Icon on Tool bar
+	  <li>Set the referenced diagram from the Property View
+      <li>Open the referenced diagram by double-clicking<br>
+	  <li>When creating the SubActivity State by dragging an Activity Diagram from the structure tree, the
+	      name of SubActivity State will be the original diagram's name
+	  <li>Convertible between Action and SubActivity
+      <li>Size adjustment for the default and minimum size<br>
+      <li>Add Stereotype
+    </ul>
+     <li><b>ObjectFlowState</b><br>
+	<ul>
+	 <li>Show Namespace of BaseClass in the Property View<br>
+	 <li>Size adjustment for the minimum size
+	 <li>Show its name in more than single line
+	 <li>Name is no longer required
+    </ul>
+    <li><b>Partitions</b><br>
+    <ul>
+      <li><b>Add color</b><br>
+      <ul>
+        <li>Select [Set color] from its Pop-Up Menu<br>
+      </ul>
+    </ul>
+    <li><b>InitialNode</b><br>
+    <ul>
+      <li>Multiple InitialNodes are available<br>
+      <li>Check off the [Tool] - [System Properties] - [Basic] - [Allow no multiple Initial Nodes in Activity Diagram] (Default: on)<br>
+    </ul>
+    <li><b>Transition</b><br>
+    <ul>
+      <li><b>Show Event, Guard, Action of Transitions in more than single line</b>
+    </ul>
+  </ul>
+</ul>
+<ul>
+  <li><b>Add color for Association lines</b><br>
+    <ul>
+    <li>Select [Set Color] from Association lines Pop-Up Menu<br>
+    </ul>
+</ul>
+<ul>
+  <li><b>Improvement on Structure Tree</b><br>
+  <ul>
+    <li><b>New option for not expanding the structure tree</b><br>
+    [Tool] - [System Properties] - [Basic] - [Allow to expand the structure tree when adding new elements] (Default: on)<br><br>
+    </li>
+    </ul>
+</ul>
+<ul>
+  <li><b>Adjust the size of model elements</b><br>
+  <ul>
+  <li>Adjust size of model elements by inputting the size directly or selecting the element you would like to adjust the same size as in
+  [Alignment] - [Adjust Size] - [Adjust Size]<br>
+  </ul>
+<br>
+</ul>
+<ul>
+  	<li><b>Progress Bar</b>
+  	  <ul>
+  	    <li>Show a progress bar when saving Project files
+  	      <ul>
+  	        <li>[Tool] - [System Properties] - [File] - [Show progress bar when saving a project file] (Default: off)
+  	      </ul>
+      </ul>
+</ul>
+<ul>
+  <li><b>Improvement on Printing</b><br>
+    <ul>
+    <li>Reduced unnecessary space on the prints<br><br>
+    </ul>
+</ul>
+<ul>
+  <li><b>Improvement on default Project file</b><br>
+    <ul>
+      <li>A project file that locates in following directory will be opened as a default model<br>
+      <ul>
+        <li>Userhome\.jude\community\JudeDefaultModel.jude<br>
+        <li>JUDE Install Folder directory\JudeDefaultModel.jude<br>
+      </ul>
+    </ul>
+</ul>
+
+<ul>
+  <li><b>Relocated the storage of the JUDE Property files</b><br>
+    <ul>
+    <li>All property files for JUDE are relocated to this directory; Userhome\.jude\community<br><br>
+    </ul>
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>Fails importing Java if there are enums included in Attributes Names of the Java to import</b>
+<li><b>Unable to select the Artifact to set for BaseClass of ObjectNode in the Activity Diagram. [2611]</b>
+<li><b>Changing the association target creates invalid association classes. [2608]</b>
+<li><b>Message Indexes are not shown correctly in Sequence Diagram. [2600]</b>
+<li><b>Improved the contents of error messages for relationships. [2590]</b>
+<li><b>Initial value of Attributes are not imported properly upon on reverse importing *.java. [2544]</b>
+<li><b>Type of Array of the Attributes are not imported properly upon on reverse importing *.java. [2543]</b>
+<li><b>Auto resize problem on showing the object name in one line. [2542]</b>
+<li><b>Invalid selection occurs on the Class Diagram that contains duplicated Attributes in. [2538]</b>
+<li><b>An exception happens when doing Copy &amp; Paste of Partitions on Activity Diagram on certain conditions. [2524]</b>
+<li><b>Activations get shifted ouf off the Objects sometimes in Sequence Diagram. [2457]</b>
+<li><b>The location of Messages ets shifted when adding a new message to the frame in the Sequence Diagram. [2440]</b>
+<li><b>Converting Association Class to Class brings out Invalid models in the Project File. [2433]</b>
+<li><b>Unable to Paste the Style of the Message in the Sequence Diagram. [2423]</b>
+<li><b>ObjectNode of Activity Diagram can be selected to the Target for Associations. [2415]</b>
+<li><b>Invalid message pops up when pressing down Ctrl+D for object node has base class. [2412]</b>
+<li><b>HTML Export doesn't work properly in some conditions. [2233]</b>
+</ul>
+
+<hr>
+<br>
+<a name=community3.2.1></a>
+<h2>JUDE/Community 3.2.1 (March 23th, 2007)</h2>
+<ul>
+<li>Model Version : 24<br>
+If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>Unspecified Associations are not exported by [Export Java]. [2221]</b>
+<li><b>Return type int[] is exported as int. [2225]</b>
+<li><b>Asynchronous message is displayed with dashed line in sequence diagrams. [2291]</b>
+<li><b>An exception occurs when adding an [Interface] stereotype to an association class. [2304]</b>
+</ul>
+
+<hr>
+<br>
+<a name=community3.2></a>
+<h2>JUDE/Community 3.2 (February 28th, 2007)</h2>
+<ul>
+<li>Model Version : 24<br>
+If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+</ul>
+
+<h4>New functions</h4>
+<ul>
+  <li><b>Transfer Messages by dragging</b>
+    <ul>
+      <li>A start point of messages can be dragged to transfer to a lifeline.
+    </ul>
+  <li><b>Automatic Return Message Mode</b>
+    <ul>
+      <li>[Automatic Return Message Mode] has been added on Tool bar of the Sequence Diagram Window.<br>
+          Reply messages are created automatically for each message when this mode is on.
+    </ul>
+  <li><b>JUDE API</b>
+    <ul>
+      <li>JUDE API for Sequence and Activity diagrams is added. Please refer to API User Guide for detail. <br>
+Go to [start] in Windows - [Program] - [JUDE Professional] - [API User Guide]
+    </ul>
+</ul>
+  
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>Interfaces and lines connected to them get shifted over packages. [2024]</b>
+<li><b>Multiple partitions that have the same lane name cannot be copied &amp; pasted. [2108]</b>
+<li><b>It is unable to Copy &amp; Paste partitions in a row. [2107]</b>
+<li><b>An exception occurs when doing the Copy &amp; Paste any elements in a Horizontal Partition. [2092]</b>
+<li><b>Pasting Partitions onto other diagrams, which don't contain any partitions, doesn't work properly. [2090]</b>
+<li><b>Resizing width of Partitions makes inappropriate action on Partition's length. [2089]</b>
+<li><b>Invalid Resize of Partitions. [2088]</b>
+<li><b>When adding a partition as dragging, the partition will be added incorrectly.[2115]</b>
+<li><b>Improve the movement of text, rectangle, note, line, image in Partitions of Activity diagram.[2117]</b>
+<li><b>Line types are shown differently when opening a project. [2082]</b>
+<li><b>An exception occurs when cloning a Sequence Diagram. [2071]</b>
+<li><b>When resizing Note to minimal size, the position is changed.[2174]</b>
+<li><b>The check symbol of [Name Direction Visibility] in Association popup menu is not shown properly.[2096]</b>
+</ul>
+
+
+<hr>
+<br>
+<a name=community3.1.1></a>
+<h2>JUDE/Community 3.1.1 (November 20, 2006)</h2>
+<ul>
+<li>Model Version : 23<br>
+If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+<li>UML2.0 is not supported in JUDE/Community.
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>Most left view element in diagram is not displayed in some cases when diagram is opened without the scroll bar. [2011]</b>
+<li><b>Partitions will be shown overlapped after doing copy &amp; paste them in Activity Diagram. [2004]</b>
+<li><b>Cloned Association Classes are shown without its default color in them. [1998]</b>
+<li><b>Activations get out of the dotted line of Lifeline after correcting Invalid Models. [1997]</b>
+<li><b>Some associations are shown in UML 2.0 notation. [1992]</b>
+<li><b>ObjectNode names of Activity Diagram are shown on the list in the Dropdown of Lifeline base class in Sequence Diagram. [1987]</b>
+<li><b>There is only one item shown in the Dropdown list of Lifeline base class in Sequence Diagram. [1986]</b>
+<li><b>A whole text cannot be seen when it is longer than combo box's width. [1974]</b>
+<li><b>An exception occurs when editing definitions of attributes or operations without having any diagrams opened in Diagram Editor. [1966]</b>
+</ul>
+
+<hr>
+<br>
+<a name=community3.1></a>
+<h2>JUDE/Community 3.1 (October 30, 2006)</h2>
+<ul>
+<li>Model Version : 23<br>
+If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+<li>UML2.0 is not supported in JUDE/Community.
+</ul>
+
+<h4>New Functions</h4>
+<ul>
+<li><b>Window Menu</b><br>
+  Window menu in the main menu is added.<br>
+  ([Close/Close Others/Close All] [Horizontal/Vertical/Tile])
+<li><b>Open diagrams at coordinate on top left center</b><br>
+  Opening diagrams at coordinate on top left center can be set in the system properties. [Default On]<br>
+  ([Basic] - [Open diagrams at coordinate on top left center] in System Properties)
+<li><b>Diagram Editor Frame Visibility</b><br>
+  Diagram Editor Frame visibility can be set in the system properties.
+  ([Basic] - [Diagram Editor Frame visibility] in System Properties)
+</ul>
+
+<h4>Improvements</h4>
+<ul>
+<li><b>Diagram Editor Window Size</b><br>
+Diagram Editor window size will be saved on exiting JUDE.
+<li><b>Update System Properties</b><br>
+On applying the update of the system properties, it will reflect on the diagram editor.
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>Selecting [Save as] the project file always brings up the directory that is used before.[1871]</b>
+<li><b>Saving project files in directory that does not exist will create an unnecessary directory. (In case deleting the directory with Explore
+while holding the pop-up of file chooser to save project files with the directory.)[1867]</b>
+<li><b>When creating lost messages from onto the frame line, the lost message lines will not appear properly.[1858]</b>
+<li><b>Unable to UNDO after changing Message Return Value Visibility.[1854]</b>
+<li><b>An exception occurs when clicking "Back to Previous Editor" button on Tool bar occasionally.[1842]</b>
+<li><b>Mnemonic does not work for Menus in English Version.</b>
+<li><b>Unable to import the strctfp classes.[1827]</b>
+<li><b>Undo does not work occasionally when the focus is on elements such as rectangles, straight lines, and images.[1779]</b>
+<li><b>A Create Message should be drawn with solid line.[1568]</b>
+</ul>
+
+<hr>
+<br>
+<a name=community3.0.3></a>
+<h2>JUDE/Community 3.0.3 (September 6, 2006)</h2>
+<ul>
+<li>Model Version : 22<br>
+If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+<li>UML2.0 is not supported in JUDE/Community.
+</ul>
+
+<h4>Bug Fix</h4>
+<ul>
+<li><b>An exception occurs when choosing a folder to open/save a project. [1511]</b>
+<li><b>Reduced some times when dialogs come to choose Attribute types. [1528]</b>
+<li><b>Unable to make the name of ObjectFlowState Empty. [1535]</b>
+<li><b>Unable to correct the invalid model by doing [Tool]-[Correct Model]-[Correct Invalid Models]. [1536]</b>
+<li><b>Cannot direct edit for relationships without name.[1539]</b>
+<li><b>>An exception occurs when creating a Diagram in some cases.[1523]</b>
+</ul>
+
+<hr>
+<br>
+<a name=community3.0.2></a>
+<h2>JUDE/Community 3.0.2 (August 10, 2006)</h2>
+<ul>
+<li>Model Version : 22<br>
+If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+<li>UML2.0 is not supported in JUDE/Community.
+</ul>
+
+<h4>Bug Fix</h4>
+<ul>
+<li><b>An exception occurs when copying and pasting partitions over two activity diagrams in some cases. [1466]</b>
+<li><b>A default frame name of a class diagram should be a name of a namespace. [1446]</b>
+<li><b>When running JUDE again after closing once, the window doesn't open in a same location as where it was the last time. [1474]</b>
+<li><b>Topic is not in editing mode when adding new topics by inputting Japanese half-size characters directly. [1476]</b>
+<li><b>An exception occurs when creating a same named AssociationClass by [Convert to AssociationClass]. [1468]</b>
+<li><b>An exception occurs when creating CreateMessage in sequence diagrams in some cases. [1490]</b>
+<li><b>An exception occurs when opening diagram in some cases.[1501]</b>
+<li><b>When operating [Alt+F] or [Alt+V] while the focus is on an element, f or v is input in the element. [1505]</b>
+<li><b>When exporting Images of sequence diagrams, texts on Selfmessage of the right object get chopped off. [1477]</b>
+<li><b>An exception occurs when modifying the link name of Collaboration diagrams by Pop-up Menu.[1512]</b>
+<li><b>An exception occurs when converting Association to AssociationClass then converting AssociationClass to Class. [1447]</b>
+</ul>
+
+<hr>
+<br>
+<a name=community3.0.1></a>
+<h2>JUDE/Community 3.0.1 (July 10, 2006)</h2>
+<ul>
+<li>Model Version : 22<br>
+If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+<li>UML2.0 is not supported in JUDE/Community.
+</ul>
+
+<h4>Bug Fix</h4>
+<ul>
+<li><b>An exception occurs when opening diagrams in some environments. [1451]</b>
+<li><b>Message names are overlapped with Activations in sequence diagrams. [1448]</b>
+<li><b>An alert will be displayed when using the Java venders other than Sun Microsystems, Inc.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community3.0></a>
+<h2>JUDE/Community 3.0 (June 27, 2006)</h2>
+<ul>
+<li>Model Version : 22<br>
+If project files have been edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+<li>J2RE1.4.2_12 is also included in the JRE bundle version of JUDE/Community.
+<li>UML2.0 is not supported in JUDE/Community.
+</ul>
+
+<h4>New Functions</h4>
+<ul>
+<li><b>JUDE API Release</b><br>
+JavaAPI that obtain main model information of Class Diagrams and UseCase Diagrams has been released. Please refer to API User Guide for detail. <br>
+Go to [start] in Windows - [Program] - [JUDE Community] - [API User Guide]
+<li><b>Convert AssociationClass to Class or Association</b><br>
+AssociationClass can be converted to Class or Association.<br>
+To convert AssociationClass, go to [Convert to Class]/[Convert to Association] in the popup menu of AssociationClass.
+<li><b>Drag &amp; Drop of Files</b><br>
+  Drag &amp; Drop for Image files, .jude Files and others are now supported.
+  <ul>
+    <li>When you Drag &amp; Drop files, you can choose an option for how to take them in as Images or use them as Hyperlinks for Models or Model elements..etc.
+    <li>This new function can be set On/Off in System Properties.  [Tool] - [System Properties] - [Others] - [Show a dialog to select an action when drag &amp; drop a file].  If this box is not checked on, Drag &amp; Drop Files would be operated in default setting.
+  </ul>
+<li><b>Pasting images from Clipboard onto Diagrams</b><br>
+Now it is able to paste images from Clipboard by selecting [Paste].
+<li><b>Saving Projects</b><br>
+When saving a new project at first time,  the project file would be saved with the name of the first diagram as the project file name.
+<li><b>Adding continuously Attributes and Operations with Enter Key</b><br>
+After creating Attributes, Operations of Class, and Operations of SubSystem on Diagram Editor, you can add continuously more of them by just pressing Enter Key. 
+<li><b>Display and Edit of Namespaces of Attribute</b><br>
+In case you select a class for Attribute Type of a Class, its name and Namespace are displayed in Attributes Property View.  By editing the Namespace in Property View in Attribute you can change the type class, or create a new one.
+<li><b>Association buttons changed into Dropdown Buttons</b><br>
+Association buttons on the tool palette in UseCase Diagram, Class Diagram, Deployment Diagram have been changed into dropdown style buttons. Now you can choose the type of Association using these dropdown buttons. 
+<li><b>Fork, Join buttons changed into Dropdown Buttons.</b><br>
+Fork and Join buttons on the tool palette in Statechart and Activity Diagram have been changed into Dropdown style buttons. Now you can choose the Horizon one or Vertical using these Dropdown buttons.
+<li><b>Rubber band of Relations</b><br>
+Rubber band of Relations are displayed including names and other attached elements by dragging them.
+<li><b>Creating new Messages in Sequence Diagram</b><br>
+When creating new Messages in Sequence Diagram, the range of Lifeline can be selected is wider. Now it is easier to create new messages.
+<li><b>Size of Action</b><br>
+The size of Action is smaller than before.
+<li><b>Partition in Activity Diagram</b><br>
+Vertical Partitions and Horizontal Partitions are supported.
+<li><b>Icons in JUDE/Community</b><br>
+Icons in JUDE/Community are updated.
+</ul>
+
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>When Package names contain a period(.), Namespaces cannot be displayed properly in dropdown list in Property View, such as Base classes in Sequence Diagram or other Diagrams.</b>
+<li><b>Project files (.jude) which name contains a period(.) other than .jude cannot be read by Drag & Drop.</b>
+<li><b>Interfaces cannot be nested onto Nodes dragging & dropping it from the Structure Tree to the Deployment Diagram (Diagram Editor).</b>
+<li><b>Memories is not released after cloning Diagrams or Models and closing the project.</b>
+<li><b>An exception occurs when selecting a new class for Return Value of Operation in Subsystems.</b>
+<li><b>Attributes can be added with [Ctrl+F] for Subsystems. </b>
+<li><b>No popup menus of Components and Artifacts is shown up in Structure Tree. </b>
+<li><b>An exception occurs occasionally when dragging the Activations that contain Reply (return) Messages.</b>
+<li><b>In some cases, what you typed would be set in the Role name when editing a Multiplicity of Associations directly in Diagram Editor.</b>
+<li><b>In Activity Diagrams, when selecting a Subsystem for Base class of the ObjectFlowState, Stereotypes of the Subsystems would not be displayed automatically in the Object.</b>
+<li><b>An exception occurs occasionally when deleting Submachinestate.</b>
+<li><b>In the property View of Attributes, invalid letters are included in the list of Stereotype names.</b>
+<li><b>Invalid Models are created when doing undo after copying notes and note anchors.</b><br>([Tool] - [Correct Model] - [Correct Invalid Models] to fix)
+<li><b>Node cannot be highlighted when dragging Interfaces to the Deployment Diagram (Diagram Editor) from the Structure Tree.</b>
+<li><b>An exception occurs occasionally when setting a new type for Return Value in Operation of Subsystems.</b>
+<li><b>Attributes Visibility in the System Property does not work properly when creating Association Classes.</b>
+<li><b>File Separators depending on platform are used in some parts.</b>
+<li><b> << reside >> Stereotypes always get added automatically when making Dependency from Components to Interfaces.</b>
+<li><b>When moving messages in Sequence Diagram, unselected messages also move at the same time in some cases.</b>
+<li><b>Importing file images fails when the image file contains :(colon) in the file name.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community2.5.1></a>
+<h2>JUDE/Community 2.5.1 (Mar.14, 2006)</h2>
+
+<ul>
+<li>Model Version : 20<br>
+If project files are edited by the newer model version of JUDE, they cannot be edited in the older model versions.
+<li>J2RE1.4.2_11 is also included in the JRE bundle version of JUDE/Community.
+</ul>
+
+<h4>New Functions</h4>
+<ul>
+<li><b>Artifact Maps</b><br>
+Artifact maps can be generated on the popup menu of the project on the structure tree.<br>
+The artifact map includes all diagrams in the project and Hyperlinks are set from Topics in the Mind Map to each diagram.
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>In some cases, an exception occurs when searching topics in the search view and deleting the Mind Map on the structure tree.</b>
+<li><b>Hyperlink cannot be opened by double-clicking the Hyperlink icon in Mind Maps.</b>
+</ul>
+
+<h4>Existing Bugs</h4>
+<ul>
+<li><b>When editing the multiplicity of an association on diagram, it is set as a role name in some cases.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community2.5></a>
+<h2>JUDE/Community 2.5 (Feb.22, 2006)</h2>
+<ul>
+<li>JUDE image files and URLs have changed based on the establishment of the new company, Change Vision, Inc.
+<li>Model Version : 20
+</ul>
+
+<h4>New Functions</h4>
+<ul>
+<li><b>Editing relationships on diagram</b><br>
+  <ul>
+  <li>The names of relationships (Generalization, Association, Realization, Dependency, Extend, Include, Link) can be set on popup menus.
+  <li>The role names of associations are editable when setting on popup menu.
+  <li>The multiplicities of associations can be edited on diagrams.
+  </ul>
+</ul>
+
+<h4>Improvements</h4>
+<ul>
+<li><b>Aggregation Icons</b><br>
+Aggregation Icons have been added in the Class popup menu.
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>Visibility of Operation Parameter Type cannot be set correctly in the Class popup menu when setting off the default visibility in the system properties.</b>
+<li><b>Actors cannot be aligned in the center by "align horizontal center".</b>
+<li><b>In the version 2.4 or later, line width of the rectangle may change when opening a project file edited in the version 1.6. or older.</b>
+<li><b>In the version 2.4 or later, an arrow of the line is not displayed when opening a project file edited in the version 1.6. or older.</b>
+<li><b>ESC key does not work in the confirmation dialog when creating a new class as an Attribute type.</b>
+<li><b>An exception occurs when dragging and dropping a Class to its self Association Class in the structure tree.</b>
+<li><b>In some cases, an exception occurs when dragging and dropping an Association Class to a diagram in the structure tree.</b>
+<li><b>An exception occurs when a Class name is editable in the structure tree and a Class diagram is created ([Diagram] - [Class Diagram] in the main menu).</b>
+<li><b>When selecting [View] - [Look&Feel] - [Windows Classic] in the main menu, [Windows Classic] is not checked when reopening the menu.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community2.4.4></a>
+<h2>JUDE/Community 2.4.4 (Dec.27, 2005)</h2>
+<ul>
+<li>Model Version : 20
+</ul>
+
+<h4>Improvement</h4>
+<ul>
+<li><b>Show/Hide the Project View by double-clicking the tab of the Diagram Editor. (Only Java1.5.x)</b>
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>An exception occurs if there is no return value of an operation and it is input.</b>
+<li><b>Stereotypes and Constraints cannot be moved on view elements of a Package in some cases.</b>
+<li><b>In some cases, a class cannot be deleted. To correct, go to [Tool] - [Correct Model] - [Correct Invalid Models]</b>
+<li><b>Linefeed code is wrong in the Shell script file (jude) for Linux and MacOS.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community2.4.3></a>
+<h2>JUDE/Community 2.4.3 (Dec.2, 2005)</h2>
+<ul>
+<li>Model Version : 20<br>
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>In some cases, arrowhead will be changed when opening the files edited in the old version of JUDE.</b>
+<li><b>An exception occurs when selecting a role name of an Association and press Ctrl + D.</b>
+<li><b>In some cases, an exception occurs when copying and pasting in deployment diagrams.</b>
+<li><b>In some cases, messages cannot be added in sequence diagrams.</b>
+<li><b>An exception occurs when exporting HTML without any classes.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community2.4.2></a>
+<h2>JUDE/Community 2.4.2 (Nov.15, 2005)</h2>
+<ul>
+<li>Model Version : 20<br>
+<li>J2RE1.4.2_10 is also included in the JRE bundle version of JUDE/Community2.4.
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>In some cases, invalid models are generated by cloning Activity Diagram.</b><br>
+To correct invalid models, go to [Tool] - [Correct Model] - [Correct Invalid Models].
+<li><b>In some cases, an exception occurs when cloning models twice.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community2.4.1></a>
+<h2>JUDE/Community 2.4.1 (Nov.04, 2005)</h2>
+<ul>
+<li>Model Version : 20<br>
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>In some cases, invalid models are not corrected by the Correct Model command.</b>
+<li><b>An error occurs when copying and pasting or cloning diagrams if there are dependencies between Objects and Classes.</b>
+<li><b>An exception occurs when creating diagrams as displaying the Diagram view.</b>
+<li><b>Invalid models are generated when copying and pasting Sub Machine State in the Statechart diagram, and undo.</b>
+<li><b>Align function is not correct to composite states in the Statechart diagrams.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community2.4></a>
+<h2>JUDE/Community 2.4 (October 28, 2005)</h2>
+<ul>
+<li>Model version : 20
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>In JUDE/Community2.4 beta, invalid models are generated by cloning a Class Diagram with the shared style Generalizations.</b>
+<li><b>In JUDE/Community2.4 beta, the background color of Classes are not displayed when opening files which were created by the previous version.</b>
+<li><b>Diagrams are opened after editing the diagram name in the Structure Tree.</b>
+<li><b>In some cases, invalid models are generated after copying and pasting in the Sequence Diagram</b><br>
+To correct the invalid models, go to [Tool] - [Correct Model] - [Correct Invalid Models]</b>
+<li><b>Selected area of a Note is larger than the size of the Note in some cases.</b>
+<li><b>It is not available to jump from a hyperlink to the Structure Tree if the tree is not displayed.</b>
+<li><b>Stub State can not be copied and pasted.</b>
+<li><b>Sometimes opening Hyperlinks from the Diagram Editor does not work.</b>
+<li><b>The label of the Hyperlink popup menu is wrong.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community2.4beta></a>
+<h2>JUDE/Community 2.4 beta (October 24, 2005)</h2>
+
+<ul>
+<li>This is a beta version. 
+<li>The Model version is #20. The new beta version is 2.4, the same number of other JUDE products.
+<li>J2RE1.4.2_09 is also included in the JRE bundle version of JUDE/Community2.4 beta.
+</ul>
+
+<h4>New Functions & Improvements</h4>
+<ul>
+<li><b>Move Message in Sequence Diagram</b><br>
+A Message can be moved to other Object by dragging the activation of the Message (This can be done with some restrictions).
+<p>
+<li><b>Set style to Line, Rectangle and Text</b><br>
+  <ul>
+  <li>Line width, line type and line color can be set to Line and Rectangle by using the popup menus.
+  <li>Line color and background can be set to Text by using the popup menu.
+  </ul>
+<p>
+<li><b>Visibility of Attribute/Operation</b><br>
+Set visibility according to the visibility of Attribute/Operation by the Class popup menu.
+<p>
+<li><b>Back/Forward to Diagram</b><br>
+Back/Forward to Diagram buttons have been added in the Tool bar.
+<p>
+<li><b>Some of Shortcut keys have changed.</b><br>
+  <ul>
+  <li>Align Left<br>
+  Alt + Left => Ctrl + Alt + Left
+  <li>Align Right<br>
+  Alt + Right => Ctrl + Alt + Right
+  <li>Align Vertical Center<br>
+  Ctrl + I => Ctrl + Alt + I
+  <li>Align Top<br>
+  Alt + Up => Ctrl + Alt + Up
+  <li>Align Bottom<br>
+  Alt + Down => Ctrl + Alt + Down
+  <li>Align Horizontal Center<br>
+  Ctrl + Minus => Ctrl + Alt + Minus
+  </ul>
+<p>
+<li><b>Set Style of View Elements by copying & pasting them.</b><br>
+  <ul>
+  <li>Adding Style of Text, Line, Rectangle, and background color of UML View Elements.
+  <li>[Edit] - [Copy Style]/[Paste Style] in the Main menu
+  <li>[Copy Style]/[Paste Style] buttons on the tool bar
+  <li>[Copy Style]/[Paste Style] on the popup menu
+  </ul>
+<p>
+<li><b>Clone Use Case</b><br>
+Use Cases can be cloned by using the popup menu in the Structure Tree.
+<p>
+<li><b>Set Color</b><br>
+  <ul>
+  <li>A pull-down button for Set Color function is added to the tool bar.
+  <li>Previous color can be used by clicking on the Set Color button.
+  <li>Favorite color can be stored in the Color Chooser.
+  <li>The color set in View Element can be selected when opening the Color Chooser.
+  </ul>
+<p>
+<li><b>Popup menu on the tab of Diagram Editor</b><br>
+Close popup menu is added to the tab of Diagram Editor (JDK5.0 only).
+<p>
+<li><b>Set maximum size of images</b><br>
+The maximum size of images can be set, so big images are not displayed.<br>
+([Tool] - [System Properties] - [Image])
+<p>
+<li><b>Display Package name in the dropdown list of the Base Class</b><br>
+Package names are displayed in the dropdown list of the Base Class located in the Object Property.
+<p>
+<li><b>Align Width & Height</b><br>
+Align Size function is now divided to Align Width and Align Height.
+<p>
+<li><b>Open diagrams with closed state of the project.</b><br>
+([Tool] - [System Properties] - [File])
+<p>
+<li><b>Grid is not displayed when outputting the image.</b><br>
+([Tool] - [System Properties] - [Grid])
+<p>
+<li><b>The maximum number of times for UNDO can now be set.</b><br>
+([Tool] - [System Properties] - [Other])
+<p>
+<li><b>Pull-down buttons for align functions are added.</b><br>
+</ul>
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>Multiple lines appear out of rectangle.</b>
+<li><b>Project files cannot be saved after problems occur in the application. In some cases, they can be saved.</b>
+<li><b>The Inheritance Tree is not displayed after displaying the Structure Tree.</b>
+<li><b>Stereotypes of the relationships cannot be moved on to Packages.</b>
+<li><b>A part of the name is not outputted in the image when an icon notation, such as Actor, is used in the Sequence diagram.</b>
+<li><b>An exception occurs when deleting cloned Sequence diagram or Collaboration diagram in some cases.</b>
+<li><b>When an Object is displayed by icon notation, the name of the Object is displayed out of the rectangle after the stereotype of the base class is changed.</b>
+<li><b>A stereotype of the Use Case is not displayed in the center in some cases.</b>
+<li><b>Underline for the static operation of the Subsystem is not displayed.</b>
+<li><b>An exception occurs when setting color to the stereotype of "Set color for Stereotype".</b>
+<li><b>Sub Activity State is resized when the name of Activity Graph is changed.</b>
+<li><b>When images are displayed in the Diagram Editor, a part of images are not displayed because the frame of the images is white.</b>
+<li><b>When selecting multiple classes, the Popup menu of other view elements are not correct.</b>
+<li><b>The name of Object in Sequence diagram is sometimes out of rectangle.</b>
+<li><b>Interface is imported as a Class by Import Java in some cases.</b>
+<li><b>An array format (int[10]) cannot be set to the type of attributes.</b>
+<li><b>In some cases, JUDE can not be started because access to jude.log is failed after exiting JUDE.</b>
+<li><b>An exception occurs when exporting Java if a file with the same name and no write permission already exists.</b>
+<li><b>When setting true to the "derived" of the Attribute, "{derive=true}" is displayed on the Class.</b>
+<li><b>Input text disappears without recognition by Undo.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community1.6.2></a>
+<h2>JUDE/Community 1.6.2(August 12, 2005)</h2>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>Invalid models are generated by cloning diagrams or copy & paste diagram elements.</b><br>
+(Statechart, Activity, Sequence and Component diagrams)
+<li><b>An exception occurs when copying and pasting Statechart diagrams.</b>
+<li><b>An invalid model is generated when copying and pasting note anchor in Statechart or Activity diagrams.</b>
+<li><b>Sub Activity State is displayed by one line when updating input with multiple lines.</b>
+<li><b>The icon of Sub Activity State is out of frame in some cases.</b>
+<li><b>Invalid models are generated when moving a Class with an inner Class to other package.</b>
+<li><b>An exception occurs when changing a parent package of Subsystem with Association Class.</b><br>
+<li><b>The size of a Class with stereotype &lt;&lt;information&gt;&gt; is wrong when dragging & dropping it from the Structure Tree to the Diagram Editor.</b>
+<br>
+</ul>
+
+<hr>
+<br>
+<a name=community1.6.1></a>
+<h2>JUDE/Community 1.6.1(July 25, 2005)</h2>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>A part of Hyperlink icon is not displayed for the image output.</b><br>
+<li><b>A name of ObjectFlowState is not displayed when reading files created by the older version.</b><br>
+<li><b>The status of the name visibility and class name visibility is wrong in the Popup Menu of ObjectFlowState.</b><br>
+<li><b>The Popup Menu is not displayed by the plural selection of Objects.</b><br>
+<li><b>The Popup Menu of Action State does not contain "Icon Notation".</b><br>
+<li><b>The Popup Menu of ObjectFlowState does not contain "Name Visibility" and "Class Name Visibility" by the plural selection.</b><br>
+<li><b>When deleting an association with multiple qualifiers, an invalid model is generated.<br>
+(It can be corrected by [Tool]-[Correct Model]-[Correct Invalid Model])</b><br>
+<li><b>A part of input is not displayed when editing multiple lines in a textbox.</b><br>
+<li><b>An invalid model is generated by deleting classes with Sequence Diagrams and Collaboration Diagrams.</b><br>
+<li><b>The Hyperlink menu is not displayed on the Structure Tree.</b><br>
+<li><b>The width of the Property View cannot be narrowed.</b><br>
+<li><b>An exception occurs when deleting an Activity Diagram referenced by a Sub Activity State.</b><br>
+</ul>
+
+<hr>
+<br>
+<a name=community1.6></a>
+<h2>JUDE/Community 1.6(July 20, 2005)</h2>
+
+<h4>Improvements</h4>
+<ul>
+<li><b>Hyperlink</b><br>
+Display Hyperlinks set in JUDE/Professional. (Reference Only)
+<p>
+<li><b>Direct Input</b><br>
+When selecting the input items such as names, they can be input directly.
+<p>
+<li><b>The names of elements on Structure Tree and Inheritance Tree become editable by F2.</b><br>
+<p>
+<li><b>The elements on Structure Tree and Inheritance Tree can be deleted by Ctrl + D.</b><br>
+<p>
+<li><b>Model version</b><br>
+The model version is displayed in the version information dialog. ( [Help]-[Version Information] )
+<p>
+<li><b>Alert when opening the project file created in the newer version.</b><br>
+<p>
+<li><b>Show/Hide Project View</b><br>
+<ul>
+<li>[Show/Hide Project View] is added in Main Menu<br>
+[View]-[Show/Hide Project View]
+<li>[Show/Hide Project View] is added in Tool Bar<br>
+</ul>
+<p>
+<li><b>Show input within definition area of Property View</b><br>
+Check [Show input within definition area of Property View] in [System Properties]-[Base] for this function.
+<p>
+<li><b>Namespace is added in Property Views for Diagrams and UseCases.</b><br>
+<p>
+<li><b>Property View of Note is added.</b><br>
+<p>
+<li><b>Stereotypes of Note are added.</b><br>
+<p>
+<li><b>Mouse cursor</b><br>
+<ul>
+<li>Change mouse cursor when zooming in/out<br>
+Ctrl + Mouse Wheel, or Ctrl + Right-mouse drag (up and down)<br>
+<p>
+<li>Change mouse cursor when moving Diagram Editor<br>
+Right-mouse drag
+</ul>
+<p>
+<li><b>Mnemonic</b><br>
+Mnemonics are added to menus. (Main Menu and Popup Menu)
+<p>
+<li><b>Job Name for printing</b><br>
+Job names for printing are set in the following cases.
+<ul>
+<li>Print Multi-Diagram - Project name</li>
+<li>Print - Diagram name</li>
+</ul>
+<p>
+<li><b>Base Class of ObjectFlowState in Activity Diagram can be set.</b><br>
+<p>
+<li><b>English menu and error messages are improved.</b><br>
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>Swimlanes overlap in Activity Diagram.</b><br>
+<li><b>Text cannot be found by the search function.</b><br>
+<li><b>Java files cannot be imported if the character set is set as SJIS.</b><br>
+<li><b>An exception occurs when pressing the Add button in Attribute tab of Property View.</b><br>
+<li><b>Message indexes are not set correctly in the Collaboration Diagram.</b><br>
+<li><b>The rubber of Message is displayed bigger when hiding stereotypes or constraints.</b><br>
+<li><b>Parameters of Create Message cannot be shown on the Sequence Diagram.</b><br>
+<li><b>Diagram elements cannot be moved in the Diagram Editor by the some Grid setting.</b><br>
+</ul>
+
+<hr>
+<br>
+<a name=community1.5.3></a>
+<h2>JUDE/Community 1.5.3(July 7, 2005)</h2>
+
+<h4>Changes</h4>
+<ul>
+<li><b>Input on Diagram Editor</b><br>
+To edit an input on the Diagram Editor, select it and press F2. The input will be editable.
+<p>
+<li><b>Color Chooser</b><br>
+Black is added in the Color Chooser.
+</ul>
+
+<p>
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>Generalizations with the shared style on a Package cannot be moved when moving the Package.</b>
+<li><b>Change the name of Class on the Class Diagram and do not fix the input.<br>
+The input name is not updated by drag & drop the Class from the Structure Tree to the Class Diagram.</b>
+<li><b>Element names are selected by drag & drop multiple elements from the Structure Tree to the Diagram.</b>
+<li><b>Action State is out of Swimlane when adding a new Swimlane in the Activity Diagram.</b>
+<li><b>Actor, Entity, Boundary and Control are shown with the normal icon by Undo/Redo of creating the elements.</b>
+<li><b>Attributes and Methods are not editable by creating Attributes (Ctrl+F) and Methods(Ctrl+M) if the Class name is selected.</b>
+<li><b>In some cases, invalid models are created when changing the end of Association, Generalization and Dependency.</b>
+<li><b>Invalid models are created when changing the link end of the self link on the Collaboration Diagram.</b><br>
+<li><b>An exception occurs when deleting &lt;&lt;extend&gt;&gt; or &lt;&lt;include&gt;&gt; in the UseCase Diagram.</b>
+<li><b>The initial color of the Association Class cannot be set.</b>
+<li><b>Packages are enlarged when putting on the plural classes in the Class Diagram.</b>
+<li><b>Move the diagram including Constraints from a Package to another Package. Constraints are deleted when deleting the former package. </b>
+<li><b>The end of the Note Anchor moves to the corner of the Note when moving the other end of the Note Anchor to another element.</b>
+<li><b>The deletion conformation dialog is not displayed when opening the Statechart Diagram, Activity Diagram, Sequence Diagram and Collaboration Diagram.</b>
+<li><b>To edit a text, only a part of the text is displayed in the scale-down diagram.</b>
+<li><b>The Class visibility cannot be cloned.</b>
+</ul>
+
+<hr>
+<a name=community1.5.2></a>
+<h2>JUDE/Community 1.5.2(April 8, 2005)</h2>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>An exception occured when we created an associationClass in right-angle mode</b><br>
+<li><b>A dashed line of an associationClass should not be allowed to be dragged to another element</b><br>
+<li><b>Sometimes Objects couldn't be resized on a sequence diagram.</b><br>
+<li><b>There was a case that position of Activation would be wrong on sequence diagram</b><br>
+<li><b>There was a problem around model compativility</b><br>
+</ul>
+
+<hr>
+<a name=community1.5.1></a>
+<h2>JUDE/Community 1.5.1(April 8, 2005)</h2>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>Initial value of attributes causes Exception</b><br>
+</ul>
+
+<hr>
+<a name=community1.5></a>
+<h2>JUDE/Community 1.5(April 7, 2005)</h2>
+
+<h4>New Functions</h4>
+<ul>
+<li><b>Association Class</b><br>
+To create Association Class, open Class Diagram, then click Association Class icon on Tool Pallet. Then, Click two classes one by one.
+<p>
+<li><b>Constraint(Attribute, Method, Association, Role, Generalization, Realization, Dependency, Message)</b><br>
+<ul>
+<li>Add Constraint of Attribute, Method, Association, Role, Generalization, Realization, Dependency, Message in Constraint Tab of Property View.
+<li>Add Constraint of Association, Role, Generalization, Realization, Dependency, Message by [Add Constraint] in Popup Menu.
+</ul>
+<p>
+<li><b>SubactivityState</b><br>
+To create SubactivityState, drag an Activity Diagram icon on Structure Tree to another Activity Diagram on Diagram Editor.
+<p>
+<li><b>CreateMessage and DestroyMessage for BranchMessage</b><br>
+To create CreateMessage and DestroyMessage for Branch Message, select [Branch Message] in Message Popup Menu.
+<p>
+<li><b>Clone Diagram</b><br>
+<ul>
+<li>To clone Diagram, select [Clone] in Diagram Popup menu on Structure Tree.
+<li>It is the same function to Copy & Paste all elements on Diagram. 
+<li>Models (eg. Class, UseCase) are shared in both diagrams.
+</ul>
+<p>
+<li><b>Open file by drag & drop .jude file</b><br>
+To open a project file(.jude), drag & drop it on JUDE window.
+<p>
+<li><b>Show stereotype of Attribute and Operation</b><br>
+To show/hide sterotype of Attribute and Operation, select [Extended Visibility] - [Attribute Stereotype Visibility] / [Operation Stereotype Visibility] in Class Popup Menu.
+<p>
+<li><b>Show stereotype of Message</b><br>
+To show/hide stereotype of Message, select [Stereotype Visibility] in Message Popup Menu.
+<p>
+<li><b>Visibility of Association name</b><br>
+To show/hide Association name, select [Name Visibility] in Association Popup Menu.
+<p>
+<li><b>Visibility of Object stereotype</b><br>
+To show/hide Object stereotype, select [Stereotype Visibility] in Object Popup Menu.
+<p>
+</ul>
+
+<h4>Improvements</h4>
+<ul>
+<li><b>Delete Diagram on Diagram View</b><br>
+To Delete a diagram on Diagram View, select [Delete] in the diagram's Popup Menu.
+<p>
+<li><b>Attribute initial value</b><br>
+<ul>
+<li>Attribute intial value will be abbreviated. 
+<li>Set to abbreviate or not in [Tool] - [System Properites] - [Base] - [Show Long Attribute Initial Value].
+</ul>
+<p>
+<li><b>Horizontal/Vertical Line</b><br>
+Press Shift as creating or modifying Line. It will create or modify a horizontal/vertical line.
+<p>
+<li><b>Popup Menu for plural Objects are added.</b><br>
+<p>
+<li><b>Show a stereotype of Subsystem attribute.</b>
+<p>
+<li><b>Nest Classes is cloned with the parent Class.</b>
+<p>
+<li><b>A font size problem of J2SE5.0.(A part of Combobox is shown "...") is solved.</b>
+<p>
+<li><b>Confirm when deleting items if they are used in diagrams.</b>
+<p>
+<li><b>An error message is shown when javaw cannot be found.</b>
+<p>
+<li><b>Change the size of element by pressing Shift. It keeps an aspect ratio.</b>
+<p>
+<li><b>Improve the performance of Import Java.</b>
+<p>
+<li><b>Cut the time of the post handling for Import Java.</b>
+<p>
+<li><b>Add EUC_JP to character sets in System Properties. (Import Java, Export Java)</b>
+<p>
+<li><b>Improve the performance when copying a big diagram.</b>
+</ul>
+
+<h4>Changes</h4>
+<ul>
+<li><b>Note, Text</b><br>
+Fix input by Enter. Create a new line by Shift + Enter, or Alt + Enter.
+<p>
+<li><b>Copy</b><br>
+<ul>
+<li>Copy is divided into [Copy] and  [Copy to Clipboard] in Popup Menu.
+<li>It will reduce the memeory usage.
+<li>All formats of images can be copied by the setting of [Tool] - [System Properties] - [Copy] -[Copy all formats of images to Clipboard by Ctrl+C].
+</ul>
+<p>
+<li><b>Use the system default newline code for [Export Java]</b>
+</ul>
+
+<h4>Fixed Bugs</h4>
+<ul>
+<li><b>Autoresize Object : Calculate a length of stereotype.</b>
+<li><b>The position of Create Message (Arrow) is wrong after opening a file and move some elements on Sequence diagram.</b>
+<li><b>Cannot move elements on diagrams by editing a right angle line.</b>
+<li><b>Stereotype disappears by direct editing of Attribute in Subsystem or Qualifier in Association.</b>
+<li><b>Exception by delete from diagram when creating ComponentInstance or Object on Node, NodeInstance, Component or ComponentInstance.</b>
+<li><b>Can't open .JUDE file.</b>
+<li><b>To edit a text, only a part of the text is shown in the scale-down diagram.</b>
+<li><b>Import Java : Judge packages and inner classes correctly.</b>
+<li><b>Autoresize Object : Ignore a length of Attribute.</b>
+<li><b>Model of Object attribute can be deleted.</b>
+<li><b>Autoresize UseCase : Autoresize when Autoresize is off.</b>
+<li><b>Undo/Redo Submachinestate.</b>
+<li><b>Exception : [Correct Model] Generalization with shared style line.</b>
+<li><b>Character set for Import Java and Export Java in System Properties does not apply.</b>
+<li><b>Export Java : An abstract method to an implement class of an Interface is automatically created.</b>
+<li><b>Export Html : Package definition is not outputted.</b>
+<li><b>When pressing Close button (X) in the confirmation to save a file, it does not cancel the operation. </b>
+<li><b>Copy & Paste a self message in Sequence Diagram. A length of the self message is wrong.</b>
+<li><b>Cannot resize Component when the stereotype is not shown.</b>
+</ul>
+
+<hr>
+<br>
+<a name=community1.4.3></a>
+<h2>JUDE/Community 1.4.3(Nov 19, 2004)</h2>
+<h4>Bug Fixing</h4>
+<ul>
+<li><b>There is a case that rectangles of Activation in Sequence Diagram is not on the Lifeline
+  when we delete a Message.</b><br>
+If you have .jude projects which have the bad sequence diagram, you can correct it by
+[Tool]-[Correct Model]-[Correct Invalid Model].
+<li><b>[Import Java] fails to parse a source file which has a assignment of a instance of anonymous classes.<br></b>
+<li><b>[Import Java] fails to parse a source file which has a innerclass of interfaces.<br></b>
+<li><b>[Import Java] fails to parse a source file which has a "assert" method.<br></b>
+<li><b>JUDE Installer ignores the option to assotiate JUDE with the .jude extension.</b><br>
+<li><b>JUDE Installer ignores the option to add desktop icons for all users.</b><br>
+</ul>
+
+<hr>
+<br>
+<a name=community1.4.2></a>
+<h2>JUDE/Community 1.4.2(Nov 14, 2004)</h2>
+<h4>Bug Fixing</h4>
+<ul>
+<li><b>JUDE fails to open old .jude files which has a Message.</b><br>
+<li><b>[Correct Invalid Model] function deletes regular InternalTransition.</b><br>
+<li><b>There is a case that the event name of InternalTransition disappears.</b><br>
+<li><b>[Import Java] on J2SE1.4.1 doesn't accept user's operation to the Association/Attribute dialog.</b><br>
+<li><b>The status of [Propery] buttons and [New] buttons in PropertyView is not managed well.</b><br>
+</ul>
+
+<hr>
+<br>
+<a name=community1.4.1></a>
+<h2>JUDE/Community 1.4.1(Oct 26, 2004)</h2>
+<h4>Changes</h4>
+<ul>
+<li><b>New JUDE logo for printing.</b><br>
+</ul>
+
+<h4>Bug Fixing</h4>
+<ul>
+<li><b>Fix a bug of loading an old project.</b><br>
+</ul>
+
+<hr>
+<br>
+<a name=community1.4></a>
+<h2>JUDE/Community 1.4(Oct 25, 2004)</h2>
+<p> From this version, "JUDE Community" will be used instead of Jude take.
+<p>
+<h4>New Functions</h4>
+<ul>
+<li><b>Attribute/Operation  [Class Diagram]</b><br>
+It's possible that only focused attributes and operations can be shown on the diagram by [Attribute/Operation Individial Visibility] in the popup menu of class element. 
+<p>
+<li><b>Control of elements on diagram  by cursor keys</b><br>
+Elements on diagram can be moved by cursor keys.
+<p>
+<li><b>Grid snap for the movement of elements on diagram</b><br>
+Being moved with mouse or cursor keys, the position of elements on diagram can be adjusted based on grids' position.
+The movement of the element on diagram will be based on the position of grid by the combination of mouse-drag and Ctrl key or cusor key control. The combination of Ctrl key and Cursor key will make the movement of elements more delicate.
+The grid snap can be set by [Tool]-[System Property]-[Grid].
+<p>
+<li><b>Multi diagrams' saving as picture</b><br>
+<p>
+<li><b>The direction of signal can be changed[Activity Diagram]</b><br>
+<p>
+<li><b> Junction Point Support[StateChart Diagram]</b><br>
+<p>
+<li><b>Dynamic Choice Support[StateChart Diagram]</b><br>
+<p>
+<li><b>Option for setting the position of toolbar/toolplate </b><br>
+The initial position of toolbar/toolplate can be set by [Tool]-[System Property]-[View]. 
+<p>
+<li><b>Diagram Creation by Usecases and Classes</b><br>
+All kinds of diagrams can be created by usecases and classes in structure tree. 
+<p>
+<li><b>model correction functions</b><br>
+The models created by privious version can be corrected for new version by these temporary functions <br>
+[Incorrect Model Correction]： To correct the incorrect points of exsiting models, which are caused by extension of current version or the bugs of preivous version <br>
+<p>
+<li><b>Others</b><br>
+Abolish DefaultPackage、etc
+<p>
+</ul>
+<h4>Bug Fixing</h4>
+<ul>
+<li><b>Fix the bug of Html output</b><br>
+<p>
+<li><b>Fix the bug of regular expression "[ ]" for replacement item in search view</b><br>
+<p>
+<li><b>Other bugs are fixed</b><br>
+</ul>
+
+<hr>
+<br>
+<a name=take1.3></a>
+<h2>Jude take 1.3(Apr 12, 2004)</h2>
+<p>
+<ul>
+<li><b>Multi-stereotype. </b><br>
+It's possible to define and show multiple stereotype for an element. 
+<p>
+<li><b>Paste image to the diagram. </b><br>
+It's possible to paste any image(JPG/PNG/GIF) on the diagram by the "Image" button in tool bar.
+<p>
+<li><b>Compress data. </b><br>
+While Jude saving data, Data can be compressed by checking the 
+item "Compress data at saving" in [Tool]-[System Properties]-[File]. 
+<p>
+<li><b>"Cut" becomes unavailable. </b><br>
+Because of a bug of "Cut", "Cut" becomes unavailable in this version.
+<p>
+<li><b>Fixed the bug of Setter/Getter creation. </b><br>
+The bug that the operations named setName/getName will be created 
+for a property whose type is String without considering the property's
+<br> name has been fixed.
+<p>
+<li><b>Fixed the bug of swimlane. </b><br>
+The bug occuring while an activity diagram containing more than two
+swimlanes is deleted and undo the operation has been fixed.
+<p>
+<li><b>Fixed the bug of copying the note. </b><br>
+The bug that a note will be affected by modifying its copy has been fixed. 
+<p>
+<li><b>Fixed the bug of deleting the note. </b><br>
+The bug that the copy of a note with note anchor cannot be deleted
+has been fixed.
+<p>
+<li><b>Fixed the bug of copying right-angle-style line. </b><br>
+The bug that right-angle-style line of a note will be deleted by
+deleting the line of the copy of that note has been fixed.
+<p>
+<li><b>Other bugs are fixed.  </b><br>
+</ul>
+
+<hr>
+<br>
+<a name=take1.2.7></a>
+<h2>Jude take 1.2.7(Jan 30, 2004)</h2>
+<p>
+<ul>
+<li><b>Correct the problem that cut and copy are unavailable. </b>
+</ul>
+
+<hr>
+<br>
+<a name=take1.2.6></a>
+<h2>Jude take 1.2.6(Jan 30, 2004)</h2>
+<p>
+<ul>
+<li><b>Add the starting shell script for Unix(Linux)</b><br>
+<p>
+<li><b>Line Type and Line Arrow</b><br>
+Line type and line arrow can be set by line item's popup menu.
+<p>
+<li><b>Show Grid on diagram</b><br>
+Item "Grid" is added to the Jude System Properties.[Tool] - [System Properties]
+</br>Options "Diagram grid visible","Grid horizontal interval","Grid vertical interval","Grid color" are added to item "Grid".
+<p>
+<li><b>Setter()/Getter() Creation</b><br>
+In structure view,Setter()/Getter() can be created by attribute's popup menu.
+<p>
+<li><b>Correct the multi-movement in Activity Diagram</b><br>
+After being moved,multi-slected elements will be still in their original swinlane.
+<p>
+<li><b>Correct the multi-movement of messages in Seqence Diagram</b><br>
+Multi-movement of messages in Seqence Diagram becomes possible.
+<p>
+<li><b>Correct the bug which occurs when the return value of a method is deleted</b><br>
+The bug that modification becomes impossible after the return value of a method is deleted in property view has been corrected.
+<p>
+<li><b>Correct the project-saving problem on Unix(Linux)</b><br>
+Make project-saving correct when the temporary directory is in the different partition from the partition where the saving directory is in. 
+<p>
+<li>Other bugs are fixed. 
+</ul>
+
+<hr>
+<br>
+<a name=take1.2.5></a>
+<h2>Jude take 1.2.5(Dec 24, 2003)</h2>
+<p>
+<ul>
+<li><b>Line Item</b><br>
+<p>
+<li><b>Scroll Bar</b><br>
+"Show scroll bar" option is added to the Jude System Properties. [Tool] - [System Properties].
+<p>
+<li><b>Show Object's Name by Multi-lines Style (Only for Sequence Diagram)</b><br>
+<p>
+<li><b>Improvement of Print</b><br>
+<ul>
+<li>Remember the margins used previous time.
+<li>Delete extra space aroud printed items and modify their position automatically.
+</ul>
+<p>
+<li><b>Improvement of Paste</b><br>
+<ul>
+<li>Pasted item will be above all other items. 
+<li>Keep the pasted item in selected condition.
+<li>Items will be pasted at the positon of mouse cursor when the popup-menu-paste is used.
+</ul>
+<p>
+<li><b>Scale of Copied Item</b><br>
+The pasted picture in other tools will be the same scale as that in the diagram.<p>
+<li><b>Improvement of Alignment</b><br>
+<ul>
+<li>The rules of center-alignment are the same as the rules of MS Word.
+<li>The item will be aligned in its own swimlane.
+</ul>
+<p>
+<li><b>Left-right Scroll For Diagram</b><br>
+It's possible to left-right scoll diagram with Shift + Mousewheel.
+<p>
+<li><b>Mouse Operation For The Map</b><br>
+"Change mouse operation for the map (left for view, right for resize)" option is added to the Jude System Properties. [Tool] - [System Properties].
+<p>
+<li><b>Name By Bold Style</b><br>
+"Show a name By bold style" option is added to the Jude System Properties. [Tool] - [System Properties].
+<p>
+<li><b>ON/OFF of Auto-Resize for multi-selection</b><br>
+It's possible to switch ON/OFF of auto-resize for multi-selection.(only for usecase and class) 
+<p>
+<li><b>Jude.log's Position</b><br>
+Jude.log will be saved in the home directory.
+<p>
+<li><b>The bug that long icon-items' name,like long actor's name,cannot be shown completely in the print and pasted picture has been corrected.</b><br>
+<p>
+<li><b>Unsupported items in [View] - [LookAndFeel] are deleted.</b><br>
+<p>
+<li><b>The bug that jude file cannot be saved when the fold where jude is installed cannot be written has been corrected.</b><br>
+<p>
+<li>Other bugs are fixed. 
+</ul>
+
+<hr>
+<br>
+<a name=take1.2.4></a>
+<h2>Jude take 1.2.4(Oct 24, 2003)</h2>
+<p>
+<ul>
+<li><b>Auto-Scroll</b><br>
+When you drag items to the edge of DiagramEditor, it will auto-scroll to show the items.
+<p>
+<li><b>Jude System Properties</b><br>
+These options are added to the Jude System Properties. [Tool] - [System Properties]
+<p>
+<b>Basic</b>
+<ul>
+<li>Show element after auto-scroll
+<li>Use independent synchronization bar - [Activity]
+<li>Show name of package on the body
+<li>Remove invalid recent files on exit
+</ul>
+<p>
+<b>Visibility</b>
+<ul>
+<li>Subsystem Detail
+</ul>
+<p>
+<b>Line Right Angle</b>
+<ul>
+<li>Set the default line style to each diagram. (On:Right Angle, Off:Normal)
+</ul>
+<p>
+<li><b>Right Angle Line Algorithm</b><br>
+The Right Angle Line Algorithm is changed to keep a point between an item and a relation.
+<p>
+<li><b>Stereotype of UseCase, Generalization and Dependency</b><br>
+A combo box is added to Stereotype of UseCase, Generalization and Dependency. It will show stereotypes which you input.
+<p>
+<li><b>Swimlane</b><br>
+You can drag Swimlane by a knob or a line in Activity Diagram. Also, you can pick the bottom of Swimlane easily.
+<p>
+<li><b>Message in Sequence Diagram</b><br>
+These bugs are fixed.
+<ul>
+<li>Set a overloaded method to Message.
+<li>When a base class realizes an Interface, set a method of the Interface to Message. Or, rename the method name on Tree.
+<li>Change the order of a sequence number, a guard, a return value and a method.
+</ul>
+<p>
+<li><b>Package Name</b><br>
+Package Name can be shown on the tab of Package.
+<p>
+<li><b>Note</b><br>
+Note is shown in the foreground.
+<p>
+<li><b>ActionState</b><br>
+Show multi-line on ActionState. (bug)
+<p>
+<li><b>Print Header</b><br>
+A position of a print header is adjusted. Type and Time in the header is removed.
+<p>
+<li><b>UseCase</b><br>
+Include/Extend tabs are added in UseCase Property.
+<p>
+<li><b>Color Chooser</b><br>
+A new color set is added. (Gray to White)
+<p>
+<li><b>Extension points</b><br>
+Japanese title for "Extension Points" of UseCase is added in the Japanese version.
+<p>
+<li><b>Stereotype color</b><br>
+Stereotype color to UseCase and Package is added.(In the previous version, only Class can be set the stereotype color.)
+<p>
+<li>Other bugs are fixed.
+<p>
+</ul>
+<p>
+
+<hr>
+<br>
+<a name=take1.2.3></a>
+<h2>Jude take 1.2.3(Sep 24, 2003)</h2>
+<p>
+<ul>
+<li><b>Create Diagram</b><br>
+<ul>
+<li>Diagram menu is added on Menu bar.
+<li>All diagrams can be created under Package, Model or Subsystem.
+</ul>
+<p>
+<li><b>Import Java</b><br>
+You can import Java sorce codes recursively.
+<p>
+<li><b>Message Index in Collaboration diagram</b><br>
+You can set Message Index in the Message Property View.
+<p>
+<li><b>Message Operation</b><br>
+Methods in an Interface related with the base class are shown in the Message Operation dropdwon list in Sequence/Collaboration Diagrams.
+<p>
+<li><b>Select items on Tree</b><br>
+When you add a new item, it will be selected on Tree.
+<p>
+<li><b>Jude log file</b><br>
+A Jude log file is saved under the user's home directory.
+<p>
+<li><b>Activity & StateChart Diagrams on Tree</b><br>
+The bug not to show Activity & StateChart Diagrams on Tree is fixed.
+<p>
+<li><b>Cut & Paste in Activity Diagram</b><br>
+The bug to cut & paste Swimlane and ObjectFlowState in Activity diagram is fixed.
+<p>
+<li>Other bugs are fixed.
+</ul>
+
+<hr>
+<br>
+<a name=take1.2.2></a>
+<h2>Jude take 1.2.2(August 28, 2003)</h2>
+<p>
+<ul>
+<li><b>Create relations</b><br>
+<ul>
+<li>Click an item, then click the next item.
+<li>Click an item and drag to the next item.
+<li>When you create relations, arrowhead will come to the end. (You can set the original way to create relation in Jude Property)
+</ul>
+<p>
+<li><b>Create Diagrams</b><br>
+You can create Diagrams from [Edit] - [Create Diagrams]<br>
+When you are selecting an item on Tree, Diagrams are created under the item.<br>
+When you are selecting no item on Tree, Diagrams are created under Default Package.
+<p>
+<li><b>Search unreferenced Models</b><br>
+You can search undrawn Models and unreferenced Models in Search tab of Project View.<br>
+Select these options from the dropdown list next to Search button.
+<p>
+<li><b>Stereotype</b><br>
+Stereotype is shown on ActionState in Activity Diagram and Object in Sequence/Collaboration Diagrams.
+<p>
+<li><b>Multi-line name in ActionState</b><br>
+Multi-line name is shown in the center of ActionState.
+<p>
+<li><b>Select/Deselect items on Diagram</b><br>
+Select/Deselect items on Diagram by Ctrl or Shift + Click.
+<p>
+<li><b>Vertical/Horizontal move</b><br>
+You can move items vertically/horizontally on Diagram by Shift + Drag.
+<p>
+<li>Other bugs are fixed.
+</ul>
+
+<hr>
+<br>
+<a name=take1.2.1></a>
+<h2>Jude take 1.2.1(August 13, 2003)</h2>
+<p>
+<b>We fixed bugs of the previous version.</b>
+<ul>
+<li>Subsystem : Create Statechart & Activity Diagrams under Subsystem on Tree. 
+<li>Fixed bug : Create items(eg. Class, UseCase, Component) on Rectangle or Note.
+<li>Fixed bug : Delete Message from Model on Collaboration Diagram. Then, undo and redo.
+<li>Fixed bug : Delete Association from Model, then undo.
+<li>Fixed bug : Change icon of Object without a base class in Sequence Diagram.
+</ul>
+
+<hr>
+<br>
+<a name=take1.2></a>
+<h2>Jude take 1.2(August 8, 2003)</h2>
+<p>
+<ul>
+<li><b>Component Diagram</b><br>
+Support Component Diagram. You can create Component Diagram under Package, Model and Subsystem on Tree.
+<p>
+<li><b>Deployment Diagram</b><br>
+Support Deployment Diagram. Your can create Deployment Diagram under Package, Model and Subsystem on Tree.
+<p>
+<li><b>Subsystem and Model</b><br>
+<ul>
+<li>Subsystem<br>
+You can create Subsystem under Project, Package and Model on Tree. Or, use [Subsystem] button in Tool bar on Class Diagram.
+<li>Model<br>
+You can create Model under Project, Subsystem and Model on Tree.<br>
+After creating Models on Tree, drag & drop them into Class Diagram under a Model.
+</ul>
+<p>
+<li><b>Zoom</b><br>
+Zoom in and out by Ctrl + Right-Mouse drag, or Ctrl + Mouse wheel.
+<p>
+<li><b>Align Size</b><br>
+Select items(eg, Class, Actor, UseCase), then use [Tool] - [Align Size] or [Align Size] button on Tool bar to align size of items.
+<p>
+<li><b>Map View</b><br>
+When you are dragging a rectangle on Map View, the view on Diagram is also updated.
+<p>
+<li><b>Stereotype of UseCase</b><br>
+Stereotype of UseCase is added.
+<p>
+<li><b>Link</b><br>
+We fixed the bug to replace a target of a source of Link in Collaboration Diagram.
+<p>
+<li><b>Auto Create Class Diagram</b><br>
+We fixed the bug of Auto Create Class Diagram.
+<p>
+<li><b>Partial Auto Layout</b><br>
+We fiexd the bug of Partial Auto Layout.
+<p>
+<li><b>Import Java</b><br>
+We fixed the bug that Jude cannot read the file with comments at the last line.
+<p>
+<li><b>Actor, Aggregation</b><br>
+We changed the shape of Actor and Aggregation.
+<p>
+<li><b>More bugs are fixed.</b><br>
+<p>
+</ul>
+
+<hr>
+<br>
+<a name=take1.1.1></a>
+<h2>Jude take 1.1.1(July 8, 2003)</h2>
+<p>
+<ul>
+<b>We fixed bugs of the previous version.</b>
+<p>
+<li><b>JudeDefaultModel</b><br>
+JudeDefaultModel can be read into Jude project.
+<p>
+<li><b>GUI Default Color</b><br>
+We changed the GUI default color for Mac user.
+</ul>
+
+<hr>
+<br>
+<a name=take1.1></a>
+<h2>Jude take 1.1(July 7, 2003)</h2>
+<p>
+<ul>
+<b>We added new functions and fixed bugs of previous version.</b><br><br>
+<li><b>Object Diagram</b><br>
+Object Diagram is added. Object and Link buttons are added in Class Diagram.
+<p>
+<li><b>Qualifier</b><br>
+Qualifier is added. You can add or delete Qualifier from the popup menu of Association.
+<p>
+<li><b>Derived Element</b><br>
+Derived Element is added. You can set Derived Element in the Property View of Attribute and Role.
+<p>
+<li><b>Composite Package</b><br>
+You can draw Composite Package.
+<p>
+<li><b>Return value</b><br>
+Return value is shown on Sequence & Collaboration diagram.
+<p>
+<li><b>Map View</b><br>
+Performance of Map view is improved.
+<p>
+<li><b>Mac Look & Feel</b><br>
+Mac Look & Feel is improved.
+<p>
+<li><b>Export HTML</b><br>
+Comments of Summary are added.<br>
+Tag values(eg. Parameters, Returns) are added in Detail.
+<p>
+<li><b>Method Parameter</b><br>
+We fixed the bug of deleting method parameter when you change the name of method on Tree.
+<p>
+<li><b>Copy Collaboration Diagram</b><br>
+We fixed the bug of copying Collaboration Diagram.
+<p>
+</ul>
+
+<hr>
+<br>
+<a name=take1.0.9></a>
+<h2>Jude take 1.0.9(Beta)(June 23, 2003)</h2>
+<p>
+<ul>
+<b>We added new functions and fixed bugs of previous version.</b><br><br>
+<li><b>Replace function</b><br>
+Replace function is added. You can replace words from Search tab in Project View.
+<p>
+<li><b>Signal</b><br>
+Signal in Activity Diagram is added.
+<p>
+<li><b>Edit Signature</b><br>
+You can edit Attribute and Method directly on Diagram.
+<p>
+<li><b>Delete Attribute & Method</b><br>
+You can delete Attribute and Method on Diagram. (Use Popup menu or Ctrl + D)
+<p>
+<li><b>Open Diagram</b><br>
+You can select and open a diagram from the popup menu of the Package on Tree.
+<p>
+<li><b>Direction of Association name</b><br>
+Direction of Association name is added. You can change the visibility of direction or reverse direction by Popup menu.
+<p>
+<li><b>Return Message</b><br>
+Property View of Return Message in Sequence Diagram is modified.
+<p>
+<li><b>Opened file name</b><br>
+We fixed the bug of Opened file name. It was not closed the existing project and diagram editors when you selected the opened file name from [File] menu.
+<p>
+<li><b>Message Parameter visibility</b><br>
+We fixed the bug of Message Parameter visibility. You can change the visibility of Message Parameter by Popup menu.
+<p>
+<li><b>Expand & collapse tree</b><br>
+The bug of expanding and collapsing tree was fixed.
+<p>
+<li><b>Cut</b><br>
+We support [Cut] for Sequence diagrams.
+<p>
+</ul>
+
+<hr>
+<br>
+<a name=take1.0.8></a>
+<h2>Jude take 1.0.8(June 10, 2003)</h2>
+<p>
+<ul>
+<b>We added new functions and fixed bugs of previous version.</b><br><br>
+<li><b>Search function</b><br>
+Search function is added. You can search models from Search tab in Project View.
+<p>
+<li><b>Copy diagrams</b><br>
+You can copy items in StateChart, Activity, Sequence and Collaboration diagrams.
+<p>
+<li><b>Diagram list</b><br>
+A list of diagrams is added on Diagram tab of Project View. 
+<p>
+<li><b>Display opened file name</b><br>
+You can see your opened file names in [File] menu.
+<p>
+<li><b>Association with one navigation</b><br>
+A button for Association with one navigation is added in Class and UseCase diagrams.
+<p>
+<li><b>Message</b><br>
+	<ul>
+	<li>Flat Message Index is added in Sequence Diagram.
+	<li>Message in Sequence Diagram is always displayed on top.
+	</ul>
+<p>
+<li><b>Stereotype color</b><br>
+Stereotype color is changed to the default color when you change the stereotype.
+<p>
+<li><b>Look & Feel</b><br>
+Look & Feel for Mac and GTK+ is added.
+<p>
+<li><b>Windows98, ME</b><br>
+We fixed a bug for installation and startup in Windows98 and ME.
+<p>
+</ul>
+
+<hr>
+<br>
+<a name=take1.0.7></a>
+<h2>Jude take 1.0.7(May 26, 2003)</h2>
+<p>
+<ul>
+<b>We fixed bugs of previous version.</b><br><br>
+<li><b>Ordering of Attribute, Method, Parameter and Internal Transition</b><br>
+You can change the order of Attribute, Method, Parameter and Internal Transition in Property View.
+<p>
+<li><b>Print multi-diagram</b><br>
+We improved the Print multi-diagram function.
+<p>
+<li><b>Message in Sequence Diagrams</b><br>
+We fixed the bug of creating callback Message.
+<p>
+<li><b>State size</b><br>
+We fixed the bug of resizing State in StateChart.
+<p>
+</ul>
+
+<hr>
+<br>
+<a name=take1.0.6></a>
+<h2>Jude take 1.0.6(May 19, 2003)</h2>
+<p>
+<ul>
+<b>We fixed bugs of previous version.</b><br><br>
+<li><b>Print multi-diagram</b><br>
+Print multi-diagram at once.
+<p>
+<li><b>Import Jude Models</b><br>
+You can import Jude Models.
+<p>
+<li><b>Drag & Drop on Tree</b><br>
+    <ul>
+    <li>Drag & Drop multi-item on Tree.
+    <li>Auto-scroll Tree when you drag items on Tree.
+    </ul>
+<p>
+<li><b>Save file</b><br>
+Display (*) when you modify a file. It dissapears after saving the file.
+<p>
+<li><b>Role Visibility</b><br>
+Display Role Visibility.
+<p>
+</ul>
+
+<hr>
+<br>
+<a name=take1.0.5></a>
+<h2>Jude take 1.0.5(May 14, 2003)</h2>
+<p>
+<ul>
+<b>We fixed serious bugs of previous version.</b><br><br>
+</ul>
+
+<hr>
+<br>
+<a name=take1.0.4></a>
+<h2>Jude take 1.0.4(May 12, 2003)</h2>
+<p>
+<b>We fixed bugs of previous version.</b><br><br>
+<p>
+<ul>
+<li><b>System Property</b><br><br>
+       You can set System Property in Jude.
+<p>
+       Use System Dialog.
+       <ul>
+       <li>Basic
+       <li>Visibility
+       <li>Color
+       <li>Stereotype Color
+       </ul>
+<p>
+       Save your information automatically.
+       <ul>
+       <li>Window size and position
+       <li>Working directory and Java Source Directory
+       <li>Look and Feel
+       </ul>
+<p>
+<li><b>Select multi-item on Tree</b><br><br>
+       <ul>
+       <li>Delete multi-item on Tree by multi-selection.
+       <li>Drag & Drop multi-item from Tree to Diagram by multi-selection.
+       </ul>
+<p>
+<li><b>Change multi-Icon</b><br><br>
+       Change multi-Icon by a botton of Tool bar or Popup menu.
+<p>
+<li><b>Asynchronous Message</b><br><br>
+       You can create Asynchronous Message in Sequence Diagrams.
+<p>
+<li><b>Multiple Inheritance & Multiple Classification</b><br><br>
+       Support Multiple Inheritance & Multiple Classification.
+<p>
+<li><b>Import Java/Export Java</b><br><br>
+       Fixed bugs for Import Java/Export Java.
+<p>
+</ul>
+
+<hr>
+<br>
+<a name=take1.0.3></a>
+<h2>Jude take 1.0.3(April 29, 2003)</h2>
+<p>
+<b>We fixed bugs of previous version.</b><br><br>
+<p>
+<ul>
+<li><b>Fit Window</b><br><br>
+Fit Window function is added. It shows a whole diagram in Diagram Editor. 
+<p>
+<li><b>Japanese Menu</b><br><br>
+Japanese menu is added to Project Window and Property View. 
+<p>
+<li><b>Wheel scroll in Project Tree</b><br><br>
+Wheel scroll is added in Project Tree. 
+<p>
+<li><b>Action Visibility</b><br><br>
+Action Visibility in Statechart diagrams is added. 
+<p>
+<li><b>Multiplicity Popup</b><br><br>
+Popup of Multiplicity in Class Diagrams is added. 
+<p>
+<li><b>Object without Name</b><br><br>
+You can create an object without the name in Sequence diagrams and Collaboration diagrams. 
+<p>
+<li><b>Performance Tuning</b><br><br>
+Performance Tuning for displaying diagrams. 
+</ul>
+
+<hr>
+<br>
+<a name=take1.0.2></a>
+<h2>Jude take 1.0.2(April 21, 2003)</h2>
+<p>
+
+<b>We fixed bugs of previous version.</b><br><br>
+<p>
+<ul>
+<li><b>Japanese Menu</b><br><br>
+Japanese Menu for Management Window, DiagramEditor is added. 
+<p>
+<li><b>Create Class</b><br><br>
+When you specify a type of attributes, parameters and returns, which does not exist, it creates a new class. 
+<p>
+<li><b>Message Operation</b><br><br>
+You can see the parameter and class name in Operation Combobox. 
+<p>
+<li><b>Source and Target of Link.</b><br><br>
+Change the setting of source or target of link when you change it. 
+<p>
+<li><b>Fixed Memory leak</b>
+</ul>
+
+<hr>
+<br>
+<a name=take1.0.1></a>
+<h2>Jude take 1.0.1(April 14, 2003)</h2>
+<p>
+<b>We fixed bugs of previous version.</b><br><br>
+<p>
+<ul>
+<li><b>Fixed Bug: ExportHTML</b><br><br>
+<p>
+<li>You can use Jude on Linux.
+<p>
+</ul>
+
+<hr>
+<br>
+<a name=take1.0></a>
+<h2>Jude take 1.0(April 11, 2003)</h2>
+<p>
+<b>Jude take 1.0 is the formal take version.</b><br><br>
+<p>
+<ul>
+<li><b>Sequence Diagram</b><br>
+	<ul>
+	<li>Prevent from deleting activation by delete botton.
+	<li>Fix rubber of BranchMessage.
+	</ul>
+<p>
+<li><b>PropertyView</b><br>
+	Improve the function to apply input by Enter Key, Focus out or Selection of Combobox. 
+<p>
+<li><b>Fix bug: Exception for Return Type</b>
+<p>
+</ul>
+
+<hr>
+<br>
+<a name=take1.0beta6></a>
+<h2>Jude take 1.0beta6(April 7, 2003)</h2>
+<p>
+<b>We fixed bugs of previous version.</b><br><br>
+<p>
+<ul>
+<li><b>Collaboration Diagrams</b><br>
+    <ul>
+    <li>You can update a message name in Activator and Predecessor Combobox when you change the message name.
+    <li>You can change indexes of messages as specifying Predecessor.
+	</ul>
+<li>You can change the parameter name of Method.
+<li>Relations do not overlap the names of Icons.
+<li>You can edit and resize Note.
+</ul>
+
+
+<hr>
+<br>
+<h2>Jude take 1.0beta5(April 1, 2003)</h2>
+<p>
+<b>We fixed some serious bugs of previous version.</b><br><br>
+<p>
+
+<hr>
+<br>
+<h2>Jude take 1.0 beta4(March 31, 2003)</h2>
+<ul>
+<li><b>Collaboration Diagram is supported.</b><br><br>
+
+<li><b>Single Window</b><br><br>
+       Management View, Project View and Diagram View are set in a single
+       window for the easy operation.
+<br><br>
+<li><b>Copy & Paste</b><br><br>
+       Copy & Paste selected items to Clipboard.
+<br><br>
+<li><b>Property View</b><br><br>
+       Apply input by Enter Key, Focus out or Selection of Combobox.
+<br><br>
+<li><b>Line Style</b><br><br>
+       Right Angle Line is added.
+<br><br>
+<li><b>Stereotype</b><br><br>
+       Icons of control, boundary, entity are supported.
+<br><br>
+<li><b>Sequence Diagram</b><br><br>
+       Index is added.<br>
+       Branch is added.
+<br><br>
+<li><b>Type Visibility</b><br><br>
+       Type Visibility of attribute/method/method parameter is added.
+<br><br>
+<li><b>Drag & Drop on Tree</b><br><br>
+       Drag & Drop for attribute and method on Tree is added.<br>
+       User also can change the order of attribute and method on tree.
+<br><br>
+<li><b>Color Dialog</b><br><br>
+       Image color is added.
+       User can choose any color from HSB panel.
+<br><br>
+<li><b>Set Color for each stereotype</b><br><br>
+       User can set color for stereotype at once.
+       actor, control, boundary, entity, interface
+<br><br>
+<li><b>Multi-Selection</b><br><br>
+       Multi-Selection of Items is added.
+</ul>
+<p>
+
+<h2>Jude take 1.0 beta3(March 7, 2003)</h2>
+<ul>
+<li><b>Sequence Diagram</b><br><br>
+       Bacic functions of SequenceDiagram is added.
+<br><br>
+<li><b>UseCase</b><br><br>
+       Name is displayed in multiple lines.
+       Name is displayed inside or outside of the oval.
+<br><br>
+<li><b>Print Screen</b><br><br>
+       Print Screen to JPEG or PNG.
+<br><br>
+<li><b>Array Type</b><br><br>
+       Array Type is added. (ex. parameter of method)
+<br><br>
+<li><b>Drag & Drop on Tree</b><br><br>
+       Drag & Drop are available on Tree.
+<br><br>
+<li><b>Wheel Scroll</b><br><br>
+       Scroll by mouse wheel is added.
+<br><br>
+<li><b>Java Class</b><br><br>
+       Basic Java classes are read in when a new project is created.
+       JudeDefaultModel.jude has models. It is included in the
+       downloaded file.
+<br><br>
+<li><b>Undo/Redo</b><br><br>
+       Consecutive Undo/Redo by pressing button is added.
+<br><br>
+</ul>
+<p>
+
+<h2>Jude take 1.0 beta2(Feb 4, 2003)</h2>
+     Followings are improved or added.<br>
+<ul>
+<li>Speed up MapView, scaling and selection.<br>
+<li>Create class, interface and actor on the tree.<br>
+<li>Fixed bug: Selection of the note item.<br>
+<li>Fixed bug: Rubber is displayed correctly when a user draws relations.<br>
+<li>Fixed bug: User can draw relations using Linux.<br>
+<li>Adjust menu items.<br>
+</ul>
+<p>
+
+<h2>Jude take 1.0 beta1(Feb 2, 2003)</h2>
+<ul>
+<li><b>Fixed bug: Exception occurs when a user deletes Usecase.</b><br><br>
+</ul>
+<p>
+<h2>Jude take 1.0 beta(Jan 31, 2003)</h2>
+Bugs in Jude take 1.0 alpha have been fixed.
+<ul>
+<li><b>Project Window</b><br><br>
+       Property View and Map View are embedded into Project Window.
+<br><br>
+<li><b>New align functions</b><br><br>
+       Align Center (horizontal/vertical) functions are added.
+<br><br>
+<li><b>Improved performance</b><br><br>
+       Speed of Map view, resize, and movement of multi-items are improved.
+<br><br>
+<li><b>Drag & Drop in Project tree is now available.</b><br><br>
+       (Limitation)<br>
+          * Targets of dragging are package, class and diagram.<br>
+          * Target of dropping is only package.<br>
+<br><br>
+<li><b>Import/Export</b><br><br>
+       Bugs in Import Java/Rose and Export Java/Html are fixed.
+<br><br>
+<li><b>Extension points in UseCase are added.</b><br><br>
+<li><b>New Design of Jude</b><br><br>
+       Jude has a new Design based on take(bamboo).
+<br><br>
+<li><b>More bugs are fixed.</b><br><br>
+</ul>
+
+<h2>Jude take 1.0 alpha(Dec 20, 2002)</h2>
+     Followings are improved or added.<br>
+<ul>
+     <li> Support Statechart Diagram<br>
+     <li> Support Activity Diagram<br>
+     <li> Add Color Select function for Package, Class, Actor and UseCase<br>
+     <li> Add Align function<br>
+     <li> Save UseCase Diagram<br>
+     <li> Display method signature<br>
+     <li> Drag & Drop for relations<br>
+</ul>
+Caution: This is alpha release. ImportJava, ExportJava, ExportHtml doesn't work with some encodings.
+<p>
+<a name=1.3></a>
+<h2>Jude ume 1.3(Dec 8, 2000)</h2>
+<ul>
+<li><b>JDK 1.3 supported</b><br><br>
+Bugs found on JDK1.3 were fixed.
+<br><br>
+<li><b>ImportJava function</b><br><br>
+ImportJava restriction was removed.<br>
+You can import java source files more than once.
+And you don't have to add a classpath to "tools.jar", which means you can
+ use this function also when you just "click Jude_1_3.jar" file.
+(In case of JRE installed)
+<br><br>
+<li><b>JudeDefaultModel</b><br><br>
+This function loads models automatically when you create or load a Jude project.<br>
+<br>
+<li><b>Partial Auto Layout function</b><br><br>
+You can use Auto Layout function for only the models you select.  The models will be layed out right- and downward from the middle of the DiagramEditor.
+<br>
+</ul>
+
+<h2>Jude ume 1.2.1(Mar 6, 2000)</h2>
+<p>Mainly the performance is improved in this version.
+
+<h2>Jude ume 1.2 (Jan 30, 2000)</h2>
+<p> For Jude ume 1.2 we attached importance upon the easy use and the looks 
+   to improve.
+<br>This version supports use case diagrams, which have some restrictions
+   though.
+
+<p>We recommend you use Jude ume 1.2 on JDK 1.2.2.
+<br>It works with JDK 1.2 and the later version as well,
+but the appearance or the operation might change.
+
+<p>Please note that on Jude ume 1.2 you cannot use models created on Jude ume 1.0 - 1.1.1.
+
+
+<ul>
+<li><b>Use case diagram</b>
+<br>
+<br>You can draw use case diagrams with items such as actors, use cases,
+<br>squares to indicate system boundaries, << include >> and << extend >>.
+<br>
+<br>But Jude ume 1.2 contains restrictions as below.
+<ul>
+<li>You cannot save models in use case diagrams.
+<li>You cannot print out use case diagrams.
+</ul>
+<br>
+
+<li><b>Property Window</b>
+<br>
+<br>You can open Property Window on Project Window.
+<br>Or you can also open it as another dialog.
+<br>It follows the choice of a Model on Diagram Editor and Project Window.
+<br>
+
+<br>
+<li><b>Zoom Button</b>
+<br>
+<br>Your view changes (bigger or smaller) as long as you push Zoom Button.
+<br>
+
+<br>
+<li><b>Shared Style</b>
+<br>
+<br>You can draw Shared Style of inheritances.
+<br>You can also switch from Shared Style to Separate Style.
+<br>
+  
+<br>
+<li><b>Preview over diagrams</b>
+<br>
+<br>You can get a preview over diagrams by clicking on a diagram in
+    Project Window.
+<br>This function helps you to check diagrams' appearance without opening
+    Diagram Editor.
+<br>
+
+<br>
+<li><b>Centre Mode</b>
+<br>
+<br>You can set Centre Mode for making relation lines.
+<br>When you choose this mode, relation lines end in the middle of items
+    automatically.
+<br>Otherwise lines end where you click.
+<br>
+<br>To set this mode, push down the button on the right end of Diagram Editor
+<br>(a button of a square with a dot on its middle).
+<br>
+
+<br>
+<li><b>Round Interface Icon</b>
+<br>
+<br>You can change interfaces (classes with a streotype of "interface") to 
+    round icons.
+<br>Right click on the interface, and select  "ModifyIcon".
+<br>
+    
+<br>
+<li><b>Add Header to Printings</b>
+<br>
+<br>You can add following information to your printings as a header.
+<br>
+<ul>
+<li>Diagram name
+<li>Diagram's category
+<li>Date and time of print
+</ul>
+
+<br>
+<li><b>Others</b>
+<br>
+<br>ImportJava function still has the same restriction as before.
+<br>(You cannot import java more than once.)
+
+</ul>
+
+<h2>Jude ume 1.1.1 (Oct 21, 1999)</h2>
+
+<ul><b>[Upgrades & Debugs]</b>
+<li>Version information on the title bar was corrected.<br><br>
+Followings are debugged.<br>
+<li>Disablity to add classes while opening the Property Window.
+<li>Exceptions on opening files after closing the Project Window.
+</ul>
+
+<h2>Jude ume 1.1 (Oct 1, 1999)</h2>
+
+<ul>
+<b>[Upgrades]</b>
+<li>ImportJava function, possible to choose more than one file.
+<li>Drawing quality is improved.
+<li>Extension "jude" is omittable to save files.
+<br><br>
+<b>[Debugs]</b>
+<br>
+Followings are debugged.
+<br>
+<li>Extra dialogs on choosing files.
+<li>Exceptions on dragging the ProjectWindow.
+<li>Error in cases of a same parameter name as a property name.
+<li>Association names and role names didn't follow the reformation of assosiation lines.
+</ul>
+
+<h2>Jude ume 1.0.1 (Aug 2, 1999)</h2>
+<ul>
+<b>[Debugs]</b>
+<li>Some bugs found in the tutorial.
+</ul>
+
+<h2>Jude ume 1.0 (July 30, 1999)</h2>
+&nbsp first release.
+<p>
+</body> </html>

@@ -1,0 +1,76 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+
+<html>
+
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+   <title>JUDE API User Guide</title>
+</head>
+
+<body bgcolor="#F0F8FF">
+
+<h1>JUDE API User Guide</h1>
+<hr>
+
+<h2>[How to edit models]</h2>
+
+We will show you how to edit JUDE models with sample programs in this paragraph.<br>
+Please refer to <a href="javadoc/index.html">JUDE API JavaDoc</a> for &quot;Class and Usecase         
+Diagram Interface&quot;, &quot;ER Diagram Interface&quot;, &quot;Mindmap Interface&quot; for more details.<br>
+<I>Edit function of JUDE API is not available in JUDE/Community.</I>
+               
+<p>
+<i>Edit class name and definition</i>
+<TABLE border="1">
+<tr>
+<td>
+<pre><samp>
+  try {
+      TransactionManager.beginTransaction();
+      BasicModelEditor bme = ModelEditorFactory.getBasicModelEditor();
+      // Create a class
+      IClass class0 = bme.createClass(project, &quot;class0&quot;);
+      // Set name
+      class0.setName(&quot;new class name&quot;);
+      // Set definition
+      class0.setDefinition(&quot;Definition of the class&quot;);
+      TransactionManager.endTransaction();
+  } catch (InvalidEditingException e) {
+      TransactionManager.abortTransaction();
+  }
+</samp></pre>
+</td>
+</tr>
+</TABLE>
+
+<p>
+<i>Edit physical name of ER entity</i>
+<TABLE border="1">
+<tr>
+<td>
+<pre><samp>
+  IERModel erModel = (IERModel) getElement(project.getOwnedElements(), &quot;ER_Model&quot;);
+  schema = erModel.getSchemata()[0];
+  IEREntity[] entities = schema.getEntities();
+  for (int i = 0; i &lt; entities.length; i++) {
+      if (&quot;Entity0&quot;.equals(entities[i].getName())) {
+      try {
+         TransactionManager.beginTransaction();
+         // Set physical name
+         entities[i].setPhysicalName(&quot;entity0 physical name&quot;);
+         TransactionManager.endTransaction();
+      } catch (InvalidEditingException e) {
+         TransactionManager.abortTransaction();
+      }
+  }
+</samp></pre>
+</td>
+</tr>
+</TABLE>
+
+<hr>
+
+<a href="index.html">Home</a>
+</body>
+</html>
+

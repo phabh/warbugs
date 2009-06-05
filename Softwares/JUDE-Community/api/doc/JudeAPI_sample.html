@@ -1,0 +1,83 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+
+<html>
+
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+   <title>JUDE API User Guide</title>
+</head>
+
+<body bgcolor="#F0F8FF">
+
+<h1>JUDE API User Guide</h1>
+<hr>
+
+<h2>[Sample Applications]</h2>
+
+<h3>[ClassDefinitionExporter]</h3>
+Class information in JUDE Project File would be exported into CSV format.<br>   
+There are 5 information of the class get exported; Class Full Path name, Attribute, Operation,    
+Definition, SuperClass, and Supplier of the realization.<br>   
+<br>
+<br>
+<h4>How to compile</h4>
+Compilation can be done with your system command prompt or Java IDE (Integrated Development Environments)   
+tool. The class path needs to be set to both of JUDE install folder and jude-api.jar that is    
+inside the same folder.<br>   
+<br>
+Sample : Compiles using [compile.bat] that is a batch file for Windows command prompt<br>   
+<br>
+<TABLE border="1">
+<tr>
+<td>
+C:\Program Files\JUDE-XXXXXXXXXX\api\sample\csvexporter&gt;compile<br>
+</td>
+</tr>
+</TABLE>
+<br>
+
+<br>
+<h4>How to Run</h4>
+Running can be done by specifying the JUDE project file name as   
+the first parameter and the csv format file name where    
+is the target to export as the second parameter by using your system command prompt    
+or Java IDE (Integrated Development Environments) tool.   
+The Class Path needs to be set to both of jude-api.jar and jude-community.jar(jude-pro.jar)   
+that are in the install folder.<br>   
+Also, memory option for Java environment needs to be set up in case the size of your JUDE    
+Project is large.<br>   
+<br>
+Sample : Running using [run.bat] that is a batch file for Windows command prompt.<br>   
+<br>
+<TABLE border="1">
+<tr>
+<td>
+C:\Program Files\JUDE-XXXXXXXXXX\api\sample\csvexporter&gt;run ..\APISample.jude APISample.csv<br>
+</td>
+</tr>
+</TABLE>
+
+<h3>[ImportDBToJudeDialog]</h3>
+JUDE DB Reverse tool can be connected to DB and generate JUDE models.
+Please refer to <a href="../../db_reverse-e.html">JUDE DB Reverse Tool User Guide</a> for details.
+<font color="red">(Please note that this sample program and document are not available in JUDE/Community.)</font>
+
+<h3>[Referencing and creating JUDE models]</h3>
+Sample applications are included under "JUDE install folder\api\sample".
+<ol>
+<li>Reference JUDE Model : APIForReadingModelsSample.java</li>
+<li>Create JUDE Model : APIForEditingModelsSample.java</li>
+</ol>
+
+<ul>
+<li><b>Source code for unit test of Package com.change_vision.jude.api.test.model</b><br>
+This is a source code of unit test for JUDE API. Please refer to it when you use JUDE API.
+</ul>
+
+
+<hr>
+
+<a href="index.html">Home</a>
+</body>
+</html>
+

@@ -1,0 +1,9 @@
+com.change_vision.jude.api.inf.editor
+com.change_vision.jude.api.inf.exception
+com.change_vision.jude.api.inf.model
+com.change_vision.jude.api.inf.presentation
+com.change_vision.jude.api.inf.project
+java.awt
+java.io
+java.lang
+java.util
