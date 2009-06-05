@@ -20,6 +20,8 @@ CGameCore::CGameCore(int &startInit)
 
 	//_fileCfg->reset();
 
+	
+
 	_gameConfig = _fileCfg->loadConfig();
 
 	/*
@@ -132,26 +134,26 @@ void CGameCore::addContour(ISceneNode* oNode, f32 fThickness, SColor cColor)
 	if(!oNode) 
 		return;
 
-	SMaterial tmat[MATERIAL_MAX_TEXTURES],
-		lmat;
+	SMaterial originalMaterial[MATERIAL_MAX_TEXTURES],
+		tempMaterial;
 
-	lmat.DiffuseColor = lmat.SpecularColor = lmat.AmbientColor = lmat.EmissiveColor = cColor;
-	lmat.Lighting = true;
-	lmat.Wireframe = true;
-	lmat.Thickness = fThickness;
-	lmat.FrontfaceCulling = true;
-	lmat.BackfaceCulling = false;
+	tempMaterial.DiffuseColor = tempMaterial.SpecularColor = tempMaterial.AmbientColor = tempMaterial.EmissiveColor = cColor;
+	tempMaterial.Lighting = true;
+	tempMaterial.Wireframe = true;
+	tempMaterial.Thickness = fThickness;
+	tempMaterial.FrontfaceCulling = true;
+	tempMaterial.BackfaceCulling = false;
 
 	for(u32 i=0; i<oNode->getMaterialCount(); i++)
 	{
-		tmat[i] = oNode->getMaterial(i);
-		oNode->getMaterial(i) = lmat;
+		originalMaterial[i] = oNode->getMaterial(i);
+		oNode->getMaterial(i) = tempMaterial;
 	}
 
 	oNode->render();
 
 	for(u32 i=0; i<oNode->getMaterialCount(); i++)
-		oNode->getMaterial(i) = tmat[i];
+		oNode->getMaterial(i) = originalMaterial[i];
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -163,6 +165,7 @@ void CGameCore::contourAll(ISceneNode* node)
 		if( node->getAutomaticCulling() != EAC_OFF)
 			addContour(node);
 	}  
+
 	list<ISceneNode*>::ConstIterator begin = node->getChildren().begin(); 
 	list<ISceneNode*>::ConstIterator end   = node->getChildren().end(); 
 

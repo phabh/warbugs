@@ -8,7 +8,8 @@ struct SBolsa
 	int _idBolsa;
 	int _listaItens[BOLSAMAXITENS];
 	float _x;
-	float _z;	 
+	float _z;
+	bool _isOpen;
 };
 
 struct SQuadrante 
@@ -20,6 +21,7 @@ struct SQuadrante
 
 class CPersonagem 
 {
+
 private:
 
 	int _agilidade;
@@ -45,7 +47,7 @@ private:
 	int _itemEnviarTroca;
 	int _itemReceberTroca;
 	int _lealdade[RACASMAX];
-	int _listaPreco[MAXITENSVENDEDOR];
+	//int _listaPreco[MAXITENSVENDEDOR];
 	int _listaProdutos[MAXITENSVENDEDOR];
 	int _nivel;
 	int _nivelPoder[NUMPODERES];

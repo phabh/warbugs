@@ -53,10 +53,10 @@ void addContorno(ISceneNode* oNode, f32 fThickness = 3, SColor cColor = SColor(2
 
 void MapearMundo(ISceneNode* node) 
 { 
-  if (node->getType() == ESNT_MESH || node->getType() == ESNT_ANIMATED_MESH )
+	if (node->getType() == ESNT_MESH || node->getType() == ESNT_ANIMATED_MESH || node->getType() == ESNT_TERRAIN )
   {
 
-	  if( node->getAutomaticCulling() != EAC_OFF)
+	 // if( node->getAutomaticCulling() != EAC_OFF)
 			addContorno(node);
 
   }  
@@ -139,6 +139,8 @@ int main(int argc, char* argv[])
 	u32 lasttick; 
 	int lastFPS = -1; 
 
+	::ILightSceneNode *_luz;
+
 	MyEventReceiver event; 
 
 	device = createDevice(::EDT_OPENGL/*::EDT_DIRECT3D9*/, dimension2d<s32>(640, 480), 16, false, true, false,&event); 
@@ -203,14 +205,14 @@ int main(int argc, char* argv[])
 	for(int i=0; i<100; i++)
 	{
 
-		//modelos[i] = smgr->addAnimatedMeshSceneNode(smgr->getMesh("lagarto.b3d")); 
+		modelos[i] = smgr->addAnimatedMeshSceneNode(smgr->getMesh("lagarto.b3d")); 
 		//modelos[i]->setMaterialFlag(EMF_LIGHTING, false);
-		//modelos[i]->setMaterialTexture(0, driver->getTexture("lagarto1.jpg"));
-		modelos[i] = smgr->addAnimatedMeshSceneNode(smgr->getMesh("besouro6.b3d")); 
-	modelos[i]->setMaterialFlag(EMF_LIGHTING, false);
-	modelos[i]->setMaterialTexture(0, driver->getTexture("besouro1.jpg"));
+	modelos[i]->setMaterialTexture(0, driver->getTexture("lagarto1.jpg"));
+		//modelos[i] = smgr->addAnimatedMeshSceneNode(smgr->getMesh("besouro6.b3d")); 
+	//modelos[i]->setMaterialFlag(EMF_LIGHTING, false);
+	//modelos[i]->setMaterialTexture(0, driver->getTexture("besouro1.jpg"));
 
-		modelos[i]->setPosition(vector3df(i*-10.0,10.f,0.f));
+		modelos[i]->setPosition(vector3df(i*-20.0,10.f,0.f));
 		modelos[i]->setAnimationSpeed(30);
 	}
 	/*
@@ -256,7 +258,7 @@ int main(int argc, char* argv[])
 
 	smgr->loadScene("recursos/cenas/jogo.irr");
 
-	cam->setFarValue(300);
+	cam->setFarValue(1000);
 
 
 
@@ -269,9 +271,12 @@ int main(int argc, char* argv[])
 
 	mblack.setFlag(::E_MATERIAL_FLAG::EMF_NORMALIZE_NORMALS, true);
 
+
+	_luz = smgr->addLightSceneNode(cam, vector3df(0,10000,0), SColorf(0.5, 0.5, 1.0, 1.0), 10000);
+
 	while (device->run()) 
 	{ 
-		driver->beginScene(true, true, SColor(0,220,220,255)); 
+		driver->beginScene(true, true, SColor(255,100,100,100)); 
 
 		smgr->drawAll(); 
 
