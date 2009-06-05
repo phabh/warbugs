@@ -11,6 +11,11 @@
 
 #include "CVendedor.h"
 
+#ifndef _MARKET_
+#define _MARKET_
+SMarket *mercado;
+#endif
+
 CVendedor::CVendedor()
 {
 	setID(-1);
@@ -45,15 +50,19 @@ CVendedor::CVendedor(EstadoPersonagem estado, int dinheiro, CBolsa *inventario, 
 	setBaseBonus(new CBonusPrimario());
 	setBuffs(new CBuffList());
 }
+void init()
+{
+	mercado->init();
+}
 //Métodos da economia
 void CVendedor::plusDemand(int typeItem)
 {
 	if(typeItem < MAXITEMTYPES)
 	{
-		_itemDemanda[typeItem] = _itemDemanda[typeItem] + 1;
-		if(_itemDemanda[typeItem] > _maxDemanda)
+		mercado->_itemDemanda[typeItem] = mercado->_itemDemanda[typeItem] + 1;
+		if(mercado->_itemDemanda[typeItem] > mercado->_maxDemanda)
 		{
-			_maxDemanda = _itemDemanda[typeItem];
+			mercado->_maxDemanda = mercado->_itemDemanda[typeItem];
 		}
 	}
 	else
@@ -65,10 +74,10 @@ void CVendedor::plusOffer(int typeItem)
 {
 	if(typeItem < MAXITEMTYPES)
 	{
-		_itemOferta[typeItem] = _itemOferta[typeItem] + 1;
-		if(_itemOferta[typeItem] > _maxOferta)
+		mercado->_itemOferta[typeItem] = mercado->_itemOferta[typeItem] + 1;
+		if(mercado->_itemOferta[typeItem] > mercado->_maxOferta)
 		{
-			_maxOferta = _itemOferta[typeItem];
+			mercado->_maxOferta = mercado->_itemOferta[typeItem];
 		}
 	}
 	else
@@ -80,7 +89,7 @@ int CVendedor::normalizeDemand(int typeItem)
 {
 	if(typeItem < MAXITEMTYPES)
 	{
-		return((_itemDemanda[typeItem] + (0-_minDemanda))/((0-_minDemanda)+_maxDemanda));
+		return((mercado->_itemDemanda[typeItem] + (0-mercado->_minDemanda))/((0-mercado->_minDemanda)+mercado->_maxDemanda));
 	}
 	else
 	{
@@ -92,7 +101,7 @@ int CVendedor::normalizeOffer(int typeItem)
 {
 	if(typeItem < MAXITEMTYPES)
 	{
-		return((_itemOferta[typeItem] + (0-_minOferta))/((0-_minOferta)+_maxOferta));
+		return((mercado->_itemOferta[typeItem] + (0-mercado->_minOferta))/((0-mercado->_minOferta)+mercado->_maxOferta));
 	}
 	else
 	{
@@ -102,7 +111,7 @@ int CVendedor::normalizeOffer(int typeItem)
 }
 int CVendedor::stockValue(CItem *item)
 {
-	return(_precoBase[(int)item->getTipo()]+(_precoBase[(int)item->getTipo()]+((item->getDurability()-_MEDIANADURABILIDADE)/100))+(_precoBase[(int)item->getTipo()]+((normalizeDemand((int)item->getTipo())-_MEDIANADEMANDA)/100))+((normalizeOffer((int)item->getTipo())-_MEDIANAOFERTA)/100));
+	return(mercado->_precoBase[(int)item->getTipo()]+(mercado->_precoBase[(int)item->getTipo()]+((item->getDurability()-mercado->_MEDIANADURABILIDADE)/100))+(mercado->_precoBase[(int)item->getTipo()]+((normalizeDemand((int)item->getTipo())-mercado->_MEDIANADEMANDA)/100))+((normalizeOffer((int)item->getTipo())-mercado->_MEDIANAOFERTA)/100));
 }
 void CVendedor::setLeftToGoal()
 {
@@ -120,15 +129,15 @@ int CVendedor::getSellingPrice(CItem *item)
 }
 int CVendedor::getBuyPrice(CItem *item)
 {
-	return((_precoBase[(int)item->getTipo()]/2)+(_precoBase[(int)item->getTipo()]+((item->getDurability()-_MEDIANADURABILIDADE)/100))+(_precoBase[(int)item->getTipo()]+((normalizeDemand((int)item->getTipo())-_MEDIANADEMANDA)/100))+((normalizeOffer((int)item->getTipo())-_MEDIANAOFERTA)/100)+(_tecnicaDeMercado * _restanteMeta));
+	return((mercado->_precoBase[(int)item->getTipo()]/2)+(mercado->_precoBase[(int)item->getTipo()]+((item->getDurability()-mercado->_MEDIANADURABILIDADE)/100))+(mercado->_precoBase[(int)item->getTipo()]+((normalizeDemand((int)item->getTipo())-mercado->_MEDIANADEMANDA)/100))+((normalizeOffer((int)item->getTipo())-mercado->_MEDIANAOFERTA)/100)+(_tecnicaDeMercado * _restanteMeta));
 }
 int CVendedor::getFinalPriceSell(CItem *item, CPersonagemJogador *jogador)
 {
-	return(getSellingPrice(item)-(getSellingPrice(item)*(jogador->getLoyalty()->getLoyaltyTo(this->getRace())/1000)*(_DESCONTOLEALDADE/100))-(getSellingPrice(item)*(_tempoSemVender/10)*(_DESCONTOTEMPO/100)));
+	return(getSellingPrice(item)-(getSellingPrice(item)*(jogador->getLoyalty()->getLoyaltyTo(this->getRace())/1000)*(mercado->_DESCONTOLEALDADE/100))-(getSellingPrice(item)*(_tempoSemVender/10)*(mercado->_DESCONTOTEMPO/100)));
 }
 int CVendedor::getFinalPriceBuy(CItem *item, CPersonagemJogador *jogador)
 {
-	return(getBuyPrice(item)-(getBuyPrice(item)*(jogador->getLoyalty()->getLoyaltyTo(this->getRace())/1000)*(_DESCONTOLEALDADE/100))-(getBuyPrice(item)*(_tempoSemVender/10)*(_DESCONTOTEMPO/100)));
+	return(getBuyPrice(item)-(getBuyPrice(item)*(jogador->getLoyalty()->getLoyaltyTo(this->getRace())/1000)*(mercado->_DESCONTOLEALDADE/100))-(getBuyPrice(item)*(_tempoSemVender/10)*(mercado->_DESCONTOTEMPO/100)));
 }
 //Outros métodos
 void CVendedor::takeDecision()

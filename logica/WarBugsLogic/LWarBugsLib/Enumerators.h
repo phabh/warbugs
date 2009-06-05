@@ -293,5 +293,40 @@ struct Ponto
 		this->z = z;
 	}
 };
+struct SMarket
+{
+	int _maxDemanda;
+	int _minDemanda;
+	int _maxOferta;
+	int _minOferta;
+	int _itemDemanda[MAXITEMTYPES];
+	int _itemOferta[MAXITEMTYPES];
+	int _precoBase[MAXITEMTYPES];
+	int _MEDIANADEMANDA;
+	int _MEDIANAOFERTA;
+	int _MEDIANADURABILIDADE;
+	int _DESCONTOLEALDADE;
+	int _DESCONTOTEMPO;
+
+	void init()
+	{
+		_maxDemanda = 0;
+		_minDemanda = 0;
+		_maxOferta = 0;
+		_minOferta = 0;
+		for(int i = 0; i < MAXITEMTYPES; i = i + 1)
+		{
+			_itemDemanda[i] = 0;
+			_itemOferta[i] = 0;
+			_precoBase[i] = 0;
+		}
+		_MEDIANADEMANDA = 0;
+		_MEDIANAOFERTA = 0;
+		_MEDIANADURABILIDADE = 0;
+		_DESCONTOLEALDADE = 0;
+		_DESCONTOTEMPO = 0;
+	}
+};
+
 // ------------------------------------------------------------------------------------------------------------
 #endif
