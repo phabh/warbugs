@@ -1,0 +1,101 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+
+<html>
+
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+   <title>JUDE API User Guide</title>
+</head>
+
+<body bgcolor="#F0F8FF">
+
+<h1>JUDE API User Guide</h1>
+<P align="right">May 30, 2008<br>
+Change Vision, Inc.</p>
+<hr>
+<br>
+<h2>[What's JUDE API]</h2>
+JUDE API is a Java Interface Group for developing applications software using JUDE model data.<br>
+This document will explain how to develop applications using the JUDE API.<br>
+<h2>[Permission to Use]</h2>
+<ul>
+<li>Do not redistribute jude-api.jar that is .jar format file of JUDE API.
+<li>You must accept [JUDE END-USER LICENSE AGREEMENT] to use JUDE API.
+</ul>
+<h2>[JUDE API System Requirements]</h2>
+The system environments that enable JUDE to run are required to run applications
+software using JUDE API.<br>
+<ul>
+<li>Ensure that an appropriate version of Java is installed to run JUDE.
+<li>JUDE software needs to be installed.
+<ul>
+<li>jude-api.jar is required for application compilation.
+<li>Both of jude-api.jar and jude-pro.jar (jude-community.jar) are required for execution of applications.
+<li>Optional JAVA VM memory management setup is needed when the size of your JUDE project file is large.
+<br><b>(Example of set up for VM Startup Option as initial heap size 16MB, maximum heap size 256MB 
+and stack size 2MB)<br>
+-Xms16m -Xmx256m -Xss2m</b>
+</ul>
+<li>Supported functions in JUDE API
+<ul>
+<li>Reference function is supported in JUDE/Community.
+<li>Reference, create and edit functions are supported in JUDE/Professional (JUDE/Professional license is required).
+</ul>
+</ul>
+
+<h2>[Notes]</h2>
+<ul>
+<li>Multi-threading of JUDE API is not supported.</li>
+<li>When opening a project file in JUDE API, an error may occur due to the file lock 
+(ProjectAccessor.open(String projectName)).
+In this case, please close the project file which may be opened in JUDE, then  
+open it by JUDE API again. Or, you can specify the read only mode to open the project 
+file in JUDE API.<br>
+To open a project file with the read only mode, please use the following method (Set true to allowReadOnly).<br>
+ProjectAccessor.open(String projectName, boolean isIgnoreModelVersion, boolean lockMode,  boolean allowReadOnly)
+</ul> 
+
+<h2>[Features]</h2>
+JUDE API enables you to obtain JUDE model elements and use them on applications software.<br>
+The reference of model elements used in Class Diagrams and UseCase Diagrams,
+Statemachine Diagrams, Activity Diagrams, Sequence Diagrams, Flowchart, Mind Map, 
+CRUDs, Data Flow Diagrams (DFDs), are currently supported.
+
+<h2>[JUDE API Javadoc]</h2>
+Please refer to <a href="javadoc/index.html">JUDE API JavaDoc</a> for details.
+
+<h2>[How to use JUDE API and Sample Application]</h2>
+<ol>
+<li><a href="JudeAPI_reference.html">How to get Model Information</a></li>
+<li><a href="JudeAPI_create.html">How to create models</a></li>
+<li><a href="JudeAPI_edit.html">How to edit models</a></li>
+<li><a href="JudeAPI_language.html">Programming Language Information for Project</a></li>
+<li><a href="JudeAPI_xmi.html">Import/Export XMI</a></li>
+<li><a href="JudeAPI_reference_project.html">Add, Update and Delete Reference Project</a></li>
+<li><a href="JudeAPI_sample.html">Sample Applications</a></li>
+<li><a href="JudeAPI_models.html">Supported Models</a></li>
+</ol>
+
+<h2>[Additional information about Model elements]</h2>
+
+<h4>What is the difference between UML metamodel and JUDE API?</h4>
+A part of the class structure of JUDE API is different from the one of UML metamodel.
+JUDE API has a simplified structure. Some of abstract model elements in the UML metamodel   
+inheritance structure are eliminated because they would never be instantiated as model elements.  
+
+<h4>Class elements contain Icon Notations</h4>
+Those elements that can be shown as normal class notations such as Actor, Interface,   
+ Boundary, Entity, Control are classes that have stereotypes.
+For example, Actor is a class that has a stereotype of "Actor", and Interface is a class   
+that has a stereotype of "Interface".
+
+<h4>About TaggedValue(ITaggedValue)</h4>
+JUDE uses TaggedValus for derived information of Attributes and Role names, and expressions   
+about UseCase descriptions.
+
+<hr>
+Copyright(C) 2008 Change Vision, Inc. All rights reserved. 
+<br>
+</body>
+</html>
+

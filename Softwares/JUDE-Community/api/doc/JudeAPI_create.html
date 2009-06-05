@@ -1,0 +1,123 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+
+<html>
+
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+   <title>JUDE API User Guide</title>
+</head>
+
+<body bgcolor="#F0F8FF">
+
+<h1>JUDE API User Guide</h1>
+<hr>
+
+<h2>[How to create models]</h2>
+
+We will show you how to create JUDE models with a sample program in this paragraph.<br>
+Please refer to <a href="javadoc/index.html">JUDE API JavaDoc</a> for details of each interface and method.<br>
+<I>Create function of JUDE API is not available in JUDE/Community.</I>
+
+<h4>[Transaction Operation]</h4>
+Transaction operation is required when creating or editing models in JUDE API. Please use methods in TransacionManager (e.g. beginTransaction()) to add transaction operations in your program.
+
+<h4>[Create models in ER Diagram]</h4>
+Models in ER Diagram (e.g. ER Entity) can be created by using methods in ERModelEditor (e.g. createEREntity()).
+
+<h4>[Create models in Class Diagram]</h4>
+Models in Class Diagram (e.g. Class) can be created by using methods in BasicModelEditor (e.g. createClass()).
+
+<h4>[Create models in UseCase Diagram]</h4>
+Models in UseCase Diagram (e.g. UseCase) can be created by using methods in UsseCaseModelEditor (e.g. createUseCase()).
+
+<h4>[Create models in Mind Map]</h4>
+Topic in Mind Map can be created by using methods in MindmapDiagramEditor (e.g. addChild()).
+
+<h4>[Example of creating models in Class Diagram]</h4>     
+Create a package and two classes, and then add an association between classes.
+<TABLE border="1">
+<tr>
+<td>
+<pre><samp>
+public class APIForEditingModelsSample {
+
+    public static void main(String[] args) {
+
+        try {
+            System.out.println(&quot;Creating new project...&quot;);
+
+            // Create a project and get a root model
+            ProjectAccessor prjAccessor = ProjectAccessorFactory.getProjectAccessor();
+            prjAccessor.create(&quot;./SampleModel.jude&quot;);
+            IModel project = prjAccessor.getProject();
+
+            System.out.println(&quot;Creating new elements in the project...&quot;);
+
+            // Begin transaction when creating or editing models
+            TransactionManager.beginTransaction();
+
+            // Get model editor to create models in a class diagram
+            BasicModelEditor basicModelEditor = ModelEditorFactory.getBasicModelEditor();
+
+            // Create a package
+            IPackage packageA = basicModelEditor.createPackage(project, &quot;PackageA&quot;);
+
+            // Create a class in the specified package
+            IClass classA = basicModelEditor.createClass(packageA, &quot;ClassA&quot;);
+            // Add a definition to the class
+            classA.setDefinition(&quot;Definition of ClassA&quot;);
+            // Add an attribute to the class
+            basicModelEditor.createAttribute(classA, &quot;attribute0&quot;, &quot;int&quot;);
+            // Add an operation to the class
+            basicModelEditor.createOperation(classA, &quot;operation0&quot;, &quot;void&quot;);
+
+            // Create a class in the specified package
+            IClass classB = basicModelEditor.createClass(packageA, &quot;ClassB&quot;);
+
+            // Add an association between classes
+            basicModelEditor.createAssociation(classA, classB, &quot;association name&quot;,
+                    &quot;classA end&quot;, &quot;classB end&quot;);
+
+            // End transaction
+            TransactionManager.endTransaction();
+
+            // Save project
+            prjAccessor.save();
+
+            // Close project
+            prjAccessor.close();
+
+            System.out.println(&quot;Finished&quot;);
+
+        } catch (LicenseNotFoundException e) {
+            e.printStackTrace();
+        } catch (ProjectNotFoundException e) {
+            e.printStackTrace();
+        } catch (ProjectLockedException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InvalidEditingException e) {
+            // Abort transaction
+            TransactionManager.abortTransaction();
+            // Get an exception message
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+}
+</samp></pre>
+</td>
+</tr>
+</TABLE>
+
+<hr>
+
+<a href="index.html">Home</a>
+</body>
+</html>
+

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+#Remove "#" from following two lines, if you'd like to use j2sdk.
+#JAVA_HOME=/usr/lib/j2sdk1.4/;export JAVA_HOME
+#PATH=$JAVA_HOME/bin:$PATH; export PATH
+
+#JUDE_HOME=/usr/local/share/jude_community
+JUDE_HOME=`dirname $0`
+JUDE_JAR=jude-community.jar
+
+CLASSPATH=$JUDE_HOME/$JUDE_JAR
+
+JAVA_OPTS="-Xms16m -Xmx512m -Xss2m"
+
+java $JAVA_OPTS -jar $JUDE_HOME/$JUDE_JAR  $1 $2 $3
