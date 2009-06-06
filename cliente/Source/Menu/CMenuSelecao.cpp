@@ -62,10 +62,15 @@ void CMenuSelecao::updateHuds()
 		_gerHud->addButton(rect<s32>(440,550,540,590), 0, 201 , L"Criar");
 
 	if(_gameCore->_numMyChars > 0)
-		_gerHud->addButton(rect<s32>(440,650,540,690), 0, 204, L"Jogar");
+	{
+		if(_gameCore->_numMyChars > 1)
+			_gerHud->addButton(rect<s32>(640,650,740,690), 0, 204, L"Jogar 2");
 
-	_gerHud->addButton(rect<s32>(240,550,340,590), 0, 202, L"Remover1");
-	_gerHud->addButton(rect<s32>(640,550,740,590), 0, 203, L"Remover2");
+		_gerHud->addButton(rect<s32>(240,650,340,690), 0, 204, L"Jogar 1");
+	}
+
+	_gerHud->addButton(rect<s32>(240,550,340,590), 0, 202, L"Remover 1");
+	_gerHud->addButton(rect<s32>(640,550,740,590), 0, 203, L"Remover 2");
 
 	//_gerHud->addButton(rect<s32>(140,10,240,50), 0, 5, L"<");
 	//_gerHud->addButton(rect<s32>(540,10,640,50), 0, 6, L">");

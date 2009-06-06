@@ -4,7 +4,7 @@
 
 CGameScene::CGameScene()
 {
-	_listaPersonagens = new CListaPersonagem();
+	_listaPersonagens = new ListaPersonagem();
 	_listaBolsas = new ListaBolsa();
 
 	_fileMtx = new CArquivoMatrizes();
@@ -21,13 +21,13 @@ SMatrix CGameScene::loadMyMatrix(int idScene)
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-
-void CGameScene::addBolsa(SBolsa bolsa)
+/*
+void CGameScene::addBolsa(SBolsa *bolsa)
 {
 	// Inclui uma bolsa no cenário do cliente
-	_listaBolsas->addElement(bolsa, bolsa._idBolsa);
+	//_listaBolsas->addElement(bolsa, bolsa->_idBolsa);
 }
-
+*/
 //-----------------------------------------------------------------------------------------------------------------
 
 void CGameScene::addPersonagem( CPersonagem *personagem )
@@ -68,13 +68,6 @@ void CGameScene::resetar()
 {
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-
-void CGameScene::setHorario(long hora)
-{
-	// Cenário do cliente recebe a hora do cenário do servidor
-	_horario = hora;
-}
 
 //-----------------------------------------------------------------------------------------------------------------
 

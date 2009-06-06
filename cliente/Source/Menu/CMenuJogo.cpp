@@ -34,7 +34,7 @@ bool CMenuJogo::start(CGameCore *gameCore)
 	_menuFlag[HUDUPDATED]  = false;
 	_menuFlag[ALERTON]     = false;
 
-	_terreno = (ITerrainSceneNode*)_gerCena->getSceneNodeFromType(ESNT_TERRAIN, 0);
+	//_terreno = (ITerrainSceneNode*)_gerCena->getSceneNodeFromType(ESNT_TERRAIN, 0);
 
 	_empty = _gerCena->addEmptySceneNode();
 
@@ -43,9 +43,9 @@ bool CMenuJogo::start(CGameCore *gameCore)
 
 
 	//_textura[0] = _gerenciadorVideo->getTexture("recursos/texturas/louva_lider.jpg");
-	_malha[0] = _gerCena->getMesh("recursos/modelos/besouro.b3d");
-	_modelo[0] = _gerCena->addAnimatedMeshSceneNode(_malha[0]);
-	_modelo[0]->setPosition(vector3df(990,_terreno->getHeight(990,980)+2,980));
+	//_malha[0] = _gerCena->getMesh("recursos/modelos/besouro.b3d");
+	//_modelo[0] = _gerCena->addAnimatedMeshSceneNode(_malha[0]);
+	//_modelo[0]->setPosition(vector3df(990,_terreno->getHeight(990,980)+2,980));
 
 	//_empty->setPosition(_modelo[0]->getPosition());
 
@@ -57,40 +57,43 @@ bool CMenuJogo::start(CGameCore *gameCore)
 
 	//luz->setPosition(_modelo[0]->getPosition()+vector3df(0,100,0));
 
-	_toonShader = new CToonShader(_dispGrafico, luz);
+	//_toonShader = new CToonShader(_dispGrafico, luz);
 
-	_modelo[0]->setAnimationSpeed(30);
-	_modelo[0]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	_toonShader->apply(_modelo[0],"recursos/texturas/besouro1.jpg");
+	//_modelo[0]->setAnimationSpeed(30);
+	//_modelo[0]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+	//_toonShader->apply(_modelo[0],"recursos/texturas/besouro1.jpg");
 
-	_malha[1] = _gerCena->getMesh("recursos/modelos/arvore.3ds");
-	_modelo[1] = _gerCena->addAnimatedMeshSceneNode(_malha[1]);
-	_modelo[1]->setPosition(vector3df(1000,_terreno->getHeight(1000,980)+2,980));
-	_modelo[1]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	_toonShader->apply(_modelo[1],"recursos/texturas/arvore.jpg");
+	//_malha[1] = _gerCena->getMesh("recursos/modelos/arvore.3ds");
+	//_modelo[1] = _gerCena->addAnimatedMeshSceneNode(_malha[1]);
+	//_modelo[1]->setPosition(vector3df(1000,_terreno->getHeight(1000,980)+2,980));
+	//_modelo[1]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+	//_toonShader->apply(_modelo[1],"recursos/texturas/arvore.jpg");
 
-	_malha[2] = _gerCena->getMesh("recursos/modelos/louva_lider.b3d");
-	_modelo[2] = _gerCena->addAnimatedMeshSceneNode(_malha[2]);
-	_modelo[2]->setPosition(vector3df(1100,_terreno->getHeight(1100,980)+2,980));
-	_modelo[2]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	_toonShader->apply(_modelo[2],"recursos/texturas/louva_lider.jpg");
-	_modelo[2]->setID(5);
+	//_malha[2] = _gerCena->getMesh("recursos/modelos/louva_lider.b3d");
+	//_modelo[2] = _gerCena->addAnimatedMeshSceneNode(_malha[2]);
+	//_modelo[2]->setPosition(vector3df(1100,_terreno->getHeight(1100,980)+2,980));
+	//_modelo[2]->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+	//_toonShader->apply(_modelo[2],"recursos/texturas/louva_lider.jpg");
+	//_modelo[2]->setID(5);
 
-	_direcao = 0.0f;
-	_velocidade = 0.1f;
+	//_direcao = 0.0f;
+	//_velocidade = 0.1f;
 
-	s32 Width = _gerVideo->getViewPort().getWidth();
-	s32 Height = _gerVideo->getViewPort().getHeight();
+	//s32 Width = _gerVideo->getViewPort().getWidth();
+	//s32 Height = _gerVideo->getViewPort().getHeight();
 
-	_selector = _gerCena->createTerrainTriangleSelector(_terreno, 0);
-	_terreno->setTriangleSelector(_selector); 
+	//_selector = _gerCena->createTerrainTriangleSelector(_terreno, 0);
+	//_terreno->setTriangleSelector(_selector); 
 
 	//cout << "\nIndex Count: " << _terreno->getIndexCount() << endl;
 	//_selector = _terreno->getTriangleSelector();
 
 	rotV = rotH = 0.0;
 
-	_gameCore->enviarPacote(START_GAME, _gameCore->_myUserID, _gameCore->_myCharID);
+//	_gameCore->enviarPacote(START_GAME, _gameCore->_myUserID, _gameCore->_myCharID);
+
+
+	_gameCore->loadGameScene(pathArquivoCena[MC_SELECAO]);
 
 	return (true);
 }
