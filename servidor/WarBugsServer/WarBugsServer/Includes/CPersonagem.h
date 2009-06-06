@@ -36,15 +36,19 @@ class CBuffList;
 #ifndef _CDIVXP_H_
 class CDivisorXP;
 #endif
+
+#ifndef _CPODER_H_
+class CPoder;
+#endif
 // ------------------------------------------------------------------------------------------------------------
 class CPersonagem : public C3DObject{
 protected:
 	int nivel;
 	int experiencia;
+	int xpToNextLv;
 	char nome[10];
 	Raca raca;
 	TypeClassChars tipo;
-	float baseMoveSpeed;
 	float direcao;
 	Ponto *destino;
 	EstadoPersonagem estado;
@@ -62,10 +66,11 @@ protected:
 	CDivisorXP *divisorxp;
 public:
 
-	CPersonagem();
+	void initCPersonagem();
 	//Getters e Setters
 	int getLevel();
 	int getXP();
+	int getMaxXP();
 	char *getName();
 	Raca getRace();
 	TypeClassChars getType();
@@ -88,6 +93,7 @@ public:
 	
 	void setLevel(int level);
 	void setXP(int xp);
+	void setMaxXP(int xp);
 	void setName(char *name);
 	CPersonagem *getTarget();
 	CCenario *getScene();
@@ -95,7 +101,6 @@ public:
 	void setType(TypeClassChars novotipo);
 	void setRespawnTime(int newTime);
 	void setDirection(float direction);
-	void setMoveSpeed(float newSpeed);
 	void setState(EstadoPersonagem newState);
 	void setMoney(int value);
 	void setBolsa(CBolsa *bolsa);
@@ -111,10 +116,11 @@ public:
 	void addXP(int value);
 	//Outros métodos
 	void move();
+	virtual bool tryAttack()=0;
 	virtual void attack()=0;
 	virtual void takeDamage(int damage, CPersonagem *atkr)=0;
 	virtual void die()=0;
 	virtual void useItem(CItem *item)=0;
-	//void useSkill(CPoder *skill);
+	void useSkill(TipoPoder skill, int skillLevel);
 };
 #endif

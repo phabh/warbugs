@@ -6,7 +6,7 @@
 #include <vcclr.h>
 
 /*Transforma a porra do tipo string do windows em coisa de macho!*/
-char * toChar(System::String^ str)
+static char * toChar(System::String^ str)
 {
 	char * target;
 

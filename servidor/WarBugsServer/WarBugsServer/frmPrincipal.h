@@ -787,7 +787,7 @@ private: System::Void btKicar_Click(System::Object^  sender, System::EventArgs^ 
 					 gridJogadores->Rows->RemoveAt(i);
 					 _coreServer->getPlayers()->getElementAt(i)->getSocket()->SendLine(m);
 					 _coreServer->getPlayers()->getElementAt(i)->getSocket()->Close();
-					 _coreServer->getPlayers()->removeJogadorByPosition(i);
+					 _coreServer->getPlayers()->removeJogadorAt(i);
 				 }
 			 }
 			 gridJogadores->Rows->Clear();

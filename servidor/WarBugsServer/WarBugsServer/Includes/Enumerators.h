@@ -204,10 +204,13 @@ enum TipoItem
 // ------------------------------------------------------------------------------------------------------------
 enum EstadoPersonagem
 {
-	PARADO,
-	ANDANDO,
-	MORTO,
-	FALANDO
+	E_PARADO,
+	E_ANDANDO,
+	E_ARIETE,
+	E_BERSERK,
+	E_STRIKE,
+	E_MORTO,
+	E_FALANDO
 };
 // ------------------------------------------------------------------------------------------------------------
 enum Direcoes 
@@ -222,15 +225,28 @@ enum TipoPoder
 {
 	SK_BERSERK_TORNADO, 
 	SK_ARIETE, 
-	SK_STRIKE
+	SK_STRIKE,
+	SK_STEAL,
+	SK_BREAK,
+	SK_STINK_GAS,
+	SK_LIGHT_SPEED,
+	SK_ATOMIC_EXPLOSION
 };
 // ------------------------------------------------------------------------------------------------------------
+enum QuestState
+{
+	Q_CLOSED,
+	Q_OPEN,
+	Q_FINISHED
+};
+// ------------------------------------------------------------------------------------------------------------
+
 /*DEFINES*/
 #ifndef MAXSTATS
 #define MAXSTATS 5
 #endif
 // ------------------------------------------------------------------------------------------------------------
-#define FPS 8
+#define FPS 30
 // ------------------------------------------------------------------------------------------------------------
 #define MAXFRIENDS 10
 // ------------------------------------------------------------------------------------------------------------
@@ -277,5 +293,40 @@ struct Ponto
 		this->z = z;
 	}
 };
+struct SMarket
+{
+	int _maxDemanda;
+	int _minDemanda;
+	int _maxOferta;
+	int _minOferta;
+	int _itemDemanda[MAXITEMTYPES];
+	int _itemOferta[MAXITEMTYPES];
+	int _precoBase[MAXITEMTYPES];
+	int _MEDIANADEMANDA;
+	int _MEDIANAOFERTA;
+	int _MEDIANADURABILIDADE;
+	int _DESCONTOLEALDADE;
+	int _DESCONTOTEMPO;
+
+	void init()
+	{
+		_maxDemanda = 0;
+		_minDemanda = 0;
+		_maxOferta = 0;
+		_minOferta = 0;
+		for(int i = 0; i < MAXITEMTYPES; i = i + 1)
+		{
+			_itemDemanda[i] = 0;
+			_itemOferta[i] = 0;
+			_precoBase[i] = 0;
+		}
+		_MEDIANADEMANDA = 0;
+		_MEDIANAOFERTA = 0;
+		_MEDIANADURABILIDADE = 0;
+		_DESCONTOLEALDADE = 0;
+		_DESCONTOTEMPO = 0;
+	}
+};
+
 // ------------------------------------------------------------------------------------------------------------
 #endif

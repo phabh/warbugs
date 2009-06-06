@@ -30,5 +30,7 @@ public:
 
 	int getValue();
 	Atrib getAtribute();
+
+	void setAll(Raca raca, int def, int dur, int nM);
 };
 #endif

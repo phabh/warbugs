@@ -31,14 +31,15 @@ public:
 	TypeItens getNome();
 	EstadoItem getEstado();
 	int getEstadoAsInt();
-	TipoItem getTipo();
-	int getTipoAsInt();
+	TipoItem getType();
+	int getTypeAsInt();
 	int getPrice();
 	int getDurability();
 	bool isDropable();
 	//CPersonagem getOwner(){}
 	void setNome(TypeItens novoNome);
 	void setEstado(EstadoItem novoEstado);
+	void setType(TipoItem tipo);
 	void setPrice(int novoPreco);
 	void setDropable(bool isdropable);
 	void setDurability(int value);
