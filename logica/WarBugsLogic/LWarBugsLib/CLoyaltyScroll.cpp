@@ -31,6 +31,14 @@ CLoyaltyScroll::CLoyaltyScroll(TypeItens nome, EstadoItem estado, int preco, boo
 	_bonus->setLoyaltyToSpider(aranha);
 	_bonus->setLoyaltyToWasp(vespa);
 }
+void CLoyaltyScroll::setAllLoyalties(int aranha, int besouro, int louvadeus, int escorpiao, int vespa)
+{
+	_bonus->setLoyaltyToBeetle(besouro);
+	_bonus->setLoyaltyToMantis(louvadeus);
+	_bonus->setLoyaltyToScorpion(escorpiao);
+	_bonus->setLoyaltyToSpider(aranha);
+	_bonus->setLoyaltyToWasp(vespa);
+}
 void CLoyaltyScroll::use(CLealdade *base)
 {
 	base->addLoyalty(_bonus);

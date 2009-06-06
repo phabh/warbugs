@@ -66,4 +66,11 @@ Atrib CArmor::getAtribute()
 {
 	return (NENHUM);
 }
+void CArmor::setAll(Raca raca, int def, int dur, int nM)
+{
+	_raca = raca;
+	_defesa = def;
+	setDurability(dur);
+	_nivelMagico = nM;
+}
 #endif

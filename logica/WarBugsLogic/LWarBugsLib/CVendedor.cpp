@@ -111,7 +111,7 @@ int CVendedor::normalizeOffer(int typeItem)
 }
 int CVendedor::stockValue(CItem *item)
 {
-	return(mercado->_precoBase[(int)item->getTipo()]+(mercado->_precoBase[(int)item->getTipo()]+((item->getDurability()-mercado->_MEDIANADURABILIDADE)/100))+(mercado->_precoBase[(int)item->getTipo()]+((normalizeDemand((int)item->getTipo())-mercado->_MEDIANADEMANDA)/100))+((normalizeOffer((int)item->getTipo())-mercado->_MEDIANAOFERTA)/100));
+	return(mercado->_precoBase[(int)item->getType()]+(mercado->_precoBase[(int)item->getType()]+((item->getDurability()-mercado->_MEDIANADURABILIDADE)/100))+(mercado->_precoBase[(int)item->getType()]+((normalizeDemand((int)item->getType())-mercado->_MEDIANADEMANDA)/100))+((normalizeOffer((int)item->getType())-mercado->_MEDIANAOFERTA)/100));
 }
 void CVendedor::setLeftToGoal()
 {
@@ -129,7 +129,7 @@ int CVendedor::getSellingPrice(CItem *item)
 }
 int CVendedor::getBuyPrice(CItem *item)
 {
-	return((mercado->_precoBase[(int)item->getTipo()]/2)+(mercado->_precoBase[(int)item->getTipo()]+((item->getDurability()-mercado->_MEDIANADURABILIDADE)/100))+(mercado->_precoBase[(int)item->getTipo()]+((normalizeDemand((int)item->getTipo())-mercado->_MEDIANADEMANDA)/100))+((normalizeOffer((int)item->getTipo())-mercado->_MEDIANAOFERTA)/100)+(_tecnicaDeMercado * _restanteMeta));
+	return((mercado->_precoBase[(int)item->getType()]/2)+(mercado->_precoBase[(int)item->getType()]+((item->getDurability()-mercado->_MEDIANADURABILIDADE)/100))+(mercado->_precoBase[(int)item->getType()]+((normalizeDemand((int)item->getType())-mercado->_MEDIANADEMANDA)/100))+((normalizeOffer((int)item->getType())-mercado->_MEDIANAOFERTA)/100)+(_tecnicaDeMercado * _restanteMeta));
 }
 int CVendedor::getFinalPriceSell(CItem *item, CPersonagemJogador *jogador)
 {

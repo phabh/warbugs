@@ -68,7 +68,16 @@ int CScroll::getDurability()
 {
 	return(_bDurabilidade);
 }
-
+void CScroll::setAll(int mod, int danM, int danX, int spd, int rng, int def, int dur)
+{
+	_bModificador = mod;
+	_bDanoMin = danM;
+	_bDanoMax = danX;
+	_bVelocidade = spd;
+	_bAlcance = rng;
+	_bDefesa = def;
+	_bDurabilidade = dur;
+}
 Atrib CScroll::getAtribute()
 {
 	return (NENHUM);

@@ -36,6 +36,8 @@ public:
 	int getDef();
 	int getDurability();
 
+	void setAll(int mod, int danM, int danX, int spd, int rng, int def, int dur);
+
 	//Métodos de manipulação de itens
 	//virtual void use(CPersonagem *jogador)=0;
 	//virtual void loot(CPersonagem *jogador)=0;

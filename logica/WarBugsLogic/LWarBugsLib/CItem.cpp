@@ -27,11 +27,11 @@ int CItem::getEstadoAsInt()
 {
 	return((int)_estado);
 }
-TipoItem CItem::getTipo()
+TipoItem CItem::getType()
 {
 	return(_tipo);
 }
-int CItem::getTipoAsInt()
+int CItem::getTypeAsInt()
 {
 	return((int)_tipo);
 }
@@ -55,6 +55,10 @@ void CItem::setNome(TypeItens novoNome)
 void CItem::setEstado(EstadoItem novoEstado)
 {
 	_estado = novoEstado;
+}
+void CItem::setType(TipoItem tipo)
+{
+	_tipo = tipo;
 }
 void CItem::setPrice(int novoPreco)
 {

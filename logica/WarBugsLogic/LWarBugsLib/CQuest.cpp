@@ -143,7 +143,7 @@ bool CQuest::testEnemyKilled(CPersonagem *personagem)
 }
 bool CQuest::testItemPicked(CItem *item)
 {
-	if(item->getTipo() == _itemNecessario)
+	if(item->getType() == _itemNecessario)
 	{
 		_itensPossuidos = _itensPossuidos + 1;
 		return(true);
