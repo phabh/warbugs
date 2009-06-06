@@ -16,7 +16,6 @@
 
 CPersonagemJogador::CPersonagemJogador()
 {
-	initC3DObject();
 	initCPersonagem();
 	setID(-1);
 	coordenada = new Ponto();
