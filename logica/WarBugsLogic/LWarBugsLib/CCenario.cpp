@@ -87,6 +87,22 @@ int CCenario::salesmanCount()
 {
 	return(_vendedores->size());
 }
+CPeopleList *CCenario::getPlayerList()
+{
+	return(_jogadores);
+}
+CPeopleList *CCenario::getMonsterList()
+{
+	return(_inimigos);
+}
+CPeopleList *CCenario::getNPCList()
+{
+	return(_npcs);
+}
+CPeopleList *CCenario::getSalesmanList()
+{
+	return(_vendedores);
+}
 //
 CPersonagemJogador *CCenario::getPlayer(int idJogador)
 {
@@ -128,37 +144,37 @@ CVendedor *CCenario::getSalesmanAt(int idVendedor)
 {
 	return((CVendedor*)_vendedores->getElementAt(idVendedor));
 }
-CPortal *CCenario::getExit(Direcoes idPortal)
+CPortal *CCenario::getExit(TypeDirecao idPortal)
 {
 	switch(idPortal)
 	{
-	case NORTE:
+	case D_NORTH:
 		return(_saidaNorte);
-	case SUL:
+	case D_SOUTH:
 		return(_saidaSul);
-	case LESTE:
+	case D_EAST:
 		return(_saidaRight);
-	case OESTE:
+	case D_WEST:
 		return(_saidaLeft);
 	}
 	return(NULL);
 }
 
 //
-void CCenario::setExit(CPortal *newExit, Direcoes idPortal)
+void CCenario::setExit(CPortal *newExit, TypeDirecao idPortal)
 {
 	switch(idPortal)
 	{
-	case NORTE:
+	case D_NORTH:
 		_saidaNorte = newExit;
 		break;
-	case SUL:
+	case D_SOUTH:
 		_saidaSul = newExit;
 		break;
-	case LESTE:
+	case D_EAST:
 		_saidaRight = newExit;
 		break;
-	case OESTE:
+	case D_WEST:
 		_saidaLeft = newExit;
 		break;
 	}

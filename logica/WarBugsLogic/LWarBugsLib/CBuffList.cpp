@@ -235,3 +235,16 @@ void CBuffList::executeBuffs(CPersonagem *jogador, CBuffList *lista)
 		temp->valor->execute(jogador, lista);
 	}
 }
+
+void CBuffList::cleanMoonBuffs()
+{
+	SBuffElemento *temp = _first;
+	while(temp->next != NULL)
+	{
+		if((temp->valor->getTipo() == BUFF_MOON_ABGRUNDI)||(temp->valor->getTipo() == BUFF_MOON_MABILOG)||(temp->valor->getTipo() == BUFF_MOON_RESPLANDORA)||(temp->valor->getTipo() == BUFF_MOON_SAMARA)||(temp->valor->getTipo() == BUFF_MOON_TYPHOONA))
+		{
+			removeBuff(temp->valor);
+			return;
+		}
+	}
+}

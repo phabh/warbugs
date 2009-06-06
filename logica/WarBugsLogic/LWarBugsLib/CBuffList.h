@@ -43,5 +43,6 @@ public:
 	bool haveBuff(CBuff *Buff);
 
 	void executeBuffs(CPersonagem *jogador, CBuffList *lista);
+	void cleanMoonBuffs();
 };
 #endif

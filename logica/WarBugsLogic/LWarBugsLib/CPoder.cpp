@@ -21,19 +21,19 @@ void CPoder::berserkTornado(CPersonagemJogador *user, int level)
 		case 0:
 			break;
 		case 1:
-			temp = new CBuff(BERSERKER, 5*FPS, user, 10, user->getFOR(), -10);
+			temp = new CBuff(BUFF_BERSERKER, 5*FPS, user, 10, user->getFOR(), -10);
 			break;
 		case 2:
-			temp = new CBuff(BERSERKER, 7*FPS, user, 10, user->getFOR()+1, -10);
+			temp = new CBuff(BUFF_BERSERKER, 7*FPS, user, 10, user->getFOR()+1, -10);
 			break;
 		case 3:
-			temp = new CBuff(BERSERKER, 10*FPS, user, 15, user->getFOR()+1, -5);
+			temp = new CBuff(BUFF_BERSERKER, 10*FPS, user, 15, user->getFOR()+1, -5);
 			break;
 		case 4:
-			temp = new CBuff(BERSERKER, 10*FPS, user, 15, user->getFOR()+3, -5);
+			temp = new CBuff(BUFF_BERSERKER, 10*FPS, user, 15, user->getFOR()+3, -5);
 			break;
 		case 5:
-			temp = new CBuff(BERSERKER, 20*FPS, user, 20, user->getFOR()+5, -5);
+			temp = new CBuff(BUFF_BERSERKER, 20*FPS, user, 20, user->getFOR()+5, -5);
 			break;
 		default:
 			break;
@@ -113,19 +113,19 @@ void CPoder::strike(CPersonagemJogador *user, int level)
 		case 0:
 			break;
 		case 1:
-			temp = new CBuff(STRIKE, 5*FPS, user, user->getFOR(), 1);
+			temp = new CBuff(BUFF_STRIKE, 5*FPS, user, user->getFOR(), 1);
 			break;
 		case 2:
-			temp = new CBuff(STRIKE, 5*FPS, user, user->getFOR()+1, 3);
+			temp = new CBuff(BUFF_STRIKE, 5*FPS, user, user->getFOR()+1, 3);
 			break;
 		case 3:
-			temp = new CBuff(STRIKE, 7*FPS, user, user->getFOR()+3, 5);
+			temp = new CBuff(BUFF_STRIKE, 7*FPS, user, user->getFOR()+3, 5);
 			break;
 		case 4:
-			temp = new CBuff(STRIKE, 7*FPS, user, user->getFOR()+5, 7);
+			temp = new CBuff(BUFF_STRIKE, 7*FPS, user, user->getFOR()+5, 7);
 			break;
 		case 5:
-			temp = new CBuff(STRIKE, 10*FPS, user, user->getFOR()+10, 10);
+			temp = new CBuff(BUFF_STRIKE, 10*FPS, user, user->getFOR()+10, 10);
 			break;
 		default:
 			break;
