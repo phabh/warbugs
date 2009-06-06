@@ -11,9 +11,20 @@ using namespace io;
 using namespace gui; 
 
 IrrlichtDevice *device; 
+IVideoDriver* driver; 
+	ISceneManager* smgr; 
+	IGUIEnvironment* guienv; 
+	ICameraSceneNode *cam; 
+	IAnimatedMesh *mod1, *mod2;
+	::ITexture *tx1, *tx2;
+
 IAnimatedMeshSceneNode *modelo; 
 IAnimatedMeshSceneNode *modelo1; 
-IAnimatedMeshSceneNode *modelos[100]; /*
+IAnimatedMeshSceneNode *modelos[100];
+
+IAnimatedMeshSceneNode *md1, *md2; 
+
+/*
 									  IAnimatedMeshSceneNode *modelo3; 
 									  IAnimatedMeshSceneNode *modelo4; 
 									  IAnimatedMeshSceneNode *modelo5; */
@@ -21,8 +32,18 @@ ILightSceneNode *_luz;
 CToonShader *_toonShader; 
 
 SMaterial mblack;
-	
 
+
+	
+	
+float getDist(vector3df v1, vector3df v2)
+{
+	float dx = abs(v1.X - v2.X);
+	float dz = abs(v1.Z - v2.Z);
+
+	return ::sqrt(dx*dx + dz*dz);
+
+}
 
 void addContorno(ISceneNode* oNode, f32 fThickness = 3, SColor cColor = SColor(255,0,0,0))
 {
@@ -38,6 +59,7 @@ void addContorno(ISceneNode* oNode, f32 fThickness = 3, SColor cColor = SColor(2
 	lmat.Thickness = fThickness;
 	lmat.FrontfaceCulling = true;
 	lmat.BackfaceCulling = false;
+	//lmat.setFlag(EMF_FOG_ENABLE, true);
 
 	for(u32 i=0; i<oNode->getMaterialCount(); i++)
 	{
@@ -53,12 +75,54 @@ void addContorno(ISceneNode* oNode, f32 fThickness = 3, SColor cColor = SColor(2
 
 void MapearMundo(ISceneNode* node) 
 { 
-	if (node->getType() == ESNT_MESH || node->getType() == ESNT_ANIMATED_MESH || node->getType() == ESNT_TERRAIN )
+	if (node->getType() == ESNT_MESH || node->getType() == ESNT_ANIMATED_MESH  /*|| node->getType() == ESNT_TERRAIN*/ )
   {
+	  if(node->getID() >= 10)
+	  {
+	  IAnimatedMeshSceneNode* no = (IAnimatedMeshSceneNode*)node;
 
-	 // if( node->getAutomaticCulling() != EAC_OFF)
+	  if( getDist(no->getAbsolutePosition(), cam->getAbsolutePosition()) > 300)
+	  {		
+		  no->setVisible(false);/*
+		  no->setMesh(mod2);
+		  no->setMaterialFlag(EMF_LIGHTING, false);
+		  no->setMaterialTexture(0, tx2);
+		  no->setAnimationSpeed(30);*/
+	  }
+	  else
+	  {
+		  no->setVisible(true);/*
+		  no->setMesh(mod1);
+		  no->setMaterialFlag(EMF_LIGHTING, false);
+		  no->setMaterialTexture(0, tx1);
+		  no->setAnimationSpeed(30);*/
+	  }
+	  }
+	  
+	  if( node->getAutomaticCulling() != EAC_OFF && node->isVisible())
+	  {
 			addContorno(node);
+/*
+			video::SMaterial m;
+m.Lighting = false;
+driver->setMaterial(m);
 
+// this is an object aligned bounding box. it should be a pretty tight fit.
+core::aabbox3df box(node->getBoundingBox());
+
+// to draw a box that is in object coordinates...
+driver->setTransform(ETS_WORLD, node->getAbsoluteTransformation());
+driver->draw3DBox(box, SColor(255, 0, 255, 0));
+
+// this is a world aligned bounding box. it may be bigger than the
+// object space bounding box, but the edges of the box will be aligned
+// with the world coordinate system.
+node->getAbsoluteTransformation().transformBoxEx(box);
+
+// to draw a box that is in world coordinates...
+driver->setTransform(video::ETS_WORLD, core::matrix4());
+driver->draw3DBox(box, video::SColor(255, 0, 0, 255)); */
+	  }
   }  
   list<ISceneNode*>::ConstIterator begin = node->getChildren().begin(); 
   list<ISceneNode*>::ConstIterator end   = node->getChildren().end(); 
@@ -132,10 +196,8 @@ public:
 
 int main(int argc, char* argv[]) 
 { 
-	IVideoDriver* driver; 
-	ISceneManager* smgr; 
-	IGUIEnvironment* guienv; 
-	ICameraSceneNode *cam; 
+	
+
 	u32 lasttick; 
 	int lastFPS = -1; 
 
@@ -202,19 +264,41 @@ int main(int argc, char* argv[])
 
 	// lagarto
 
+	mod1 = smgr->getMesh("lagarto.b3d");
+	mod2 = smgr->getMesh("besouro6.b3d");
+
+	tx1 = driver->getTexture("lagarto1.jpg");
+	tx2 =driver->getTexture("besouro1.jpg");
+/*
+	md1 = smgr->addAnimatedMeshSceneNode(mod1); 
+	md1->setMaterialFlag(EMF_LIGHTING, false);
+	md1->setMaterialTexture(0, tx1);
+	md1->setAnimationSpeed(30);
+
+	md2 = smgr->addAnimatedMeshSceneNode(mod2); 
+	md2->setMaterialFlag(EMF_LIGHTING, false);
+	md2->setMaterialTexture(0, tx2);
+	md2->setAnimationSpeed(30);*/
+
 	for(int i=0; i<100; i++)
 	{
 
-		modelos[i] = smgr->addAnimatedMeshSceneNode(smgr->getMesh("lagarto.b3d")); 
-		//modelos[i]->setMaterialFlag(EMF_LIGHTING, false);
-	modelos[i]->setMaterialTexture(0, driver->getTexture("lagarto1.jpg"));
+		//modelos[i] = smgr->addAnimatedMeshSceneNode(smgr->getMesh("lagarto.b3d")); 
+	modelos[i] = smgr->addAnimatedMeshSceneNode(mod1); 
+	modelos[i]->setMaterialFlag(EMF_FOG_ENABLE, true);
+	//modelos[i]->setMaterialType(::EMT_SOLID);
+		modelos[i]->setMaterialFlag(EMF_LIGHTING, false);
+	modelos[i]->setMaterialTexture(0, tx1);
 		//modelos[i] = smgr->addAnimatedMeshSceneNode(smgr->getMesh("besouro6.b3d")); 
 	//modelos[i]->setMaterialFlag(EMF_LIGHTING, false);
 	//modelos[i]->setMaterialTexture(0, driver->getTexture("besouro1.jpg"));
 
 		modelos[i]->setPosition(vector3df(i*-20.0,10.f,0.f));
 		modelos[i]->setAnimationSpeed(30);
+		modelos[i]->setID(i+10);
 	}
+
+	driver->setFog(video::SColor(255,/*138,125,81*/255,255,255), true, /*250*/100, 300, 0, true);
 	/*
 	modelo3 = smgr->addAnimatedMeshSceneNode(smgr->getMesh("lagarto.b3d")); 
 	//modelo3->setMaterialFlag(EMF_LIGHTING, false);
@@ -260,8 +344,6 @@ int main(int argc, char* argv[])
 
 	cam->setFarValue(1000);
 
-
-
 	mblack.DiffuseColor = mblack.SpecularColor = mblack.AmbientColor = mblack.EmissiveColor = SColor(255,0,0,0);
 	mblack.Lighting = true;
 	mblack.Wireframe = true;
@@ -276,7 +358,7 @@ int main(int argc, char* argv[])
 
 	while (device->run()) 
 	{ 
-		driver->beginScene(true, true, SColor(255,100,100,100)); 
+		driver->beginScene(true, true, SColor(255,255,255,255)); 
 
 		smgr->drawAll(); 
 
