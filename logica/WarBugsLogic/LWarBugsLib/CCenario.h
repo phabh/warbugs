@@ -44,6 +44,11 @@ public:
 	int NPCCount();
 	int salesmanCount();
 
+	CPeopleList *getPlayerList();
+	CPeopleList *getMonsterList();
+	CPeopleList *getNPCList();
+	CPeopleList *getSalesmanList();
+
 	CPersonagemJogador *getPlayer(int idJogador);
 	CInimigo *getMonster(int idInimigo);
 	CNPC *getNpc(int idNpc);
@@ -56,9 +61,9 @@ public:
 	CBolsa *getBagAt(int pos);
 	CVendedor *getSalesmanAt(int pos);
 
-	CPortal *getExit(Direcoes idPortal);
+	CPortal *getExit(TypeDirecao idPortal);
 
-	void setExit(CPortal *newExit, Direcoes idPortal);
+	void setExit(CPortal *newExit, TypeDirecao idPortal);
 
 	void addPlayer(CPersonagem *jogador);
 	void addMonster(CPersonagem *inimigo);

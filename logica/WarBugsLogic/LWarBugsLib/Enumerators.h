@@ -172,16 +172,21 @@ enum Atrib
 // ------------------------------------------------------------------------------------------------------------
 enum TipoBuff
 {
-	NORMAL, 
-	DESESPERO, 
-	VENENO, 
-	DADIVA, 
-	BERSERKER, 
-	STRIKE, 
-	BACKSTAB, 
-	LENTO, 
-	STUN, 
-	ATORDOADO
+	BUFF_NORMAL, 
+	BUFF_DESESPERO, 
+	BUFF_VENENO, 
+	BUFF_DADIVA, 
+	BUFF_BERSERKER, 
+	BUFF_STRIKE, 
+	BUFF_BACKSTAB, 
+	BUFF_LENTO, 
+	BUFF_STUN, 
+	BUFF_ATORDOADO,
+	BUFF_MOON_TYPHOONA,
+	BUFF_MOON_MABILOG,
+	BUFF_MOON_ABGRUNDI,
+	BUFF_MOON_RESPLANDORA,
+	BUFF_MOON_SAMARA,
 };
 // ------------------------------------------------------------------------------------------------------------
 enum EstadoItem
@@ -213,12 +218,16 @@ enum EstadoPersonagem
 	E_FALANDO
 };
 // ------------------------------------------------------------------------------------------------------------
-enum Direcoes 
+enum TypeDirecao
 {
-	NORTE, 
-	SUL, 
-	LESTE, 
-	OESTE
+	D_LEFT,
+	D_SOUTH,
+	D_DOWN,
+	D_EAST,
+	D_RIGHT,
+	D_NORTH,
+	D_UP,
+	D_WEST
 };
 // ------------------------------------------------------------------------------------------------------------
 enum TipoPoder 
@@ -240,7 +249,16 @@ enum QuestState
 	Q_FINISHED
 };
 // ------------------------------------------------------------------------------------------------------------
-
+enum Moon
+{
+	MOON_OBLIVION,
+	MOON_TYPHOONA,
+	MOON_MABILOG,
+	MOON_ABGRUNDI,
+	MOON_RESPLANDORA,
+	MOON_SAMARA,
+};
+// ------------------------------------------------------------------------------------------------------------
 /*DEFINES*/
 #ifndef MAXSTATS
 #define MAXSTATS 5

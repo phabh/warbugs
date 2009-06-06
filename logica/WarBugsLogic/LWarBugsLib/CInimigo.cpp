@@ -106,9 +106,9 @@ void CInimigo::takeDamage(int damage, CPersonagem *atkr)
 }
 void CInimigo::die()
 {
-	divisorxp->giveXP();
 	if(getStats()->getPV() <= 0)
 	{
+		divisorxp->giveXP();
 		estado = E_MORTO;
 		respawn = ENEMYRESPAWNTIME;
 	}

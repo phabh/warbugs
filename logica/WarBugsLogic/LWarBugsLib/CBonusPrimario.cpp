@@ -16,7 +16,7 @@
 
 CBonusPrimario::CBonusPrimario()
 {
-	origem = NORMAL;
+	origem = BUFF_NORMAL;
 	next = NULL;
 	prev = NULL;
 	_valor = new CHabilidades();

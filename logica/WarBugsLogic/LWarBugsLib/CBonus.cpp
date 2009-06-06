@@ -13,7 +13,7 @@
 
 CBonus::CBonus()
 {
-	origem = NORMAL;
+	origem = BUFF_NORMAL;
 	next = NULL;
 	prev = NULL;
 }
