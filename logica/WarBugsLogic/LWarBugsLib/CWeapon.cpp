@@ -100,4 +100,14 @@ int CWeapon::getValue()
 {
 	return -1;
 }
+void CWeapon::setAll(Raca raca, int mod, int danM, int danX, int spd, int rng, int dur, int nM)
+{
+	_raca = raca;
+	_modificador = mod;
+	_danoMin = danM;
+	_danoMax = danX;
+	_velocidade = spd;
+	_alcance = rng;
+	_nivelMagico = nM;
+}
 #endif

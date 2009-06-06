@@ -235,7 +235,7 @@ void CPersonagemJogador::useItem(CItem *item)
 {
 	if(haveItem(item))
 	{
-		if(item->getTipo() == USO)
+		if(item->getType() == USO)
 		{
 			switch(item->getAtribute())
 			{
@@ -267,7 +267,7 @@ void CPersonagemJogador::equip(CItem *item)
 	if(this->haveItem(item))
 	{
 		//É arma?
-		if(item->getTipo() == ARMA)
+		if(item->getType() == ARMA)
 		{
 			//Estou equipado?
 			if(_equip->arma == NULL)//Se não estou equipado
@@ -317,7 +317,7 @@ void CPersonagemJogador::equip(CItem *item)
 				//ERRO: INVENTÁRIO CHEIO
 			}
 		}
-		else if(item->getTipo() == ARMADURA)
+		else if(item->getType() == ARMADURA)
 		{
 			if(_equip->armadura == NULL)
 			{
