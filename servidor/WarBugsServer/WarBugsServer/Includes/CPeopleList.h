@@ -26,10 +26,12 @@ public:
 	bool isEmpty();
 	int size();
 	void addPersonagem(CPersonagem *personagem);
-	CPersonagem *removePersonagemByPosition(int pos);
+	CPersonagem *removePersonagemAt(int pos);
 	CPersonagem *removePersonagem(int ID);
+	CPersonagem *removeScenePersonagem(int sceneID);
 	//CPersonagem *removePersonagem(CPersonagem *personagem);
 	CPersonagem *getPersonagem(int IDpersonagem);
+	CPersonagem *getScenePersonagem(int sceneID);
 	CPersonagem *getElementAt(int index);
 
 	bool havePersonagem(int ID);

@@ -38,7 +38,6 @@ public:
 	int getRange();
 	int getMagicLevel();
 
-	void initialize(CObjectCount *counter);
 	//Métodos de manipulação de itens
 	//virtual void use(CPersonagem *jogador)=0;
 	//virtual void loot(CPersonagem *jogador)=0;
@@ -46,5 +45,7 @@ public:
 	//Métodos virtuais pra funcionar
 	int getValue();
 	Atrib getAtribute();
+
+	void setAll(Raca raca, int mod, int danM, int danX, int spd, int rng, int dur, int nM);
 };
 #endif

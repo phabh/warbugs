@@ -46,7 +46,6 @@ class CPersonagemJogador : public CPersonagem
 	CBugSocket *_socketJogador;
 	
 	int _skillLevel[3];
-	int _xpToNextLv;
 	int _pontoDistribuir;
 	int _skillPontoDistribuir;
 	CEquipamento *_equip;
@@ -75,7 +74,6 @@ public:
 	CPersonagemJogador();
 	//Getters
 	int getSkillLevel(int skillIndex);
-	int getMaxXP();
 	int getAttack();
 	int getDamage();
 	bool isTradeOn();
@@ -90,8 +88,6 @@ public:
 	CBugSocket *getSocket();
 	
 	//Setters
-	
-	void setXPToNextLv(int xp);
 	void setPointsToDistribute(int points);
 	void setSkillPointsToDistribute(int value);
 	void setEquip(CEquipamento *equip);
@@ -142,6 +138,7 @@ public:
 	void speakToNPC(CPersonagem *alvo);
 	//Batalha
 	void takeDamage(int damage, CPersonagem *atkr);
+	bool tryAttack();
 	void attack();
 	//Level Up
 	void updateXP();

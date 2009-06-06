@@ -84,7 +84,7 @@ void CCoreServer::readPackets()
 				case DISCONNECT:
 					{
 						_playersList->getElementAt(indexJogador)->getSocket()->Close();
-						_playersList->removeJogadorByPosition(indexJogador);
+						_playersList->removeJogadorAt(indexJogador);
 						break;
 					}
 		
@@ -106,7 +106,7 @@ void CCoreServer::readPackets()
 						{
 							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)LOGIN_OK,tempJogador->getID());
 							tempJogador->setSocket(_playersList->getElementAt(indexJogador)->getSocket());
-							_playersList->removeJogadorByPosition(indexJogador);
+							_playersList->removeJogadorAt(indexJogador);
 							_playersList->addJogador(tempJogador);
 						}
 						else
@@ -208,7 +208,7 @@ void CCoreServer::readPackets()
 						break;
 					}
 
-				case PLAY: //ID PERSONAGEM
+				case START_GAME: //ID PERSONAGEM
 					{
 						mesRecebida.beginReading();
 						mesRecebida.readByte();
@@ -223,7 +223,7 @@ void CCoreServer::readPackets()
 
 						if(tempPersonagem == NULL)
 						{
-							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)START_GAME_FAIL);
 							break;
 						}
 						else
@@ -234,13 +234,13 @@ void CCoreServer::readPackets()
 
 							if(idCenario == -1)
 							{
-								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)START_GAME_FAIL);
 								break;								
 							}
 
 							if(!_cenarioList->haveCenario(idCenario))
 							{
-								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)START_GAME_FAIL);
 								break;								
 							}
 
@@ -256,19 +256,18 @@ void CCoreServer::readPackets()
 
 							if(posCenario == -1)
 							{
-								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);
+								sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)START_GAME_FAIL);
 								break;								
 							}
-
 
 							//coloca o personagem no cenário
 							_cenarioList->getElementAt(posCenario)->addPlayer(tempPersonagem);
 
-							//manda o cenário em que o jogador está
-							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)ENTER_CENARIO, tempPersonagem->getSceneID(), tempPersonagem->getPosition()->x, tempPersonagem->getPosition()->z);
-
 							//manda para todos do cenário adicionar o novo personagem
 							sendMessage(true,_cenarioList->getElementAt(posCenario)->getID(),_playersList->getElementAt(indexJogador)->getSocket(),(int)ADD_PERSONAGEM, JOGADOR, tempPersonagem);
+
+							//manda o cenário em que o jogador está
+							sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)ENTER_CENARIO, _playersList->getElementAt(indexJogador)->getScene()->getID(),tempPersonagem->getSceneID());
 
 							//manda para o player os inimigos
 							for(int p = 0; p < _cenarioList->getElementAt(posCenario)->monsterCount(); p++)
@@ -277,7 +276,7 @@ void CCoreServer::readPackets()
 
 								if(tempInimigo == NULL)
 								{
-									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);	
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)START_GAME_FAIL);	
 								}
 								else
 								{
@@ -292,7 +291,7 @@ void CCoreServer::readPackets()
 
 								if(tempNPC == NULL)
 								{
-									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);	
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)START_GAME_FAIL);	
 								}
 								else
 								{
@@ -307,7 +306,7 @@ void CCoreServer::readPackets()
 
 								if(tempBolsa == NULL)
 								{
-									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);	
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)START_GAME_FAIL);	
 								}
 								else
 								{
@@ -322,7 +321,7 @@ void CCoreServer::readPackets()
 
 								if(tempVendedor == NULL)
 								{
-									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);	
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)START_GAME_FAIL);	
 								}
 								else
 								{
@@ -337,9 +336,9 @@ void CCoreServer::readPackets()
 
 								if(tempPersonagemJogador == NULL)
 								{
-									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)PLAY_FAIL);	
+									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)START_GAME_FAIL);	
 								}
-								else
+								else if(tempPersonagemJogador->getSceneID() != _playersList->getElementAt(indexJogador)->getCharacter()->getSceneID())
 								{
 									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)ADD_PERSONAGEM, JOGADOR, tempPersonagemJogador);
 								}
@@ -681,9 +680,7 @@ void CCoreServer::readPackets()
 
 						//-1 para todos
 						int    idPersonagem	= mesRecebida.readInt();
-						char * mensagem;
-
-						strcpy_s(mensagem,mesRecebida.getSize(),mesRecebida.readString());
+						char * mensagem = mesRecebida.readString();
 
 						System::String ^ nome = gcnew System::String(_playersList->getElementAt(indexJogador)->getCharacter()->getName());
 						System::String ^ mensagemString = gcnew System::String(mensagem);
@@ -712,7 +709,7 @@ void CCoreServer::readPackets()
 						float  posX			= mesRecebida.readFloat();
 						float  posZ			= mesRecebida.readFloat();
 
-						sendMessage(true,_playersList->getElementAt(indexJogador)->getScene()->getID(),_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOT, idShot, posX, posZ, idAlvo);
+						sendMessage(true,_playersList->getElementAt(indexJogador)->getScene()->getID(),_playersList->getElementAt(indexJogador)->getSocket(),(int)SHOT, idShot, idAlvo, posX, posZ);
 
 						break;
 					}
@@ -1357,6 +1354,9 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino,  
 	mes.writeInt(p1->getStats()->getPM());
 	mes.writeInt(p1->getStats()->getMaxPV());
 	mes.writeInt(p1->getStats()->getMaxPM());
+
+	mes.writeInt(p1->getLevel());
+
 	
 	//	AKI VAI TER QUE PREENCHER OS BUFFS CONFORME FOR, OLHA AE EDER
 	
@@ -1395,14 +1395,16 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino,  
 	
 	//	END BUFF
 	
-
-	mes.writeInt(p1->getState());
 	mes.writeInt(race);
 	mes.writeInt(tipoClasse);
+
+	mes.writeInt(p1->getState());
+
+	mes.writeFloat(p1->getMoveSpeed());
+	mes.writeInt(p1->getDirection());
+
 	mes.writeInt(idWeapon);
 	mes.writeInt(idArmor);
-	mes.writeFloat(p1->getDirection());
-	mes.writeFloat(p1->getMoveSpeed());
 
 	sendMessage(toAll, idCenario, destino, mes);
 }
@@ -1665,7 +1667,7 @@ void CCoreServer::sendMessagesFrame(CPlayerList * cList)
 						}
 						catch(...)
 						{
-							cList->removeJogadorByPosition(index);
+							cList->removeJogadorAt(index);
 							index--;
 						}
 					}
@@ -1677,7 +1679,7 @@ void CCoreServer::sendMessagesFrame(CPlayerList * cList)
 						}
 						catch(...)
 						{
-							cList->removeJogadorByPosition(index);
+							cList->removeJogadorAt(index);
 							index--;
 						}
 					}
