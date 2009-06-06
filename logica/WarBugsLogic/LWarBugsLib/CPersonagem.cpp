@@ -19,6 +19,7 @@
 
 void CPersonagem::initCPersonagem()
 {
+	initC3DObject();
 	setID(-1);
 	nivel = 1;
 	experiencia = 0;
@@ -31,6 +32,7 @@ void CPersonagem::initCPersonagem()
 	bonusSecundario = new CBonusSecundario();
 	//poderes = new CPoder();
 	status = new CBuffList();
+	divisorxp = new CDivisorXP(this);
 }
 //Getters
 int CPersonagem::getLevel()

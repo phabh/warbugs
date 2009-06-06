@@ -13,8 +13,8 @@
 
 CNPC::CNPC()
 {
+	initCPersonagem();
 	setID(-1);
-	//CPersonagem::CPersonagem();
 	coordenada = new Ponto();
 	dinheiro = 0;
 	habilidadesPrimarias = new CHabilidades();

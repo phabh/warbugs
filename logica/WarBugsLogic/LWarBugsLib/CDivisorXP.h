@@ -44,9 +44,10 @@ private:
 	SDivisorXP *_first;
 	int _size;
 public:
-	CDivisorXP()
+	CDivisorXP(CPersonagem *owner)
 	{
 		_first = new SDivisorXP();
+		_owner = owner;
 		_size = 0;
 	}
 	bool isEmpty()
@@ -92,17 +93,17 @@ public:
 	}
 	void giveXP()
 	{
+		SDivisorXP *temp = _first;
 		float aux;
 		int xp;
-		while(_first != NULL)
+		while(temp != NULL)
 		{
-			aux = ((float)(_first->dano * 100))/((float)(_owner->getStats()->getMaxPV()));
-			xp = (int)(((float)(BASEXPVALUE *_first->causador->getLevel()))*aux) - (BASEXPVALUE/XPREDUCTIONFACTOR * _first->causador->getLevel());
-			_first->causador->addXP(xp);
-			_first = _first->next;
+			aux = ((float)(temp->dano * 100))/((float)(_owner->getStats()->getMaxPV()));
+			xp = (int)(((float)(BASEXPVALUE *temp->causador->getLevel()))*aux) - (BASEXPVALUE/XPREDUCTIONFACTOR * temp->causador->getLevel());
+			temp->causador->addXP(xp);
+			temp = temp->next;
 		}
 		cleanUp();
 	}
-
 };
 #endif

@@ -18,6 +18,7 @@ SMarket *mercado;
 
 CVendedor::CVendedor()
 {
+	initCPersonagem();
 	setID(-1);
 	coordenada = new Ponto();
 	dinheiro = 0;

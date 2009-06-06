@@ -13,6 +13,7 @@
 
 CInimigo::CInimigo()
 {
+	initCPersonagem();
 	setID(-1);
 	coordenada = new Ponto();
 	destino = new Ponto();
