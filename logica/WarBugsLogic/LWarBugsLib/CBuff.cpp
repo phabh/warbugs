@@ -87,14 +87,30 @@ CBuff::CBuff(TipoBuff tipo, int dur, /*int img, int efc,*/ CPersonagem *origem, 
 			_badBuff = true;
 			break;
 		case BUFF_MOON_ABGRUNDI:
+			_valor1 = val1;//Aumento em INS
+			//TIRAR O DESESPERO
+			_badBuff = false;
 			break;
 		case BUFF_MOON_MABILOG:
+			_valor1 = val1;//Aumento de Dano
+			_valor2 = val2;//Aumento de DEF
+			_badBuff = false;
 			break;
 		case BUFF_MOON_RESPLANDORA:
+			_valor1 = val1;//Aumento em AGI
+			_valor2 = val2;//Aumento em INS
+			_badBuff = false;
 			break;
 		case BUFF_MOON_SAMARA:
+			_valor1 = val1;//Aumento no Ataque
+			_valor2 = val2;//Redução no Dano
+			_valor3 = val3;//Aumento em AGI
+			_badBuff = false;
 			break;
 		case BUFF_MOON_TYPHOONA:
+			_valor1 = val1;//Aumento em DES
+			_valor2 = val2;//Aumento em INS
+			_badBuff = false;
 			break;
 		default:
 			break;
@@ -194,6 +210,51 @@ void CBuff::addBuff(CBuffList * lista, CPersonagem *alvo)
 			bonus = NULL;
 			delete bonus;
 			break;
+		case BUFF_MOON_ABGRUNDI:
+			bonus = new CBonusPrimario();
+			bonus->createBonus(0,0,0,_valor1,0);
+			bonus->setOrigem(this->getTipo());
+			alvo->getBaseBonus()->add(bonus);
+			bonus = NULL;
+			delete bonus;
+			//TIRAR O DESESPERO
+			break;
+		case BUFF_MOON_MABILOG:
+			bonus = new CBonusSecundario();
+			bonus->createBonus(0,0,_valor1, _valor1, _valor2);
+			bonus->setOrigem(this->getTipo());
+			alvo->getBonus()->add(bonus);
+			bonus = NULL;
+			delete bonus;
+			break;
+		case BUFF_MOON_RESPLANDORA:
+			bonus = new CBonusPrimario();
+			bonus->createBonus(0,_valor1,0,_valor2,0);
+			bonus->setOrigem(this->getTipo());
+			alvo->getBaseBonus()->add(bonus);
+			bonus = NULL;
+			delete bonus;
+			break;
+		case BUFF_MOON_SAMARA:
+			bonus = new CBonusPrimario();
+			bonus->createBonus(0,_valor3, 0,0,0);
+			bonus->setOrigem(this->getTipo());
+			alvo->getBaseBonus()->add(bonus);
+			bonus = NULL;
+			bonus = new CBonusSecundario();
+			bonus->createBonus(_valor1, _valor1, _valor2, _valor2, 0);
+			alvo->getBonus()->add(bonus);
+			bonus = NULL;
+			delete bonus;
+			break;
+		case BUFF_MOON_TYPHOONA:
+			bonus = new CBonusPrimario();
+			bonus->createBonus(0,_valor1,0,_valor2,0);
+			bonus->setOrigem(this->getTipo());
+			alvo->getBaseBonus()->add(bonus);
+			bonus = NULL;
+			delete bonus;
+			break;
 		default:
 			break;
 	}
@@ -222,6 +283,19 @@ void CBuff::remove(CPersonagem *alvo)
 			break;
 		case BUFF_ATORDOADO:
 			alvo->getBaseBonus()->removeElement(this->getTipo());
+			break;
+		case BUFF_MOON_ABGRUNDI:
+			alvo->getBaseBonus()->removeElement(this->getTipo());
+			break;
+		case BUFF_MOON_MABILOG:
+			alvo->getBonus()->removeElement(this->getTipo());
+			break;
+		case BUFF_MOON_RESPLANDORA:
+			alvo->getBaseBonus()->removeElement(this->getTipo());
+			break;
+		case BUFF_MOON_SAMARA:
+			alvo->getBaseBonus()->removeElement(this->getTipo());
+			alvo->getBonus()->removeElement(this->getTipo());
 			break;
 		default:
 			break;
