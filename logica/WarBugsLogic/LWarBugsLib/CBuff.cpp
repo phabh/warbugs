@@ -63,6 +63,7 @@ CBuff::CBuff(TipoBuff tipo, int dur, CPersonagem *origem, int val1, int val2, in
 			_badBuff = false;
 			break;
 		case BUFF_BACKSTAB:
+			_duracao = -1;
 			_valor1 = val1;//Raio de alcance
 			_valor2 = val2;//Dano causado
 			_badBuff = false;
@@ -94,6 +95,10 @@ CBuff::CBuff(TipoBuff tipo, int dur, CPersonagem *origem, int val1, int val2, in
 			_valor2 = val2;//Aumento em FOR
 			_badBuff = false;
 			break;
+		case BUFF_INVISIVEL:
+			_duracao = -1;
+			_valor1 = val1;//Aumento em DEF
+			_valor2 = val2;//Custo por turno
 		case BUFF_MOON_ABGRUNDI:
 			_valor1 = val1;//Aumento em INS
 			//TIRAR O DESESPERO
@@ -226,6 +231,14 @@ void CBuff::addBuff(CBuffList * lista, CPersonagem *alvo)
 			bonus = NULL;
 			delete bonus;
 			break;
+		case BUFF_INVISIVEL:
+			bonus = new CBonusSecundario();
+			bonus->createBonus(0,0,0,0,_valor1);
+			bonus->setOrigem(this->getTipo());
+			alvo->getBonus()->add(bonus);
+			bonus = NULL;
+			delete bonus;
+			break;
 		case BUFF_MOON_ABGRUNDI:
 			bonus = new CBonusPrimario();
 			bonus->createBonus(0,0,0,_valor1,0);
@@ -299,6 +312,9 @@ void CBuff::remove(CPersonagem *alvo)
 			break;
 		case BUFF_ATORDOADO:
 			alvo->getBaseBonus()->removeElement(this->getTipo());
+			break;
+		case BUFF_INVISIVEL:
+			alvo->getBonus()->removeElement(this->getTipo());
 			break;
 		case BUFF_MOON_ABGRUNDI:
 			alvo->getBaseBonus()->removeElement(this->getTipo());
@@ -377,6 +393,14 @@ void CBuff::execute(CPersonagem *jogador, CBuffList *lista)
 	case BUFF_ESCUDO:
 		break;
 	case BUFF_CHI:
+		break;
+	case BUFF_INVISIVEL:
+		if(!jogador->getStats()->addPM((-1)*_valor2))
+		{
+			jogador->getStats()->addPM(_valor2);
+			this->remove(jogador);
+			lista->removeBuff(this->getID());
+		}
 		break;
 	default:
 		break;

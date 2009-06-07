@@ -30,9 +30,14 @@ private:
 
 	static void stealItem(CPersonagem *user, CPersonagem *target);
 	static void breakItem(CPersonagem *user, CPersonagem *target);
-	static void stinkGas(CPersonagem *user, CPersonagem *target);
+	static void stinkGas(CPersonagem *user);
+	static void killingNeedle(CPersonagem *user, CPersonagem *target);
 	static void lightSpeed(CPersonagem *user);
+	static void eat(CPersonagem *user, CPersonagem *target);
 	static void explode(CPersonagem *user);
+	static void invisible(CPersonagem *user);
+	static void summonAnts();
+
 	//RaceTypes
 	static void beetleSkills(CPersonagemJogador *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target = NULL);
 
