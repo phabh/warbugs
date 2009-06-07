@@ -33,8 +33,6 @@ class CBuff : public CWarBugObject
 {
 private:
 	int _duracao;
-	int _indiceImagem;
-	int _indiceEfeito;
 	bool _badBuff;
 	TipoBuff _tipoBuff;
 	CPersonagem *_causador;

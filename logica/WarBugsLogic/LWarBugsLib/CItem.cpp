@@ -15,7 +15,7 @@
 CItem::CItem()
 {
 }
-TypeItens CItem::getNome()
+TypeItens CItem::getBaseID()
 {
 	return(_nome);
 }
@@ -48,7 +48,7 @@ bool CItem::isDropable()
 	return(_dropavel);
 }
 //CPersonagem getOwner(){}
-void CItem::setNome(TypeItens novoNome)
+void CItem::setBaseID(TypeItens novoNome)
 {
 	_nome = novoNome;
 }

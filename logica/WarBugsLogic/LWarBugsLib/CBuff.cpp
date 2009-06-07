@@ -20,8 +20,6 @@ CBuff::CBuff()
 {
 	setID(-1);
 	_duracao = 0;
-	_indiceImagem = -1;
-	_indiceEfeito = -1;
 	_badBuff = false;
 	_tipoBuff = BUFF_NORMAL;
 	_causador = NULL;
@@ -29,12 +27,10 @@ CBuff::CBuff()
 	_valor2 = 0;
 	_valor3 = 0;
 }
-CBuff::CBuff(TipoBuff tipo, int dur, /*int img, int efc,*/ CPersonagem *origem, int val1, int val2, int val3)
+CBuff::CBuff(TipoBuff tipo, int dur, CPersonagem *origem, int val1, int val2, int val3)
 {
 	setID(-1);
 	_tipoBuff = tipo;
-	//_indiceEfeito = efc;
-	//_indiceImagem = img;
 	_duracao = dur;
 	_causador = origem;
 	switch(tipo)
@@ -46,8 +42,9 @@ CBuff::CBuff(TipoBuff tipo, int dur, /*int img, int efc,*/ CPersonagem *origem, 
 			_badBuff = true;
 			break;
 		case BUFF_VENENO:
-			_valor1 = val1;//Dano que será causado por segundo
+			_valor1 = val1;//Dano que será causado por segundo nos PVs
 			_valor2 = val2;//Valor para o teste de resistencia
+			_valor3 = val3;//Dano que será causado por segundo nos PPs
 			_badBuff = true;
 			break;
 		case BUFF_DADIVA:
@@ -85,6 +82,17 @@ CBuff::CBuff(TipoBuff tipo, int dur, /*int img, int efc,*/ CPersonagem *origem, 
 			_valor2 = val2;//Redução em DES
 			_valor3 = val3;//Área de efeito
 			_badBuff = true;
+			break;
+		case BUFF_ESCUDO:
+			_duracao = -1;
+			_valor1 = val1;//Área de alcance
+			_valor2 = val2;//Ataque defendido
+			_badBuff = false;
+			break;
+		case BUFF_CHI:
+			_valor1 = val1;//Aumento em AGI
+			_valor2 = val2;//Aumento em FOR
+			_badBuff = false;
 			break;
 		case BUFF_MOON_ABGRUNDI:
 			_valor1 = val1;//Aumento em INS
@@ -149,7 +157,7 @@ void CBuff::addBuff(CBuffList * lista, CPersonagem *alvo)
 		delete temp;
 	}
 
-	lista->addBuff(this);
+	lista->addBuff(this, alvo);
 	switch(getTipo())
 	{
 		case BUFF_DADIVA:
@@ -205,6 +213,14 @@ void CBuff::addBuff(CBuffList * lista, CPersonagem *alvo)
 		case BUFF_ATORDOADO:
 			bonus = new CBonusPrimario();
 			bonus->createBonus(0,_valor1,_valor2,0,0);
+			bonus->setOrigem(this->getTipo());
+			alvo->getBaseBonus()->add(bonus);
+			bonus = NULL;
+			delete bonus;
+			break;
+		case BUFF_CHI:
+			bonus = new CBonusPrimario();
+			bonus->createBonus(_valor2, _valor1,0,0,0);
 			bonus->setOrigem(this->getTipo());
 			alvo->getBaseBonus()->add(bonus);
 			bonus = NULL;
@@ -312,6 +328,7 @@ void CBuff::execute(CPersonagem *jogador, CBuffList *lista)
 		if(jogador->getRES() < _valor2)
 		{
 			jogador->takeDamage((-1)*_valor1, _causador);//addPV(((-1)*_valor1));
+			jogador->getStats()->addPM(((-1)*_valor3));
 		}
 		break;
 	case BUFF_DADIVA:
@@ -356,6 +373,10 @@ void CBuff::execute(CPersonagem *jogador, CBuffList *lista)
 	case BUFF_STUN:
 		break;
 	case BUFF_ATORDOADO:
+		break;
+	case BUFF_ESCUDO:
+		break;
+	case BUFF_CHI:
 		break;
 	default:
 		break;

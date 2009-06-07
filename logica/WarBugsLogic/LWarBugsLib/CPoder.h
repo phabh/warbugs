@@ -30,6 +30,7 @@ private:
 
 	static void stealItem(CPersonagem *user, CPersonagem *target);
 	static void breakItem(CPersonagem *user, CPersonagem *target);
+	static void stinkGas(CPersonagem *user, CPersonagem *target);
 	static void lightSpeed(CPersonagem *user);
 	static void explode(CPersonagem *user);
 	//RaceTypes

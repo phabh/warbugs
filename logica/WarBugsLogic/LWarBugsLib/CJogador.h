@@ -18,6 +18,8 @@ private:
 	CBugSocket *			_socket;
 	CPersonagemJogador *	_personagem;
 	CCenario *              _cenario;
+	long					_TempoEnvioPing;
+	long					_TempoRespostaPing;
 
 public:
 
@@ -39,4 +41,9 @@ public:
 	void					setSocket(CBugSocket * socket);
 	void					setCharacter(CPersonagemJogador * personagem);
 	void					setScene(CCenario * cenario);
+
+	long					getBeginTimePing();
+	void					setBeginTimePing(long newTime);
+	long					getEndTimePing();
+	void					setEndTimePing(long newTime);
 };

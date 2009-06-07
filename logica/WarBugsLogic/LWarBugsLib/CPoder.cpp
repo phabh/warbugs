@@ -38,7 +38,7 @@ void CPoder::berserkTornado(CPersonagemJogador *user, int level)
 		default:
 			break;
 		}
-		user->getBuffs()->addBuff(temp);
+		user->getBuffs()->addBuff(temp, user);
 		user->getStats()->addChargeTime(-90);
 	}
 	else
@@ -130,7 +130,7 @@ void CPoder::strike(CPersonagemJogador *user, int level)
 		default:
 			break;
 		}
-		user->getBuffs()->addBuff(temp);
+		user->getBuffs()->addBuff(temp, user);
 		user->getStats()->addChargeTime(-50);
 	}
 	else
@@ -140,32 +140,44 @@ void CPoder::strike(CPersonagemJogador *user, int level)
 }
 void CPoder::stealItem(CPersonagem *user, CPersonagem *target)
 {
-	int indexToSteal = (clock()%target->getBolsa()->size());
-	CItem *temp;
-	if(user->tryAttack())
+	if(user->getStats()->addPM(-10)&&(user->getStats()->getChargeTime() >= 40))
 	{
-		temp = target->getBolsa()->removeItemAt(indexToSteal);
-		user->getBolsa()->addItem(temp);
+		int indexToSteal = (clock()%target->getBolsa()->size());
+		CItem *temp;
+		if(user->tryAttack())
+		{
+			temp = target->getBolsa()->removeItemAt(indexToSteal);
+			user->getBolsa()->addItem(temp);
+		}
+		temp = NULL;
+		delete temp;
 	}
-	temp = NULL;
-	delete temp;
+	else
+	{
+		user->getStats()->addPM(10);
+	}
 }
 void CPoder::breakItem(CPersonagem *user, CPersonagem *target)
 {
-	int indexToBreak = (clock()%target->getBolsa()->size());
-	CItem *temp;
-	if(user->tryAttack())
+	if(user->getStats()->addPM(-10)&&(user->getStats()->getChargeTime() >= 90))
 	{
-		temp = target->getBolsa()->removeItemAt(indexToBreak);
+		int indexToBreak = (clock()%target->getBolsa()->size());
+		CItem *temp;
+		if(user->tryAttack())
+		{
+			temp = target->getBolsa()->removeItemAt(indexToBreak);
+		}
+		temp = NULL;
+		delete temp;
 	}
-	temp = NULL;
-	delete temp;
+	else
+	{
+		user->getStats()->addPM(10);
+	}
 }
-void CPoder::lightSpeed(CPersonagem *user)
+void CPoder::stinkGas(CPersonagem *user, CPersonagem *target)
 {
-}
-void CPoder::explode(CPersonagem *user)
-{
+	CBuff *temp;
 	CPeopleList *player = user->getScene()->getPlayerList();
 	CPeopleList *monster = user->getScene()->getMonsterList();
 	CPeopleList *npc = user->getScene()->getNPCList();
@@ -175,22 +187,26 @@ void CPoder::explode(CPersonagem *user)
 		if(i < player->size())
 			if(user->getDistanceToPoint(player->getElementAt(i)->getPosition()) <= 10*METRO)
 			{
-				player->getElementAt(i)->getStats()->addPV(-100);
+				temp = new CBuff(BUFF_VENENO, 5*FPS, user, 3, 200, 5);
+				target->getBuffs()->addBuff(temp, target);
 			}
 		if(i < monster->size())
-			if(user->getDistanceToPoint(monster->getElementAt(i)->getPosition()) <= 10*METRO)
+			if((user->getDistanceToPoint(monster->getElementAt(i)->getPosition()) <= 10*METRO)&&(monster->getElementAt(i)->getSceneID() != user->getSceneID()))
 			{
-				monster->getElementAt(i)->getStats()->addPV(-100);
+				temp = new CBuff(BUFF_VENENO, 5*FPS, user, 3, 200, 5);
+				target->getBuffs()->addBuff(temp, target);
 			}
 		if(i < npc->size())
 			if(user->getDistanceToPoint(npc->getElementAt(i)->getPosition()) <= 10*METRO)
 			{
-				npc->getElementAt(i)->getStats()->addPV(-100);
+				temp = new CBuff(BUFF_VENENO, 5*FPS, user, 3, 200, 5);
+				target->getBuffs()->addBuff(temp, target);
 			}
 		if(i < salesman->size())
 			if(user->getDistanceToPoint(salesman->getElementAt(i)->getPosition()) <= 10*METRO)
 			{
-				salesman->getElementAt(i)->getStats()->addPV(-100);
+				temp = new CBuff(BUFF_VENENO, 5*FPS, user, 3, 200, 5);
+				target->getBuffs()->addBuff(temp, target);
 			}
 	}
 	player = NULL;
@@ -201,6 +217,54 @@ void CPoder::explode(CPersonagem *user)
 	delete monster;
 	delete npc;
 	delete salesman;
+}
+void CPoder::lightSpeed(CPersonagem *user)
+{
+}
+void CPoder::explode(CPersonagem *user)
+{
+	if(user->getStats()->addPM(-1)&&(user->getStats()->getChargeTime() >= 90))
+	{
+		CPeopleList *player = user->getScene()->getPlayerList();
+		CPeopleList *monster = user->getScene()->getMonsterList();
+		CPeopleList *npc = user->getScene()->getNPCList();
+		CPeopleList *salesman = user->getScene()->getSalesmanList();
+		for(int i = 0; max(max(player->size(), monster->size()),max(npc->size(), salesman->size())); i = i + 1)
+		{
+			if(i < player->size())
+				if(user->getDistanceToPoint(player->getElementAt(i)->getPosition()) <= 10*METRO)
+				{
+					player->getElementAt(i)->getStats()->addPV(-100);
+				}
+			if(i < monster->size())
+				if((user->getDistanceToPoint(monster->getElementAt(i)->getPosition()) <= 10*METRO)&&(monster->getElementAt(i)->getSceneID() != user->getSceneID()))
+				{
+					monster->getElementAt(i)->getStats()->addPV(-100);
+				}
+			if(i < npc->size())
+				if(user->getDistanceToPoint(npc->getElementAt(i)->getPosition()) <= 10*METRO)
+				{
+					npc->getElementAt(i)->getStats()->addPV(-100);
+				}
+			if(i < salesman->size())
+				if(user->getDistanceToPoint(salesman->getElementAt(i)->getPosition()) <= 10*METRO)
+				{
+					salesman->getElementAt(i)->getStats()->addPV(-100);
+				}
+		}
+		player = NULL;
+		monster = NULL;
+		npc = NULL;
+		salesman = NULL;
+		delete player;
+		delete monster;
+		delete npc;
+		delete salesman;
+	}
+	else
+	{
+		user->getStats()->addPM(1);
+	}
 }
 //RaceTypes
 void CPoder::beetleSkills(CPersonagemJogador *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target)
