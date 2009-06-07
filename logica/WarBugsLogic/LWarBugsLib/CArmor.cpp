@@ -22,7 +22,7 @@ CArmor::CArmor()
 CArmor::CArmor(TypeItens nome, EstadoItem estado, int preco, bool isdropable, Raca raca, int def, int dur, int nM)
 {
 	setID(-1);
-	setNome(nome);
+	setBaseID(nome);
 	setEstado(estado);
 	setPrice(preco);
 	setDropable(isdropable);

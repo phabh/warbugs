@@ -28,7 +28,7 @@ CWeapon::CWeapon(TypeItens nome, EstadoItem estado, int preco, bool isdropable, 
 {
 	setID(-1);
 	setDurability(dur);
-	setNome(nome);
+	setBaseID(nome);
 	setEstado(estado);
 	setPrice(preco);
 	setDropable(isdropable);

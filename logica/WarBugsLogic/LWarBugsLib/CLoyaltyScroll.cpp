@@ -21,7 +21,7 @@ CLoyaltyScroll::CLoyaltyScroll(TypeItens nome, EstadoItem estado, int preco, boo
 {
 	setID(-1);
 	setDurability(100);
-	setNome(nome);
+	setBaseID(nome);
 	setEstado(estado);
 	setPrice(preco);
 	setDropable(isdropable);

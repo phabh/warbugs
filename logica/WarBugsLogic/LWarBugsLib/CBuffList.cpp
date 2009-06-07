@@ -24,7 +24,11 @@ int CBuffList::size()
 {
 	return(_size);
 }
-void CBuffList::addBuff(CBuff *Buff)
+void CBuffList::addBuff(CBuff *Buff, CPersonagem * alvo)
+{
+	Buff->addBuff(this, alvo);
+}
+void CBuffList::pushBackBuff(CBuff *Buff)
 {
 	SBuffElemento *nodo = new SBuffElemento();
 	nodo->valor = Buff;

@@ -24,7 +24,7 @@ CQItem::CQItem(TypeItens nome, EstadoItem estado, int preco, bool isdropable, CQ
 {
 	setID(-1);
 	setDurability(100);
-	setNome(nome);
+	setBaseID(nome);
 	setEstado(estado);
 	setPrice(preco);
 	setDropable(isdropable);

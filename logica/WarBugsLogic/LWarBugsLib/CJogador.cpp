@@ -84,3 +84,19 @@ void CJogador::setScene(CCenario * cenario)
 {
 	_cenario = cenario;
 }
+long CJogador::getBeginTimePing()
+{
+	return(_TempoEnvioPing);
+}
+void CJogador::setBeginTimePing(long newTime)
+{
+	_TempoEnvioPing = newTime;
+}
+long CJogador::getEndTimePing()
+{
+	return(_TempoRespostaPing);
+}
+void CJogador::setEndTimePing(long newTime)
+{
+	_TempoRespostaPing = newTime;
+}

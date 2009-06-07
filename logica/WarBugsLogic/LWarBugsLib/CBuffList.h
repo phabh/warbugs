@@ -32,7 +32,11 @@ public:
 
 	bool isEmpty();
 	int size();
-	void addBuff(CBuff *Buff);
+	void addBuff(CBuff *Buff, CPersonagem * alvo);
+	/*
+	Não utilize este método!!!!! Ele será usado internamente!!!
+	*/
+	void pushBackBuff(CBuff *Buff);
 	CBuff *removeBuffAt(int pos);
 	CBuff *removeBuff(int ID);
 	CBuff *removeBuff(CBuff *Buff);
