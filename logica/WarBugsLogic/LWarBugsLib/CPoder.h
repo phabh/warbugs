@@ -16,7 +16,8 @@
 #include "CBuff.h"
 #include <time.h>
 
-#include "CPersonagemJogador.h"
+//#include "CPersonagemJogador.h"
+#include "CCenario.h"
 
 
 class CPoder : public CWarBugObject

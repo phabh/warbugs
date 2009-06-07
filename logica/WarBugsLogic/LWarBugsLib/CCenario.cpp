@@ -64,8 +64,13 @@ CCenario::CCenario(int ID,
 		}
 	}
 }
-void CCenario::enterScene()
+bool CCenario::isSceneFull()
 {
+	return(_jogadores->size() < MAXPLAYERSINSCENE);
+}
+bool CCenario::haveLoyaltyRequired(CPersonagemJogador *jogador)
+{
+	return(jogador->getLoyalty()->getLoyaltyTo(_lealdadeNecessaria) >= _quantidadeNecessaria);
 }
 int CCenario::playerCount()
 {
@@ -159,7 +164,18 @@ CPortal *CCenario::getExit(TypeDirecao idPortal)
 	}
 	return(NULL);
 }
-
+Raca CCenario::getRaceNeeded()
+{
+	return(_lealdadeNecessaria);
+}
+int CCenario::getRaceNeededAsInt()
+{
+	return(_quantidadeNecessaria);
+}
+int CCenario::getLoyaltyRequired()
+{
+	return((int)_quantidadeNecessaria);
+}
 //
 void CCenario::setExit(CPortal *newExit, TypeDirecao idPortal)
 {
@@ -178,6 +194,14 @@ void CCenario::setExit(CPortal *newExit, TypeDirecao idPortal)
 		_saidaLeft = newExit;
 		break;
 	}
+}
+void CCenario::setRaceNeeded(Raca race)
+{
+	 _lealdadeNecessaria = race;
+}
+void CCenario::setLoyaltyRequired(int value)
+{
+	_quantidadeNecessaria = value;
 }
 //
 void CCenario::addPlayer(CPersonagem *jogador)
