@@ -175,7 +175,7 @@ void CPoder::breakItem(CPersonagem *user, CPersonagem *target)
 		user->getStats()->addPM(10);
 	}
 }
-void CPoder::stinkGas(CPersonagem *user, CPersonagem *target)
+void CPoder::stinkGas(CPersonagem *user)
 {
 	CBuff *temp;
 	CPeopleList *player = user->getScene()->getPlayerList();
@@ -188,25 +188,25 @@ void CPoder::stinkGas(CPersonagem *user, CPersonagem *target)
 			if(user->getDistanceToPoint(player->getElementAt(i)->getPosition()) <= 10*METRO)
 			{
 				temp = new CBuff(BUFF_VENENO, 5*FPS, user, 3, 200, 5);
-				target->getBuffs()->addBuff(temp, target);
+				player->getElementAt(i)->getBuffs()->addBuff(temp, player->getElementAt(i));
 			}
 		if(i < monster->size())
 			if((user->getDistanceToPoint(monster->getElementAt(i)->getPosition()) <= 10*METRO)&&(monster->getElementAt(i)->getSceneID() != user->getSceneID()))
 			{
 				temp = new CBuff(BUFF_VENENO, 5*FPS, user, 3, 200, 5);
-				target->getBuffs()->addBuff(temp, target);
+				monster->getElementAt(i)->getBuffs()->addBuff(temp, player->getElementAt(i));
 			}
 		if(i < npc->size())
 			if(user->getDistanceToPoint(npc->getElementAt(i)->getPosition()) <= 10*METRO)
 			{
 				temp = new CBuff(BUFF_VENENO, 5*FPS, user, 3, 200, 5);
-				target->getBuffs()->addBuff(temp, target);
+				npc->getElementAt(i)->getBuffs()->addBuff(temp, player->getElementAt(i));
 			}
 		if(i < salesman->size())
 			if(user->getDistanceToPoint(salesman->getElementAt(i)->getPosition()) <= 10*METRO)
 			{
 				temp = new CBuff(BUFF_VENENO, 5*FPS, user, 3, 200, 5);
-				target->getBuffs()->addBuff(temp, target);
+				salesman->getElementAt(i)->getBuffs()->addBuff(temp, player->getElementAt(i));
 			}
 	}
 	player = NULL;
@@ -220,6 +220,16 @@ void CPoder::stinkGas(CPersonagem *user, CPersonagem *target)
 }
 void CPoder::lightSpeed(CPersonagem *user)
 {
+	CBuff *temp;
+	if(user->getStats()->addPM(-10)&&(user->getStats()->getChargeTime() >= 100))
+	{
+		temp = new CBuff(BUFF_CHI, 5*FPS, user, 50,0,0);
+		user->getBuffs()->addBuff(temp, user);
+	}
+	else
+	{
+		user->getStats()->addPM(10);
+	}
 }
 void CPoder::explode(CPersonagem *user)
 {
@@ -266,6 +276,29 @@ void CPoder::explode(CPersonagem *user)
 		user->getStats()->addPM(1);
 	}
 }
+void CPoder::killingNeedle(CPersonagem *user, CPersonagem *target)
+{
+
+}
+void CPoder::eat(CPersonagem *user, CPersonagem *target)
+{
+	if(user->getStats()->addPM(-10)&&(user->getStats()->getChargeTime() >= 10))
+	{
+		target->getStats()->setPV(0);
+		target->die();
+	}
+	else
+	{
+		user->getStats()->addPM(10);
+	}
+}
+void CPoder::invisible(CPersonagem *user)
+{
+	CBuff *temp = new CBuff(BUFF_INVISIVEL, -1, user, 50, 1, 0);
+}
+void CPoder::summonAnts()
+{
+}
 //RaceTypes
 void CPoder::beetleSkills(CPersonagemJogador *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target)
 {
@@ -295,15 +328,47 @@ void CPoder::antSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, 
 }
 void CPoder::termiteSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target)
 {
+	switch(skillIndex)
+	{
+	case SK_BREAK:
+		breakItem(user, target);
+		break;
+	default:
+		break;
+	}
 }
 void CPoder::shaverSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target)
 {
+	switch(skillIndex)
+	{
+	case SK_STINK_GAS:
+		stinkGas(user);
+		break;
+	default:
+		break;
+	}
 }
 void CPoder::lizardSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target)
 {
+	switch(skillIndex)
+	{
+	case SK_LIGHT_SPEED:
+		lightSpeed(user);
+		break;
+	default:
+		break;
+	}
 }
 void CPoder::ladybugSkills(CPersonagem *user, TipoPoder skillIndex, int skillLevel, CPersonagem *target)
 {
+	switch(skillIndex)
+	{
+	case SK_ATOMIC_EXPLOSION:
+		explode(user);
+		break;
+	default:
+		break;
+	}
 }
 void CPoder::cast(CPersonagem *user, Raca userRace, TipoPoder skillIndex, int skillLevel, CPersonagem *target)
 {

@@ -184,11 +184,12 @@ enum TipoBuff
 	BUFF_ATORDOADO,
 	BUFF_ESCUDO,
 	BUFF_CHI,
+	BUFF_INVISIVEL,
 	BUFF_MOON_TYPHOONA,
 	BUFF_MOON_MABILOG,
 	BUFF_MOON_ABGRUNDI,
 	BUFF_MOON_RESPLANDORA,
-	BUFF_MOON_SAMARA,
+	BUFF_MOON_SAMARA
 };
 // ------------------------------------------------------------------------------------------------------------
 enum EstadoItem
