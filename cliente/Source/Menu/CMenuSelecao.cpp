@@ -19,9 +19,9 @@ bool CMenuSelecao::start(CGameCore *gameCore)
 	_menuCamera = _gameCore->createCamera( vector3df(0,0,0), vector3df(0,0,100), vector3df(0,0,0), 0, 179.0f/*true*/, true);
 
 	_gameCore->createLight(_menuCamera, vector3df(0,0,0), 1200.0f);
-	
+
 	_gameCore->initToonShader();
-	
+
 	_myID = _nextID = MN_SELECAOPERSONAGEM;
 
 	_menuFlag[HUDUPDATED]  = false;
@@ -34,12 +34,15 @@ bool CMenuSelecao::start(CGameCore *gameCore)
 
 	_gameCore->enviarPacote(PERSONAGENS_REQUEST, _gameCore->_myUserID);
 
-	_gameCore->receberPacote();
+	int retorno = PING_REQUEST;
+
+	while(retorno == PING_REQUEST)
+		retorno = _gameCore->receberPacote();
 
 	if(_gameCore->_numMyChars == 0) // Se não possuo personagem algum
 		_nextID = MN_CRIACAOPERSONAGEM; // Ir direto ao menu de criação
 
-	_gameCore->playCutScene(CS_TRANSICAO, 100);
+	//_gameCore->playCutScene(CS_TRANSICAO, 100);
 
 	_gameCore->playMusic(pathBackgroundSound[MM_SELECAO]);
 
@@ -64,16 +67,14 @@ void CMenuSelecao::updateHuds()
 	if(_gameCore->_numMyChars > 0)
 	{
 		if(_gameCore->_numMyChars > 1)
-			_gerHud->addButton(rect<s32>(640,650,740,690), 0, 204, L"Jogar 2");
+		{
+			_gerHud->addButton(rect<s32>(640,650,740,690), 0, 205, L"Jogar 2");
+			_gerHud->addButton(rect<s32>(640,550,740,590), 0, 203, L"Remover 2");
+		}
 
 		_gerHud->addButton(rect<s32>(240,650,340,690), 0, 204, L"Jogar 1");
+		_gerHud->addButton(rect<s32>(240,550,340,590), 0, 202, L"Remover 1");
 	}
-
-	_gerHud->addButton(rect<s32>(240,550,340,590), 0, 202, L"Remover 1");
-	_gerHud->addButton(rect<s32>(640,550,740,590), 0, 203, L"Remover 2");
-
-	//_gerHud->addButton(rect<s32>(140,10,240,50), 0, 5, L"<");
-	//_gerHud->addButton(rect<s32>(540,10,640,50), 0, 6, L">");
 
 	_menuFlag[HUDUPDATED] = true;
 }
@@ -84,6 +85,8 @@ void CMenuSelecao::readCommands()
 {
 
 	int slotPersonagem = 0;
+
+	int retorno = PING;
 
 	if(_gerEventos->isKeyDown(KEY_ESCAPE))
 	{
@@ -107,8 +110,11 @@ void CMenuSelecao::readCommands()
 		case 202: 
 
 			_gameCore->enviarPacote(DELETE_PERSONAGEM, _gameCore->_myUserID, _gameCore->_myStructChar[0]._id, _gameCore->_myStructChar[0]._nome );
-			
-			if(_gameCore->receberPacote() == SUCESSO)
+
+			while(retorno == PING_REQUEST)
+				retorno = _gameCore->receberPacote();
+
+			if(retorno == SUCESSO)
 				this->start(_gameCore);
 
 			break;
@@ -116,13 +122,21 @@ void CMenuSelecao::readCommands()
 		case 203:
 
 			_gameCore->enviarPacote(DELETE_PERSONAGEM, _gameCore->_myUserID, _gameCore->_myStructChar[1]._id, _gameCore->_myStructChar[1]._nome );
-			
-			if(_gameCore->receberPacote() == SUCESSO)
+
+			while(retorno == PING_REQUEST)
+				retorno = _gameCore->receberPacote();
+
+			if(retorno == SUCESSO)
 				this->start(_gameCore);
 
 			break;
 
 		case 204:
+			_nextID =  MN_JOGO;
+			return;
+			break;
+
+		case 205:
 			_nextID =  MN_JOGO;
 			return;
 			break;
@@ -137,26 +151,26 @@ void CMenuSelecao::readCommands()
 	if(_gerEventos->isMouseButtonReleased(MBLEFT))
 	{
 		// Clique com o botao esquerdo
-/*
+		/*
 		if(_menuFlag[OBJSELECTED])
 		{
-			_menuFlag[OBJSELECTED] = false; // Drop 3D
-			_menuFlag[HUDUPDATED] = false;
+		_menuFlag[OBJSELECTED] = false; // Drop 3D
+		_menuFlag[HUDUPDATED] = false;
 		}
 		else
 		{
-			_idChar = -1;
+		_idChar = -1;
 
-			_nodeChar = _gerCena->getSceneCollisionManager()->getSceneNodeFromScreenCoordinatesBB(_dispGrafico->getCursorControl()->getPosition());
+		_nodeChar = _gerCena->getSceneCollisionManager()->getSceneNodeFromScreenCoordinatesBB(_dispGrafico->getCursorControl()->getPosition());
 
-			if (_nodeChar)
-				_idChar = _nodeChar->getID();
+		if (_nodeChar)
+		_idChar = _nodeChar->getID();
 
-			if(_idChar > 0)
-			{
-				_menuFlag[OBJSELECTED] = true; // Get 3D
-				_menuFlag[HUDUPDATED] = false;
-			}
+		if(_idChar > 0)
+		{
+		_menuFlag[OBJSELECTED] = true; // Get 3D
+		_menuFlag[HUDUPDATED] = false;
+		}
 		}	*/	
 	}
 }

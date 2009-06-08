@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="Cliente"
 	ProjectGUID="{828E4CB9-AB7C-4054-908B-E27EEC208C68}"
 	RootNamespace="Aula_1"
@@ -43,7 +43,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\Irrlicht\include&quot;;&quot;$(ProjectDir)\IrrKlang\include&quot;;&quot;$(ProjectDir)\Dsvt\include&quot;;&quot;$(ProjectDir)\Source\Setup&quot;;&quot;$(ProjectDir)\Source\Event&quot;;&quot;$(ProjectDir)\Source\DataStruct&quot;;&quot;$(ProjectDir)\Source\GameCore&quot;;&quot;$(ProjectDir)\Source\Hud&quot;;&quot;$(ProjectDir)\Source\Menu&quot;;&quot;$(ProjectDir)\Source\Network&quot;;&quot;$(ProjectDir)\Source\Shader&quot;;&quot;$(ProjectDir)\Source\Video&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\Irrlicht\include&quot;;&quot;$(ProjectDir)\IrrKlang\include&quot;;&quot;$(ProjectDir)\Dsvt\include&quot;;&quot;$(ProjectDir)\Source\Setup&quot;;&quot;$(ProjectDir)\Source\Event&quot;;&quot;$(ProjectDir)\Source\DataStruct&quot;;&quot;$(ProjectDir)\Source\GameCore&quot;;&quot;$(ProjectDir)\Source\Hud&quot;;&quot;$(ProjectDir)\Source\Menu&quot;;&quot;$(ProjectDir)\Source\Network&quot;;&quot;$(ProjectDir)\Source\Shader&quot;;&quot;$(ProjectDir)\Source\Video&quot;;&quot;$(ProjectDir)\Source\HudSkin&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -66,7 +66,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)\Irrlicht\lib&quot;;&quot;$(ProjectDir)\IrrKlang\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)\Irrlicht\lib&quot;;&quot;$(ProjectDir)\IrrKlang\lib&quot;;&quot;$(ProjectDir)\Dsvt\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
@@ -237,10 +237,6 @@
 				</File>
 				<File
 					RelativePath=".\Source\GameCore\CGameData.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\GameCore\CGameScene.cpp"
 					>
 				</File>
 				<File
@@ -455,10 +451,6 @@
 				</File>
 				<File
 					RelativePath=".\Source\GameCore\CGameData.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\GameCore\CGameScene.h"
 					>
 				</File>
 				<File

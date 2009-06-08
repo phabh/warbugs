@@ -21,6 +21,7 @@ bool CMenuCriacao::start(CGameCore *gameCore)
 	_gameCore->playMusic(pathBackgroundSound[MM_CRIACAO]);
 
 	_myID = _nextID = MN_CRIACAOPERSONAGEM;
+
 	_nodeChar = 0;
 	_idChar = -1;
 	_camRotation = 18.5;
@@ -39,7 +40,7 @@ bool CMenuCriacao::start(CGameCore *gameCore)
 
 	_luz = _gerCena->addLightSceneNode(0, vector3df(0,50,0/*500,500,500*/), SColorf(1.0f, 0.6f, 0.7f, 1.0f), 1200.0f);
 
-	_toonShader = new CToonShader(_dispGrafico, _luz);
+	//_toonShader = new CToonShader(_dispGrafico, _luz);
 
 	return true;
 }
@@ -68,6 +69,8 @@ void CMenuCriacao::updateHuds()
 
 void CMenuCriacao::readCommands()
 {
+	int retorno = PING_REQUEST;
+
 	if(_gerEventos->isKeyPressed(KEY_ESCAPE))
 	{
 		_nextID = MN_SAIDA;
@@ -126,10 +129,15 @@ void CMenuCriacao::readCommands()
 				break;
 
 			case 303:
-				
+
 				_gameCore->enviarPacote(CREATE_PERSONAGEM, _gameCore->_myUserID, _tipoPersonagem+2, "Fulano");  
 
-				if(_gameCore->receberPacote() == SUCESSO)
+				
+
+				while(retorno == PING_REQUEST)
+					retorno = _gameCore->receberPacote();
+
+				if(retorno == SUCESSO)
 					_nextID = MN_SELECAOPERSONAGEM;
 
 				return;

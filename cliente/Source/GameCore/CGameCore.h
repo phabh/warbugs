@@ -13,13 +13,19 @@
 
 #include "CGerEventos.h"
 #include "CGameData.h"
-#include "CGameScene.h"
+//#include "CGameScene.h"
+
+#include "CPersonagem.h"
 
 #include "CToonShader.h"
 
 #include "CVideoTexture.h"
 
 #include "CHudSkin.h"
+
+
+
+
 
 struct SPersonagemSelecao
 {
@@ -51,6 +57,9 @@ class CGameCore
 
 private:
 
+	typedef CDoubleList<CPersonagem> ListaPersonagem;
+	typedef CDoubleList<SBolsa> ListaBolsa;
+
 	IrrlichtDevice  *_dispositivoGrafico; 
 	ISoundEngine    *_dispositivoAudio;
 
@@ -65,7 +74,7 @@ private:
 	CListaParticulas  *_listaParticulas;
 
 	CHudImageSkin* _gameSkin;
-	//IGUISkin *_gameSkin;
+
 	IGUIFont *_gameFont[NUMHUDFONTS];
 
 	ISound* _gameMusic;
@@ -79,7 +88,12 @@ private:
 	char _dataToSend[PACKAGESIZE],
 		_dataReceived[PACKAGESIZE];
 
+	//! Objeto para carregar as matrizes de colisão do cenário
+	CArquivoMatrizes *_fileMtx;
+
+	//! Objeto para carregar as configurações do jogo
 	CArquivoConfig *_fileCfg;
+	
 	TypeCfg _gameConfig;
 
 	char _myLogin[15],
@@ -95,7 +109,27 @@ private:
 
 	CVideoTexture *_cutScene[CS_COUNT];
 
+	//! Matriz de colisões do cenário atual
+	SMatrix _cenario; 
 
+	//! Lista de personagens do cenário
+	ListaPersonagem  *_listaPersonagens;
+
+	//! Ponteiro para o meu personagem
+	CPersonagem *_myPlayerChar;
+	
+	//! Lista de bolsas do cenário
+	ListaBolsa *_listaBolsas;
+
+
+	//! Identificação da lua corrente
+	int _sceneMoon;
+
+	//! Lista de portais para troca de cenário
+	SQuadrante _portal[MAXPORTAIS];
+
+	ITerrainSceneNode *_sceneTerrain;
+	ITriangleSelector* _sceneTris;
 
 public:
 
@@ -104,12 +138,14 @@ public:
 	CHudProgressBar* _barraLoad;
 
 	CGameData *_gameData;
-	CGameScene *_gameScene;
+	//CGameScene *_gameScene;
 
 	int _numMyChars;
 	int _myUserID;
 	int _myCharID;
-
+	int _myCharSceneID;
+	int _myMapSceneID;
+	
 	SPersonagemSelecao _myStructChar[MAXSLOTPERSONAGEM];
 	IAnimatedMeshSceneNode *_myChar[MAXSLOTPERSONAGEM];
 
@@ -131,13 +167,87 @@ public:
 	IParticleSystemSceneNode* addPaticleNode(TypeParticle tipo, int tempoVida, vector3df posicao, vector3df escala);
 	void loadMenuScene(c8 *sceneFile);
 	int getNumCharSlots();
+
 	void loadGameScene(c8 *sceneFile);
+/*
+	void setMyMapSceneID(int idMapa);
+	void setMyCharSceneID(int idChar);
+	void setSceneQuadPortalID(int idQuadPortal1, int idQuadPortal2, int idQuadPortal3, int idQuadPortal4);
+*/
+
+
 
 	ICameraSceneNode *createCamera( vector3df posicao, vector3df target = vector3df(0,0,100) , vector3df rotacao = vector3df(0,0,0), ISceneNode *parent = 0, f32 angulo = 179.0f/*bool isOrtogonal = true*/, bool bind = true);
 	void createLight(ISceneNode *parent, vector3df posicao, f32 raio);
 
 	void addContour(ISceneNode* oNode, f32 fThickness = 3, SColor cColor = SColor(255,0,0,0));
 	void contourAll(ISceneNode* node);
+
+
+	//! Carrega a matriz de colisão do cenário atual
+	SMatrix loadSceneMatrix(int idScene);
+
+	//! Inclui uma bolsa no cenário
+	void addBolsa(int idBolsa, float posX, float posZ);
+
+	//! Remove uma bolsa do cenário
+	void removeBolsa(int idBolsa);
+
+	//! Inclui um personagem no cenário
+	void addPersonagem(CPersonagem *personagem);
+
+	//! Remove um personagem do cenário
+	void removePersonagem(int idPersonagem);
+
+	//! Atualiza a posição de um personagem
+	void updCharPosition(int idPersonagem, float posX, float posZ);
+
+	//! Atualiza o estado de animação de um personagem
+	void updCharState(int idPersonagem, int estado);
+
+	//! Atualiza o alvo de um personagem
+	void updCharTarget(int idPersonagem, float posX, float posZ);
+
+	//! Atualiza os itens equipados por um personagem
+	void updCharEquipment(int idPersonagem, int idArmadura, int idArma);
+
+	//! Atualiza a direção e a velocidade de um personagem
+	void updCharDirectionVelocity(int idPersonagem, int direction, int velocity);
+
+	//! Atualiza os buffs de um personagem
+	void updCharBuff(int idPersonagem, short buffs);
+
+	//! Atualiza os ids dos quadrantes dos portais no cenário
+	void updMapPortals(int idQuadPortal1, int idQuadPortal2, int idQuadPortal3, int idQuadPortal4);
+
+	//! Atualiza a lua corrente do cenário
+	void updMoon(int idLua);
+
+	//! Retorna a coordenada3D do centro de um quadrante
+	vector3df getQuadCenter(int linha, int coluna);
+
+	//! Retorna a coordenada3D do centro de um quadrante
+	vector3df getQuadCenter(int idQuad);
+
+	//! Retorna a coordenada3D do centro de um quadrante
+	vector3df getQuadCenter(vector3df posicao);
+
+	//! Retorna por parâmetros a linha e a coluna de uma posicao
+	void getQuadLinhaColuna(vector3df posicao, int &linha, int &coluna);
+
+	//! Retorna por parâmetros a linha e a coluna de um determinado quadrante
+	void getQuadLinhaColuna(int idQuad, int &linha, int &coluna);
+
+	//! Retorna o id do quadrante referente a uma posição
+	int getQuadID(vector3df posicao);
+
+	//! Retorna o id do quadrante referente a linha e coluna
+	int getQuadID(int linha, int coluna);
+
+	//! Atualiza a posição 3D de um elemento do cenário
+	vector3df upd3DPosition(float posX, float posZ);
+
+
 
 	bool conectar(char *login, char *password);
 	bool isConnected();
