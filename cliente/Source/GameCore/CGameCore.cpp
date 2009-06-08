@@ -8,8 +8,11 @@ CGameCore::CGameCore(int &startInit)
 
 	_connected = false;
 
+	_numMyChars = 0;
 	_myUserID = -1;
 	_myCharID = -1;
+	_myCharSceneID = -1;
+	_myMapSceneID = -1;
 
 	_particleCount = 0;
 
@@ -47,7 +50,7 @@ CGameCore::CGameCore(int &startInit)
 	if(!_dispositivoGrafico)
 	{
 		cout << "\nERRO 0x00: Falha ao inicializar o dispositivo grafico.";
-		startInit = ERRO;
+		startInit = ERRO_SAIR;
 	}
 
 	if(startInit == SUCESSO)
@@ -57,7 +60,7 @@ CGameCore::CGameCore(int &startInit)
 		if(!_dispositivoAudio)
 		{
 			cout << "\nERRO 0x01: Falha ao inicializar o dispositivo de audio.";
-			startInit = ERRO;
+			startInit = ERRO_SAIR;
 		}
 	}
 
@@ -73,10 +76,16 @@ CGameCore::CGameCore(int &startInit)
 	_listaParticulas = new CListaParticulas();
 
 	_gameData = new CGameData(_dispositivoGrafico);
-	_gameScene = new CGameScene();
+	//_gameScene = new CGameScene();
 
+	_listaPersonagens = new ListaPersonagem();
+	_listaBolsas = new ListaBolsa();
+
+	_fileMtx = new CArquivoMatrizes();
+	//_fileMtx->reset();
+/*
 	for(int i = 0; i < CS_COUNT; i++)
-		_cutScene[i] = CVideoTexture::createVideoTexture(_dispositivoGrafico, pathCutScene[i]);
+		_cutScene[i] = CVideoTexture::createVideoTexture(_dispositivoGrafico, pathCutScene[i]);*/
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -289,6 +298,13 @@ void CGameCore::loadMenuScene(c8* sceneFile)
 void CGameCore::loadGameScene(c8* sceneFile)
 {
 	_gerenciadorCena->loadScene(sceneFile);
+
+	if(_myMapSceneID >=0)
+	{
+	_sceneTerrain = (ITerrainSceneNode*)_gerenciadorCena->getSceneNodeFromType(ESNT_TERRAIN, 0);
+
+	_sceneTris = _sceneTerrain->getTriangleSelector();
+	}
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -350,10 +366,159 @@ void CGameCore::loadGameData(int stage)
 		_barraLoad->drop();
 }
 
+
+
+
+//-----------------------------------------------------------------------------------------------------------------
+
+SMatrix CGameCore::loadSceneMatrix(int idScene)
+{
+	_cenario = _fileMtx->getMatrix(idScene);
+
+	return(_cenario);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CGameCore::addBolsa(int idBolsa, float posX, float posZ)
+{
+	// Inclui uma bolsa no cenário
+	SBolsa *bolsa = new SBolsa();
+
+	bolsa->_idBolsa = idBolsa;
+	bolsa->posicao = upd3DPosition(posX, posZ);
+	
+	_listaBolsas->addElement(bolsa, bolsa->_idBolsa);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CGameCore::addPersonagem( CPersonagem *personagem )
+{
+	_listaPersonagens->addElement(personagem, personagem->getId());
+	
+	if(personagem->getId() == _myCharSceneID)
+		_myPlayerChar = personagem;
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CGameCore::removeBolsa(int idBolsa)
+{
+	// Remove uma bolsa do cenário do cliente
+	_listaBolsas->removeElement(idBolsa);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CGameCore::removePersonagem( int idPersonagem )
+{
+	_listaPersonagens->removeElement(idPersonagem);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CGameCore::updMoon(int idLua)
+{
+	_sceneMoon = idLua;
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CGameCore::updMapPortals(int idQuadPortal1, int idQuadPortal2, int idQuadPortal3, int idQuadPortal4)
+{
+	_portal[0]._id = idQuadPortal1;
+	getQuadLinhaColuna(idQuadPortal1,  _portal[0]._linha, _portal[0]._coluna);
+	_portal[0]._center = getQuadCenter(_portal[0]._linha, _portal[0]._coluna);
+
+	_portal[1]._id = idQuadPortal2;
+	getQuadLinhaColuna(idQuadPortal2,  _portal[1]._linha, _portal[1]._coluna);
+	_portal[1]._center = getQuadCenter(_portal[1]._linha, _portal[1]._coluna);
+
+	_portal[2]._id = idQuadPortal3;
+	getQuadLinhaColuna(idQuadPortal3,  _portal[2]._linha, _portal[2]._coluna);
+	_portal[2]._center = getQuadCenter(_portal[2]._linha, _portal[2]._coluna);
+
+	_portal[3]._id = idQuadPortal4;
+	getQuadLinhaColuna(idQuadPortal4,  _portal[3]._linha, _portal[3]._coluna);
+	_portal[3]._center = getQuadCenter(_portal[3]._linha, _portal[3]._coluna);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+vector3df CGameCore::getQuadCenter(int linha, int coluna)
+{
+	vector3df center;
+
+	center.X = (linha * TAMQUADRANTE) + (TAMQUADRANTE/2);
+	center.Y = 0.0;
+	center.Z = (coluna * TAMQUADRANTE) + (TAMQUADRANTE/2);
+
+	return center;
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+vector3df CGameCore::getQuadCenter(int idQuad)
+{
+	int linha, coluna;
+
+	getQuadLinhaColuna(idQuad, linha, coluna);
+
+	return getQuadCenter(linha, coluna);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+vector3df CGameCore::getQuadCenter(vector3df posicao)
+{
+	int linha, coluna;
+
+	getQuadLinhaColuna(posicao, linha, coluna);
+
+	return getQuadCenter(linha, coluna);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CGameCore::getQuadLinhaColuna(vector3df posicao, int &linha, int &coluna)
+{
+	linha  = posicao.Z / TAMQUADRANTE; // TAMQUADRANTE é a dimensão de um quadrante em pixels
+	coluna = posicao.X / TAMQUADRANTE;
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CGameCore::getQuadLinhaColuna(int idQuad, int &linha, int &coluna)
+{
+	linha  = idQuad / MAPMAXCOL;
+	coluna = idQuad % MAPMAXCOL;
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+int CGameCore::getQuadID(vector3df posicao)
+{
+	int linha, coluna;
+
+	getQuadLinhaColuna(posicao, linha, coluna);
+
+	return getQuadID(linha, coluna);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+int CGameCore::getQuadID(int linha, int coluna)
+{
+	return ( coluna + (linha * MAPMAXCOL) );
+}
+
 //-----------------------------------------------------------------------------------------------------------------
 
 bool CGameCore::conectar(char *login, char *password)
 {
+	int retorno = PING;
+
 	strcpy(_myLogin, "");
 	strcpy(_myPassword, "");
 
@@ -369,7 +534,8 @@ bool CGameCore::conectar(char *login, char *password)
 
 		enviarPacote(LOGIN_REQUEST, _myLogin, _myPassword);
 
-		receberPacote();
+		while(retorno == PING)
+			retorno = receberPacote();
 	}
 	catch(...)
 	{
@@ -387,7 +553,7 @@ void CGameCore::initToonShader()
 	if(_luz!= NULL && _dispositivoGrafico != NULL)
 		_toonShader = new CToonShader(_dispositivoGrafico, _luz);
 }
-
+			
 //--------------------------------------------------------------------------------------
 
 IAnimatedMesh* CGameCore::getMAnimMesh(int idMesh)
@@ -414,6 +580,13 @@ bool CGameCore::isConnected()
 int CGameCore::getNumCharSlots()
 {
 	return _numMyChars;
+}
+
+//--------------------------------------------------------------------------------------
+
+vector3df CGameCore::upd3DPosition(float posX, float posZ)
+{
+	return vector3df(posX, _sceneTerrain->getHeight(posX, posZ), posZ);
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -605,6 +778,12 @@ int CGameCore::receberPacote()
 {
 	int retorno = SUCESSO;
 
+	short buffs;
+
+	int potencia;
+
+	CPersonagem *personagem = new CPersonagem();
+
 	_packageReceived.clear();
 	_gameSocket->ReceiveLine(_packageReceived);
 
@@ -644,7 +823,7 @@ int CGameCore::receberPacote()
 				_myStructChar[i]._idHud = _packageReceived.readInt();
 
 				_myChar[i] = _gerenciadorCena->addAnimatedMeshSceneNode( getMAnimMesh(_myStructChar[i]._idModelo), 0, _myStructChar[i]._id );
-				_toonShader->apply( _myChar[i], pathTextureModels[_myStructChar[i]._idTextura] );
+			//	_toonShader->apply( _myChar[i], pathTextureModels[_myStructChar[i]._idTextura] );
 				_myChar[i]->setAnimationSpeed(5);
 
 				switch (i)
@@ -663,6 +842,122 @@ int CGameCore::receberPacote()
 
 			break;
 
+		case ENTER_CENARIO: // CODIGO: ENTROU EM UM CENÁRIO COM SUCESSO.
+			
+
+			_myMapSceneID  = _packageReceived.readInt();
+			loadGameScene(pathCenario[_myMapSceneID]);
+
+			_myCharSceneID = _packageReceived.readInt();
+
+			updMapPortals(_packageReceived.readInt(), _packageReceived.readInt(), _packageReceived.readInt(), _packageReceived.readInt());
+			
+			cout << "\nPersonagem entrou no cenário." << endl;
+
+			break;
+
+		case  START_GAME_FAIL: // CODIGO: INICIALIZAÇÃO DO CENÁRIO FALHOU.
+
+			enviarPacote(DISCONNECT);
+			_gameSocket->Close();
+			_connected = false;
+			retorno = ERRO_SAIR;
+			cout << "\nErro ao inicializar o cenário." << endl;
+
+			break;
+
+		case ADD_PERSONAGEM: // CODIGO: INSERÇÃO DE PERSONAGEM NO CENÁRIO
+
+			personagem->_id = _packageReceived.readInt();
+			personagem->_nome = new char[15];
+			strcpy(personagem->_nome, _packageReceived.readString());
+			personagem->_posicao = upd3DPosition(_packageReceived.readFloat(), _packageReceived.readFloat());
+
+			personagem->_pv = _packageReceived.readInt();
+			personagem->_pp = _packageReceived.readInt();
+			personagem->_xp = _packageReceived.readInt();
+
+			personagem->_pvMax = _packageReceived.readInt();
+			personagem->_ppMax = _packageReceived.readInt();
+			personagem->_xpMax = _packageReceived.readInt();
+
+			personagem->_nivel = _packageReceived.readInt();
+
+			buffs = _packageReceived.readShort();
+
+			for(int i = 0; i < BUFF_COUNT; i++)
+			{
+				potencia = 1;
+
+				for(int j = 0; j < i; j++)
+					potencia = potencia * 2;
+
+				personagem->_buff[i] = (bool)(buffs & potencia);
+			}
+
+			//for(int i=0; i<BUFF_COUNT; i++)
+			//	 buffs & pow(2, i);
+
+			personagem->_raca = _packageReceived.readInt();
+			personagem->_classe = _packageReceived.readInt();
+			personagem->_estado = _packageReceived.readInt();
+			
+			personagem->_ultimoEstado = personagem->_estado;
+
+			personagem->_velAnim = _packageReceived.readFloat();
+		
+			personagem->_direcao = _packageReceived.readInt();
+			personagem->_idBaseArma = _packageReceived.readInt();
+			personagem->_idBaseArmadura = _packageReceived.readInt();
+
+			addPersonagem(personagem);
+
+			break;
+
+		case ADD_BOLSA: // CODIGO: ADICIONAR BOLSA AO CENÁRIO
+
+			addBolsa(_packageReceived.readInt(), _packageReceived.readFloat(), _packageReceived.readFloat());
+			cout << "\nBolsa inserida no cenário." << endl;
+
+			break;
+
+		case REMOVE_BOLSA: // CODIGO: REMOVER BOLSA DO CENÁRIO
+
+			removeBolsa(_packageReceived.readInt());
+			cout << "\nBolsa removida do cenário." << endl;
+
+			break;
+
+		case SCENE_FULL: // CODIGO: FALHA AO ENTRAR NO CENÁRIO. CAPACIDADE MÁXIMA ATINGIDA.
+			
+			cout << "\nO cenário de destino atingiu a capacidade máxima." << endl;
+
+			break;
+
+		case PING: // CODIGO: PING.
+
+			enviarPacote(PING);
+			cout << "\nPing." << endl;
+
+			break;
+
+		case NO_LOYALTY: // CODIGO: FALHA AO ENTRAR NO CENÁRIO. FALTA LEALDADE.
+			
+			cout << "\nSeu personagem não possui lealdade suficiente para entrar nesse cenário." << endl;
+
+			break;
+
+		case PORTAL_FAIL: // CODIGO: FALHA AO CARREGAR O NOVO CENÁRIO. 
+			
+			enviarPacote(DISCONNECT);
+			_gameSocket->Close();
+			_connected = false;
+			retorno = ERRO_SAIR;
+
+			cout << "\nFalha ao carregar o novo cenário." << endl;
+
+			break;
+
 		case  CREATE_PLAYER_OK: // CODIGO: CRIAÇÃO DE PERSONAGEM OK
 
 			cout << "\nPersonagem criado com sucesso." << endl;
@@ -671,7 +966,7 @@ int CGameCore::receberPacote()
 
 		case  CREATE_PLAYER_FAIL: // CODIGO: CRIAÇÃO DE PERSONAGEM FALHOU
 
-			retorno = ERRO;
+			retorno = ERRO_CONTINUE;
 			cout << "\nErro ao criar personagem." << endl;
 
 			break;
@@ -684,7 +979,7 @@ int CGameCore::receberPacote()
 
 		case  DELETE_PLAYER_FAIL: // CODIGO: REMOÇÃO DE PERSONAGEM FALHOU
 
-			retorno = ERRO;
+			retorno = ERRO_CONTINUE;
 			cout << "\nErro ao excluir personagem." << endl;
 
 			break;
@@ -704,7 +999,17 @@ int CGameCore::receberPacote()
 			enviarPacote(DISCONNECT);
 			_gameSocket->Close();
 			_connected = false;
-			retorno = ERRO;
+			retorno = ERRO_SAIR;
+
+			break;
+
+		case  DOUBLE_LOGIN: // CODIGO: FALHA DE LOGIN SIMULTÂNEO
+
+			cout << "\nErro de login simultaneo." << endl;
+			enviarPacote(DISCONNECT);
+			_gameSocket->Close();
+			_connected = false;
+			retorno = ERRO_SAIR;
 
 			break;
 
@@ -714,7 +1019,7 @@ int CGameCore::receberPacote()
 			enviarPacote(DISCONNECT);
 			_gameSocket->Close();
 			_connected = false;
-			retorno = ERRO;
+			retorno = ERRO_SAIR;
 		};
 	}
 	else // CODIGO: SERVIDOR NÃO RESPONDE
@@ -723,7 +1028,7 @@ int CGameCore::receberPacote()
 		enviarPacote(DISCONNECT);
 		_gameSocket->Close();
 		_connected = false;
-		retorno = ERRO;
+		retorno = ERRO_SAIR;
 	}
 
 	return retorno;

@@ -12,11 +12,9 @@ bool CMenuJogo::start(CGameCore *gameCore)
 {
 	_gameCore = gameCore;
 
-	_gameScene = _gameCore->_gameScene;
-
 	_gameCore->getAllManagers(_dispGrafico, _dispAudio, _gerEventos, _gerCena, _gerVideo, _gerHud, _gameConfig);
 
-	_gameCore->loadGameScene(pathCenario[GAMESCENE_01]);
+	//_gameCore->loadGameScene(pathCenario[GAMESCENE_01]);
 
 	_menuCamera = gameCore->createCamera( vector3df(0,0,0), vector3df(0,0,100), vector3df(0,0,0), 0, 179.0f/*true*/, false);
 
@@ -90,12 +88,44 @@ bool CMenuJogo::start(CGameCore *gameCore)
 
 	rotV = rotH = 0.0;
 
-//	_gameCore->enviarPacote(START_GAME, _gameCore->_myUserID, _gameCore->_myCharID);
+	
+	_gameCore->enviarPacote(START_GAME, _gameCore->_myUserID, _gameCore->_myCharID);
 
 
-	_gameCore->loadGameScene(pathArquivoCena[MC_SELECAO]);
+	int retorno = PING_REQUEST;
+
+				while(retorno == PING_REQUEST)
+					retorno = _gameCore->receberPacote();
+
+	if(retorno == ERRO_SAIR)
+		_nextID = MN_LOGIN; // Desconecta e volta para a tela de login
+
+	fillGameScene();
+	
 
 	return (true);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CMenuJogo::fillGameScene()
+{
+	int retorno = SUCESSO;
+	bool fim = false;
+
+	do
+	{
+		retorno = _gameCore->receberPacote();
+
+		switch (retorno)
+		{
+			case FINAL_PACOTES:	fim = true;	break;
+			case ERRO_SAIR: fim = true; _nextID = MN_LOGIN; break;
+
+		};
+
+	}while(!fim);
+
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -388,15 +418,13 @@ void CMenuJogo::readCommands()
 
 void CMenuJogo::updateGraphics()
 {
-	_modelo[0]->setPosition(vector3df(_modelo[0]->getPosition().X, _terreno->getHeight(_modelo[0]->getPosition().X,_modelo[0]->getPosition().Z)+2, _modelo[0]->getPosition().Z));
-	_empty->setPosition(_modelo[0]->getPosition());
-	_empty->setRotation(rotacaoResultante(0, rotH, rotV));
+	//_modelo[0]->setPosition(vector3df(_modelo[0]->getPosition().X, _terreno->getHeight(_modelo[0]->getPosition().X,_modelo[0]->getPosition().Z)+2, _modelo[0]->getPosition().Z));
+	//_empty->setPosition(_modelo[0]->getPosition());
+	//_empty->setRotation(rotacaoResultante(0, rotH, rotV));
 
-	_menuCamera->setTarget(_empty->getAbsolutePosition());
-	//luz->setPosition(vector3df(0, rotH, rotV));
-
+	//_menuCamera->setTarget(_empty->getAbsolutePosition());
 	//_toonShader->apply(_modelo[0],"recursos/texturas/besouro1.jpg");
-	//luz->setPosition(_modelo[0]->getPosition()+vector3df(0,100,0));
+
 
 	_roleta->update();
 }

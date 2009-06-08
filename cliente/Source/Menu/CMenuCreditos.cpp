@@ -42,7 +42,7 @@ void CMenuCreditos::readCommands()
 
 void CMenuCreditos::updateGraphics() 
 {
-	_gameCore->playCutScene(CS_CREDITOS, 100);
+	//_gameCore->playCutScene(CS_CREDITOS, 100);
 	/*
 	_video = CVideoTexture::createVideoTexture(_dispGrafico, pathVideoCreditos);
 	_video->setVolume(100);

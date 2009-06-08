@@ -9,7 +9,7 @@ class CMenu
 protected:
 
 	CGameCore *_gameCore;
-	CGameScene *_gameScene;
+//	CGameScene *_gameScene;
 
 	IrrlichtDevice  *_dispGrafico; 
 	ISoundEngine    *_dispAudio;

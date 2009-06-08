@@ -7,8 +7,7 @@ struct SBolsa
 {
 	int _idBolsa;
 	int _listaItens[BOLSAMAXITENS];
-	float _x;
-	float _z;
+	vector3df posicao;
 	bool _isOpen;
 };
 
@@ -17,6 +16,7 @@ struct SQuadrante
 	int _id;
 	int _coluna;
 	int _linha;
+	vector3df _center;
 };
 
 class CPersonagem 
@@ -24,65 +24,85 @@ class CPersonagem
 
 private:
 
+	SQuadrante _listaQuadrante[AREABUSCA];
+	SQuadrante _quadranteFinal;
+	SQuadrante _quadranteSeguinte;
+	CTree Memoria;
+
+public:
+
+	/*	
+	
+	
+
+	bool _modoAtaque;
+	
+	int _dinheiro;
+
+	int _itemEnviarTroca;
+	int _itemReceberTroca;
+	int _dinheiroEnviarTroca;
+	int _dinheiroReceberTroca;
+
+	int _idQuest;
+	int _objetivosQuest;
+	
+	int _inventario[INVENTARIOMAXITENS];
+	int _lealdade[RACASMAX];
+	int _listaProdutos[MAXITENSVENDEDOR];
+	
+	int _nivelPoder[NUMPODERES];
+	
+	int _bonusHabilidade;
+	int _bonusPoder;
+
+	int _idAlvo;
+	int _roleta[NUMROLETAOPCOES];
+	
+	*/
+
+	int _id;
+	char *_nome;
+	vector3df _posicao;
+	int _pv;
+	int _pp;
+	int _xp;
+	int _pvMax;
+	int _ppMax;
+	int _xpMax;
+	int _nivel;
+	bool _buff[BUFF_COUNT];
+	int _raca;
+	int _classe;
+	int _estado;
+	int _ultimoEstado;
+	float _velAnim;
+	int _direcao;
+	int _idBaseArma;
+	int _idBaseArmadura;
+
+	int _idRelArma;
+	int _idRelArmadura;
+
+	//primarias
+	int _forca;
+	int _destreza;
 	int _agilidade;
+	int _resistencia;
+	int _instinto;
+
+	//secundarias
 	int _alcance;
 	int _ataque;
 	int _dano;
 	int _defesa;
-	int _destreza;
-	int _dinheiro;
-	int _dinheiroEnviarTroca;
-	int _dinheiroReceberTroca;
-	float _direcao;
-	int _estado;
-	int _ultimoEstado;
-	int _forca;
-	int _id;
-	int _idAlvo;
-	int _idArma;
-	int _idArmadura;
-	int _idQuest;
-	int _instinto;
-	int _inventario[INVENTARIOMAXITENS];
-	int _itemEnviarTroca;
-	int _itemReceberTroca;
-	int _lealdade[RACASMAX];
-	//int _listaPreco[MAXITENSVENDEDOR];
-	int _listaProdutos[MAXITENSVENDEDOR];
-	int _nivel;
-	int _nivelPoder[NUMPODERES];
-	char *_nome;
-	int _objetivosQuest;
-	int _pontosPoder;
-	int _pontosHabilidadeDisponiveis;
-	int _pontosPoderDisponiveis;
-	int _pontosPoderMaximo;
-	int _pontosVida;
-	int _pontosVidaMaximo;
-	float _posX;
-	float _posZ;
-	int _raca;
-	int _resistencia;
-	int _roleta[NUMROLETAOPCOES];
 	int _taxaAtaque;
-	int _tipoPersonagem;
-	int _tempoCarga;
-	int _velocidade;
-	int _xp;
-	int _xpMaximo;
+	//int _tempoCarga;
 
-	bool _buff[NUMBUFFERS];
-	bool _modoAtaque;
 
-	SQuadrante _listaQuadrante[AREABUSCA];
-	SQuadrante _quadranteFinal;
-	SQuadrante _quadranteSeguinte;
+	ISound *_soundFX; // Efeito sonoro do personagem
+	IAnimatedMeshSceneNode *_modelo;
 
-	ISound* _soundFX; // Efeito sonoro do personagem
-
-	CTree Memoria;
-
-public:
 
 	CPersonagem();
 
@@ -119,11 +139,11 @@ public:
 	void usarItem(int idItem);
 	void venderItem(int idItem, int idComprador);
 
-	int       getQuadranteID(int linha, int coluna);
-	float     getDistanceBetween( vector3d<f32> p1, vector3d<f32> p2 );
+	int getQuadranteID(int linha, int coluna);
+	float getDistanceBetween( vector3d<f32> p1, vector3d<f32> p2 );
 	vector3df getQuadranteCenter(int linha, int coluna);
-	int       getDirectionTo(vector3d<f32> p2);
-	float     getRotationTo(vector3d<f32> destino);
+	int getDirectionTo(vector3d<f32> p2);
+	float getRotationTo(vector3d<f32> destino);
 
 	void LRTAStar(SQuadrante origem, vector3df objetivo, SQuadrante &proximoPasso, bool Matriz[MAPMAXLIN][MAPMAXCOL]);
 };

@@ -73,6 +73,8 @@ public:
 	CMenuJogo();
 	bool start(CGameCore *gameCore);
 
+	void fillGameScene();
+
 	//! rotacaoResultante
 	/*!
 	\Calcula a rotação resultante entre três eixos (X,Y,Z).

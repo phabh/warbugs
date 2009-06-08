@@ -156,8 +156,8 @@ int CPersonagem::getDirectionTo(vector3d<f32> p2)
 {
 	vector3df p1;
 	
-	p1.X = this->_posX;
-	p1.Z = this->_posZ;
+	p1.X = this->_posicao.X;
+	p1.Z = this->_posicao.Z;
 
 	float dx = p1.Z - p2.Z; // deltaZ
 	float dz = p1.X - p2.X; // deltaX

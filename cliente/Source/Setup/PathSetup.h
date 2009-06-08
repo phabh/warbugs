@@ -68,6 +68,56 @@ static c8 *pathParticleImage[NUMPARTICLETYPES] =
 //-----------------------------------------------------------------------------------------
 // Nomes de arquivos
 
+static c8 *pathMtxCharsModels[NUMRACES][NUMCLASSES] =
+{
+// NONECLASS, ALLCLASS, JOGADOR, SOLDADO, LIDER, VENDEDOR, MAE, FILHOTE
+{"", "", "", "", "", "", "", "" }, // NONERACE
+{"", "", "", "", "", "", "", "" }, // ALLRACE
+{"", "", "recursos/modelos/p3d_aranha_jogador.b3d", "recursos/modelos/p3d_aranha_soldado.b3d", "recursos/modelos/p3d_aranha_lider.b3d", "recursos/modelos/p3d_aranha_vendedor.b3d", "recursos/modelos/p3d_aranha_mae.b3d", "recursos/modelos/p3d_aranha_filhote.b3d"}, // ARANHA
+{"", "", "recursos/modelos/p3d_besouro_jogador.b3d", "recursos/modelos/p3d_besouro_soldado.b3d",  "recursos/modelos/p3d_besouro_lider.b3d", "recursos/modelos/p3d_besouro_vendedor.b3d", "recursos/modelos/p3d_besouro_mae.b3d", "recursos/modelos/p3d_besouro_filhote.b3d"}, // BESOURO
+{"", "", "recursos/modelos/p3d_escorpiao_jogador.b3d", "recursos/modelos/p3d_escorpiao_soldado.b3d", "recursos/modelos/p3d_escorpiao_lider.b3d", "recursos/modelos/p3d_escorpiao_vendedor.b3d", "recursos/modelos/p3d_escorpiao_mae.b3d", "recursos/modelos/p3d_escorpiao_filhote.b3d"},  // ESCORPIAO
+{"", "", "recursos/modelos/p3d_louvadeus_jogador.b3d", "recursos/modelos/p3d_louvadeus_soldado.b3d", "recursos/modelos/p3d_louvadeus_lider.b3d", "recursos/modelos/p3d_louvadeus_vendedor.b3d", "recursos/modelos/p3d_louvadeus_mae.b3d", "recursos/modelos/p3d_louvadeus_filhote.b3d"},  // LOUVADEUS
+{"", "", "recursos/modelos/p3d_vespa_jogador.b3d", "recursos/modelos/p3d_vespa_soldado.b3d", "recursos/modelos/p3d_vespa_lider.b3d", "recursos/modelos/p3d_vespa_vendedor.b3d", "recursos/modelos/p3d_vespa_mae.b3d", "recursos/modelos/p3d_vespa_filhote.b3d"}, // VESPA
+{"", "", "", "recursos/modelos/p3d_cupim.b3d", "", "", "", ""}, // CUPIM
+{"", "", "", "recursos/modelos/p3d_formiga.b3d", "recursos/modelos/p3d_tandan.b3d", "", "", ""}, // FORMIGA
+{"", "", "", "recursos/modelos/p3d_barbeiro.b3d", "", "", "", ""}, // BARBEIRO
+{"", "", "", "recursos/modelos/p3d_barata.b3d", "", "", "", ""}, // BARATA
+{"", "", "", "recursos/modelos/p3d_tatubolinha.b3d", "", "", "", ""}, // TATU_BOLINHA
+{"", "", "", "recursos/modelos/p3d_libelula.b3d", "", "", "", ""}, // LIBELULA
+{"", "", "", "recursos/modelos/p3d_percevejo.b3d", "", "", "", ""}, // PERCEVEJO
+{"", "", "", "recursos/modelos/p3d_abelha.b3d", "", "", "", ""}, // ABELHA
+{"", "", "", "recursos/modelos/p3d_lagartixa.b3d", "", "", "", ""}, // LAGARTIXA
+{"", "", "", "recursos/modelos/p3d_calango.b3d", "", "", "", ""}, // CALANGO
+{"", "", "", "recursos/modelos/p3d_sapo.b3d", "", "", "", ""}, // SAPO
+{"", "", "", "recursos/modelos/p3d_joaninha.b3d", "", "", "", ""}, // JOANINHA
+{"", "", "", "recursos/modelos/p3d_camaleao.b3d", "", "", "", ""} // CAMALEAO
+};
+
+static c8 *pathMtxCharsTextures[NUMRACES][NUMCLASSES] =
+{
+// NONECLASS, ALLCLASS, JOGADOR, SOLDADO, LIDER, VENDEDOR, MAE, FILHOTE
+{"", "", "", "", "", "", "", "" }, // NONERACE
+{"", "", "", "", "", "", "", "" }, // ALLRACE
+{"", "", "recursos/modelos/tx3d_aranha_jogador.png", "recursos/modelos/tx3d_aranha_soldado.png", "recursos/modelos/tx3d_aranha_lider.png", "recursos/modelos/tx3d_aranha_vendedor.png", "recursos/modelos/tx3d_aranha_mae.png", "recursos/modelos/tx3d_aranha_filhote.png"}, // ARANHA
+{"", "", "recursos/modelos/tx3d_besouro_jogador.png", "recursos/modelos/tx3d_besouro_soldado.png",  "recursos/modelos/tx3d_besouro_lider.png", "recursos/modelos/tx3d_besouro_vendedor.png", "recursos/modelos/tx3d_besouro_mae.png", "recursos/modelos/tx3d_besouro_filhote.png"}, // BESOURO
+{"", "", "recursos/modelos/tx3d_escorpiao_jogador.png", "recursos/modelos/tx3d_escorpiao_soldado.png", "recursos/modelos/tx3d_escorpiao_lider.png", "recursos/modelos/tx3d_escorpiao_vendedor.png", "recursos/modelos/tx3d_escorpiao_mae.png", "recursos/modelos/tx3d_escorpiao_filhote.png"},  // ESCORPIAO
+{"", "", "recursos/modelos/tx3d_louvadeus_jogador.png", "recursos/modelos/tx3d_louvadeus_soldado.png", "recursos/modelos/tx3d_louvadeus_lider.png", "recursos/modelos/tx3d_louvadeus_vendedor.png", "recursos/modelos/tx3d_louvadeus_mae.png", "recursos/modelos/tx3d_louvadeus_filhote.png"},  // LOUVADEUS
+{"", "", "recursos/modelos/tx3d_vespa_jogador.png", "recursos/modelos/tx3d_vespa_soldado.png", "recursos/modelos/tx3d_vespa_lider.png", "recursos/modelos/tx3d_vespa_vendedor.png", "recursos/modelos/tx3d_vespa_mae.png", "recursos/modelos/tx3d_vespa_filhote.png"}, // VESPA
+{"", "", "", "recursos/modelos/tx3d_cupim.png", "", "", "", ""}, // CUPIM
+{"", "", "", "recursos/modelos/tx3d_formiga.png", "recursos/modelos/tx3d_tandan.png", "", "", ""}, // FORMIGA
+{"", "", "", "recursos/modelos/tx3d_barbeiro.png", "", "", "", ""}, // BARBEIRO
+{"", "", "", "recursos/modelos/tx3d_barata.png", "", "", "", ""}, // BARATA
+{"", "", "", "recursos/modelos/tx3d_tatubolinha.png", "", "", "", ""}, // TATU_BOLINHA
+{"", "", "", "recursos/modelos/tx3d_libelula.png", "", "", "", ""}, // LIBELULA
+{"", "", "", "recursos/modelos/tx3d_percevejo.png", "", "", "", ""}, // PERCEVEJO
+{"", "", "", "recursos/modelos/tx3d_abelha.png", "", "", "", ""}, // ABELHA
+{"", "", "", "recursos/modelos/tx3d_lagartixa.png", "", "", "", ""}, // LAGARTIXA
+{"", "", "", "recursos/modelos/tx3d_calango.png", "", "", "", ""}, // CALANGO
+{"", "", "", "recursos/modelos/tx3d_sapo.png", "", "", "", ""}, // SAPO
+{"", "", "", "recursos/modelos/tx3d_joaninha.png", "", "", "", ""}, // JOANINHA
+{"", "", "", "recursos/modelos/tx3d_camaleao.png", "", "", "", ""} // CAMALEAO
+};
+
 static c8 *pathCharsModels[NUM3DPERS]=
 { // Modelos 3D de todos os personagens do jogo
 	"recursos/modelos/p3d_aranha_lider.b3d", 
