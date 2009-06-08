@@ -36,6 +36,10 @@ CCenario * CJogador::getScene()
 {
 	return(_cenario);
 }
+bool CJogador::isPlaying()
+{
+	return(_isPlaying);
+}
 
 void CJogador::setName(char *value)
 {
@@ -83,6 +87,10 @@ void CJogador::setCharacter(CPersonagemJogador *personagem)
 void CJogador::setScene(CCenario * cenario)
 {
 	_cenario = cenario;
+}
+void CJogador::setPlaying(bool isplaying)
+{
+	_isPlaying = isplaying;
 }
 long CJogador::getBeginTimePing()
 {

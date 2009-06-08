@@ -74,6 +74,11 @@ CBuff::CBuff(TipoBuff tipo, int dur, CPersonagem *origem, int val1, int val2, in
 			_valor3 = val3;//Valor para o teste de resistencia
 			_badBuff = true;
 			break;
+		case BUFF_PIERCESHOT:
+			_valor1 = val1;//Aumento no Ataque
+			_valor2 = val2;//Aumento no Dano
+			_badBuff = false;
+			break;
 		case BUFF_STUN:
 			_valor1 = val1;//Valor para teste de resistencia
 			_badBuff = true;
@@ -81,7 +86,6 @@ CBuff::CBuff(TipoBuff tipo, int dur, CPersonagem *origem, int val1, int val2, in
 		case BUFF_ATORDOADO:
 			_valor1 = val1;//Redução em AGI
 			_valor2 = val2;//Redução em DES
-			_valor3 = val3;//Área de efeito
 			_badBuff = true;
 			break;
 		case BUFF_ESCUDO:
@@ -207,6 +211,14 @@ void CBuff::addBuff(CBuffList * lista, CPersonagem *alvo)
 			bonus = NULL;
 			delete bonus;
 			break;
+		case BUFF_PIERCESHOT:
+			bonus = new CBonusSecundario();
+			bonus->createBonus(0,_valor1,0,_valor2,0);
+			bonus->setOrigem(this->getTipo());
+			alvo->getBonus()->add(bonus);
+			bonus = NULL;
+			delete bonus;
+			break;
 		case BUFF_STUN:
 			bonus = new CBonusPrimario();
 			bonus->createBonus(0,((-1)*(alvo->getAGI())),0,0,0);
@@ -307,6 +319,9 @@ void CBuff::remove(CPersonagem *alvo)
 		case BUFF_LENTO:
 			alvo->getBaseBonus()->removeElement(this->getTipo());
 			break;
+		case BUFF_PIERCESHOT:
+			alvo->getBonus()->removeElement(this->getTipo());
+			break;
 		case BUFF_STUN:
 			alvo->getBaseBonus()->removeElement(this->getTipo());
 			break;
@@ -387,6 +402,11 @@ void CBuff::execute(CPersonagem *jogador, CBuffList *lista)
 		}
 		break;
 	case BUFF_STUN:
+		if(jogador->getRES() > _valor1)
+		{
+			this->remove(jogador);
+			lista->removeBuff(this->getID());
+		}
 		break;
 	case BUFF_ATORDOADO:
 		break;

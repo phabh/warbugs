@@ -20,6 +20,7 @@ private:
 	CCenario *              _cenario;
 	long					_TempoEnvioPing;
 	long					_TempoRespostaPing;
+	bool					_isPlaying;
 
 public:
 
@@ -32,6 +33,7 @@ public:
 	CBugSocket *			getSocket();
 	CPersonagemJogador *	getCharacter();
 	CCenario *              getScene();
+	bool					isPlaying();
 
 	void					setName(char *value);
 	void					setBirthdate(char *value);
@@ -41,6 +43,7 @@ public:
 	void					setSocket(CBugSocket * socket);
 	void					setCharacter(CPersonagemJogador * personagem);
 	void					setScene(CCenario * cenario);
+	void					setPlaying(bool isplaying);
 
 	long					getBeginTimePing();
 	void					setBeginTimePing(long newTime);
