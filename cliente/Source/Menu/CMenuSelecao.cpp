@@ -86,7 +86,7 @@ void CMenuSelecao::readCommands()
 
 	int slotPersonagem = 0;
 
-	int retorno = PING;
+	int retorno = PING_REQUEST;
 
 	if(_gerEventos->isKeyDown(KEY_ESCAPE))
 	{
@@ -132,11 +132,13 @@ void CMenuSelecao::readCommands()
 			break;
 
 		case 204:
+			_gameCore->_myCharID = _gameCore->_myStructChar[0]._id;
 			_nextID =  MN_JOGO;
 			return;
 			break;
 
 		case 205:
+			_gameCore->_myCharID = _gameCore->_myStructChar[1]._id;
 			_nextID =  MN_JOGO;
 			return;
 			break;

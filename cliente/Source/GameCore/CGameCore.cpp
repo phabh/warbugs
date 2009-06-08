@@ -192,8 +192,8 @@ void CGameCore::drop()
 		_gameSocket->Close();
 	}
 
-	for(int i = 0; i < CS_COUNT; i++)
-		_cutScene[i]->drop();
+	//for(int i = 0; i < CS_COUNT; i++)
+	//	_cutScene[i]->drop();
 
 	_dispositivoGrafico->drop(); // Deleta o dispositivo grafico da memória
 	_dispositivoAudio->drop();   // Deleta o dispositivo de audio da memória
@@ -517,7 +517,7 @@ int CGameCore::getQuadID(int linha, int coluna)
 
 bool CGameCore::conectar(char *login, char *password)
 {
-	int retorno = PING;
+	int retorno = PING_REQUEST;
 
 	strcpy(_myLogin, "");
 	strcpy(_myPassword, "");
@@ -534,7 +534,7 @@ bool CGameCore::conectar(char *login, char *password)
 
 		enviarPacote(LOGIN_REQUEST, _myLogin, _myPassword);
 
-		while(retorno == PING)
+		while(retorno == PING_REQUEST)
 			retorno = receberPacote();
 	}
 	catch(...)
@@ -936,6 +936,7 @@ int CGameCore::receberPacote()
 
 		case PING: // CODIGO: PING.
 
+			retorno = PING_REQUEST;
 			enviarPacote(PING);
 			cout << "\nPing." << endl;
 
@@ -981,6 +982,13 @@ int CGameCore::receberPacote()
 
 			retorno = ERRO_CONTINUE;
 			cout << "\nErro ao excluir personagem." << endl;
+
+			break;
+
+		case  END_FRAME: // CODIGO: FINAL DE UM CICLO DE PACOTES
+			
+			retorno = FINAL_PACOTES;
+			cout << "\nEnd-Frame." << endl;
 
 			break;
 

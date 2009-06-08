@@ -100,12 +100,17 @@ void CMenuLogin::updateGraphics()
 {
 	if(_loadingStage <= LS_COUNT)
 	{
-		_gameCore->loadGameData(_loadingStage);
+		//if(!_gameCore->_gameData->isDataLoaded())
+		//{ 
+			_gameCore->loadGameData(_loadingStage);
 
-		if(_loadingStage == LS_COUNT)
-			_menuFlag[HUDUPDATED] = false;
+			if(_loadingStage == LS_COUNT)
+				_menuFlag[HUDUPDATED] = false;
 
-		_loadingStage++;
+			_loadingStage++;
+		//}
+		//else
+		//	_loadingStage == LS_PERSONAGENS;
 	}
 }
 
