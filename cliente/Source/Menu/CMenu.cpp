@@ -13,9 +13,9 @@ TypeMenuID CMenu::run()
 	{
 		tempoInicial = cronometroMS->getRealTime(); // Milisegundos
 
-		if(_myID > MN_ABERTURA && _myID < MN_CREDITOS)
+		if(_myID == MN_JOGO)
 		{
-			//Ler pacotes
+			receivePackages();
 		}
 
 		if (_dispGrafico->isWindowActive())

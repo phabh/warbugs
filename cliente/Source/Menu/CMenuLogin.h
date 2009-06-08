@@ -19,6 +19,7 @@ private:
 	void updateHuds();
 	void readCommands();
 	void updateGraphics();
+	void receivePackages();
 
 public:
 

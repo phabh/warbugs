@@ -56,7 +56,7 @@ public:
 	int _bonusHabilidade;
 	int _bonusPoder;
 
-	int _idAlvo;
+	
 	int _roleta[NUMROLETAOPCOES];
 	
 	*/
@@ -74,10 +74,15 @@ public:
 	bool _buff[BUFF_COUNT];
 	int _raca;
 	int _classe;
+
 	int _estado;
 	int _ultimoEstado;
+
 	float _velAnim;
 	int _direcao;
+
+	int _idAlvo;
+
 	int _idBaseArma;
 	int _idBaseArmadura;
 

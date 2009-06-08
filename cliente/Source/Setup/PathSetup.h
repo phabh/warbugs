@@ -98,24 +98,24 @@ static c8 *pathMtxCharsTextures[NUMRACES][NUMCLASSES] =
 // NONECLASS, ALLCLASS, JOGADOR, SOLDADO, LIDER, VENDEDOR, MAE, FILHOTE
 {"", "", "", "", "", "", "", "" }, // NONERACE
 {"", "", "", "", "", "", "", "" }, // ALLRACE
-{"", "", "recursos/modelos/tx3d_aranha_jogador.png", "recursos/modelos/tx3d_aranha_soldado.png", "recursos/modelos/tx3d_aranha_lider.png", "recursos/modelos/tx3d_aranha_vendedor.png", "recursos/modelos/tx3d_aranha_mae.png", "recursos/modelos/tx3d_aranha_filhote.png"}, // ARANHA
-{"", "", "recursos/modelos/tx3d_besouro_jogador.png", "recursos/modelos/tx3d_besouro_soldado.png",  "recursos/modelos/tx3d_besouro_lider.png", "recursos/modelos/tx3d_besouro_vendedor.png", "recursos/modelos/tx3d_besouro_mae.png", "recursos/modelos/tx3d_besouro_filhote.png"}, // BESOURO
-{"", "", "recursos/modelos/tx3d_escorpiao_jogador.png", "recursos/modelos/tx3d_escorpiao_soldado.png", "recursos/modelos/tx3d_escorpiao_lider.png", "recursos/modelos/tx3d_escorpiao_vendedor.png", "recursos/modelos/tx3d_escorpiao_mae.png", "recursos/modelos/tx3d_escorpiao_filhote.png"},  // ESCORPIAO
-{"", "", "recursos/modelos/tx3d_louvadeus_jogador.png", "recursos/modelos/tx3d_louvadeus_soldado.png", "recursos/modelos/tx3d_louvadeus_lider.png", "recursos/modelos/tx3d_louvadeus_vendedor.png", "recursos/modelos/tx3d_louvadeus_mae.png", "recursos/modelos/tx3d_louvadeus_filhote.png"},  // LOUVADEUS
-{"", "", "recursos/modelos/tx3d_vespa_jogador.png", "recursos/modelos/tx3d_vespa_soldado.png", "recursos/modelos/tx3d_vespa_lider.png", "recursos/modelos/tx3d_vespa_vendedor.png", "recursos/modelos/tx3d_vespa_mae.png", "recursos/modelos/tx3d_vespa_filhote.png"}, // VESPA
-{"", "", "", "recursos/modelos/tx3d_cupim.png", "", "", "", ""}, // CUPIM
-{"", "", "", "recursos/modelos/tx3d_formiga.png", "recursos/modelos/tx3d_tandan.png", "", "", ""}, // FORMIGA
-{"", "", "", "recursos/modelos/tx3d_barbeiro.png", "", "", "", ""}, // BARBEIRO
-{"", "", "", "recursos/modelos/tx3d_barata.png", "", "", "", ""}, // BARATA
-{"", "", "", "recursos/modelos/tx3d_tatubolinha.png", "", "", "", ""}, // TATU_BOLINHA
-{"", "", "", "recursos/modelos/tx3d_libelula.png", "", "", "", ""}, // LIBELULA
-{"", "", "", "recursos/modelos/tx3d_percevejo.png", "", "", "", ""}, // PERCEVEJO
-{"", "", "", "recursos/modelos/tx3d_abelha.png", "", "", "", ""}, // ABELHA
-{"", "", "", "recursos/modelos/tx3d_lagartixa.png", "", "", "", ""}, // LAGARTIXA
-{"", "", "", "recursos/modelos/tx3d_calango.png", "", "", "", ""}, // CALANGO
-{"", "", "", "recursos/modelos/tx3d_sapo.png", "", "", "", ""}, // SAPO
-{"", "", "", "recursos/modelos/tx3d_joaninha.png", "", "", "", ""}, // JOANINHA
-{"", "", "", "recursos/modelos/tx3d_camaleao.png", "", "", "", ""} // CAMALEAO
+{"", "", "recursos/texturas/tx3d_aranha_jogador.png", "recursos/texturas/tx3d_aranha_soldado.png", "recursos/texturas/tx3d_aranha_lider.png", "recursos/texturas/tx3d_aranha_vendedor.png", "recursos/texturas/tx3d_aranha_mae.png", "recursos/texturas/tx3d_aranha_filhote.png"}, // ARANHA
+{"", "", "recursos/texturas/tx3d_besouro_jogador.png", "recursos/texturas/tx3d_besouro_soldado.png",  "recursos/texturas/tx3d_besouro_lider.png", "recursos/texturas/tx3d_besouro_vendedor.png", "recursos/texturas/tx3d_besouro_mae.png", "recursos/texturas/tx3d_besouro_filhote.png"}, // BESOURO
+{"", "", "recursos/texturas/tx3d_escorpiao_jogador.png", "recursos/texturas/tx3d_escorpiao_soldado.png", "recursos/texturas/tx3d_escorpiao_lider.png", "recursos/texturas/tx3d_escorpiao_vendedor.png", "recursos/texturas/tx3d_escorpiao_mae.png", "recursos/texturas/tx3d_escorpiao_filhote.png"},  // ESCORPIAO
+{"", "", "recursos/texturas/tx3d_louvadeus_jogador.png", "recursos/texturas/tx3d_louvadeus_soldado.png", "recursos/texturas/tx3d_louvadeus_lider.png", "recursos/texturas/tx3d_louvadeus_vendedor.png", "recursos/texturas/tx3d_louvadeus_mae.png", "recursos/texturas/tx3d_louvadeus_filhote.png"},  // LOUVADEUS
+{"", "", "recursos/texturas/tx3d_vespa_jogador.png", "recursos/texturas/tx3d_vespa_soldado.png", "recursos/texturas/tx3d_vespa_lider.png", "recursos/texturas/tx3d_vespa_vendedor.png", "recursos/texturas/tx3d_vespa_mae.png", "recursos/texturas/tx3d_vespa_filhote.png"}, // VESPA
+{"", "", "", "recursos/texturas/tx3d_cupim.png", "", "", "", ""}, // CUPIM
+{"", "", "", "recursos/texturas/tx3d_formiga.png", "recursos/texturas/tx3d_tandan.png", "", "", ""}, // FORMIGA
+{"", "", "", "recursos/texturas/tx3d_barbeiro.png", "", "", "", ""}, // BARBEIRO
+{"", "", "", "recursos/texturas/tx3d_barata.png", "", "", "", ""}, // BARATA
+{"", "", "", "recursos/texturas/tx3d_tatubolinha.png", "", "", "", ""}, // TATU_BOLINHA
+{"", "", "", "recursos/texturas/tx3d_libelula.png", "", "", "", ""}, // LIBELULA
+{"", "", "", "recursos/texturas/tx3d_percevejo.png", "", "", "", ""}, // PERCEVEJO
+{"", "", "", "recursos/texturas/tx3d_abelha.png", "", "", "", ""}, // ABELHA
+{"", "", "", "recursos/texturas/tx3d_lagartixa.png", "", "", "", ""}, // LAGARTIXA
+{"", "", "", "recursos/texturas/tx3d_calango.png", "", "", "", ""}, // CALANGO
+{"", "", "", "recursos/texturas/tx3d_sapo.png", "", "", "", ""}, // SAPO
+{"", "", "", "recursos/texturas/tx3d_joaninha.png", "", "", "", ""}, // JOANINHA
+{"", "", "", "recursos/texturas/tx3d_camaleao.png", "", "", "", ""} // CAMALEAO
 };
 
 static c8 *pathCharsModels[NUM3DPERS]=

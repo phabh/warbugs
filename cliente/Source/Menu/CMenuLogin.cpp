@@ -2,6 +2,12 @@
 
 //-----------------------------------------------------------------------------------------------------------------
 
+void CMenuLogin::receivePackages()
+{
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
 CMenuLogin::CMenuLogin()
 {
 }
@@ -40,7 +46,7 @@ void CMenuLogin::updateHuds()
 	if(_loadingStage == LS_PERSONAGENS) 
 	{
 		_gameCore->_barraLoad = new CHudProgressBar(_gerHud->getRootGUIElement(), _gerHud, rect<s32>( 0+100, _gameCore->sHeight-200, _gameCore->sWidth-100, _gameCore->sHeight-100));
-		_gameCore->_barraLoad->setProgress(0.01f);
+		_gameCore->_barraLoad->setProgress(0.00001f);
 
 		//_gerHud->addButton(rect<s32>(420,500,520,550), 0, 101, L"conectar");
 	}
