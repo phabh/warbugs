@@ -129,6 +129,19 @@ CItem *CBolsa::removeItem(int ID)
 			temp = temp->next;
 		}
 	}
+	if((temp->valor)->getID() == ID)
+	{
+		if(temp->prev != NULL)
+			(temp->prev)->next = temp->next;
+		else
+		{
+			_first = temp->next;
+			_first->next = (temp->next)->next;
+			_first->prev = NULL;
+		}
+		_size = _size - 1;
+		return(temp->valor);
+	}
 	temp = NULL;
 	delete temp;
 	return(NULL);
