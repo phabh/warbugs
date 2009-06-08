@@ -134,6 +134,17 @@ template <class T> T *CDoubleList<T>::removeElement(int ID)
 			temp = temp->next;
 		}
 	}
+	if(temp->id == ID)
+	{
+		//Se for o último
+		if(temp->next == NULL)
+		{
+			(temp->prev)->next = NULL;
+			temp->prev = NULL;
+			_size = _size - 1;
+			return(temp->valor);
+		}
+	}
 	temp = NULL;
 	delete temp;
 	return(NULL);
@@ -142,7 +153,7 @@ template <class T> T *CDoubleList<T>::removeElement(int ID)
 template <class T> T *CDoubleList<T>::getElement(int ID)
 {
 	SCelula<T> *temp = _first;
-	while(temp->next != NULL)
+	while(temp/*->next*/ != NULL)
 	{
 		if(temp->id == ID)
 		{
@@ -207,20 +218,25 @@ template <class T> void CDoubleList<T>::addElementAt(T *element, int pos)
 template <class T> T *CDoubleList<T>::removeElementAt(int pos)
 {
 	SCelula<T> *temp = _first;
-	while(pos > 0)
+	if(pos < size())
 	{
-		temp = temp->next;
-		pos = pos - 1;
+		while(pos > 0)
+		{
+			temp = temp->next;
+			pos = pos - 1;
+		}
+		if(temp->next != NULL)
+			(temp->next)->prev = temp->prev;
+		if(temp->next != NULL)
+			(temp->prev)->next = temp->next;
+		temp->next = NULL;
+		temp->prev = NULL;
+		T *value = (temp->valor);
+		_size = _size - 1;
+		temp = NULL;
+		delete temp;
+		return(value);
 	}
-	(temp->next)->prev = temp->prev;
-	(temp->prev)->next = temp->next;
-	temp->next = NULL;
-	temp->prev = NULL;
-	T *value = (temp->valor);
-	_size = _size - 1;
-	temp = NULL;
-	delete temp;
-	return(value);
 }
 
 //Retorna o valor do elemento na posição dada. Alterações posteriores ao apontador retornado, NÃO alterarão o elemento na lista 

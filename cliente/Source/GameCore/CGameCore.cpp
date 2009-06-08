@@ -14,6 +14,8 @@ CGameCore::CGameCore(int &startInit)
 	_myCharSceneID = -1;
 	_myMapSceneID = -1;
 
+	
+
 	_particleCount = 0;
 
 	strcpy(_myLogin, "");
@@ -197,6 +199,31 @@ void CGameCore::drop()
 
 	_dispositivoGrafico->drop(); // Deleta o dispositivo grafico da memória
 	_dispositivoAudio->drop();   // Deleta o dispositivo de audio da memória
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+vector3df CGameCore::rotacaoResultante(f32 rotX, f32 rotY, f32 rotZ)
+{
+	// Matrizes de rotação
+	matrix4 mRotX; 
+	matrix4 mRotY;
+	matrix4 mRotZ;
+	matrix4 mRotResultante;
+
+	mRotResultante.setRotationDegrees(vector3df(0, 0, 0));
+
+	// Matrizes separadas para os eixos coordenados
+	mRotX.setRotationDegrees(vector3df(rotX, 0, 0)); 
+	mRotY.setRotationDegrees(vector3df(0, rotY, 0));
+	mRotZ.setRotationDegrees(vector3df(0, 0, rotZ));
+
+	// Produto de vetores
+	mRotResultante *= mRotX;
+	mRotResultante *= mRotY;
+	mRotResultante *= mRotZ;
+
+	return mRotResultante.getRotationDegrees();
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -395,10 +422,26 @@ void CGameCore::addBolsa(int idBolsa, float posX, float posZ)
 
 void CGameCore::addPersonagem( CPersonagem *personagem )
 {
-	_listaPersonagens->addElement(personagem, personagem->getId());
+	int r = personagem->_raca;
+	int c = personagem->_classe;
+
+	personagem->_modelo = _gerenciadorCena->addAnimatedMeshSceneNode(_gerenciadorCena->getMesh(pathMtxCharsModels[r][c]));
+	personagem->_modelo->setMaterialFlag(EMF_LIGHTING, false);
+	personagem->_modelo->setMaterialTexture(0, _gerenciadorVideo->getTexture(pathMtxCharsTextures[r][c]));
+	personagem->_modelo->setPosition(personagem->_posicao);
 	
+	_listaPersonagens->addElement(personagem, personagem->getId());
+
 	if(personagem->getId() == _myCharSceneID)
+	{
 		_myPlayerChar = personagem;
+
+		_emptyCam = _gerenciadorCena->addEmptySceneNode();
+		_emptyCam->setPosition(_myPlayerChar->_posicao);
+		_gameCamera->setParent(_emptyCam);
+		_gameCamera->setPosition( vector3df(-20,20,0));
+		_gameCamera->setTarget(_emptyCam->getPosition());
+	}
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -599,6 +642,9 @@ void CGameCore::enviarPacote(int packageID)
 	_packageToSend.writeByte(packageID);
 
 	_gameSocket->SendLine(_packageToSend);
+
+	if(packageID == DISCONNECT)
+		Sleep(100);
 }
 //-----------------------------------------------------------------------------------------------------------------
 
@@ -866,10 +912,21 @@ int CGameCore::receberPacote()
 
 			break;
 
+		case  UPDATE_POSITION: // CODIGO: ATUALIZA A POSIÇÃO DE UM PERSONAGEM
+
+			personagem = _listaPersonagens->getElement(_packageReceived.readInt());
+			personagem->_posicao = upd3DPosition(_packageReceived.readFloat(), _packageReceived.readFloat());
+			personagem->_modelo->setPosition(personagem->_posicao);
+			personagem->_direcao = _packageReceived.readInt(); 
+			
+			cout << "\nPosição de personagem atualizada." << endl;
+
+			break;
+
 		case ADD_PERSONAGEM: // CODIGO: INSERÇÃO DE PERSONAGEM NO CENÁRIO
 
 			personagem->_id = _packageReceived.readInt();
-			personagem->_nome = new char[15];
+			personagem->_nome = new char[30];
 			strcpy(personagem->_nome, _packageReceived.readString());
 			personagem->_posicao = upd3DPosition(_packageReceived.readFloat(), _packageReceived.readFloat());
 
@@ -911,6 +968,7 @@ int CGameCore::receberPacote()
 			personagem->_idBaseArmadura = _packageReceived.readInt();
 
 			addPersonagem(personagem);
+			Sleep(1);
 
 			break;
 
@@ -1014,7 +1072,17 @@ int CGameCore::receberPacote()
 		case  DOUBLE_LOGIN: // CODIGO: FALHA DE LOGIN SIMULTÂNEO
 
 			cout << "\nErro de login simultaneo." << endl;
-			enviarPacote(DISCONNECT);
+			//enviarPacote(DISCONNECT);
+			_gameSocket->Close();
+			_connected = false;
+			retorno = ERRO_SAIR;
+
+			break;
+
+			case  DISCONNECT: // CODIGO: RECEBEU DISCONNECT DO SERVIDOR
+
+			cout << "\nO servidor te desconectou." << endl;
+			//enviarPacote(DISCONNECT);
 			_gameSocket->Close();
 			_connected = false;
 			retorno = ERRO_SAIR;

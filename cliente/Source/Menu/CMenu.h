@@ -28,10 +28,12 @@ protected:
 	virtual void readCommands() = 0;
 	virtual void updateGraphics() = 0;
 	virtual void graphicsDrawAddOn() = 0;
+	
 
 public:
 
 	CMenu(){}
+	void receivePackages(){};
 	bool start(CGameCore *gameCore);
 	TypeMenuID run();
 };

@@ -11,10 +11,10 @@ class CMenuJogo : public CMenu
 
 private:
 
-	int _idPersonagem, 
-		_idInimigo;
+	//int _idPersonagem, 
+	//	_idInimigo;
 
-	ITriangleSelector* _selector;
+	//ITriangleSelector* _selector;
 
 	ICameraSceneNode *_menuCamera;
 	
@@ -35,19 +35,19 @@ private:
 
 	CHudRoleta *_roleta;
 
-	ITerrainSceneNode *_terreno;
-	IAnimatedMesh *_malha[10];
-	ITexture *_textura[10];
-	IAnimatedMeshSceneNode *_modelo[10];
+	//ITerrainSceneNode *_terreno;
+	//IAnimatedMesh *_malha[10];
+	//ITexture *_textura[10];
+	//IAnimatedMeshSceneNode *_modelo[10];
 
-	float _direcao, 
-		_velocidade;
+	//float _direcao, 
+	//	_velocidade;
 
 	float rotV, 
 		rotH;
 
-	ISceneNode *_empty;
-	ILightSceneNode *luz;
+	//ISceneNode *_empty;
+	//ILightSceneNode *_luz;
 
 
 	// Variáveis para tratar o click do mouse no terreno
@@ -61,24 +61,20 @@ private:
 
 	stringw temp;
 
-	CToonShader *_toonShader;
+	//CToonShader *_toonShader;
 
 	void updateHuds();
 	void readCommands();
 	void updateGraphics();
 	void graphicsDrawAddOn();
+	void receivePackages();
 
 public:
 
 	CMenuJogo();
 	bool start(CGameCore *gameCore);
 
-	void fillGameScene();
+	void updateScene();
 
-	//! rotacaoResultante
-	/*!
-	\Calcula a rotação resultante entre três eixos (X,Y,Z).
-	\Retorna o vetor de rotação absoluta resultante
-	*/
-	vector3df rotacaoResultante(f32 rotX, f32 rotY, f32 rotZ);
+	
 };

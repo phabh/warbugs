@@ -68,7 +68,7 @@ private:
 	IGUIEnvironment *_gerenciadorHud;
 	CGerEventos     _gerenciadorEventos;
 
-	ICameraSceneNode *_gameCamera;
+
 
 	typedef CDoubleList<IParticleSystemSceneNode> CListaParticulas;
 	CListaParticulas  *_listaParticulas;
@@ -115,8 +115,7 @@ private:
 	//! Lista de personagens do cenário
 	ListaPersonagem  *_listaPersonagens;
 
-	//! Ponteiro para o meu personagem
-	CPersonagem *_myPlayerChar;
+	
 	
 	//! Lista de bolsas do cenário
 	ListaBolsa *_listaBolsas;
@@ -133,6 +132,14 @@ private:
 
 public:
 
+	
+
+	ICameraSceneNode *_gameCamera;
+
+	ISceneNode *_emptyCam; // nodo vazio para camera
+
+	float camRotVert, camRotHor; // rotações do empty da camera
+
 	int sWidth, sHeight;
 
 	CHudProgressBar* _barraLoad;
@@ -145,6 +152,9 @@ public:
 	int _myCharID;
 	int _myCharSceneID;
 	int _myMapSceneID;
+
+	//! Ponteiro para o meu personagem
+	CPersonagem *_myPlayerChar;
 	
 	SPersonagemSelecao _myStructChar[MAXSLOTPERSONAGEM];
 	IAnimatedMeshSceneNode *_myChar[MAXSLOTPERSONAGEM];
@@ -175,7 +185,8 @@ public:
 	void setSceneQuadPortalID(int idQuadPortal1, int idQuadPortal2, int idQuadPortal3, int idQuadPortal4);
 */
 
-
+	//! Calcula a rotação resultante entre três eixos (X,Y,Z).
+	vector3df rotacaoResultante(f32 rotX, f32 rotY, f32 rotZ);
 
 	ICameraSceneNode *createCamera( vector3df posicao, vector3df target = vector3df(0,0,100) , vector3df rotacao = vector3df(0,0,0), ISceneNode *parent = 0, f32 angulo = 179.0f/*bool isOrtogonal = true*/, bool bind = true);
 	void createLight(ISceneNode *parent, vector3df posicao, f32 raio);
