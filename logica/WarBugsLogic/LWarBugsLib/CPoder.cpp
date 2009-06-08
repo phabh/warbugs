@@ -138,6 +138,7 @@ void CPoder::strike(CPersonagemJogador *user, int level)
 		user->getStats()->addPM(1);
 	}
 }
+//void CPoder
 void CPoder::stealItem(CPersonagem *user, CPersonagem *target)
 {
 	if(user->getStats()->addPM(-10)&&(user->getStats()->getChargeTime() >= 40))
@@ -278,7 +279,14 @@ void CPoder::explode(CPersonagem *user)
 }
 void CPoder::killingNeedle(CPersonagem *user, CPersonagem *target)
 {
-
+	if(user->getStats()->addPM(-1)&&(user->getStats()->getChargeTime() >= 5))
+	{
+		target->getStats()->addPV(-50);
+	}
+	else
+	{
+		user->getStats()->addPM(1);
+	}
 }
 void CPoder::eat(CPersonagem *user, CPersonagem *target)
 {
