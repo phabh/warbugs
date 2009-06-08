@@ -1,0 +1,48 @@
+Ligando o server
+
+Load de soldados 
+ 
+ - Carrega todos os inimigos que estão vinculados ao cenário que está sendo carregado
+ - Atribui para o ponto de respaw válido
+ - Verifica se há itens para algum destes inimigos 
+ - Colocar os itens existentes para os inimigos na bolsa deles
+ - Para os inimigos que não tem itens colocar os itens com a probabilidade de drop
+
+ - Metodo Bolsa de Drop
+
+   * é passado a raca do soldado e o tipo de Personagem e através de uma probabilidade 
+     do item é montada a bolsa que será atribuida ao inimigo
+
+ - salva os soldados com seus vinculos com os itens
+
+
+Load de vendedor
+
+ - carrega o vendedor que está vinculado ao cenário
+ - carrega as variaveis de mercado
+ - atribui a ele o ponto de respaw
+ - verifica se há itens para ele   
+ - coloca na bolsa dele os itens já existentes
+ - caso não tenha os itens é montado para ele a bolsa inicial do vendedor
+
+ - metodo de bolsa Inicial de vendedor
+   * é passado a raca do vendedor e com isso é retornado a bolsa inicial dele
+
+ - salva o vendedor com seus vinculos com itens
+
+Load de Lider
+
+ - carrega o Lider que está vinculado ao cenário
+ - define seu ponto de respaw
+
+
+SALVANDO O SERVER
+
+Salva o personagemJogador
+
+ - atualiza as informações dele no BD
+ - atualiza o cenário em que ele está
+ - exclui os itens que possuia no bd
+ - insere os itens que possui
+
+ 
