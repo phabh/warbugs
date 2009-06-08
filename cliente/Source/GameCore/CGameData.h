@@ -8,6 +8,8 @@ class CGameData
 
 private:
 
+	bool _gameLoaded;
+
 	IrrlichtDevice  *_dispositivo; 
 	IVideoDriver    *_gerenciadorVideo; 
 	ISceneManager   *_gerenciadorCena; 
@@ -32,5 +34,6 @@ public:
 				  *dataGeometryProps[NUMPROPS];   // Malha animada 3D dos objetos estáticos do cenário
 
 	CGameData(IrrlichtDevice *grafico);
+	bool isDataLoaded();
 	void loadStage(int stage);
 };

@@ -2,6 +2,7 @@
 
 CGameData::CGameData(IrrlichtDevice *grafico)
 {
+	_gameLoaded = false;
 	porcentagem = 0.0f;
 	_dataLoaded = 0;
 
@@ -12,6 +13,11 @@ CGameData::CGameData(IrrlichtDevice *grafico)
 	_gerenciadorHud   = _dispositivo->getGUIEnvironment(); // Cria o gerenciador de menu
 
 	_totalLoading = /*NUMCENARIOS*8 +*/ NUMMENUHUDS + NUM2DOBJS + NUM3DPERS*2 + NUM3DITENS*2;// + NUMPROPS*2;
+}
+
+bool CGameData::isDataLoaded()
+{
+	return _gameLoaded;
 }
 
 void CGameData::loadStage(int stage)
@@ -90,7 +96,10 @@ void CGameData::loadStage(int stage)
 			dataTxHuds[i] = _gerenciadorVideo->getTexture(pathTextureHud[i]);
 			_dataLoaded++;
 			porcentagem = _dataLoaded/_totalLoading*100.00f;
-		}	          
+		}
+
+		_gameLoaded = true;
+
 		break;
 	};
 
