@@ -30,10 +30,11 @@ ref class CFrame
 			_idCenario = -1;
 		}
 
-		CFrame(bool toAll, CBugSocket * socket, CBugMessage  & mes, int idCenario)
+		CFrame(bool toAll, CBugSocket * socket, CBugMessage mes, int idCenario)
 		{
 			_toAll	= toAll;
 			_socket = socket;
+			//_message = &mes;
 			_data   = new char[1400];
 			_message = new CBugMessage();
 			_message->init(_data,1400);
@@ -54,7 +55,7 @@ typedef System::Collections::ArrayList CBufferFrame;
 
 ref class CCoreServer
 {
-				CCenarioList	* _cenarioList;
+
 				CBugSocketServer* _networkServer;
 				CDataBase       * _db;
 				CDataManager    * _dataManager;
@@ -75,6 +76,9 @@ ref class CCoreServer
 				bool              _serverStarted;
 				
 	public:
+
+				CCenarioList	* _cenarioList;
+
 						CCoreServer(CDataBase * db);	//Construtor
 
 		void			initialize();					//inicializará todo o server
