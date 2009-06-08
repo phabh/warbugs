@@ -34,15 +34,24 @@ private:
 	CPortal *_saidaSul;
 	CPortal *_saidaLeft;
 	CPortal *_saidaRight;
+
+	Raca _lealdadeNecessaria;
+	int _quantidadeNecessaria;
 public:
 
-	CCenario(int ID, CPeopleList *players, CPeopleList *monsters, CPeopleList *npcs, CPeopleList *vendedores, CBolsaList *bolsa, CPortal *saidaNorte, CPortal *saidaSul, CPortal *saidaLeft, CPortal *saidaRight);
-	void enterScene();
+	CCenario(int ID, CPeopleList *players, CPeopleList *monsters, CPeopleList *npcs, CPeopleList *vendedores, CBolsaList *bolsa, CPortal *saidaNorte, CPortal *saidaSul, CPortal *saidaLeft, CPortal *saidaRight);	
+	bool isSceneFull();
+	bool haveLoyaltyRequired(CPersonagemJogador *jogador);
 	int playerCount();
 	int bagCount();
 	int monsterCount();
 	int NPCCount();
 	int salesmanCount();
+
+	CPeopleList *getPlayerList();
+	CPeopleList *getMonsterList();
+	CPeopleList *getNPCList();
+	CPeopleList *getSalesmanList();
 
 	CPersonagemJogador *getPlayer(int idJogador);
 	CInimigo *getMonster(int idInimigo);
@@ -56,9 +65,14 @@ public:
 	CBolsa *getBagAt(int pos);
 	CVendedor *getSalesmanAt(int pos);
 
-	CPortal *getExit(Direcoes idPortal);
+	CPortal *getExit(TypeDirecao idPortal);
+	Raca getRaceNeeded();
+	int getRaceNeededAsInt();
+	int getLoyaltyRequired();
 
-	void setExit(CPortal *newExit, Direcoes idPortal);
+	void setExit(CPortal *newExit, TypeDirecao idPortal);
+	void setRaceNeeded(Raca race);
+	void setLoyaltyRequired(int value);
 
 	void addPlayer(CPersonagem *jogador);
 	void addMonster(CPersonagem *inimigo);

@@ -4,7 +4,6 @@
 #include "commom.h"
 #include "CDataBase.h"
 #include "CDataManager.h"
-//#include <CDoubleList.h>
 #include <CCenario.h>
 #include <CBugSocket.h>
 #include <CPersonagemJogador.h>
@@ -62,12 +61,21 @@ ref class CCoreServer
 				CPlayerList     * _playersList;
 
 				int               _fps;
-//				CTimer            _time;
+
+				int               _lastTimeSaveAll;
+				int               _intervalTimeSaveAll;
+
+				int               _lastTimeSaveMarket;
+				int               _intervalTimeSaveMarket;
+
+				int               _intervalTimePing;
+				int               _beginTimePing;
+				int               _toleranceMaxPing;
 
 				bool              _serverStarted;
 				
 	public:
-						CCoreServer(CDataBase * db, int fps);	//Construtor
+						CCoreServer(CDataBase * db);	//Construtor
 
 		void			initialize();					//inicializará todo o server
 
@@ -82,6 +90,22 @@ ref class CCoreServer
 		void            updateAll();
 
 		void			sendAllMessages();
+
+		void			setIntervalTimeSaveAll(int timeInHour);
+		void			setIntervalTimeSaveMarket(int timeInMinutes);
+		void			setIntervalTimePing(int timeInSeconds);
+		void            setBeginTimePing(int timeInSeconds);
+		void			setToleranceMaxPing(int timeInSeconds);
+		void			setFPS(int fps);
+
+		int				getIntervalTimeSaveAll();
+		int				getLastTimeSaveAll();
+		int				getIntervalTimeSaveMarket();
+		int				getLastTimeSaveMarket();
+		int				getIntervalTimePing();
+		int				getBeginTimePing();
+		int				getToleranceMaxPing();
+		int				getFPS();
 
 		void            backupAll();
 
