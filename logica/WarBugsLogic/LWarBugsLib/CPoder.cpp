@@ -138,7 +138,124 @@ void CPoder::strike(CPersonagemJogador *user, int level)
 		user->getStats()->addPM(1);
 	}
 }
-//void CPoder
+void CPoder::piercingShot(CPersonagemJogador * user, int level)
+{
+	CBuff *temp;
+	switch(level)
+	{
+	case 0:
+		break;
+	case 1:
+		temp = new CBuff(BUFF_PIERCESHOT, 10*FPS, user, 5, 2,0);
+		break;
+	case 2:
+		temp = new CBuff(BUFF_PIERCESHOT, 10*FPS, user, 7, 3,0);
+		break;
+	case 3:
+		temp = new CBuff(BUFF_PIERCESHOT, 10*FPS, user, 10, 5,0);
+		break;
+	case 4:
+		temp = new CBuff(BUFF_PIERCESHOT, 10*FPS, user, 15, 7,0);
+		break;
+	case 5:
+		temp = new CBuff(BUFF_PIERCESHOT, 10*FPS, user, 30, 10,0);
+		break;
+	}
+	user->getBuffs()->addBuff(temp, user);
+}
+void CPoder::stunningShot(CPersonagemJogador *user, CPersonagem *target, int level)
+{
+	CBuff *temp;
+	if(user->getStats()->addPM(-5)&&(user->getStats()->getChargeTime() >= 20))
+	{
+		switch(level)
+		{
+		case 0:
+			break;
+		case 1:
+			temp = new CBuff(BUFF_STUN, 5*FPS, user, user->getDES(),0,0);
+			break;
+		case 2:
+			temp = new CBuff(BUFF_STUN, 7*FPS, user, user->getDES()+1,0,0);
+			break;
+		case 3:
+			temp = new CBuff(BUFF_STUN, 7*FPS, user, user->getDES()+5,0,0);
+			break;
+		case 4:
+			temp = new CBuff(BUFF_STUN, 7*FPS, user, user->getDES()+7,0,0);
+			break;
+		case 5:
+			temp = new CBuff(BUFF_STUN, 7*FPS, user, user->getDES()+10,0,0);
+			break;
+		}
+		target->getBuffs()->addBuff(temp, target);
+	}
+	else
+	{
+		user->getStats()->addPM(5);
+	}
+}
+void CPoder::numbingOnion(CPersonagemJogador *user, CPersonagem *target, int level)
+{
+	CBuff *temp;
+	CPeopleList *player = user->getScene()->getPlayerList();
+	CPeopleList *monster = user->getScene()->getMonsterList();
+	CPeopleList *npc = user->getScene()->getNPCList();
+	CPeopleList *salesman = user->getScene()->getSalesmanList();
+	switch(level)
+	{
+	case 0:
+		break;
+	case 1:
+		temp = new CBuff(BUFF_ATORDOADO, 1*FPS, user, 3,0,0);
+		break;
+	case 2:
+		temp = new CBuff(BUFF_ATORDOADO, 1*FPS, user, 5,0,0);
+		break;
+	case 3:
+		temp = new CBuff(BUFF_ATORDOADO, 1*FPS, user, 5,3,0);
+		break;
+	case 4:
+		temp = new CBuff(BUFF_ATORDOADO, 1*FPS, user, 5,3,0);
+		break;
+	case 5:
+		temp = new CBuff(BUFF_ATORDOADO, 1*FPS, user, 5,5,0);
+		break;
+	}
+	for(int i = 0; max(max(player->size(), monster->size()),max(npc->size(), salesman->size())); i = i + 1)
+	{
+		if(i < player->size())
+			if(user->getDistanceToPoint(player->getElementAt(i)->getPosition()) <= 10*METRO)
+			{
+				player->getElementAt(i)->getBuffs()->addBuff(temp, player->getElementAt(i));
+			}
+		if(i < monster->size())
+			if((user->getDistanceToPoint(monster->getElementAt(i)->getPosition()) <= 10*METRO)&&(monster->getElementAt(i)->getSceneID() != user->getSceneID()))
+			{
+				monster->getElementAt(i)->getBuffs()->addBuff(temp, player->getElementAt(i));
+			}
+		if(i < npc->size())
+			if(user->getDistanceToPoint(npc->getElementAt(i)->getPosition()) <= 10*METRO)
+			{
+				npc->getElementAt(i)->getBuffs()->addBuff(temp, player->getElementAt(i));
+			}
+		if(i < salesman->size())
+			if(user->getDistanceToPoint(salesman->getElementAt(i)->getPosition()) <= 10*METRO)
+			{
+				salesman->getElementAt(i)->getBuffs()->addBuff(temp, player->getElementAt(i));
+			}
+	}
+	temp = NULL;
+	player = NULL;
+	monster = NULL;
+	npc = NULL;
+	salesman = NULL;
+	delete temp;
+	delete player;
+	delete monster;
+	delete npc;
+	delete salesman;
+}
 void CPoder::stealItem(CPersonagem *user, CPersonagem *target)
 {
 	if(user->getStats()->addPM(-10)&&(user->getStats()->getChargeTime() >= 40))

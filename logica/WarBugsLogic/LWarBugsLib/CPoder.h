@@ -27,7 +27,9 @@ private:
 	static void berserkTornado(CPersonagemJogador *user, int level);
 	static void ariete(CPersonagemJogador *user, CPersonagem *target, int level);
 	static void strike(CPersonagemJogador *user, int level);
-	//static void 
+	static void piercingShot(CPersonagemJogador *user, int level);
+	static void stunningShot(CPersonagemJogador *user, CPersonagem *target, int level);
+	static void numbingOnion(CPersonagemJogador *user, CPersonagem *target, int level);
 
 	static void stealItem(CPersonagem *user, CPersonagem *target);
 	static void breakItem(CPersonagem *user, CPersonagem *target);
