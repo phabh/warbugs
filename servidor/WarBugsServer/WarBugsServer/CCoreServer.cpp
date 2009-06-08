@@ -146,7 +146,7 @@ void CCoreServer::readPackets()
 		_playersList->getElementAt(indexJogador)->getSocket()->ReceiveLine(mesRecebida);
 		//_playersList->getElementAt(indexJogador)->getSocket()->ReceiveLine(mesRecebida);
 		
-		tipoMensagem = 0;
+		tipoMensagem = -1;
 
 		mesRecebida.beginReading();
 		tipoMensagem = mesRecebida.readByte();	
@@ -190,8 +190,11 @@ void CCoreServer::readPackets()
 								sendMessage(false,-1,_playersList->getElementAt(p)->getSocket(),(int)DISCONNECT);
 								String ^ tempString = gcnew String(login);
 								WarBugsLog::_log->Items->Add(L"Houve duplicidade de login para o jogador de login "+tempString);
+								_playersList->getElementAt(indexJogador)->getSocket()->Close();
+								_playersList->getElementAt(p)->getSocket()->Close();
+								indexJogador = _playersList->getElementAt(indexJogador)->getID();
 								_playersList->removeJogadorAt(p);
-								_playersList->removeJogadorAt(indexJogador);								
+								_playersList->removeJogador(indexJogador);
 								return;
 							}
 						}
@@ -1299,7 +1302,7 @@ void CCoreServer::readPackets()
 
 }
 
-void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, CBugMessage & mes)
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, CBugMessage &mes)
 {
 	CFrame ^ frame = gcnew CFrame(toAll, destino, mes, idCenario);
 
@@ -1650,7 +1653,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino,  
 	mes.writeInt(p1->getState());
 
 	mes.writeFloat(p1->getMoveSpeed());
-	mes.writeInt(p1->getDirection());    //INT de 0 a 7 que são os quadrantes em volta do personagem
+	mes.writeInt((int)p1->getDirection());    //INT de 0 a 7 que são os quadrantes em volta do personagem
 
 	mes.writeInt(idWeapon);
 	mes.writeInt(idArmor);
@@ -1901,8 +1904,6 @@ void CCoreServer::sendMessagesFrame(CPlayerList * cList)
 	while(_buffer->Count > 0)
 	{
 		frame = (CFrame ^)_buffer[0];
-		_buffer->RemoveAt(0);
-
 		if(frame)
 		{
 			//se for mensagem para todos
@@ -1924,9 +1925,11 @@ void CCoreServer::sendMessagesFrame(CPlayerList * cList)
 						}
 					}
 					else //mensagem para todos de um cenário especifico
+					if(cList->getElementAt(index)->isPlaying())
 					if(frame->_idCenario == cList->getElementAt(index)->getScene()->getID())
 					{
-						try{
+						try
+						{
 							cList->getElementAt(index)->getSocket()->SendLine(*frame->_message);
 						}
 						catch(...)
@@ -1948,8 +1951,17 @@ void CCoreServer::sendMessagesFrame(CPlayerList * cList)
 					System::String ^ texto = L"Não foi possivel mandar a mensagem!";
 					WarBugsLog::_log->Items->Add(texto);
 				}
+
+				//disconecta o cliente caso a mensagem seja de disconect
+				frame->_message->beginReading();
+
+				if(frame->_message->readByte() == DISCONNECT)
+				{
+					frame->_socket->Close();
+				}
 			}
 		}
+		_buffer->RemoveAt(0);
 	}
 }
 

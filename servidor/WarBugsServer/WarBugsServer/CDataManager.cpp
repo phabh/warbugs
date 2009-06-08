@@ -254,6 +254,7 @@ CPersonagem * CDataManager::getPersonagem(int id)
 		personagem->getStats()->setRangedAttack(dado[9]);
 		personagem->getStats()->setRangedDamage(dado[10]);
 
+		personagem->setState(E_PARADO);
 	}
 
 	return personagem;

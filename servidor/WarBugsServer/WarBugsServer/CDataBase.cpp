@@ -40,6 +40,8 @@ bool CDataBase::connectNow(char *host, char *bd, char *user, char *password)
 	_user      = user;
 	_password  = password;
 	_connected = mysql_real_connect(_connection,host,user,password,bd,0,NULL,0) != NULL;
+	System::String ^ temp = gcnew System::String(mysql_error(_connection));
+	WarBugsLog::_log->Items->Add(L"Erro: "+temp);
 	return (_connected);
 }
 
