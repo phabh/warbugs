@@ -35,7 +35,7 @@ public:
 	//Obter persoangens
 	CPersonagem			* getPersonagem(int id);
 	CPeopleList           getPersonagemJogador(int idJogador);
-	CPeopleList			  getPersonagem(int idTipoPersonagem, int idRaca, bool personagemBase);
+	CPeopleList			* getPersonagem(int idTipoPersonagem, int idRaca, bool personagemBase);
 	CPeopleList			  getPersonagem(int idTipoPersonagem, int idRaca);
 	CPeopleList			* getPersonagem(int idTipoPersonagem, int idRaca, int idCenario);
 	
@@ -47,14 +47,17 @@ public:
 	//Obter Cenarios
 	CCenarioList  * getListCenario();
 	int				getCenarioId(int idPersonagem, int idJogador);
+	int				getCenarioId(Raca race);
 
 	//Portal
-	CPortal * getPortal(int idCenario, Direcoes direcao);
+	CPortal * getPortal(int idCenario, TypeDirecao direcao);
 
 	//Obter Bolsa
 	CBolsa      * getBolsa(int id);
-	CBolsa		  getBolsaPersonagem(int idPersonagem);
-	CBolsa		  getBolsaTipoItem(int Tipo);
+	CBolsa      * getBolsaPersonagem(int idPersonagem);
+	CBolsa      * getItensInimigo(int idInimigo);
+	CBolsa      * getItensNPC(int idNPC);
+	CBolsa      * getItensVendedor(int idVendedor);
 	CBolsaList  * getListBolsa(int idCenario);
 
 	//Obtem Jogador
@@ -75,6 +78,7 @@ public:
 	//Personagem
 	void updatePersonagem(int id, float posX, float posZ);
 	void updatePersonagem(int id, int nivel, int xp);
+	void updatePersonagem(CPersonagem * p1);
 	void updatePersonagemJogador(CPersonagemJogador * p1);
 
 	//Bolsa
@@ -83,6 +87,9 @@ public:
 	//Inserções
 	bool insertPersonagemJogador(CPersonagemJogador * p1, int idJogador);
 	void insertPersonagem(CPeopleList p1);
+	CItem * relacionaItemPersonagem(int idPersonagem, int idItem);
+	void insereItemRelacional(CItem * item, int idPersonagem, int iddeCenario);
+	void insereItemRelacional(CItem * item, int idBolsa);
 
 	//deletes
 	bool deletePersonagemJogador(int idJogador, int idPersoangem, char * nomePersonagem);

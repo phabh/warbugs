@@ -10,8 +10,6 @@
 #ifndef _CWEAPON_H_
 #define _CWEAPON_H_
 
-#define MAXMELEERANGE 10
-
 #include "CItem.h"
 #include "CScroll.h"
 

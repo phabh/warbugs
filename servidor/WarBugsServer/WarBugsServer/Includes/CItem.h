@@ -28,7 +28,7 @@ private:
 public:
 
 	CItem();
-	TypeItens getNome();
+	TypeItens getBaseID();
 	EstadoItem getEstado();
 	int getEstadoAsInt();
 	TipoItem getType();
@@ -37,7 +37,7 @@ public:
 	int getDurability();
 	bool isDropable();
 	//CPersonagem getOwner(){}
-	void setNome(TypeItens novoNome);
+	void setBaseID(TypeItens valor);
 	void setEstado(EstadoItem novoEstado);
 	void setType(TipoItem tipo);
 	void setPrice(int novoPreco);

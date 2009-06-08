@@ -33,8 +33,6 @@ class CBuff : public CWarBugObject
 {
 private:
 	int _duracao;
-	int _indiceImagem;
-	int _indiceEfeito;
 	bool _badBuff;
 	TipoBuff _tipoBuff;
 	CPersonagem *_causador;
@@ -45,12 +43,12 @@ private:
 public:
 
 	CBuff();
-	CBuff(TipoBuff tipo, int dur, /*int img, int efc,*/ CPersonagem *origem, int val1 = 0, int val2 = 0, int val3 = 0);
+	CBuff(TipoBuff tipo, int dur, CPersonagem *origem, int val1 = 0, int val2 = 0, int val3 = 0);
 	TipoBuff getTipo();
 	int getTipoAsInt();
 	int getDuration();
 	void setDuration(int newDuration);
-	void addDuration(int newDuration);
+	void addDuration(int valor);
 	void addBuff(CBuffList * lista, CPersonagem *alvo);
 	void remove(CPersonagem *alvo);
 	void execute(CPersonagem *jogador, CBuffList *lista);
