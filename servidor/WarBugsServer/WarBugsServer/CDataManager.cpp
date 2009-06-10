@@ -151,6 +151,9 @@ CPersonagem * CDataManager::getPersonagem(int id)
 
 					personagem->setRace(r);
 
+					//TESTE
+					//((CInimigo *) personagem)->setDestino(personagem->getPosition()->x,personagem->getPosition()->z);
+
 				}
 				else
 				{
