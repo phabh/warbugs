@@ -37,6 +37,8 @@ public:
 	void die();
 	void useItem(CItem *item);
 
+	void setDestino(float x, float z);
+
 	void update();
 };
 #endif

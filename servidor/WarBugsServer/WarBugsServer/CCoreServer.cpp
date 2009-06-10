@@ -385,6 +385,7 @@ void CCoreServer::readPackets()
 							for(int p = 0; p < _cenarioList->getElementAt(posCenario)->monsterCount(); p++)
 							{
 								CInimigo * tempInimigo = _cenarioList->getElementAt(posCenario)->getMonsterAt(p);
+								//tempInimigo->setTarget(_playersList->getElementAt(indexJogador)->getCharacter());
 
 								if(tempInimigo == NULL)
 								{
@@ -1597,7 +1598,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino,  
 	mes.writeByte(idMensagem);
 
 	mes.writeInt(p1->getSceneID());
-	mes.writeString(nome);
+	//mes.writeString(nome);
 	mes.writeFloat(p1->getPosition()->x);
 	mes.writeFloat(p1->getPosition()->z);
 	mes.writeInt(p1->getStats()->getPV());
@@ -1702,6 +1703,22 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 	}
 
 	sendMessage(toAll, idCenario, destino, mes);	
+}
+
+void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, float f1, float f2, float f3)
+{
+	char data[1400];
+	CBugMessage mes;
+	mes.init(data,sizeof(data));
+
+	mes.writeByte(idMensagem);
+
+	mes.writeInt(i1);
+	mes.writeFloat(f1);
+	mes.writeFloat(f2);
+	mes.writeFloat(f3);
+
+	sendMessage(toAll, idCenario, destino, mes);
 }
 
 
