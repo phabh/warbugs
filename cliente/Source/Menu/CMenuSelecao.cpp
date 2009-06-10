@@ -157,31 +157,6 @@ void CMenuSelecao::readCommands()
 
 	_menuCamera->setRotation(vector3df(0, _camCurrRotation, 0));
 
-	if(_gerEventos->isMouseButtonReleased(MBLEFT))
-	{
-		// Clique com o botao esquerdo
-		/*
-		if(_menuFlag[OBJSELECTED])
-		{
-		_menuFlag[OBJSELECTED] = false; // Drop 3D
-		_menuFlag[HUDUPDATED] = false;
-		}
-		else
-		{
-		_idChar = -1;
-
-		_nodeChar = _gerCena->getSceneCollisionManager()->getSceneNodeFromScreenCoordinatesBB(_dispGrafico->getCursorControl()->getPosition());
-
-		if (_nodeChar)
-		_idChar = _nodeChar->getID();
-
-		if(_idChar > 0)
-		{
-		_menuFlag[OBJSELECTED] = true; // Get 3D
-		_menuFlag[HUDUPDATED] = false;
-		}
-		}	*/	
-	}
 }
 
 //-----------------------------------------------------------------------------------------------------------------

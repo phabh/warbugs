@@ -36,35 +36,21 @@ bool CMenuJogo::start(CGameCore *gameCore)
 
 	_gameCore->getAllManagers(_dispGrafico, _dispAudio, _gerEventos, _gerCena, _gerVideo, _gerHud, _gameConfig);
 
-	//_gameCore->loadGameScene(pathCenario[GAMESCENE_01]);
-
-	_menuCamera = gameCore->createCamera( vector3df(0,0,0), vector3df(0,0,100), vector3df(0,0,0), 0, 179.0f,true/*, false*/);
-
 	_gameCore->playMusic(pathBackgroundSound[MM_JOGO]);
 
 	_myID = _nextID = MN_JOGO;
 
 	for(int i=0; i<NUMFLAGSMENU; i++)
-		_menuFlag[i] = true;
+		_menuFlag[i] = false;
 
 	_menuFlag[OBJSELECTED] = false;
 	_menuFlag[HUDUPDATED]  = false;
 	_menuFlag[ALERTON]     = false;
 
-	_gameCore->createLight(_menuCamera, vector3df(0,0,0), 1200.0f);
-
-
-
-	//_empty->setPosition(_gameCore->_myPlayerChar->_modelo->getPosition());
-
-	//_menuCamera->setParent(_empty);
-	
-	//_menuCamera->setTarget(_empty->getAbsolutePosition());
-
-
 	//_toonShader = new CToonShader(_dispGrafico, luz);
 
-
+	_menuCamera = gameCore->createCamera( vector3df(0,0,0), vector3df(0,0,100), vector3df(0,0,0), 0, 179.0f,true/*, false*/);
+	_gameCore->createLight(_menuCamera, vector3df(0,0,0), 1200.0f);
 
 
 
@@ -87,6 +73,7 @@ bool CMenuJogo::start(CGameCore *gameCore)
 
 	receivePackages();
 
+	
 
 	return (true);
 }
@@ -101,7 +88,7 @@ void CMenuJogo::updateHuds()
 
 
 	// Criar janela de mini mapa
-	_mapWindow = _gerHud->addWindow(rect<s32>(0, 0, 200, 220), false, L"Mini Mapa"); 
+	_mapWindow = _gerHud->addWindow(rect<s32>(_gameCore->sWidth-205, 5, _gameCore->sWidth-5, 205), false, L"Mini Mapa"); 
 	_mapWindow->getCloseButton()->setEnabled(false); 
 	_mapWindow->getCloseButton()->setToolTipText(L""); 
 	_mapWindow->getCloseButton()->setVisible(false);
@@ -140,8 +127,8 @@ void CMenuJogo::updateHuds()
 
 	_statWindow->setVisible(_menuFlag[STATUSON]);
 
-	_gerHud->addButton(rect<s32>(440,500,540,540), 0, 8, L"Sair");
-	_gerHud->addButton(rect<s32>(0,0,20,20), 0, 9, L"Config");
+	_gerHud->addButton(rect<s32>(440,700,540,740), 0, 8, L"Sair");
+	/*_gerHud->addButton(rect<s32>(0,0,20,20), 0, 9, L"Config");
 
 	_gerHud->addButton(rect<s32>(0+40,0,20+40,20), 0, 10, L"Inventario");
 	_gerHud->addButton(rect<s32>(0+80,0,20+80,20), 0, 11, L"Status");
@@ -159,14 +146,14 @@ void CMenuJogo::updateHuds()
 
 	_gerHud->addScrollBar(true, rect<s32>(50,80,50+50,80+20), _cfgWindow, 20);
 	_gerHud->addStaticText(L"Anti-Aliasing", rect<s32>(50+60, 80, 50+80, 80+20), false, false, _cfgWindow, 21, true);
-
+*/
 
 	// Elementos GUI da janela de minimapa
-	IGUIButton *btnMiniMapa = _gerHud->addButton(rect<s32>(0,20,200,220), _mapWindow, 30);
+	IGUIButton *btnMiniMapa = _gerHud->addButton(rect<s32>(0,20, 200, 220), _mapWindow, 30);
 	btnMiniMapa->setIsPushButton(true);
 
-	btnMiniMapa->setPressedImage(_gerVideo->getTexture("recursos/texturas/minimapa.png"));
-	btnMiniMapa->setImage(_gerVideo->getTexture("recursos/texturas/louva_lider.jpg"));
+	btnMiniMapa->setImage(_gerVideo->getTexture("recursos/texturas/minimapa.png"));
+	btnMiniMapa->setPressedImage(_gerVideo->getTexture("recursos/texturas/louva_lider.jpg"));
 
 	if(_menuFlag[MAPAON])
 	{
@@ -192,13 +179,24 @@ void CMenuJogo::updateHuds()
 	{
 	}
 
+	
+		
+
 	_roleta = new CHudRoleta( 
-		rect<s32>(600, 400, 800, 600),  // Area da roleta
+		rect<s32>(_gameCore->sWidth-210,_gameCore->sHeight-210, _gameCore->sWidth-10, _gameCore->sHeight-10),  // Area da roleta
 		_gerHud,						 // Gerenciador de Hud
 		_gerHud->getRootGUIElement(), // Raiz do gerenciador de Hud 
 		_gerVideo->getTexture("recursos/huds/roleta.png"),   
 		_gerVideo->getTexture("recursos/huds/ponteiro.png")
 		);
+
+
+	for (u32 i=0; i<EGDC_COUNT ; ++i)
+	{
+		SColor col = _gerHud->getSkin()->getColor((EGUI_DEFAULT_COLOR)i);
+		col.setAlpha(100);
+		_gerHud->getSkin()->setColor((EGUI_DEFAULT_COLOR)i, col);
+	}
 
 	_menuFlag[HUDUPDATED] = true;
 }
@@ -231,9 +229,10 @@ void CMenuJogo::readCommands()
 			}
 		}
 		else
-		{/*
+		{
 		 // Não é clique de botão
 
+		 //_gameCore->_myPlayerChar->
 		 _idInimigo = -1;
 		 _nodoSelecionado = _gerCena->getSceneCollisionManager()->getSceneNodeFromScreenCoordinatesBB(_dispGrafico->getCursorControl()->getPosition());
 
@@ -257,8 +256,7 @@ void CMenuJogo::readCommands()
 			_raio = _gerCena->getSceneCollisionManager()->getRayFromScreenCoordinates(_posClick, _menuCamera);
 
 
-
-			if(_gerCena->getSceneCollisionManager()->getCollisionPoint(_raio, _selector, _targetPosition, _trianguloCapt))
+			if(_gerCena->getSceneCollisionManager()->getCollisionPoint(_raio, _gameCore->_sceneTris, _targetPosition, _trianguloCapt))
 			{
 			//_targetPosition = desiredPosition;
 			_gerVideo->setTransform(ETS_WORLD, matrix4());
@@ -266,16 +264,23 @@ void CMenuJogo::readCommands()
 			_gerVideo->draw3DTriangle(_trianguloCapt, SColor(0,255,0,0));
 			} 
 			else
-			_targetPosition = _modelo[0]->getPosition();
+			_targetPosition = _gameCore->_myPlayerChar->_modelo->getPosition();
 
 			cout << "\nAlvo X: " << _targetPosition.X << "\nAlvo Y: " << _targetPosition.Y << "\nAlvo Z: " << _targetPosition.Z << endl;
-			}*/
+			}
 		}
 	}
 
 	if(_gerEventos->wheelMoved())
 	{
 		_roleta->move(_gerEventos->getDeltaMouseWheelPosition());
+	}
+
+	if(_gerEventos->isKeyReleased(KEY_KEY_T))
+	{
+		// Mostrar | Esconder janela de chat
+		_menuFlag[CHATON] = !_menuFlag[CHATON];
+		_chatWindow->setVisible(_menuFlag[CHATON]);
 	}
 
 	if(_gerEventos->isKeyReleased(KEY_KEY_C))
@@ -305,7 +310,7 @@ void CMenuJogo::readCommands()
 		_menuFlag[STATUSON] = !_menuFlag[STATUSON];
 		_statWindow->setVisible(_menuFlag[STATUSON]);
 	}
-
+/*
 	if(_gerEventos->isKeyReleased(KEY_KEY_E))
 	{
 		// Mostrar | Esconder janela de equipamentos do jogador
@@ -318,37 +323,37 @@ void CMenuJogo::readCommands()
 		// Mostrar | Esconder janela de alertas ao jogador
 		_menuFlag[ALERTON] = !_menuFlag[ALERTON];
 		_alertWindow->setVisible(_menuFlag[ALERTON]);
-	}
+	}*/
 
-	/*
+/*
 	if(_gerEventos->isKeyDown(::KEY_UP))
 	{
-	_modelo[0]->setPosition(_modelo[0]->getPosition() + 
-	vector3df(cos(((_direcao)*PI)/180)*_velocidade,
-	0,
-	-sin(((_direcao)*PI)/180)*_velocidade));
+		_gameCore->_myPlayerChar->_modelo->setPosition(_modelo->getPosition() + 
+			vector3df(cos(((_direcao)*PI)/180)*_velocidade,
+			0,
+			-sin(((_direcao)*PI)/180)*_velocidade));
 	}
 
 	if(_gerEventos->isKeyDown(::KEY_DOWN))
 	{
-	_modelo[0]->setPosition(_modelo[0]->getPosition() + 
-	vector3df(cos(((_direcao+180)*PI)/180)*_velocidade,
-	0,
-	-sin(((_direcao+180)*PI)/180)*_velocidade));
+		_modelo[0]->setPosition(_modelo[0]->getPosition() + 
+			vector3df(cos(((_direcao+180)*PI)/180)*_velocidade,
+			0,
+			-sin(((_direcao+180)*PI)/180)*_velocidade));
 	}
 
-	if(_gerEventos->isKeyDown(::KEY_LEFT))
+	if(_gerEventos->isKeyReleased(::KEY_LEFT))
 	{
-	_direcao-=1;
-	_modelo[0]->setRotation(vector3df(0.f, _direcao, 0.f));
+		_direcao-=1;
+		_modelo[0]->setRotation(vector3df(0.f, _direcao, 0.f));
 	}
 
-	if(_gerEventos->isKeyDown(::KEY_RIGHT))
+	if(_gerEventos->isKeyReleased(::KEY_RIGHT))
 	{
-	_direcao+=1;
-	_gameCore->_myPlayerChar->setRotation(vector3df(0.f, _direcao, 0.f));
+		_direcao+=1;
+		_gameCore->_myPlayerChar->setRotation(vector3df(0.f, _direcao, 0.f));
 	}
-	*/
+*/
 
 	// ROTACOES DA CAMERA
 	if(_gerEventos->isKeyDown(KEY_NUMPAD2))
@@ -400,6 +405,8 @@ void CMenuJogo::graphicsDrawAddOn()
 	_gerVideo->setTransform(ETS_WORLD, matrix4());
 	_gerVideo->setMaterial(_material);
 	_gerVideo->draw3DTriangle(_trianguloCapt, SColor(0,255,0,0));
+
+	_gameCore->contourAll(_gerCena->getRootSceneNode());
 }
 
 //-----------------------------------------------------------------------------------------------------------------

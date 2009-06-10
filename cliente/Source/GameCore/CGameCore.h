@@ -128,11 +128,11 @@ private:
 	SQuadrante _portal[MAXPORTAIS];
 
 	ITerrainSceneNode *_sceneTerrain;
-	ITriangleSelector* _sceneTris;
+	
 
 public:
 
-	
+	ITriangleSelector* _sceneTris;
 
 	ICameraSceneNode *_gameCamera;
 

@@ -257,7 +257,7 @@ void CGameCore::getAllManagers(IrrlichtDevice*&dispGrafico, ISoundEngine*&dispAu
 	gerCena     = _gerenciadorCena;
 	gerVideo    = _gerenciadorVideo; 
 	gerHud      = _gerenciadorHud;
-	gameCfg     = _gameConfig = _fileCfg->loadConfig();;
+	gameCfg     = _gameConfig = _fileCfg->loadConfig();
 
 	gerCena->clear(); // Limpa toda a cena do jogo
 	dispAudio->removeAllSoundSources(); // Remove todos os sons pendentes
@@ -330,7 +330,10 @@ void CGameCore::loadGameScene(c8* sceneFile)
 	{
 	_sceneTerrain = (ITerrainSceneNode*)_gerenciadorCena->getSceneNodeFromType(ESNT_TERRAIN, 0);
 
-	_sceneTris = _sceneTerrain->getTriangleSelector();
+	_sceneTris = _gerenciadorCena->createTerrainTriangleSelector(_sceneTerrain, 0);
+		//createTerrainTriangleSelector (_sceneTerrain->getTriangleSelector();
+
+	_sceneTerrain->setTriangleSelector(_sceneTris); 
 	}
 }
 
@@ -826,18 +829,25 @@ int CGameCore::receberPacote()
 
 	short buffs;
 
+	float x, z;
+
 	int potencia;
+
+	int i;
 
 	CPersonagem *personagem = new CPersonagem();
 
 	_packageReceived.clear();
+
 	_gameSocket->ReceiveLine(_packageReceived);
 
 	if(_packageReceived.getSize() != 0) // Se o pacote não extiver vazio
 	{
 		_packageReceived.beginReading();
 
-		switch(_packageReceived.readByte()) // Lê o byte de identificação do pacote
+		i = (int)_packageReceived.readByte();
+
+		switch(i) // Lê o byte de identificação do pacote
 		{
 
 		case SHOW_PERSONAGENS: // CODIGO: MOSTRAR PERSONAGENS DO JOGADOR
@@ -869,19 +879,23 @@ int CGameCore::receberPacote()
 				_myStructChar[i]._idHud = _packageReceived.readInt();
 
 				_myChar[i] = _gerenciadorCena->addAnimatedMeshSceneNode( getMAnimMesh(_myStructChar[i]._idModelo), 0, _myStructChar[i]._id );
+				_myChar[i]->setMaterialFlag(EMF_LIGHTING, false);
+				_myChar[i]->setMaterialTexture(0, _gerenciadorVideo->getTexture(pathTextureModels[_myStructChar[i]._idTextura]));
+				
+
 			//	_toonShader->apply( _myChar[i], pathTextureModels[_myStructChar[i]._idTextura] );
 				_myChar[i]->setAnimationSpeed(5);
 
 				switch (i)
 				{
 				case 0:
-					_myChar[i]->setPosition(vector3df(-10,0,30));
-					_myChar[i]->setRotation(vector3df(0,80,0));
+					_myChar[i]->setPosition(vector3df(-10,-5,30));
+					_myChar[i]->setRotation(vector3df(0,-10,0));
 					break;
 
 				case 1:
-					_myChar[i]->setPosition(vector3df(10,0,30));
-					_myChar[i]->setRotation(vector3df(0,100,0));
+					_myChar[i]->setPosition(vector3df(10,-5,30));
+					_myChar[i]->setRotation(vector3df(0,20,0));
 					break;
 				};
 			}
@@ -915,19 +929,22 @@ int CGameCore::receberPacote()
 		case  UPDATE_POSITION: // CODIGO: ATUALIZA A POSIÇÃO DE UM PERSONAGEM
 
 			personagem = _listaPersonagens->getElement(_packageReceived.readInt());
-			personagem->_posicao = upd3DPosition(_packageReceived.readFloat(), _packageReceived.readFloat());
+
+			x = _packageReceived.readFloat();		
+			z = _packageReceived.readFloat();
+			personagem->_posicao = upd3DPosition(x,z);
 			personagem->_modelo->setPosition(personagem->_posicao);
 			personagem->_direcao = _packageReceived.readInt(); 
 			
-			cout << "\nPosição de personagem atualizada." << endl;
+			//cout << "\nPosição de personagem atualizada." << endl;
 
 			break;
 
 		case ADD_PERSONAGEM: // CODIGO: INSERÇÃO DE PERSONAGEM NO CENÁRIO
 
 			personagem->_id = _packageReceived.readInt();
-			personagem->_nome = new char[30];
-			strcpy(personagem->_nome, _packageReceived.readString());
+			//personagem->_nome = new char[30];
+			//strcpy(personagem->_nome, _packageReceived.readString());
 			personagem->_posicao = upd3DPosition(_packageReceived.readFloat(), _packageReceived.readFloat());
 
 			personagem->_pv = _packageReceived.readInt();
@@ -968,7 +985,7 @@ int CGameCore::receberPacote()
 			personagem->_idBaseArmadura = _packageReceived.readInt();
 
 			addPersonagem(personagem);
-			Sleep(1);
+			//Sleep(1);
 
 			break;
 
@@ -1046,7 +1063,7 @@ int CGameCore::receberPacote()
 		case  END_FRAME: // CODIGO: FINAL DE UM CICLO DE PACOTES
 			
 			retorno = FINAL_PACOTES;
-			cout << "\nEnd-Frame." << endl;
+			//cout << "\nEnd-Frame." << endl;
 
 			break;
 
@@ -1089,13 +1106,15 @@ int CGameCore::receberPacote()
 
 			break;
 
-		default: // CODIGO: MENSAGEM NÃO IDENTIFICADA, DESCONECTAR
+		default: 
+			cout << "\n i:" << i << endl;
+			break;// CODIGO: MENSAGEM NÃO IDENTIFICADA, DESCONECTAR
 
-			cout << "\nMensagem desconhecida do servidor." << endl;
-			enviarPacote(DISCONNECT);
-			_gameSocket->Close();
-			_connected = false;
-			retorno = ERRO_SAIR;
+			//cout << "\nMensagem desconhecida do servidor." << endl;
+			//enviarPacote(DISCONNECT);
+			//_gameSocket->Close();
+			//_connected = false;
+			//retorno = ERRO_SAIR;
 		};
 	}
 	else // CODIGO: SERVIDOR NÃO RESPONDE

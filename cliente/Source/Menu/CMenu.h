@@ -9,7 +9,6 @@ class CMenu
 protected:
 
 	CGameCore *_gameCore;
-//	CGameScene *_gameScene;
 
 	IrrlichtDevice  *_dispGrafico; 
 	ISoundEngine    *_dispAudio;
@@ -28,12 +27,13 @@ protected:
 	virtual void readCommands() = 0;
 	virtual void updateGraphics() = 0;
 	virtual void graphicsDrawAddOn() = 0;
+	virtual void receivePackages() = 0;
 	
 
 public:
 
 	CMenu(){}
-	void receivePackages(){};
+	
 	bool start(CGameCore *gameCore);
 	TypeMenuID run();
 };
