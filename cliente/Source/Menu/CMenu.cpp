@@ -22,7 +22,7 @@ TypeMenuID CMenu::run()
 		{
 			_gerEventos->endEventProcess(); // Desativa a escuta de eventos para desenhar.
 
-			_gerVideo->beginScene(true, true, SColor(255, 0, 0, 0));
+			_gerVideo->beginScene(true, true, SColor(255, 255, 255, 255));
 			_gerCena->drawAll(); 
 			_gerHud->drawAll();
 			graphicsDrawAddOn();

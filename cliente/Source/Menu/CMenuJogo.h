@@ -16,6 +16,8 @@ private:
 
 	//ITriangleSelector* _selector;
 
+	int _idInimigo;
+
 	ICameraSceneNode *_menuCamera;
 	
 	bool _combate;
@@ -56,6 +58,7 @@ private:
 	triangle3df _trianguloCapt;
 	position2di _posClick;
 	line3df _raio;
+
 	ISceneNode *_nodoSelecionado;
 	vector3df _targetPosition;
 
