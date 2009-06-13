@@ -19,7 +19,7 @@ class CVendedor : public CPersonagem
 private:
 	int _meta;
 	int _restanteMeta;
-	int _metaRateada;
+	int _porcentagem;
 	int _tempoSemVender;
 	int _tecnicaDeMercado;
 	Ponto *_ancora;

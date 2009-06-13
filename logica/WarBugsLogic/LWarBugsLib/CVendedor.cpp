@@ -122,15 +122,15 @@ void CVendedor::setLeftToGoal()
 		_restanteMeta = _restanteMeta + stockValue(inventario->getElementAt(i));
 	}
 	_restanteMeta = _restanteMeta + getMoney();
-	_metaRateada = _restanteMeta/inventario->size();
+	_porcentagem = _meta/_restanteMeta;
 }
 int CVendedor::getSellingPrice(CItem *item)
 {
-	return(stockValue(item)*_metaRateada);
+	return(stockValue(item)*_porcentagem);
 }
 int CVendedor::getBuyPrice(CItem *item)
 {
-	return((mercado->_precoBase[(int)item->getType()]/2)+(mercado->_precoBase[(int)item->getType()]+((item->getDurability()-mercado->_MEDIANADURABILIDADE)/100))+(mercado->_precoBase[(int)item->getType()]+((normalizeDemand((int)item->getType())-mercado->_MEDIANADEMANDA)/100))+((normalizeOffer((int)item->getType())-mercado->_MEDIANAOFERTA)/100)+(_tecnicaDeMercado * _restanteMeta));
+	return(stockValue(item)*_porcentagem/2);
 }
 int CVendedor::getFinalPriceSell(CItem *item, CPersonagemJogador *jogador)
 {
