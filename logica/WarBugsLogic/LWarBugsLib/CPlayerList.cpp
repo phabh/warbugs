@@ -1,5 +1,15 @@
 #include "CPlayerList.h"
 
+void CPlayerList::removeCharFromScene(SPlayerElemento *element)
+{
+	if(element->valor->getCharacter() != NULL)
+	{
+		if(element->valor->getCharacter()->getScene() != NULL)
+		{
+			CPersonagem *temp = element->valor->getCharacter()->getScene()->getPlayerList()->removeScenePersonagem(element->valor->getCharacter()->getSceneID());
+		}
+	}
+}
 CPlayerList::CPlayerList(void)
 {
 	setID(-1);
@@ -63,6 +73,7 @@ CJogador *CPlayerList::removeJogadorAt(int pos)
 		//Se for o primeiro
 		if(temp->prev == NULL)
 		{
+			removeCharFromScene(temp);
 			_first = temp->next;
 			temp->next = NULL;
 			_size = _size - 1;
@@ -71,6 +82,7 @@ CJogador *CPlayerList::removeJogadorAt(int pos)
 		//Se for o último
 		else if(temp->next == NULL)
 		{
+			removeCharFromScene(temp);
 			(temp->prev)->next = NULL;
 			temp->prev = NULL;
 			_size = _size - 1;
@@ -78,6 +90,7 @@ CJogador *CPlayerList::removeJogadorAt(int pos)
 		}
 		else
 		{
+			removeCharFromScene(temp);
 			(temp->prev)->next = temp->next;
 			(temp->next)->prev = temp->prev;
 			temp->next = NULL;
@@ -113,6 +126,7 @@ CJogador *CPlayerList::removeJogador(int ID)
 			{
 				(temp->prev)->next = NULL;
 			}
+			removeCharFromScene(temp);
 			_size = _size - 1;
 			return(temp->valor);
 		}
@@ -131,6 +145,7 @@ CJogador *CPlayerList::removeJogador(int ID)
 			_first->next = (temp->next)->next;
 			_first->prev = NULL;
 		}
+		removeCharFromScene(temp);
 		_size = _size - 1;
 		return(temp->valor);
 	}

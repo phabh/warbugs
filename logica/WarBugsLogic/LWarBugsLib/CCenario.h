@@ -38,6 +38,7 @@ private:
 	Raca _lealdadeNecessaria;
 	int _quantidadeNecessaria;
 public:
+	bool matrizDeCaminhamento[50][50];
 
 	CCenario(int ID, CPeopleList *players, CPeopleList *monsters, CPeopleList *npcs, CPeopleList *vendedores, CBolsaList *bolsa, CPortal *saidaNorte, CPortal *saidaSul, CPortal *saidaLeft, CPortal *saidaRight);	
 	bool isSceneFull();

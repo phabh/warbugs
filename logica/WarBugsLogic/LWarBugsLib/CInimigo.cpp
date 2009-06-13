@@ -42,36 +42,60 @@ void CInimigo::takeDecision()
 	switch((clock()%8))
 	{
 	case 0:
-		destino->x = destino->x - QUADRANTESIZE;
-		destino->z = destino->z + QUADRANTESIZE;
+        if((destino->x >= getMoveSpeed())&&(destino->z <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed())))
+        {
+			destino->x = destino->x - TAMQUADRANTE;
+		    destino->z = destino->z + TAMQUADRANTE;
+        }
 		break;
 	case 1:
-		destino->x = destino->x;
-		destino->z = destino->z + QUADRANTESIZE;
+        if(destino->z <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed()))
+        {
+            destino->x = destino->x;
+		    destino->z = destino->z + TAMQUADRANTE;
+        }
 		break;
 	case 2:
-		destino->x = destino->x + QUADRANTESIZE;
-		destino->z = destino->z + QUADRANTESIZE;
+        if((destino->x <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed()))&&(destino->z <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed())))
+        {
+		    destino->x = destino->x + TAMQUADRANTE;
+		    destino->z = destino->z + TAMQUADRANTE;
+        }
 		break;
 	case 3:
-		destino->x = destino->x - QUADRANTESIZE;
-		destino->z = destino->z;
+        if(destino->x >= getMoveSpeed())
+        {
+            destino->x = destino->x - TAMQUADRANTE;
+		    destino->z = destino->z;
+        }
 		break;
 	case 4:
-		destino->x = destino->x + QUADRANTESIZE;
-		destino->z = destino->z;
+        if(destino->x <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed()))
+        {
+            destino->x = destino->x + TAMQUADRANTE;
+		    destino->z = destino->z;
+        }
 		break;
 	case 5:
-		destino->x = destino->x - QUADRANTESIZE;
-		destino->z = destino->z - QUADRANTESIZE;
+        if((destino->x >= getMoveSpeed())&&(destino->z >= getMoveSpeed()))
+        {
+		    destino->x = destino->x - TAMQUADRANTE;
+		    destino->z = destino->z - TAMQUADRANTE;
+        }
 		break;
 	case 6:
-		destino->x = destino->x;
-		destino->z = destino->z - QUADRANTESIZE;
+        if(destino->z >= getMoveSpeed())
+        {
+            destino->x = destino->x;
+		    destino->z = destino->z - TAMQUADRANTE;
+        }
 		break;
 	case 7:
-		destino->x = destino->x + QUADRANTESIZE;
-		destino->z = destino->z - QUADRANTESIZE;
+        if((destino->x <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed()))&&(destino->z >= getMoveSpeed()))
+        {
+            destino->x = destino->x + TAMQUADRANTE;
+		    destino->z = destino->z - TAMQUADRANTE;
+        }
 		break;
 	}
 }
