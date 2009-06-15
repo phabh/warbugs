@@ -91,6 +91,8 @@ ref class CCoreServer
 
 		static CBufferFrame ^ _buffer;
 
+		CDataManager *  getDataManager();
+
 		void            updateAll();
 
 		void			sendAllMessages();

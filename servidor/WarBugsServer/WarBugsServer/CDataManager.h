@@ -34,9 +34,8 @@ public:
 	//CONSULTAS
 	//Obter persoangens
 	CPersonagem			* getPersonagem(int id);
-	CPeopleList           getPersonagemJogador(int idJogador);
+	CPeopleList         * getPersonagemJogador(int idJogador);
 	CPeopleList			* getPersonagem(int idTipoPersonagem, int idRaca, bool personagemBase);
-	CPeopleList			  getPersonagem(int idTipoPersonagem, int idRaca);
 	CPeopleList			* getPersonagem(int idTipoPersonagem, int idRaca, int idCenario);
 	
 	//Obter Itens
@@ -47,18 +46,15 @@ public:
 	//Obter Cenarios
 	CCenarioList  * getListCenario();
 	int				getCenarioId(int idPersonagem, int idJogador);
-	int				getCenarioId(Raca race);
+	int				getCenarioVilaId(Raca race);
 
 	//Portal
 	CPortal * getPortal(int idCenario, TypeDirecao direcao);
 
 	//Obter Bolsa
-	CBolsa      * getBolsa(int id);
 	CBolsa      * getBolsaPersonagem(int idPersonagem);
-	CBolsa      * getItensInimigo(int idInimigo);
-	CBolsa      * getItensNPC(int idNPC);
-	CBolsa      * getItensVendedor(int idVendedor);
 	CBolsaList  * getListBolsa(int idCenario);
+	CBolsa      * getBolsaDrop(int TipoPersonagem, int Raca, int qtdItensMaxima);
 
 	//Obtem Jogador
 	CJogador getJogador(char * login);
@@ -72,12 +68,13 @@ public:
 	long  novoIdItens();
 	int   qtdPersonagemJogador(int idJogador);
 	System::String ^ pointFormat(System::String ^ d1);
+	void  getInformacaoVendedor(int idVendedor, System::Collections::ArrayList ^ capital, System::Collections::ArrayList ^ meta, System::Collections::ArrayList ^ tempo, System::Collections::ArrayList ^lua, System::DateTime periodoInicial, System::DateTime periodoFinal);
+	bool  atualizaCoeficientesMercado(int Kr, int Kd, int Ko, int Kl, int Kt);
+	void  getCoeficientesMercado(int &Kr, int &Kd, int &Ko, int &Kl, int &Kt);
 
 
 	//ATUALIZAÇÕES
 	//Personagem
-	void updatePersonagem(int id, float posX, float posZ);
-	void updatePersonagem(int id, int nivel, int xp);
 	void updatePersonagem(CPersonagem * p1);
 	void updatePersonagemJogador(CPersonagemJogador * p1);
 
@@ -86,7 +83,6 @@ public:
 
 	//Inserções
 	bool insertPersonagemJogador(CPersonagemJogador * p1, int idJogador);
-	void insertPersonagem(CPeopleList p1);
 	CItem * relacionaItemPersonagem(int idPersonagem, int idItem);
 	void insereItemRelacional(CItem * item, int idPersonagem, int iddeCenario);
 	void insereItemRelacional(CItem * item, int idBolsa);

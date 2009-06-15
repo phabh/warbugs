@@ -45,4 +45,19 @@ Salva o personagemJogador
  - exclui os itens que possuia no bd
  - insere os itens que possui
 
+Salva o Inimigo
+
+ - exclui os itens que possuia no bd
+ - insere os itens que possui
+
+Salva o Vendedor
+
+ - exclui os itens que possuia no bd
+ - insere os itens que possui
+
+Salva o Soldado
+
+ - exclui os itens que possuia no bd
+ - insere os itens que possui
+
  
