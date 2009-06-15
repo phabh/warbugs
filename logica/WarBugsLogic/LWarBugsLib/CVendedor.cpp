@@ -51,7 +51,7 @@ CVendedor::CVendedor(EstadoPersonagem estado, int dinheiro, CBolsa *inventario, 
 	setBaseBonus(new CBonusPrimario());
 	setBuffs(new CBuffList());
 }
-void init()
+void CVendedor::init()
 {
 	mercado->init();
 }
@@ -224,6 +224,7 @@ void CVendedor::buy(CPersonagemJogador *vendedor, CItem *item)
 		vendedor->addMoney(preco);
 		this->addMoney((-1)*preco);
 		getBolsa()->addItem(item);
+		plusOffer(item->getType());
 	}
 }
 void CVendedor::sell(CPersonagemJogador *comprador, CItem *item)
@@ -235,6 +236,7 @@ void CVendedor::sell(CPersonagemJogador *comprador, CItem *item)
 		comprador->addMoney((-1)*preco);
 		this->addMoney(preco);
 		comprador->getBolsa()->addItem(item);
+		plusDemand(item->getType());
 	}	
 }
 bool CVendedor::tryAttack()
