@@ -24,7 +24,6 @@ class CPersonagem
 
 private:
 
-	SQuadrante _listaQuadrante[AREABUSCA];
 	SQuadrante _quadranteFinal;
 	SQuadrante _quadranteSeguinte;
 	CTree Memoria;

@@ -14,7 +14,7 @@ CGameCore::CGameCore(int &startInit)
 	_myCharSceneID = -1;
 	_myMapSceneID = -1;
 
-	
+
 
 	_particleCount = 0;
 
@@ -25,7 +25,7 @@ CGameCore::CGameCore(int &startInit)
 
 	//_fileCfg->reset();
 
-	
+
 
 	_gameConfig = _fileCfg->loadConfig();
 
@@ -85,9 +85,9 @@ CGameCore::CGameCore(int &startInit)
 
 	_fileMtx = new CArquivoMatrizes();
 	//_fileMtx->reset();
-/*
+	/*
 	for(int i = 0; i < CS_COUNT; i++)
-		_cutScene[i] = CVideoTexture::createVideoTexture(_dispositivoGrafico, pathCutScene[i]);*/
+	_cutScene[i] = CVideoTexture::createVideoTexture(_dispositivoGrafico, pathCutScene[i]);*/
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -328,12 +328,12 @@ void CGameCore::loadGameScene(c8* sceneFile)
 
 	if(_myMapSceneID >=0)
 	{
-	_sceneTerrain = (ITerrainSceneNode*)_gerenciadorCena->getSceneNodeFromType(ESNT_TERRAIN, 0);
+		_sceneTerrain = (ITerrainSceneNode*)_gerenciadorCena->getSceneNodeFromType(ESNT_TERRAIN, 0);
 
-	_sceneTris = _gerenciadorCena->createTerrainTriangleSelector(_sceneTerrain, 0);
+		_sceneTris = _gerenciadorCena->createTerrainTriangleSelector(_sceneTerrain, 0);
 		//createTerrainTriangleSelector (_sceneTerrain->getTriangleSelector();
 
-	_sceneTerrain->setTriangleSelector(_sceneTris); 
+		_sceneTerrain->setTriangleSelector(_sceneTris); 
 	}
 }
 
@@ -417,7 +417,7 @@ void CGameCore::addBolsa(int idBolsa, float posX, float posZ)
 
 	bolsa->_idBolsa = idBolsa;
 	bolsa->posicao = upd3DPosition(posX, posZ);
-	
+
 	_listaBolsas->addElement(bolsa, bolsa->_idBolsa);
 }
 
@@ -432,7 +432,7 @@ void CGameCore::addPersonagem( CPersonagem *personagem )
 	personagem->_modelo->setMaterialFlag(EMF_LIGHTING, false);
 	personagem->_modelo->setMaterialTexture(0, _gerenciadorVideo->getTexture(pathMtxCharsTextures[r][c]));
 	personagem->_modelo->setPosition(personagem->_posicao);
-	
+
 	_listaPersonagens->addElement(personagem, personagem->getId());
 
 	if(personagem->getId() == _myCharSceneID)
@@ -599,7 +599,7 @@ void CGameCore::initToonShader()
 	if(_luz!= NULL && _dispositivoGrafico != NULL)
 		_toonShader = new CToonShader(_dispositivoGrafico, _luz);
 }
-			
+
 //--------------------------------------------------------------------------------------
 
 IAnimatedMesh* CGameCore::getMAnimMesh(int idMesh)
@@ -633,6 +633,111 @@ int CGameCore::getNumCharSlots()
 vector3df CGameCore::upd3DPosition(float posX, float posZ)
 {
 	return vector3df(posX, _sceneTerrain->getHeight(posX, posZ), posZ);
+}
+
+//--------------------------------------------------------------------------------------
+
+int CGameCore::manhattan(int linhaO, int colunaO, int linhaD, int colunaD)
+{
+	int deltaL, deltaC;
+
+	deltaL = abs(linhaD - linhaO);
+	deltaC = abs(colunaD - colunaO);
+
+	return deltaL + deltaC;
+}
+
+//--------------------------------------------------------------------------------------
+
+int CGameCore::pathfindingRTA(CPersonagem *personagem)
+{
+
+	vector3df origem = personagem->_posicao;
+	vector3df destino = personagem->_destino;
+
+	int direcaoProximoPasso = -1;
+
+	int idQuadSucessor = -1;
+
+	int idQuadOrigem  = getQuadID(origem);
+	int idQuadDestino = getQuadID(destino);
+
+	int melhorVizinho1 = -1;
+	int melhorVizinho2 = -1;
+
+	int lin_o, col_o, lin_d, col_d;
+
+	int custoFuncao[8];
+
+	int custoVizinho, menorCusto1, menorCusto2;
+
+	menorCusto1 = 9999999;
+	menorCusto2 = 9999999;
+
+	int custoAdjacencia = 0;
+
+
+	getQuadLinhaColuna(idQuadDestino, lin_d, col_d);
+
+	for (int i = 0; i < 8; i++)
+	{
+
+		getQuadLinhaColuna(idQuadOrigem, lin_o, col_o);
+
+
+		switch (i)
+		{
+		default:
+		case 0: col_o +=  0; lin_o +=  1; custoAdjacencia = 1; break;  // Norte
+		case 1: col_o +=  1; lin_o +=  1; custoAdjacencia = 2; break;  // Nordeste
+		case 2: col_o +=  1; lin_o +=  0; custoAdjacencia = 1; break;  // Leste
+		case 3: col_o +=  1; lin_o += -1; custoAdjacencia = 2; break;  // Sudeste
+		case 4: col_o +=  0; lin_o += -1; custoAdjacencia = 1; break;  // Sul
+		case 5: col_o += -1; lin_o += -1; custoAdjacencia = 2; break;  // Sudoeste
+		case 6: col_o += -1; lin_o +=  0; custoAdjacencia = 1; break;  // Oeste
+		case 7: col_o += -1; lin_o +=  1; custoAdjacencia = 2; break;  // Noroeste
+		}
+
+		if (_cenario[lin_o][col_o].isPassable)
+		{
+			idQuadSucessor = getQuadID(lin_o, col_o); // pega indice do quadrante vizinho  
+
+			Folha lembranca = personagem->memoria.busca(idQuadSucessor); // procura na memória o indice do sucessor
+
+			if (lembranca == NULL)
+				custoFuncao[i] = manhattan(lin_o, col_o, lin_d, col_d) + custoAdjacencia;
+			else
+				custoFuncao[i] = lembranca.heuristica + custoAdjacencia;
+
+
+			if (custoFuncao[i] < menorCusto1)
+			{
+				melhorVizinho2 = melhorVizinho1;
+				menorCusto2 = menorCusto1; // atualiza o segundo menor
+
+				melhorVizinho1 = idQuadSucessor;
+				menorCusto1 = custoFuncao[i];
+				direcaoProximoPasso = i;
+			}
+
+		}
+		else
+			custoFuncao[i] = 9999999;
+	}
+
+	if (melhorVizinho2 == -1) // se teve apenas uma opção de movimento, segundo menor = menor de todos
+	{
+		melhorVizinho2 = melhorVizinho1;
+		menorCusto2 = menorCusto1;
+	}
+
+	if (melhorVizinho2 != -1) // se teve alguma opção de movimento
+		personagem->memoria.guardar(idQuadOrigem, menorCusto2);
+
+	if(idQuadDestino == melhorVizinho1)
+		personagem->memoria.clear();
+
+	return direcaoProximoPasso;
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -881,9 +986,9 @@ int CGameCore::receberPacote()
 				_myChar[i] = _gerenciadorCena->addAnimatedMeshSceneNode( getMAnimMesh(_myStructChar[i]._idModelo), 0, _myStructChar[i]._id );
 				_myChar[i]->setMaterialFlag(EMF_LIGHTING, false);
 				_myChar[i]->setMaterialTexture(0, _gerenciadorVideo->getTexture(pathTextureModels[_myStructChar[i]._idTextura]));
-				
 
-			//	_toonShader->apply( _myChar[i], pathTextureModels[_myStructChar[i]._idTextura] );
+
+				//	_toonShader->apply( _myChar[i], pathTextureModels[_myStructChar[i]._idTextura] );
 				_myChar[i]->setAnimationSpeed(5);
 
 				switch (i)
@@ -903,7 +1008,7 @@ int CGameCore::receberPacote()
 			break;
 
 		case ENTER_CENARIO: // CODIGO: ENTROU EM UM CENÁRIO COM SUCESSO.
-			
+
 
 			_myMapSceneID  = _packageReceived.readInt();
 			loadGameScene(pathCenario[_myMapSceneID]);
@@ -911,7 +1016,7 @@ int CGameCore::receberPacote()
 			_myCharSceneID = _packageReceived.readInt();
 
 			updMapPortals(_packageReceived.readInt(), _packageReceived.readInt(), _packageReceived.readInt(), _packageReceived.readInt());
-			
+
 			cout << "\nPersonagem entrou no cenário." << endl;
 
 			break;
@@ -935,7 +1040,7 @@ int CGameCore::receberPacote()
 			personagem->_posicao = upd3DPosition(x,z);
 			personagem->_modelo->setPosition(personagem->_posicao);
 			personagem->_direcao = _packageReceived.readInt(); 
-			
+
 			//cout << "\nPosição de personagem atualizada." << endl;
 
 			break;
@@ -975,11 +1080,11 @@ int CGameCore::receberPacote()
 			personagem->_raca = _packageReceived.readInt();
 			personagem->_classe = _packageReceived.readInt();
 			personagem->_estado = _packageReceived.readInt();
-			
+
 			personagem->_ultimoEstado = personagem->_estado;
 
 			personagem->_velAnim = _packageReceived.readFloat();
-		
+
 			personagem->_direcao = _packageReceived.readInt();
 			personagem->_idBaseArma = _packageReceived.readInt();
 			personagem->_idBaseArmadura = _packageReceived.readInt();
@@ -1004,7 +1109,7 @@ int CGameCore::receberPacote()
 			break;
 
 		case SCENE_FULL: // CODIGO: FALHA AO ENTRAR NO CENÁRIO. CAPACIDADE MÁXIMA ATINGIDA.
-			
+
 			cout << "\nO cenário de destino atingiu a capacidade máxima." << endl;
 
 			break;
@@ -1018,13 +1123,13 @@ int CGameCore::receberPacote()
 			break;
 
 		case NO_LOYALTY: // CODIGO: FALHA AO ENTRAR NO CENÁRIO. FALTA LEALDADE.
-			
+
 			cout << "\nSeu personagem não possui lealdade suficiente para entrar nesse cenário." << endl;
 
 			break;
 
 		case PORTAL_FAIL: // CODIGO: FALHA AO CARREGAR O NOVO CENÁRIO. 
-			
+
 			enviarPacote(DISCONNECT);
 			_gameSocket->Close();
 			_connected = false;
@@ -1061,7 +1166,7 @@ int CGameCore::receberPacote()
 			break;
 
 		case  END_FRAME: // CODIGO: FINAL DE UM CICLO DE PACOTES
-			
+
 			retorno = FINAL_PACOTES;
 			//cout << "\nEnd-Frame." << endl;
 
@@ -1096,7 +1201,7 @@ int CGameCore::receberPacote()
 
 			break;
 
-			case  DISCONNECT: // CODIGO: RECEBEU DISCONNECT DO SERVIDOR
+		case  DISCONNECT: // CODIGO: RECEBEU DISCONNECT DO SERVIDOR
 
 			cout << "\nO servidor te desconectou." << endl;
 			//enviarPacote(DISCONNECT);
