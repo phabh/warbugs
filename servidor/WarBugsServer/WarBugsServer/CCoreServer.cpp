@@ -228,7 +228,7 @@ void CCoreServer::readPackets()
 
 						int idJogador = mesRecebida.readInt();
 						
-						CPeopleList * tempList = &_dataManager->getPersonagemJogador(idJogador);
+						CPeopleList * tempList = _dataManager->getPersonagemJogador(idJogador);
 
 						if(tempList->size() > 0)
 						{
@@ -2015,4 +2015,9 @@ void CCoreServer::backupAll()
 		// 5.1 Atualiza a Localização de todos os Personagens
 
 	//
+}
+
+CDataManager * CCoreServer::getDataManager()
+{
+	return _dataManager;
 }
