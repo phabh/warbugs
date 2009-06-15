@@ -405,3 +405,27 @@ bool CGerEventos::OnEvent(const SEvent& event)
 	}	
 	return false;
 }
+
+bool CGUIEnvironment::isDoubleClick(const SEvent& event, u32 time)
+   {
+     bool result = false;
+      if (time - DoubleClick.Time < DoubleClick.Speed
+        && event.MouseInput.X == DoubleClick.X
+        && event.MouseInput.Y == DoubleClick.Y)
+     {
+        result = true;
+        DoubleClick.Time = 0; // reset
+      } else {
+        DoubleClick.Time = time;
+     }
+
+     DoubleClick.X = event.MouseInput.X;
+     DoubleClick.Y = event.MouseInput.Y;
+ 
+    return result;
+}
+
+//! Sets the double-click speed in milliseconds.
+void CGUIEnvironment::setDoubleClickSpeed(u32 speed) {
+     DoubleClick.Speed = speed;
+} 
