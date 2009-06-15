@@ -41,7 +41,7 @@ CPersonagem * CDataManager::getPersonagem(int id)
 	
 	if(numRegs == 0 || numCampos == 0)
 	{
-		String ^texto = L"Não foi encontrado nenhum Personagem com este id = "+id;
+		String ^texto = L"getPersonagem(int id): Não foi encontrado nenhum Personagem com este id = "+id;
 		WarBugsLog::_log->Items->Add(texto);		
 		return NULL;	
 	}
@@ -296,7 +296,7 @@ CPeopleList * CDataManager::getPersonagemJogador(int idJogador)
 	
 	if(numRegs == 0 || numCampos == 0)
 	{
-		String ^texto = L"Não foi encontrado nenhum Personagem para o jogador = "+idJogador;
+		String ^texto = L"getPersonagemJogador(int idJogador): Não foi encontrado nenhum Personagem para o jogador = "+idJogador;
 		WarBugsLog::_log->Items->Add(texto);		
 		return Lista;	
 	}
@@ -371,7 +371,7 @@ CPeopleList * CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, bool
 	
 	if(numRegs == 0 || numCampos == 0)
 	{
-		String ^texto = L"Não foi encontrado o Persoangem de Tipo"+idTipoPersonagem;
+		String ^texto = L"getPersonagem(int idTipoPersonagem, int idRaca, bool personagemBase): Não foi encontrado o Persoangem de Tipo"+idTipoPersonagem;
 		WarBugsLog::_log->Items->Add(texto);		
 		return Lista;	
 	}
@@ -439,7 +439,7 @@ CPeopleList * CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int 
 
 	if(numRegs == 0 || numCampos == 0)
 	{
-		String ^texto = L"Não foi encontrado o Tipo de Personagem "+idTipoPersonagem+" no cenário "+idCenario;
+		String ^texto = L"getPersonagem(int idTipoPersonagem, int idRaca, int idCenario): Não foi encontrado o Tipo de Personagem "+idTipoPersonagem+" no cenário "+idCenario;
 		WarBugsLog::_log->Items->Add(texto);		
 		return tempList;	
 	}
@@ -516,7 +516,7 @@ CItem * CDataManager::getItem(int id)
 	
 	if(numRegs == 0 || numCampos == 0)
 	{
-		String ^texto = L"Não foi encontrado nenhum Personagem com este id = "+id;
+		String ^texto = L"getItem(int id): Não foi encontrado nenhum Personagem com este id = "+id;
 		WarBugsLog::_log->Items->Add(texto);		
 		return NULL;	
 	}
@@ -734,7 +734,7 @@ CWeapon * CDataManager::getWeaponEquiped(int idPersonagem)
 
 	if(numRegs == 0 || numCampos == 0)
 	{
-		String ^texto = L"Não foi encontrado o equipamento do Personagem "+idPersonagem;
+		String ^texto = L"getWeaponEquiped(): Não foi encontrado o equipamento do Personagem "+idPersonagem;
 		WarBugsLog::_log->Items->Add(texto);		
 		arma = new CWeapon();
 		arma->setID(-1);
@@ -816,7 +816,7 @@ CArmor * CDataManager::getArmorEquiped(int idPersonagem)
 
 	if(numRegs == 0 || numCampos == 0)
 	{
-		String ^texto = L"Não foi encontrado a Armadura do Personagem "+idPersonagem;
+		String ^texto = L"getArmorEqiuped(): Não foi encontrado a Armadura do Personagem "+idPersonagem;
 		WarBugsLog::_log->Items->Add(texto);		
 		armadura = new CArmor();
 		armadura->setID(-1);
