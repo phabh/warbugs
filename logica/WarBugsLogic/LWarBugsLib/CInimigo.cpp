@@ -28,6 +28,8 @@ CInimigo::CInimigo()
 }
 void CInimigo::takeDecision()
 {
+	int tempLinha = 0, tempColuna = 0;
+	Ponto *tempPos = new Ponto();
 	for(int i = 0; i < cenario->playerCount(); i = i + 1)
 	{
 		if(this->getDistanceToPoint(cenario->getPlayerAt(i)->getPosition()) <= MAXMELEERANGE)
@@ -37,66 +39,126 @@ void CInimigo::takeDecision()
 		else
 		{
 			this->setTarget(NULL);
+			tempPos->x = this->getPosition()->x;
+			tempPos->z = this->getPosition()->z;
+			this->getScene()->getQuadLinhaColuna(tempPos, tempLinha, tempColuna);
+			switch((clock()%8))
+			{
+			case 0:
+				if((tempLinha > 0)&&(tempColuna < (MAPMAXCOL-1)))
+				{
+					tempPos = this->getScene()->getQuadCenter(tempLinha-1, tempColuna+1);
+					if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+					{
+						destino = this->getScene()->getQuadCenter(tempPos);
+					}
+					else
+					{
+						destino = this->getPosition();
+					}
+				}
+				break;
+			case 1:
+				if(tempColuna < (MAPMAXCOL-1))
+				{
+					tempPos = this->getScene()->getQuadCenter(tempLinha, tempColuna+1);
+					if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+					{
+						destino = this->getScene()->getQuadCenter(tempPos);
+					}
+					else
+					{
+						destino = this->getPosition();
+					}
+					
+				}
+				break;
+			case 2:
+				if((tempLinha < (MAPMAXCOL-1))&&(tempColuna < (MAPMAXCOL-1)))
+				{
+					tempPos = this->getScene()->getQuadCenter(tempLinha+1, tempColuna+1);
+					if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+					{
+						destino = this->getScene()->getQuadCenter(tempPos);
+					}
+					else
+					{
+						destino = this->getPosition();
+					}
+				}
+				break;
+			case 3:
+				if(tempLinha > 0)
+				{
+					tempPos = this->getScene()->getQuadCenter(tempLinha-1, tempColuna);
+					if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+					{
+						destino = this->getScene()->getQuadCenter(tempPos);
+					}
+					else
+					{
+						destino = this->getPosition();
+					}
+				}
+				break;
+			case 4:
+				if(tempLinha < (MAPMAXCOL-1))
+				{
+					tempPos = this->getScene()->getQuadCenter(tempLinha+1, tempColuna);
+					if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+					{
+						destino = this->getScene()->getQuadCenter(tempPos);
+					}
+					else
+					{
+						destino = this->getPosition();
+					}
+				}
+				break;
+			case 5:
+				if((tempLinha > 0)&&(tempColuna > 0))
+				{
+					tempPos = this->getScene()->getQuadCenter(tempLinha-1, tempColuna-1);
+					if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+					{
+						destino = this->getScene()->getQuadCenter(tempPos);
+					}
+					else
+					{
+						destino = this->getPosition();
+					}
+				}
+				break;
+			case 6:
+				if(tempColuna > 0)
+				{
+					tempPos = this->getScene()->getQuadCenter(tempLinha, tempColuna-1);
+					if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+					{
+						destino = this->getScene()->getQuadCenter(tempPos);
+					}
+					else
+					{
+						destino = this->getPosition();
+					}
+				}
+				break;
+			case 7:
+				if((tempLinha < (MAPMAXCOL-1))&&(tempColuna > 0))
+				{
+					tempPos = this->getScene()->getQuadCenter(tempLinha+1, tempColuna-1);
+					if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+					{
+						destino = this->getScene()->getQuadCenter(tempPos);
+					}
+					else
+					{
+						destino = this->getPosition();
+					}
+				}
+				break;
+			}
 		}
-	}
-	switch((clock()%8))
-	{
-	case 0:
-        if((destino->x >= getMoveSpeed())&&(destino->z <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed())))
-        {
-			destino->x = destino->x - TAMQUADRANTE;
-		    destino->z = destino->z + TAMQUADRANTE;
-        }
-		break;
-	case 1:
-        if(destino->z <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed()))
-        {
-            destino->x = destino->x;
-		    destino->z = destino->z + TAMQUADRANTE;
-        }
-		break;
-	case 2:
-        if((destino->x <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed()))&&(destino->z <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed())))
-        {
-		    destino->x = destino->x + TAMQUADRANTE;
-		    destino->z = destino->z + TAMQUADRANTE;
-        }
-		break;
-	case 3:
-        if(destino->x >= getMoveSpeed())
-        {
-            destino->x = destino->x - TAMQUADRANTE;
-		    destino->z = destino->z;
-        }
-		break;
-	case 4:
-        if(destino->x <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed()))
-        {
-            destino->x = destino->x + TAMQUADRANTE;
-		    destino->z = destino->z;
-        }
-		break;
-	case 5:
-        if((destino->x >= getMoveSpeed())&&(destino->z >= getMoveSpeed()))
-        {
-		    destino->x = destino->x - TAMQUADRANTE;
-		    destino->z = destino->z - TAMQUADRANTE;
-        }
-		break;
-	case 6:
-        if(destino->z >= getMoveSpeed())
-        {
-            destino->x = destino->x;
-		    destino->z = destino->z - TAMQUADRANTE;
-        }
-		break;
-	case 7:
-        if((destino->x <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed()))&&(destino->z >= getMoveSpeed()))
-        {
-            destino->x = destino->x + TAMQUADRANTE;
-		    destino->z = destino->z - TAMQUADRANTE;
-        }
-		break;
 	}
 }
 bool CInimigo::tryAttack()
