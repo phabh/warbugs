@@ -248,7 +248,8 @@ void CCoreServer::readPackets()
 
 						int    idJogador = mesRecebida.readInt();
 						int    idRaca	 = mesRecebida.readInt();
-						char   nome[15];
+						char   nome[30];
+
 						strcpy_s(nome,sizeof(nome),mesRecebida.readString());
 						
 						if(_dataManager->qtdPersonagemJogador(idJogador) >= NUMPERSONAGEMJOGADOR) 
@@ -268,7 +269,7 @@ void CCoreServer::readPackets()
 						{
 								((CPersonagemJogador *)tempList->getElementAt(0))->setName(nome);
 
-								if(_dataManager->insertPersonagemJogador(((CPersonagemJogador *)tempList->getElementAt(0)),_playersList->getElementAt(indexJogador)->getID()))
+								if(_dataManager->insertPersonagemJogador(((CPersonagemJogador *)tempList->getElementAt(0)), idJogador))
 								{
 									sendMessage(false,-1,_playersList->getElementAt(indexJogador)->getSocket(),(int)CREATE_PLAYER_OK);
 								}
@@ -318,7 +319,7 @@ void CCoreServer::readPackets()
 						int    idJogador	 = mesRecebida.readInt();
 						int    idPersonagem	 = mesRecebida.readInt();
 
-						CPersonagem * tempPersonagem = _dataManager->getPersonagem(idPersonagem);
+						CPersonagem * tempPersonagem = _dataManager->getPersonagemJogador(idJogador, idPersonagem);
 
 						int idCenario = -1;
 						int posCenario = -1;

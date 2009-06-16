@@ -35,6 +35,7 @@ public:
 	//Obter persoangens
 	CPersonagem			* getPersonagem(int id);
 	CPeopleList         * getPersonagemJogador(int idJogador);
+	CPersonagem         * getPersonagemJogador(int idJogador, int idPersonagem);
 	CPeopleList			* getPersonagem(int idTipoPersonagem, int idRaca, bool personagemBase);
 	CPeopleList			* getPersonagem(int idTipoPersonagem, int idRaca, int idCenario);
 	
@@ -54,7 +55,7 @@ public:
 	//Obter Bolsa
 	CBolsa      * getBolsaPersonagem(int idPersonagem);
 	CBolsaList  * getListBolsa(int idCenario);
-	CBolsa      * getBolsaDrop(int TipoPersonagem, int Raca, int qtdItensMaxima);
+	CBolsa		* getBolsaDrop(int idTipoPersonagem, int idRaca, int qtdItensMaxima);
 
 	//Obtem Jogador
 	CJogador getJogador(char * login);
