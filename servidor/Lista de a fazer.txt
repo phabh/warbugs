@@ -1,0 +1,41 @@
+Verificar os Loads do Banco de dados
+
+ - Load de PersonagemJogador
+   - Na seleção de Personagens
+   - No Jogar
+
+
+ - Load de Inimigos
+ - Load de NPCs
+ - Load de Vendedores
+ - Load de Cenários
+ - Load dos itens de todos
+ - Load do Mercado
+ 
+Verificar os Saves do Banco de Dados
+
+(toda vez que ele desloga, ou cai)
+ - Save do PersonagemJogador 
+   - Salva as informações gerais
+   - O cenário em que ele está
+   - Os itens que ele possui
+
+
+(Caso o Server Caia)
+
+ - Save dos Vendedores
+   - salvar os itens que ele possui
+   - salvar variáveis de mercado que ele possui
+
+ - Save dos NPCs
+   - Itens que possui
+
+ - Save dos Inimigos
+   - Itens que possui
+ 
+ - Save as Bolsas no cenário
+
+ - Save os Mercados
+
+
+Otimizar a parte de leitura dos pacotes

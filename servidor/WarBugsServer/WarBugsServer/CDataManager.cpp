@@ -322,10 +322,6 @@ CPeopleList * CDataManager::getPersonagemJogador(int idJogador)
 		//id de cenário se torna o id do objeto
 		personagem->setID(dado);
 
-		CBolsa * tempBolsa = getBolsaPersonagem(personagem->getID());
-
-		personagem->setBolsa(tempBolsa);
-
 		Lista->addPersonagem(personagem);
 
 		for(int i = 0; i < (int)numCampos; i++)
@@ -338,6 +334,41 @@ CPeopleList * CDataManager::getPersonagemJogador(int idJogador)
 	
 }
 
+/*
+	Obtem o personagem que o jogador irá usar para jogar
+	Obs.: o id dos personagens listados são os ids de cena
+	@param idJogador -> id do jogador
+	@return -> o personagem que o jogador irá usar
+*/
+CPersonagem * CDataManager::getPersonagemJogador(int idJogador, int idPersonagem)
+{
+
+	CPeopleList * tempListJogador = getPersonagemJogador(idJogador);
+
+	if(tempListJogador->size() == 0)
+	{
+		WarBugsLog::_log->Items->Add(L"Não foi possivel obter o Personagem do Jogador!");
+		return NULL;	
+	}
+
+	CPersonagem * tempPersonagem;
+
+	for(int i = 0; i < tempListJogador->size(); i++)
+	{
+		tempPersonagem = tempListJogador->getElementAt(i);
+		
+		if(tempPersonagem->getID() == idPersonagem)
+		{
+			i = tempListJogador->size();
+		}
+	}
+
+	CBolsa * tempBolsa = getBolsaPersonagem(tempPersonagem->getID());
+
+	tempPersonagem->setBolsa(tempBolsa);
+
+	return tempPersonagem;
+}
 
 /*
 	Obtem uma lista de personagens do tipo, raça, e se é um persoangem base
@@ -1030,6 +1061,7 @@ CBolsa * CDataManager::getBolsaPersonagem(int idPersonagem)
 		int dado[15];
 
 		dado[0] = Int32::Parse(dados[nomeCampos->IndexOf(L"ITID")]->ToString());
+
 		item = getItem(dado[0]);
 
 		int tipoItem = Int32::Parse(dados[nomeCampos->IndexOf(L"ITTIPO")]->ToString());
@@ -1640,7 +1672,6 @@ int CDataManager::qtdPersonagemJogador(int idJogador)
 	@param idJogador -> id do jogador qe quer exluir o personagem
 	@param idPersonagem -> id do personagem que será exluido
 	@param nomePersonagem -> nome Personagem que será excluido
-	
 */
 bool CDataManager::deletePersonagemJogador(int idJogador, int idPersonagem, char * nomePersonagem)
 {
@@ -1652,11 +1683,12 @@ bool CDataManager::deletePersonagemJogador(int idJogador, int idPersonagem, char
 	temp = gcnew String(nomePersonagem);
 
 
-	query = L"DELETE FROM JOGADOR_PERSONAGEM JP"
-			+" USING JOGADOR_PERSONAGEM JP, PERSONAGEM P"
+	query = L"DELETE FROM JOGADOR_PERSONAGEM JP "+
+			+" USING JOGADOR_PERSONAGEM JP, PERSONAGEM P, PERSONAGEM_CENARIO PC "
 			+" WHERE JP.PGID = P.PGID AND JP.JDID = "+idJogador
-			+" AND P.PGID = "+idPersonagem
-			+" AND P.PGNOME = '"+temp+"'";
+			+" AND P.PGID = PC.PGID
+			+" AND PC.PCID = "+idPersonagem
+			+" AND P.PGNOME = '"+temp+"' ";
 
 	
 	String ^texto;
@@ -1664,20 +1696,22 @@ bool CDataManager::deletePersonagemJogador(int idJogador, int idPersonagem, char
 	//se não for EXCLUIDO com sucesso
 	if(_dataBase->deleteNow(toChar(query)))
 	{
-		query = L"DELETE FROM ITEM_RELACIONAL WHERE PGID = "+idPersonagem;
+		query = L"DELETE FROM ITEM_RELACIONAL WHERE PCID = "+idPersonagem;
 		
 		//se não for EXCLUIDO com sucesso
 		if(_dataBase->deleteNow(toChar(query)))
 		{
 			texto = L"Os Itens do personagem '"+temp+"' foram excluido com sucesso";
-			result = true;
 		}
 		else
 		{
 			texto = L"Não foi possivel excluir os itens do personagem '"+temp+"'.";
 		}
 
-		query = L"DELETE FROM PERSONAGEM WHERE PGID = "+idPersonagem;
+		query = L"DELETE FROM PERSONAGEM P "
+				+" USING PERSONAGEM P, PERSONAGEM_CENARIO PC "
+				+" WHERE P.PGID = PC.PGID "
+				+" AND PC.PCID = "+idPersonagem;
 		
 		//se não for inserido com sucesso
 		if(_dataBase->deleteNow(toChar(query)))
@@ -1693,13 +1727,12 @@ bool CDataManager::deletePersonagemJogador(int idJogador, int idPersonagem, char
 	}
 	else
 	{
-		texto = L"Não foi possivel exluir o personagem '"+temp+"'.";
+		texto = L"Não foi possivel exluir o personagem '"+temp+"' do jogador.";
 	}
 
 	WarBugsLog::_log->Items->Add(texto);
 
 	return result;
-
 }
 
 /*
@@ -2105,11 +2138,111 @@ int CDataManager::getCenarioVilaId(Raca race)
 	@param Raca -> a raca do personagem que irá receber a bolsa
 	@param qtdItensMaxima -> a quantidade máxima de itens que poderá ter na bolsa
 */
-CBolsa * CDataManager::getBolsaDrop(int TipoPersonagem, int Raca, int qtdItensMaxima)
+CBolsa * CDataManager::getBolsaDrop(int idTipoPersonagem, int idRaca, int qtdItensMaxima)
 {
 	CBolsa * bolsa = new CBolsa();
 
-	
+	switch(idTipoPersonagem)
+	{
+		case FILHOTE:
+			{
+				break;
+			}
+		case MAE:
+			{
+				break;
+			}
+		case LIDER:
+		case SOLDADO:
+			{
+				switch(idRaca)
+				{
+					//Raças jogáveis
+					case ARANHA:
+						{
+							break;
+						}
+					case BESOURO:
+						{
+							break;
+						}
+					case ESCORPIAO:
+						{
+							break;
+						}
+					case LOUVADEUS:
+						{
+							break;
+						}
+					case VESPA:
+						{
+							break;
+						}
+
+					//Raças ainda não jogaveis
+					case ABELHA:
+						{
+							break;
+						}
+					case BARATA:
+						{
+							break;
+						}
+					case BARBEIRO:
+						{
+							break;
+						}
+					case CALANGO:
+						{
+							break;
+						}
+					case CAMALEAO:
+						{
+							break;
+						}
+					case CUPIM:
+						{
+							break;
+						}
+					case FORMIGA:
+						{
+							break;
+						}
+					case JOANINHA:
+						{
+							break;
+						}
+					case LAGARTIXA:
+						{
+							break;
+						}
+					case LIBELULA:
+						{
+							break;
+						}
+					case PERCEVEJO:
+						{
+							break;
+						}
+					case SAPO:
+						{
+							break;
+						}
+					case TATUBOLINHA:
+						{
+							break;
+						}
+
+
+				}//fim switch Raca
+
+				break;
+			}// fim case Soldado
+		case VENDEDOR:
+			{
+				break;
+			}
+	}
 
 
     return bolsa;	
