@@ -1,5 +1,15 @@
 #include "CCenario.h"
 
+void CCenario::initMatrix()
+{
+	for(int i = 0; i < MAPMAXCOL; i = i + 1)
+	{
+		for(int j = 0; j < MAPMAXCOL; j = j + 1)
+		{
+			matrizDeCaminhamento[i][j] = NAOPASSAVEL;
+		}
+	}
+}
 CCenario::CCenario(int ID, 
 				   CPeopleList *players, 
 				   CPeopleList *monsters,
@@ -11,6 +21,7 @@ CCenario::CCenario(int ID,
 				   CPortal *saidaLeft,
 				   CPortal *saidaRight)
 {
+	initMatrix();
 	_contador = new CObjectCount();
 	this->setID(ID);
 	_jogadores = players;//Lista de personagens
@@ -277,4 +288,69 @@ void CCenario::update()
 		if(i < _npcs->size())		getNpcAt(i)->update();
 		if(i < _vendedores->size())	getSalesmanAt(i)->update();
 	}
-}	
+}
+Ponto *CCenario::getQuadCenter(int linha, int coluna)
+{
+	Ponto *center = new Ponto();
+
+	center->x = ((float)(linha * TAMQUADRANTE)) + ((float)(TAMQUADRANTE/2));
+	center->z = ((float)(coluna * TAMQUADRANTE)) + ((float)(TAMQUADRANTE/2));
+
+	return(center);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+Ponto *CCenario::getQuadCenter(int idQuad)
+{
+	int linha, coluna;
+
+	getQuadLinhaColuna(idQuad, linha, coluna);
+
+	return getQuadCenter(linha, coluna);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+Ponto *CCenario::getQuadCenter(Ponto *posicao)
+{
+	int linha, coluna;
+
+	getQuadLinhaColuna(posicao, linha, coluna);
+
+	return getQuadCenter(linha, coluna);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CCenario::getQuadLinhaColuna(Ponto *posicao, int &linha, int &coluna)
+{
+	linha  = (int)(posicao->z / TAMQUADRANTE); // TAMQUADRANTE é a dimensão de um quadrante em pixels
+	coluna = (int)(posicao->x / TAMQUADRANTE);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CCenario::getQuadLinhaColuna(int idQuad, int &linha, int &coluna)
+{
+	linha  = idQuad / MAPMAXCOL;
+	coluna = idQuad % MAPMAXCOL;
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+int CCenario::getQuadID(Ponto *posicao)
+{
+	int linha, coluna;
+
+	getQuadLinhaColuna(posicao, linha, coluna);
+
+	return getQuadID(linha, coluna);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+int CCenario::getQuadID(int linha, int coluna)
+{
+	return ( coluna + (linha * MAPMAXCOL) );
+}

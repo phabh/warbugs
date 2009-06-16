@@ -292,6 +292,9 @@ enum Moon
 #define TAMQUADRANTE 44 // 44 pixels de largura cada quadrante (ainda vou ajustar)
 #define MAPMAXCOL 50 // 50 colunas por mapa
 // ------------------------------------------------------------------------------------------------------------
+const bool PASSAVEL = true;
+const bool NAOPASSAVEL = false;
+// ------------------------------------------------------------------------------------------------------------
 //Struct pra listas
 template<class A>
 struct SCelula

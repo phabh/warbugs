@@ -190,10 +190,6 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<File
-				RelativePath=".\CLua.cpp"
-				>
-			</File>
 			<Filter
 				Name="1 - Primarias"
 				>
@@ -329,6 +325,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\CLua.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\CPortal.cpp"
 						>
 					</File>
@@ -380,10 +380,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\CLua.h"
-				>
-			</File>
 			<File
 				RelativePath=".\Enumerators.h"
 				>
@@ -528,6 +524,10 @@
 					>
 					<File
 						RelativePath=".\CCenario.h"
+						>
+					</File>
+					<File
+						RelativePath=".\CLua.h"
 						>
 					</File>
 					<File

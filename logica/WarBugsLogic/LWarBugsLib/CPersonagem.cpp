@@ -33,6 +33,7 @@ void CPersonagem::initCPersonagem()
 	//poderes = new CPoder();
 	status = new CBuffList();
 	divisorxp = new CDivisorXP(this);
+	destino = this->getPosition();
 }
 //Getters
 int CPersonagem::getLevel()
@@ -200,6 +201,8 @@ void CPersonagem::setBonus(CBonus *bonus)
 void CPersonagem::setTarget(CPersonagem *Alvo)
 {
 	alvo = Alvo;
+	if(alvo != NULL)
+		destino = alvo->getPosition();
 }
 void CPersonagem::setScene(CCenario *newScene)
 {

@@ -10,6 +10,12 @@
 #define _CVENDEDOR_CPP_
 
 #include "CVendedor.h"
+#ifndef _CCENARIO_H_
+#include "CCenario.h"
+#ifndef _CCENARIO_H_
+class CCenario;
+#endif
+#endif
 
 #ifndef _MARKET_
 #define _MARKET_
@@ -143,69 +149,130 @@ int CVendedor::getFinalPriceBuy(CItem *item, CPersonagemJogador *jogador)
 //Outros métodos
 void CVendedor::takeDecision()
 {
+	int tempLinha = 0, tempColuna = 0;
+	Ponto *tempPos = new Ponto();
 	if(this->getDistanceToPoint(_ancora) >= 100)
 	{
 		destino = _ancora;
 	}
 	else
 	{
+		tempPos->x = this->getPosition()->x;
+		tempPos->z = this->getPosition()->z;
+		this->getScene()->getQuadLinhaColuna(tempPos, tempLinha, tempColuna);
 		switch((clock()%8))
 		{
 		case 0:
-			if((destino->x >= getMoveSpeed())&&(destino->z <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed())))
+			if((tempLinha > 0)&&(tempColuna < (MAPMAXCOL-1)))
 			{
-				destino->x = destino->x - TAMQUADRANTE;
-				destino->z = destino->z + TAMQUADRANTE;
+				tempPos = this->getScene()->getQuadCenter(tempLinha-1, tempColuna+1);
+				if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+				{
+					destino = this->getScene()->getQuadCenter(tempPos);
+				}
+				else
+				{
+					destino = this->getPosition();
+				}
 			}
 			break;
 		case 1:
-			if(destino->z <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed()))
+			if(tempColuna < (MAPMAXCOL-1))
 			{
-				destino->x = destino->x;
-				destino->z = destino->z + TAMQUADRANTE;
+				tempPos = this->getScene()->getQuadCenter(tempLinha, tempColuna+1);
+				if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+				{
+					destino = this->getScene()->getQuadCenter(tempPos);
+				}
+				else
+				{
+					destino = this->getPosition();
+				}
 			}
 			break;
 		case 2:
-			if((destino->x <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed()))&&(destino->z <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed())))
+			if((tempLinha < (MAPMAXCOL-1))&&(tempColuna < (MAPMAXCOL-1)))
 			{
-				destino->x = destino->x + TAMQUADRANTE;
-				destino->z = destino->z + TAMQUADRANTE;
+				tempPos = this->getScene()->getQuadCenter(tempLinha+1, tempColuna+1);
+				if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+				{
+					destino = this->getScene()->getQuadCenter(tempPos);
+				}
+				else
+				{
+					destino = this->getPosition();
+				}
 			}
 			break;
 		case 3:
-			if(destino->x >= getMoveSpeed())
+			if(tempLinha > 0)
 			{
-				destino->x = destino->x - TAMQUADRANTE;
-				destino->z = destino->z;
+				tempPos = this->getScene()->getQuadCenter(tempLinha-1, tempColuna);
+				if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+				{
+					destino = this->getScene()->getQuadCenter(tempPos);
+				}
+				else
+				{
+					destino = this->getPosition();
+				}
 			}
 			break;
 		case 4:
-			if(destino->x <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed()))
+			if(tempLinha < (MAPMAXCOL-1))
 			{
-				destino->x = destino->x + TAMQUADRANTE;
-				destino->z = destino->z;
+				tempPos = this->getScene()->getQuadCenter(tempLinha+1, tempColuna);
+				if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+				{
+					destino = this->getScene()->getQuadCenter(tempPos);
+				}
+				else
+				{
+					destino = this->getPosition();
+				}
 			}
 			break;
 		case 5:
-			if((destino->x >= getMoveSpeed())&&(destino->z >= getMoveSpeed()))
-			{	
-				destino->x = destino->x - TAMQUADRANTE;
-				destino->z = destino->z - TAMQUADRANTE;
+			if((tempLinha > 0)&&(tempColuna > 0))
+			{
+				tempPos = this->getScene()->getQuadCenter(tempLinha-1, tempColuna-1);
+				if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+				{
+					destino = this->getScene()->getQuadCenter(tempPos);
+				}
+				else
+				{
+					destino = this->getPosition();
+				}
 			}
 			break;
 		case 6:
-			if(destino->z >= getMoveSpeed())
+			if(tempColuna > 0)
 			{
-				destino->x = destino->x;
-				destino->z = destino->z - TAMQUADRANTE;
+				tempPos = this->getScene()->getQuadCenter(tempLinha, tempColuna-1);
+				if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+				{
+					destino = this->getScene()->getQuadCenter(tempPos);
+				}
+				else
+				{
+					destino = this->getPosition();
+				}
 			}
 			break;
 		case 7:
-			if((destino->x <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed()))&&(destino->z >= getMoveSpeed()))
+			if((tempLinha < (MAPMAXCOL-1))&&(tempColuna > 0))
 			{
-			    destino->x = destino->x + TAMQUADRANTE;
-			    destino->z = destino->z - TAMQUADRANTE;
-	        }
+				tempPos = this->getScene()->getQuadCenter(tempLinha+1, tempColuna-1);
+				if(this->getScene()->matrizDeCaminhamento[tempLinha][tempColuna] == PASSAVEL)
+				{
+					destino = this->getScene()->getQuadCenter(tempPos);
+				}
+				else
+				{
+					destino = this->getPosition();
+				}
+			}
 			break;
 		}
 	}
