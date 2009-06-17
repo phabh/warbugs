@@ -55,7 +55,8 @@ public:
 	//Obter Bolsa
 	CBolsa      * getBolsaPersonagem(int idPersonagem);
 	CBolsaList  * getListBolsa(int idCenario);
-	CBolsa		* getBolsaDrop(int idTipoPersonagem, int idRaca, int qtdItensMaxima);
+	CBolsa		* getBolsaDrop(int idPersonagem, int idTipoPersonagem, int idRaca, int qtdItensMaxima);
+	CBolsa      * getBolsaInicialVendedor(int idPersonagem, int idTipoPersonagem, int idRaca, int qtdItensMaxima);
 
 	//Obtem Jogador
 	CJogador getJogador(char * login);
@@ -72,11 +73,12 @@ public:
 	void  getInformacaoVendedor(int idVendedor, System::Collections::ArrayList ^ capital, System::Collections::ArrayList ^ meta, System::Collections::ArrayList ^ tempo, System::Collections::ArrayList ^lua, System::DateTime periodoInicial, System::DateTime periodoFinal);
 	bool  atualizaCoeficientesMercado(int Kr, int Kd, int Ko, int Kl, int Kt);
 	void  getCoeficientesMercado(int &Kr, int &Kd, int &Ko, int &Kl, int &Kt);
+	void  getDropItem(int idTipoPersonagem, int idRaca, TDadosBD ^ idItem, TDadosBD ^ chanceDrop);
 
 
 	//ATUALIZAÇÕES
 	//Personagem
-	void updatePersonagem(CPersonagem * p1);
+	void updateItensPersonagem(CPersonagem * p1);
 	void updatePersonagemJogador(CPersonagemJogador * p1);
 
 	//Bolsa

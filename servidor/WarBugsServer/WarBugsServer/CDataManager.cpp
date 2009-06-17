@@ -508,7 +508,17 @@ CPeopleList * CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int 
 		{
 			if(idTipoPersonagem == SOLDADO || (idTipoPersonagem == LIDER && idRaca == FORMIGA))
 			{
-				tempBolsa = getBolsaDrop(idTipoPersonagem, idRaca, 3);
+				tempBolsa = getBolsaDrop(dado, idTipoPersonagem, idRaca, 3);
+			}
+			else
+			if(idTipoPersonagem == VENDEDOR && (idRaca == ARANHA    || 
+				                                idRaca == BESOURO   || 
+												idRaca == ESCORPIAO ||
+												idRaca == LOUVADEUS ||
+												idRaca == VESPA))
+			{
+				
+				tempBolsa = getBolsaDrop(dado, idTipoPersonagem, idRaca, 180);
 			}
 		}
 
@@ -1954,7 +1964,7 @@ void CDataManager::updatePersonagemJogador(CPersonagemJogador * p1)
 	Salva os itens dos inimigos no BD
 	@param Personagem
 */
-void CDataManager::updatePersonagem(CPersonagem * p1)
+void CDataManager::updateItensPersonagem(CPersonagem * p1)
 {
 	//atualiza o personagem
 	String ^ query;
@@ -2134,120 +2144,89 @@ int CDataManager::getCenarioVilaId(Raca race)
 
 /*
 	Retorna a Bolsa com os itens que o personagem passado pode dropar
+	@param idPersonagem -> para que possa criar a relação entre o item e o personagem
 	@param TipoPersonagem -> Tipo de personagem que irá recebr a bolsa
 	@param Raca -> a raca do personagem que irá receber a bolsa
 	@param qtdItensMaxima -> a quantidade máxima de itens que poderá ter na bolsa
 */
-CBolsa * CDataManager::getBolsaDrop(int idTipoPersonagem, int idRaca, int qtdItensMaxima)
+CBolsa * CDataManager::getBolsaDrop(int idPersonagem, int idTipoPersonagem, int idRaca, int qtdItensMaxima)
 {
 	CBolsa * bolsa = new CBolsa();
 
-	switch(idTipoPersonagem)
+	TDadosBD ^ itens = gcnew TDadosBD();
+	TDadosBD ^ porcentagem = gcnew TDadosBD();
+
+	getDropItem(idTipoPersonagem, idRaca, itens, porcentagem);
+
+	if(itens->Count == 0 || porcentagem->Count == 0)
 	{
-		case FILHOTE:
-			{
-				break;
-			}
-		case MAE:
-			{
-				break;
-			}
-		case LIDER:
-		case SOLDADO:
-			{
-				switch(idRaca)
-				{
-					//Raças jogáveis
-					case ARANHA:
-						{
-							break;
-						}
-					case BESOURO:
-						{
-							break;
-						}
-					case ESCORPIAO:
-						{
-							break;
-						}
-					case LOUVADEUS:
-						{
-							break;
-						}
-					case VESPA:
-						{
-							break;
-						}
-
-					//Raças ainda não jogaveis
-					case ABELHA:
-						{
-							break;
-						}
-					case BARATA:
-						{
-							break;
-						}
-					case BARBEIRO:
-						{
-							break;
-						}
-					case CALANGO:
-						{
-							break;
-						}
-					case CAMALEAO:
-						{
-							break;
-						}
-					case CUPIM:
-						{
-							break;
-						}
-					case FORMIGA:
-						{
-							break;
-						}
-					case JOANINHA:
-						{
-							break;
-						}
-					case LAGARTIXA:
-						{
-							break;
-						}
-					case LIBELULA:
-						{
-							break;
-						}
-					case PERCEVEJO:
-						{
-							break;
-						}
-					case SAPO:
-						{
-							break;
-						}
-					case TATUBOLINHA:
-						{
-							break;
-						}
-
-
-				}//fim switch Raca
-
-				break;
-			}// fim case Soldado
-		case VENDEDOR:
-			{
-				break;
-			}
+		WarBugsLog::_log->Items->Add(L"Não há bolsas de drop para este tipo de personagem = "+idTipoPersonagem+" com esta raça = "+idRaca);
+		return bolsa;
 	}
 
+	for(int i = 0; i < qtdItensMaxima; i++)
+	{
+		CItem * tempItem;
+		int index = Random::Next(porcentagem->Count);
+		
+		double porc = Double::Parse(porcentagem[index]->ToString());
+
+		int tempPorcentagem = (int)(100000/(1000*porc));
+		
+		// se o item foi sorteado
+		// quando tempPorcentagem for 1 o item será escolhido com certeza
+		if(Random::Next(tempPorcentagem) == 0)
+		{
+			int tempIdItem = Int32::Parse(itens[index]->ToString());
+
+			tempItem = getItem(tempIdItem);
+
+			bolsa->addItem(tempItem);
+
+			insereItemRelacional(tempItem,-1,idPersonagem);
+		}
+	
+	}
+	
 
     return bolsa;	
 }
 
+
+CBolsa * CDataManager::getBolsaInicialVendedor(int idPersonagem, int idTipoPersonagem, int idRaca, int qtdItensMaxima)
+{
+	CBolsa * bolsa = new CBolsa();
+
+	TDadosBD ^ itens = gcnew TDadosBD();
+	TDadosBD ^ porcentagem = gcnew TDadosBD();
+
+	getDropItem(idTipoPersonagem, idRaca, itens, porcentagem);
+
+	if(itens->Count == 0 || porcentagem->Count == 0)
+	{
+		WarBugsLog::_log->Items->Add(L"Não há bolsas Iniciais para este vendedor = "+idTipoPersonagem+" com esta raça = "+idRaca);
+		return bolsa;
+	}
+
+	for(int i = 0; (i < qtdItensMaxima) && (i < itens->Count); i++)
+	{
+		CItem * tempItem;
+
+		int tempIdItem = Int32::Parse(itens[i]->ToString());
+
+		tempItem = getItem(tempIdItem);
+
+		bolsa->addItem(tempItem);
+
+		insereItemRelacional(tempItem,-1,idPersonagem);
+	
+	}
+	
+
+    return bolsa;	
+
+
+}
 
 void  CDataManager::getInformacaoVendedor(int idVendedor, Collections::ArrayList ^ capital, Collections::ArrayList ^ meta, Collections::ArrayList ^ tempo, Collections::ArrayList ^lua, DateTime periodoInicial, DateTime periodoFinal)
 {
@@ -2427,4 +2406,47 @@ void  CDataManager::getCoeficientesMercado(int &Kr, int &Kd, int &Ko, int &Kl, i
 	Kl = Int32::Parse(dados[nomeCampos->IndexOf(L"MEDESCONTOLEALDADE")]->ToString());
 	Kt = Int32::Parse(dados[nomeCampos->IndexOf(L"MEDESCONTOTEMPO")]->ToString());
 
+}
+
+/*
+	retorna o id do personagem passando seu tipo e sua Raca
+	@param idTipoPersonagem -> Tipo do personagem que será consultado
+	@param idRaca -> Raca do personagem que será consultado
+	@param idItem -> Vetor de itens que serão retornados
+	@param chanceDrop -> a chance de drop de cada item do outro vetor
+*/
+void CDataManager::getDropItem(int idTipoPersonagem, int idRaca, TDadosBD ^ idItem, TDadosBD ^ chanceDrop)
+{
+	TDadosBD ^ dados = gcnew TDadosBD();
+	unsigned int numCampos = 0;
+	unsigned int numRegs   = 0;
+
+	String ^  query;
+	query = L"SELECT D.ITID, D.DPCHANCE "
+			+" FROM DROP_ITEM D, PERSONAGEM P "
+			+" WHERE P.PGID = D.PGID AND "
+			+" P.PGTIPOPERSONAGEM = "+idTipoPersonagem
+			+" AND P.PGRACA = "+idRaca;
+
+	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
+
+	if(numCampos == 0 || numRegs == 0)
+	{
+		WarBugsLog::_log->Items->Add(L"Não foi possivel obter os coeficientes de Mercado!");
+		return;
+	}
+
+	for(int i = 0; i < (int)numCampos; i++)
+	{
+		dados->RemoveAt(0);
+	}
+
+	for(int i = 0; i < (int)numRegs; i++)
+	{
+		idItem->Add(dados[0]);
+		chanceDrop->Add(dados[1]);
+
+		dados->RemoveAt(0);
+		dados->RemoveAt(0);
+	}
 }

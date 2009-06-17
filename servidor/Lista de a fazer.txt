@@ -1,11 +1,11 @@
 Verificar os Loads do Banco de dados
 
- - Load de PersonagemJogador
-   - Na seleção de Personagens
+ - Load de PersonagemJogador                      
+   - Na seleção de Personagens                   V
    - No Jogar
 
 
- - Load de Inimigos
+ - Load de Inimigos                              V
  - Load de NPCs
  - Load de Vendedores
  - Load de Cenários
