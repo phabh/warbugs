@@ -444,3 +444,21 @@ enum TypeDirecao
 	D_UP, 
 	D_WEST
 };
+
+enum TypeAnimState
+{
+	IDLE,	
+	SELECTED,//(sem loop)	
+	ATTACK1,	
+	ATTACK2,	
+	ATTACK3,
+	RUN,
+	PAIN,	
+	BUFF_OFF,
+	BUFF_ON, //(sem loop)	
+	POWER1,
+	POWER2,	
+	POWER3,	
+	DEATH, //(sem loop)
+	_REPEAT
+};

@@ -47,17 +47,8 @@ bool CMenuJogo::start(CGameCore *gameCore)
 	_menuFlag[HUDUPDATED]  = false;
 	_menuFlag[ALERTON]     = false;
 
-	//_toonShader = new CToonShader(_dispGrafico, luz);
-
 	_menuCamera = gameCore->createCamera( vector3df(0,0,0), vector3df(0,0,100), vector3df(0,0,0), 0, 179.0f,true/*, false*/);
 	_gameCore->createLight(_menuCamera, vector3df(0,0,0), 1200.0f);
-
-
-
-	//_selector = _gerCena->createTerrainTriangleSelector(_terreno, 0);
-	//_terreno->setTriangleSelector(_selector); 
-
-	//_selector = _terreno->getTriangleSelector();
 
 	_gameCore->camRotVert = _gameCore->camRotHor = 0.0;
 
@@ -72,8 +63,6 @@ bool CMenuJogo::start(CGameCore *gameCore)
 		_nextID = MN_LOGIN; // Desconecta e volta para a tela de login
 
 	receivePackages();
-
-	
 
 	return (true);
 }
@@ -146,7 +135,7 @@ void CMenuJogo::updateHuds()
 
 	_gerHud->addScrollBar(true, rect<s32>(50,80,50+50,80+20), _cfgWindow, 20);
 	_gerHud->addStaticText(L"Anti-Aliasing", rect<s32>(50+60, 80, 50+80, 80+20), false, false, _cfgWindow, 21, true);
-*/
+	*/
 
 	// Elementos GUI da janela de minimapa
 	IGUIButton *btnMiniMapa = _gerHud->addButton(rect<s32>(0,20, 200, 220), _mapWindow, 30);
@@ -178,9 +167,6 @@ void CMenuJogo::updateHuds()
 	if(_menuFlag[TRADEON])
 	{
 	}
-
-	
-		
 
 	_roleta = new CHudRoleta( 
 		rect<s32>(_gameCore->sWidth-210,_gameCore->sHeight-210, _gameCore->sWidth-10, _gameCore->sHeight-10),  // Area da roleta
@@ -216,6 +202,47 @@ void CMenuJogo::readCommands()
 		return;
 	}
 
+	if(_gerEventos->isMouseButtonDoubleClicked(MBLEFT))
+	{
+		// Duplo-clique no botão esquerdo do mouse
+			
+		_idInimigo = -1;
+		_nodoSelecionado = _gerCena->getSceneCollisionManager()->getSceneNodeFromScreenCoordinatesBB(_dispGrafico->getCursorControl()->getPosition());
+
+		_idInimigo = _nodoSelecionado->getID();
+
+		if(_idInimigo > 0)
+		{
+			_combate = true;
+			_targetPosition = _nodoSelecionado->getPosition();
+			cout << "\nCombate TRUE.\n";
+			cout << "\nAlvo X: " << _targetPosition.X << "\nAlvo Y: " << _targetPosition.Y << "\nAlvo Z: " << _targetPosition.Z << endl;
+		}
+		else
+		{
+			_combate = false;
+			cout << "\nCombate FALSE.\n";
+
+			_material.Lighting = false;
+
+			_posClick = _dispGrafico->getCursorControl()->getPosition();
+			_raio = _gerCena->getSceneCollisionManager()->getRayFromScreenCoordinates(_posClick, _menuCamera);
+
+
+			if(_gerCena->getSceneCollisionManager()->getCollisionPoint(_raio, _gameCore->_sceneTris, _targetPosition, _trianguloCapt))
+			{
+				//_targetPosition = desiredPosition;
+				_gerVideo->setTransform(ETS_WORLD, matrix4());
+				_gerVideo->setMaterial(_material);
+				_gerVideo->draw3DTriangle(_trianguloCapt, SColor(0,255,0,0));
+			} 
+			else
+				_targetPosition = _gameCore->_myPlayerChar->_modelo->getPosition();
+
+			cout << "\nAlvo X: " << _targetPosition.X << "\nAlvo Y: " << _targetPosition.Y << "\nAlvo Z: " << _targetPosition.Z << endl;
+		}
+	}
+
 	if(_gerEventos->isMouseButtonReleased(MBLEFT))
 	{	
 		// BOTÃO ESQUERDO DO MOUSE
@@ -230,44 +257,7 @@ void CMenuJogo::readCommands()
 		}
 		else
 		{
-		 // Não é clique de botão
-
-		 //_gameCore->_myPlayerChar->
-		 _idInimigo = -1;
-		 _nodoSelecionado = _gerCena->getSceneCollisionManager()->getSceneNodeFromScreenCoordinatesBB(_dispGrafico->getCursorControl()->getPosition());
-
-		 _idInimigo = _nodoSelecionado->getID();
-
-		 if(_idInimigo > 0)
-			{
-			_combate = true;
-			_targetPosition = _nodoSelecionado->getPosition();
-			cout << "\nCombate TRUE.\n";
-			cout << "\nAlvo X: " << _targetPosition.X << "\nAlvo Y: " << _targetPosition.Y << "\nAlvo Z: " << _targetPosition.Z << endl;
-			}
-			else
-			{
-			_combate = false;
-			cout << "\nCombate FALSE.\n";
-
-			_material.Lighting = false;
-
-			_posClick = _dispGrafico->getCursorControl()->getPosition();
-			_raio = _gerCena->getSceneCollisionManager()->getRayFromScreenCoordinates(_posClick, _menuCamera);
-
-
-			if(_gerCena->getSceneCollisionManager()->getCollisionPoint(_raio, _gameCore->_sceneTris, _targetPosition, _trianguloCapt))
-			{
-			//_targetPosition = desiredPosition;
-			_gerVideo->setTransform(ETS_WORLD, matrix4());
-			_gerVideo->setMaterial(_material);
-			_gerVideo->draw3DTriangle(_trianguloCapt, SColor(0,255,0,0));
-			} 
-			else
-			_targetPosition = _gameCore->_myPlayerChar->_modelo->getPosition();
-
-			cout << "\nAlvo X: " << _targetPosition.X << "\nAlvo Y: " << _targetPosition.Y << "\nAlvo Z: " << _targetPosition.Z << endl;
-			}
+			// Não é clique de botão
 		}
 	}
 
@@ -310,50 +300,50 @@ void CMenuJogo::readCommands()
 		_menuFlag[STATUSON] = !_menuFlag[STATUSON];
 		_statWindow->setVisible(_menuFlag[STATUSON]);
 	}
-/*
+	/*
 	if(_gerEventos->isKeyReleased(KEY_KEY_E))
 	{
-		// Mostrar | Esconder janela de equipamentos do jogador
-		_menuFlag[EQUIPON] = !_menuFlag[EQUIPON];
-		_equipWindow->setVisible(_menuFlag[EQUIPON]);
+	// Mostrar | Esconder janela de equipamentos do jogador
+	_menuFlag[EQUIPON] = !_menuFlag[EQUIPON];
+	_equipWindow->setVisible(_menuFlag[EQUIPON]);
 	}
 
 	if(_gerEventos->isKeyReleased(KEY_KEY_A))
 	{
-		// Mostrar | Esconder janela de alertas ao jogador
-		_menuFlag[ALERTON] = !_menuFlag[ALERTON];
-		_alertWindow->setVisible(_menuFlag[ALERTON]);
+	// Mostrar | Esconder janela de alertas ao jogador
+	_menuFlag[ALERTON] = !_menuFlag[ALERTON];
+	_alertWindow->setVisible(_menuFlag[ALERTON]);
 	}*/
 
-/*
+	/*
 	if(_gerEventos->isKeyDown(::KEY_UP))
 	{
-		_gameCore->_myPlayerChar->_modelo->setPosition(_modelo->getPosition() + 
-			vector3df(cos(((_direcao)*PI)/180)*_velocidade,
-			0,
-			-sin(((_direcao)*PI)/180)*_velocidade));
+	_gameCore->_myPlayerChar->_modelo->setPosition(_modelo->getPosition() + 
+	vector3df(cos(((_direcao)*PI)/180)*_velocidade,
+	0,
+	-sin(((_direcao)*PI)/180)*_velocidade));
 	}
 
 	if(_gerEventos->isKeyDown(::KEY_DOWN))
 	{
-		_modelo[0]->setPosition(_modelo[0]->getPosition() + 
-			vector3df(cos(((_direcao+180)*PI)/180)*_velocidade,
-			0,
-			-sin(((_direcao+180)*PI)/180)*_velocidade));
+	_modelo[0]->setPosition(_modelo[0]->getPosition() + 
+	vector3df(cos(((_direcao+180)*PI)/180)*_velocidade,
+	0,
+	-sin(((_direcao+180)*PI)/180)*_velocidade));
 	}
 
 	if(_gerEventos->isKeyReleased(::KEY_LEFT))
 	{
-		_direcao-=1;
-		_modelo[0]->setRotation(vector3df(0.f, _direcao, 0.f));
+	_direcao-=1;
+	_modelo[0]->setRotation(vector3df(0.f, _direcao, 0.f));
 	}
 
 	if(_gerEventos->isKeyReleased(::KEY_RIGHT))
 	{
-		_direcao+=1;
-		_gameCore->_myPlayerChar->setRotation(vector3df(0.f, _direcao, 0.f));
+	_direcao+=1;
+	_gameCore->_myPlayerChar->setRotation(vector3df(0.f, _direcao, 0.f));
 	}
-*/
+	*/
 
 	// ROTACOES DA CAMERA
 	if(_gerEventos->isKeyDown(KEY_NUMPAD2))

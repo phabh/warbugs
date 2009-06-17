@@ -12,11 +12,16 @@ CGerEventos::CGerEventos()
 
 	MouseData.x = MouseData.y = MouseData.lx = MouseData.ly = MouseData.cx = MouseData.cy = 0;
 	MouseData.wheelPos = MouseData.lwheelPos = 0;
+	MouseDbClickData.cx = MouseDbClickData.cy = -1; // Fantini
 
 	deltaMouseX = deltaMouseY = 0;
 
+	frameCountLfDbClick = frameCountMdDbClick = frameCountRgDbClick = ENDFRAME_DOUBLECLICK;
+
 	mouseHasMoved = false; 
 	wheelHasMoved = false;
+
+	mouseLeftDbClick = mouseRightDbClick = mouseMiddleDbClick = false;
 
 	generalCallerID = menuItemSelectedID = 0;
 
@@ -124,6 +129,45 @@ bool CGerEventos::isMouseButtonPressed(mouseButton mb)
 	return false;
 }
 
+bool CGerEventos::isMouseButtonDoubleClicked(mouseButton mb)
+{
+	switch (mb)
+	{
+
+	case MBLEFT:
+
+		if(mouseLeftDbClick)
+		{
+			mouseLeftDbClick = false;
+			MouseDbClickData.cx = MouseDbClickData.cy = -1;
+			return true;
+		}
+		break;
+
+	case MBMIDDLE:
+
+		if(mouseMiddleDbClick)
+		{
+			mouseMiddleDbClick = false;
+			MouseDbClickData.cx = MouseDbClickData.cy = -1;
+			return true;
+		}
+		break;
+
+	case MBRIGHT:
+
+		if(mouseRightDbClick)
+		{
+			mouseRightDbClick = false;	
+			MouseDbClickData.cx = MouseDbClickData.cy = -1;
+			return true;
+		}
+		break;
+	};
+
+	return false;
+}
+
 bool CGerEventos::isMouseButtonReleased(mouseButton mb)
 {
 	if (Mouse[mb] == MBS_RELEASED)
@@ -222,6 +266,16 @@ void CGerEventos::endEventProcess()
 { 
 	// Finalizar escuta
 	procesState = ENDED; 
+
+	// incrementa contador de frames para double click
+	if(frameCountLfDbClick < ENDFRAME_DOUBLECLICK)
+		frameCountLfDbClick++;
+
+	//if(frameCountMdDbClick < ENDFRAME_DOUBLECLICK)
+	//	frameCountMdDbClick++;
+
+	//if(frameCountRgDbClick < ENDFRAME_DOUBLECLICK)
+	//	frameCountRgDbClick++;
 }
 
 // Método de interpretação do evento disparado
@@ -256,6 +310,7 @@ bool CGerEventos::OnEvent(const SEvent& event)
 		}
 		break;
 
+		
 	// Eventos do Mouse:
 	case EET_MOUSE_INPUT_EVENT: 
 		{
@@ -289,9 +344,30 @@ bool CGerEventos::OnEvent(const SEvent& event)
 			case EMIE_LMOUSE_PRESSED_DOWN: // Botão esquerdo pressionado
 				{
 					if(Mouse[MBLEFT] == MBS_UP || Mouse[MBLEFT] == MBS_RELEASED)
+					{
+						if( MouseDbClickData.cx == event.MouseInput.X &&
+							MouseDbClickData.cy == event.MouseInput.Y )
+						{
+							if(frameCountLfDbClick < ENDFRAME_DOUBLECLICK)
+							{
+								MouseDbClickData.cx = MouseDbClickData.cy = -1;
+								mouseLeftDbClick = true;
+							}
+						}
+						else
+						{
+							MouseDbClickData.cx = event.MouseInput.X;
+							MouseDbClickData.cy = event.MouseInput.Y;
+							mouseLeftDbClick = false;
+						}
+
+						frameCountLfDbClick = 0;
 						Mouse[MBLEFT] = MBS_PRESSED;
+					}
 					else
+					{
 						Mouse[MBLEFT] = MBS_DOWN;
+					}
 
 					break;
 				}
@@ -405,27 +481,3 @@ bool CGerEventos::OnEvent(const SEvent& event)
 	}	
 	return false;
 }
-
-bool CGUIEnvironment::isDoubleClick(const SEvent& event, u32 time)
-   {
-     bool result = false;
-      if (time - DoubleClick.Time < DoubleClick.Speed
-        && event.MouseInput.X == DoubleClick.X
-        && event.MouseInput.Y == DoubleClick.Y)
-     {
-        result = true;
-        DoubleClick.Time = 0; // reset
-      } else {
-        DoubleClick.Time = time;
-     }
-
-     DoubleClick.X = event.MouseInput.X;
-     DoubleClick.Y = event.MouseInput.Y;
- 
-    return result;
-}
-
-//! Sets the double-click speed in milliseconds.
-void CGUIEnvironment::setDoubleClickSpeed(u32 speed) {
-     DoubleClick.Speed = speed;
-} 

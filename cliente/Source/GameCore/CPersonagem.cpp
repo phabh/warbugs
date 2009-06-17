@@ -213,100 +213,101 @@ float CPersonagem::getRotationTo(vector3d<f32> destino)
 }
 
 // -----------------------------------------------------------------------------------------
-
-void CPersonagem::LRTAStar(SQuadrante origem, vector3df objetivo, SQuadrante &proximoPasso, bool Matriz[MAPMAXLIN][MAPMAXCOL])
+/*
+void CPersonagem::SetAnimation(int state, int nextState)
 {
-	int i, 
-		linha, coluna, // linha e coluna relativa dos vizinhos em relação à origem
-		linhaOrigem, colunaOrigem, // coordenadas do quadrante de origem
-		lAbs, cAbs; // linha e coluna absolutas dos vizinhos
-
-	float nota[8], // F(j)
-		  custo, // custo 1 para laterais e 2 para diagonais
-		  menor; // menor nota atual H(origem)
-
-	linhaOrigem  = origem._linha;
-	colunaOrigem = origem._coluna;
-		
-	proximoPasso._linha = linhaOrigem;
-	proximoPasso._coluna = colunaOrigem;
-
-	menor = 1000000;
-
-	for (i = 0; i < 8; ++i )
+	switch (state)
 	{
-		switch ( i ) // 8 Vizinhos
-		{
-			default:
-			case 0: linha =  1; coluna =  0; custo =  80; break; // Sul
-			case 1: linha =  1; coluna =  1; custo = 160; break; // Abaixo
-			case 2: linha =  0; coluna =  1; custo =  80; break; // Leste
-			case 3: linha = -1; coluna =  1; custo = 160; break; // Direita
-			case 4: linha = -1; coluna =  0; custo =  80; break; // Norte
-			case 5: linha = -1; coluna = -1; custo = 160; break; // Acima
-			case 6: linha =  0; coluna = -1; custo =  80; break; // Oeste
-			case 7: linha =  1; coluna = -1; custo = 160; break; // Esquerda
-		}
 
-		nota[i] = -1;
+	case IDLE:
 
-		lAbs = linha  + linhaOrigem;   // linha absoluta
-		cAbs = coluna + colunaOrigem; // coluna absoluta
+		m_startFrame = 251;
+		m_endFrame = 310;
+		break;
 
-		if(lAbs >= 0 && lAbs <MAPMAXLIN) // linha válida do tabuleiro
-		{
-			if(cAbs >= 0 && cAbs <MAPMAXCOL) // coluna válida do tabuleiro
-			{
-				if(!Matriz[lAbs][cAbs]) // quadrante nao passável
-				{
-					nota[i] = -1; 
-				}
-				else // quadrante passável
-				{
-					nota[i] = this->Memoria.Pesquisar(getQuadranteID(lAbs, cAbs)/*Matriz[lAbs][cAbs].id*/); // busca na memória a nota
-					
-					if(nota[i] == -1.0) // não tem na memória, então calcula
-					{
-						nota[i] = getDistanceBetween(objetivo, getQuadranteCenter(lAbs, cAbs)/*Matriz[lAbs][cAbs].coordenada*/) + custo; // F(i) = H[i] + Custo[origem,i]
-					}
-					else
-						nota[i] += custo;
+	case RUN:
 
-					if(nota[i] > 0 && nota[i] <= menor)
-					{
-						menor = nota[i]; 
-						proximoPasso._linha = lAbs;
-						proximoPasso._coluna = cAbs;
-					}
-				}
-			}
-			else
-			{
-				nota[i] = -1;
-			}
-		}
-		else
-		{
-			nota[i] = -1;
-		}
+		m_startFrame = 40;
+		m_endFrame = 70;
+		break;
+
+	case ATTACK1:
+
+		m_startFrame = 1;
+		m_endFrame = 30;
+		break;
+
+	case ATTACK2:
+
+		m_startFrame = 371;
+		m_endFrame = 400;
+		break;
+
+	case ATTACK3:
+
+		m_startFrame = 401;
+		m_endFrame = 420;
+		break;
+
+	case POWER1:
+
+		m_startFrame = 80;
+		m_endFrame = 100;
+		break;
+
+	case POWER2:
+
+		m_startFrame = 205;
+		m_endFrame = 245;
+		break;
+
+	case POWER3:
+
+		m_startFrame = 355;
+		m_endFrame = 385;
+		break;
+
+	case PAIN:
+
+		m_startFrame = 54;
+		m_endFrame = 57;
+		break;
+
+	case BUFF_OFF:
+
+		m_startFrame = 135;
+		m_endFrame = 153;
+		break;
+
+	case BUFF_ON:
+
+		m_startFrame = 154;
+		m_endFrame = 159;
+		break;
+
+	case DEATH:
+
+		m_startFrame = 173;
+		m_endFrame = 177;
+		break;
+
+	case SELECTED:
+
+		m_startFrame = 66;
+		m_endFrame = 71;
+		break;
+
+	default:
+
+		return;
 	}
 
-	this->Memoria.Inserir(getQuadranteID(origem._linha, origem._coluna)/*origem.id*/, menor);
-}
+	if (m_state != state)
+	{
+		m_currentFrame = m_startFrame;
+		m_nextFrame = m_startFrame + 1;
+	}
 
-int CPersonagem::getQuadranteID(int linha, int coluna)
-{
-	return (coluna + (linha*MAPMAXCOL));
-}
-
-vector3df CPersonagem::getQuadranteCenter(int linha, int coluna)
-{
-	vector3df center;
-
-	center.X = (coluna * TAMQUADRANTE) + TAMQUADRANTE/2.0f;
-	center.Z = (linha  * TAMQUADRANTE) + TAMQUADRANTE/2.0f;
-
-	center.Y = (f32)0.0f; // Lembrar de calcular via Heightmap depois
-
-	return center;
-}
+	m_state = state;
+	m_nextState = nextState;
+}*/

@@ -25,8 +25,6 @@ CGameCore::CGameCore(int &startInit)
 
 	//_fileCfg->reset();
 
-
-
 	_gameConfig = _fileCfg->loadConfig();
 
 	/*
@@ -38,10 +36,10 @@ CGameCore::CGameCore(int &startInit)
 	//_gameConfig->parametrosVideo.WindowSize.Height = 768;//desktop.bottom;
 	//_gameConfig->parametrosVideo.Fullscreen = true;
 
-	_dispositivoGrafico = createDevice(::EDT_OPENGL,//EDT_DIRECT3D9, 
+	_dispositivoGrafico = createDevice(EDT_OPENGL,//EDT_DIRECT3D9, 
 		_gameConfig.parametrosVideo.WindowSize, 
 		_gameConfig.parametrosVideo.Bits, 
-		_gameConfig.parametrosVideo.Fullscreen, 
+		false,//_gameConfig.parametrosVideo.Fullscreen, 
 		_gameConfig.parametrosVideo.Stencilbuffer, 
 		_gameConfig.parametrosVideo.Vsync, 									
 		&_gerenciadorEventos);
@@ -676,6 +674,7 @@ int CGameCore::pathfindingRTA(CPersonagem *personagem)
 
 	int custoAdjacencia = 0;
 
+	float lembranca;
 
 	getQuadLinhaColuna(idQuadDestino, lin_d, col_d);
 
@@ -698,16 +697,16 @@ int CGameCore::pathfindingRTA(CPersonagem *personagem)
 		case 7: col_o += -1; lin_o +=  1; custoAdjacencia = 2; break;  // Noroeste
 		}
 
-		if (_cenario[lin_o][col_o].isPassable)
+		if (_cenario.isPassable[lin_o][col_o])
 		{
 			idQuadSucessor = getQuadID(lin_o, col_o); // pega indice do quadrante vizinho  
 
-			Folha lembranca = personagem->memoria.busca(idQuadSucessor); // procura na memória o indice do sucessor
+			lembranca = personagem->_memoria.Pesquisar(idQuadSucessor); // procura na memória o indice do sucessor
 
 			if (lembranca == NULL)
 				custoFuncao[i] = manhattan(lin_o, col_o, lin_d, col_d) + custoAdjacencia;
 			else
-				custoFuncao[i] = lembranca.heuristica + custoAdjacencia;
+				custoFuncao[i] = lembranca + custoAdjacencia;
 
 
 			if (custoFuncao[i] < menorCusto1)
@@ -732,10 +731,10 @@ int CGameCore::pathfindingRTA(CPersonagem *personagem)
 	}
 
 	if (melhorVizinho2 != -1) // se teve alguma opção de movimento
-		personagem->memoria.guardar(idQuadOrigem, menorCusto2);
+		personagem->_memoria.Inserir(idQuadOrigem, menorCusto2);
 
 	if(idQuadDestino == melhorVizinho1)
-		personagem->memoria.clear();
+		personagem->_memoria.Reset();
 
 	return direcaoProximoPasso;
 }

@@ -99,7 +99,8 @@ void CMenuLogin::readCommands()
 			stringc str2(Password->getText());
 			strcpy(_senha, str2.c_str()); 
 
-			_gameCore->conectar( _login, _senha);
+			_gameCore->conectar( _login, _senha); // TESTE
+
 
 			if(_gameCore->isConnected())
 			{

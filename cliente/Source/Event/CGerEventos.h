@@ -23,6 +23,8 @@ using namespace std;
 #define NUMBER_OF_MOUSE_BUTTONS 3
 #define NUMBER_OF_GUI_ELEMENTS 24
 
+const int ENDFRAME_DOUBLECLICK = 10; // Intervalo máximo de frames para capturar um double-click
+
 enum buttonState
 {
 	BS_UP,
@@ -44,31 +46,32 @@ enum mouseButtonState
 	MBS_DOWN,
 	MBS_PRESSED,
 	MBS_RELEASED,
-	MBS_DOUBLE
 };
 
-struct mouseInformation
+struct mouseInformation 
 {
 	s32 x, y, lx, ly, cx, cy;
 	f32 wheelPos, lwheelPos;
 };
 
-struct SDoubleClick 
-{
-SDoubleClick():Speed(300),Time(0),X(0),Y(0){};
-u32 Speed; // speed in milliseconds
-u32 Time;  // time of last click
-s32 X, Y;  // mouse coordinates of last click
+struct mouseDoubleClick  
+{ 
+	s32 cx, cy; 
 };
 
-cont int EMIE_LMOUSE_DOUBLE_CLICKED = EMIE_COUNT;
-
 // Enumeration de estados para os eventos de interface
-enum ElementStatus { OK, NOK};
+enum ElementStatus 
+{ 
+	OK, 
+	NOK
+};
 
 // Enumeration de estados do ouvinte de eventos
-enum ProcessEventState { STARTED, ENDED };
-
+enum ProcessEventState 
+{ 
+	STARTED, 
+	ENDED 
+};
 
 
 class CGerEventos : public IEventReceiver
@@ -80,7 +83,7 @@ class CGerEventos : public IEventReceiver
 		
 		// Métodos de Interface:
 		bool getEventCallerByElement(EGUI_EVENT_TYPE guiEventType);
-		int getEventCallerOfMenuByID(); ;
+		int getEventCallerOfMenuByID();
 		int getEventCallerByID();
 
 		// Métodos de Teclado:
@@ -94,9 +97,7 @@ class CGerEventos : public IEventReceiver
 		bool isMouseButtonDown(mouseButton mb);
 		bool isMouseButtonPressed(mouseButton mb);
 		bool isMouseButtonReleased(mouseButton mb);
-		bool isDoubleClick(const SEvent& event, u32 time); // FANTINI
-		bool isMouseButtonDoubleClicked(mouseButton mb); // FANTINI
-		void setDoubleClickSpeed(u32 speed);  // FANTINI
+		bool isMouseButtonDoubleClicked(mouseButton mb);
 		bool mouseMoved();
 		int getDeltaMousePosX();
 		int getDeltaMousePosY();
@@ -144,6 +145,8 @@ class CGerEventos : public IEventReceiver
 		ElementStatus elementStatus[NUMBER_OF_GUI_ELEMENTS];
 		mouseInformation MouseData;
 		ProcessEventState procesState;
+
+		mouseDoubleClick MouseDbClickData;
 	    
 		IGUIContextMenu* menu;
 		s32 menuItemSelectedID;
@@ -155,5 +158,11 @@ class CGerEventos : public IEventReceiver
 		bool mouseHasMoved;
 		bool wheelHasMoved;
 
-		SDoubleClick DoubleClick; 
+		bool mouseLeftDbClick;
+		bool mouseRightDbClick;
+		bool mouseMiddleDbClick;
+
+		int frameCountLfDbClick;
+		int frameCountMdDbClick;
+		int frameCountRgDbClick;
 };
