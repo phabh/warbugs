@@ -3,6 +3,9 @@
 CJogador::CJogador(void)
 {
 	setID(-1);
+	_personagem = NULL;
+	_cenario = NULL;
+	_isPlaying = false;
 }
 char *CJogador::getName()
 {

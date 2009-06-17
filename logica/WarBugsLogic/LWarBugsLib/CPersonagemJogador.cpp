@@ -249,6 +249,8 @@ void CPersonagemJogador::useItem(CItem *item)
 			default:
 				break;
 			}
+			getBolsa()->removeItem(item->getID());
+			delete item;
 		}
 		else
 		{
@@ -500,15 +502,33 @@ void CPersonagemJogador::speakToNPC(CPersonagem *alvo){}
 //Batalha
 void CPersonagemJogador::takeDamage(int damage, CPersonagem *atkr)
 {
-	habilidadesSecundarias->addPV((-1)*damage);
-	divisorxp->addAttacker(atkr, damage);
+	if((_equip != NULL)&&(_equip->armadura != NULL))
+	{
+		int dam = damage/4;
+		damage = (damage*3)/4;
+		_equip->armadura->setDurability(_equip->armadura->getDurability()-dam);
+		checkInventory();
+		habilidadesSecundarias->addPV((-1)*damage);
+		divisorxp->addAttacker(atkr, damage);
+	}
+	else
+	{
+		habilidadesSecundarias->addPV((-1)*damage);
+		divisorxp->addAttacker(atkr, damage);
+	}
 }
 bool CPersonagemJogador::tryAttack()
 {
 	int testValue = 0;
-	if((this->getDistanceToPoint(alvo->getPosition()) <= _range))
+	if((this->getStats()->getChargeTime() == 100)&&(this->getDistanceToPoint(alvo->getPosition()) <= _range))
 	{
+		this->getStats()->addChargeTime((-1)*CTATTACKCOST);
 		testValue = _ataque;
+		if((_equip != NULL)&&(_equip->arma != NULL)&&(clock()%10 == 0))
+		{
+			_equip->arma->setDurability(_equip->arma->getDurability()-1);
+			checkInventory();
+		}
 
 		if(testValue > alvo->getStats()->getDefense())
 		{
@@ -612,6 +632,26 @@ void CPersonagemJogador::distibuteSkillPoints(int points, int skillIndex)
 void CPersonagemJogador::die()
 {
 	divisorxp->giveXP();
+}
+void CPersonagemJogador::checkInventory()
+{
+	if(_equip != NULL)
+	{
+		if(_equip->arma != NULL)
+		{
+			if(!(_equip->arma->getDurability() > 0))
+			{
+				_equip->arma = NULL;
+			}
+		}
+		if(_equip->armadura != NULL)
+		{
+			if(!(_equip->armadura->getDurability() > 0))
+			{
+				_equip->armadura = NULL;
+			}
+		}
+	}
 }
 void CPersonagemJogador::update()
 {
