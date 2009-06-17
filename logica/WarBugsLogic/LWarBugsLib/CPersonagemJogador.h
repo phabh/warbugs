@@ -148,6 +148,7 @@ public:
 	void distibuteSkillPoints(int points, int skillIndex);
 
 	void die();
+	void checkInventory();
 	void update();
 };
 #endif
