@@ -1,9 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cliente", "Cliente.vcproj", "{828E4CB9-AB7C-4054-908B-E27EEC208C68}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Editor_Matrizes", "Editor_mtx.vcproj", "{977379FD-DCA5-42D0-AB64-20718E4D2A12}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Editor_Matrizes", "Editor_mtx.vcproj", "{828E4CB9-AB7C-4054-908B-E27EEC208C68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +13,6 @@ Global
 		{828E4CB9-AB7C-4054-908B-E27EEC208C68}.Debug|Win32.Build.0 = Debug|Win32
 		{828E4CB9-AB7C-4054-908B-E27EEC208C68}.Release|Win32.ActiveCfg = Release|Win32
 		{828E4CB9-AB7C-4054-908B-E27EEC208C68}.Release|Win32.Build.0 = Release|Win32
-		{977379FD-DCA5-42D0-AB64-20718E4D2A12}.Debug|Win32.ActiveCfg = Debug|Win32
-		{977379FD-DCA5-42D0-AB64-20718E4D2A12}.Debug|Win32.Build.0 = Debug|Win32
-		{977379FD-DCA5-42D0-AB64-20718E4D2A12}.Release|Win32.ActiveCfg = Release|Win32
-		{977379FD-DCA5-42D0-AB64-20718E4D2A12}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

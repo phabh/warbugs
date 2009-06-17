@@ -8,7 +8,7 @@
 // ----------------------------------------------- GLOBAIS
 
 
-int START     = 0,  // Comeca da raiz em 0 ( contando os niveis )
+int START = 0,  // Comeca da raiz em 0 ( contando os niveis )
 MAXNIVEL  = 0,  // Maximo de niveis
 TENDENCIA = 0;  // -1 = esquerda, 1 = direita e 0 = raiz.
 

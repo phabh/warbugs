@@ -31,6 +31,6 @@ public:
 	void Reset     ( void );
 	void Mostrar   ( void );
 	void Inserir   ( int id, float Heuristica );
-	float  Pesquisar ( int id );
+	float Pesquisar ( int id );
 
 };

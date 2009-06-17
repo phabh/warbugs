@@ -259,6 +259,11 @@ public:
 	vector3df upd3DPosition(float posX, float posZ);
 
 
+int manhattan(int linhaO, int colunaO, int linhaD, int colunaD);
+
+int pathfindingRTA(CPersonagem *personagem);
+
+
 
 	bool conectar(char *login, char *password);
 	bool isConnected();

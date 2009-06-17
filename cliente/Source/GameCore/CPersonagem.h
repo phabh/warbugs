@@ -22,14 +22,11 @@ struct SQuadrante
 class CPersonagem 
 {
 
-private:
+public:
 
 	SQuadrante _quadranteFinal;
 	SQuadrante _quadranteSeguinte;
-	CTree Memoria;
-
-public:
-
+	CTree _memoria;
 	/*	
 	
 	
@@ -63,6 +60,7 @@ public:
 	int _id;
 	char *_nome;
 	vector3df _posicao;
+	vector3df _destino;
 	int _pv;
 	int _pp;
 	int _xp;
