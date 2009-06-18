@@ -38,6 +38,9 @@ private:
 	Raca _lealdadeNecessaria;
 	int _quantidadeNecessaria;
 public:
+	bool matrizDeCaminhamento[MAPMAXCOL][MAPMAXCOL];
+
+	void initMatrix();
 
 	CCenario(int ID, CPeopleList *players, CPeopleList *monsters, CPeopleList *npcs, CPeopleList *vendedores, CBolsaList *bolsa, CPortal *saidaNorte, CPortal *saidaSul, CPortal *saidaLeft, CPortal *saidaRight);	
 	bool isSceneFull();
@@ -87,5 +90,15 @@ public:
 	CVendedor *removeSalesman(int idVendedor);
 
 	void update();
+
+	//Métodos de quadrante
+	Ponto *getQuadCenter(int linha, int coluna);
+	Ponto *getQuadCenter(int idQuad);
+	Ponto *getQuadCenter(Ponto *posicao);
+	void getQuadLinhaColuna(Ponto *posicao, int &linha, int &coluna);
+	void getQuadLinhaColuna(int idQuad, int &linha, int &coluna);
+	int getQuadID(Ponto *posicao);
+	int getQuadID(int linha, int coluna);
+
 };
 #endif

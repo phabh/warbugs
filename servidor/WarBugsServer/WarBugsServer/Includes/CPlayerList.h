@@ -15,6 +15,7 @@ private:
 	SPlayerElemento *_first;
 	int _size;
 
+	void removeCharFromScene(SPlayerElemento *element);
 public:
 	CPlayerList(void);
 	CPlayerList(CJogador * Jogador);

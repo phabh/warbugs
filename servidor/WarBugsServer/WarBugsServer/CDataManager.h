@@ -43,6 +43,7 @@ public:
 	CItem   * getItem(int id);
 	CWeapon * getWeaponEquiped(int idPersonagem);
 	CArmor  * getArmorEquiped(int idPersonagem);
+	int       getIdRelacionalUltimoItem();
 
 	//Obter Cenarios
 	CCenarioList  * getListCenario();
@@ -60,6 +61,10 @@ public:
 
 	//Obtem Jogador
 	CJogador getJogador(char * login);
+
+	//Obter Mercado
+	void atualizaMercado();
+	void atualizaVendedor(int idVendedor);
 	
 	//Login
 	bool  doLogin(char * login, char * senha, CJogador & jogador);

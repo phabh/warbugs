@@ -493,6 +493,12 @@ CPeopleList * CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int 
 		personagem = getPersonagem(dado);
 
 		
+		//Ponto de respaw dos bichos
+		float x = (float)Double::Parse(dados[nomeCampos->IndexOf(L"PCRESPAWX")]->ToString());
+		float z = (float)Double::Parse(dados[nomeCampos->IndexOf(L"PCRESPAWZ")]->ToString());
+
+		personagem->setPosition(x,z);
+
 		//id de cenário
 		dado = Int32::Parse(dados[nomeCampos->IndexOf(L"PCID")]->ToString());
 
@@ -506,20 +512,23 @@ CPeopleList * CDataManager::getPersonagem(int idTipoPersonagem, int idRaca, int 
 
 		if(tempBolsa->size() <= 0)
 		{
-			if(idTipoPersonagem == SOLDADO || (idTipoPersonagem == LIDER && idRaca == FORMIGA))
+			//Caso o personagem seja um inimigo e não possua itens
+			if((int)personagem->getType() == SOLDADO || ((int)personagem->getType() == LIDER && (int)personagem->getRace() == FORMIGA))
 			{
-				tempBolsa = getBolsaDrop(dado, idTipoPersonagem, idRaca, 3);
+				tempBolsa = getBolsaDrop(dado, (int)personagem->getType(), (int)personagem->getRace(), 3);
 			}
-			else
-			if(idTipoPersonagem == VENDEDOR && (idRaca == ARANHA    || 
-				                                idRaca == BESOURO   || 
-												idRaca == ESCORPIAO ||
-												idRaca == LOUVADEUS ||
-												idRaca == VESPA))
+			else // caso ele seja um vendedor
+			if((int)personagem->getType() == VENDEDOR && ((int)personagem->getRace() == ARANHA    || 
+				                                (int)personagem->getRace() == BESOURO   || 
+												(int)personagem->getRace() == ESCORPIAO ||
+												(int)personagem->getRace() == LOUVADEUS ||
+												(int)personagem->getRace() == VESPA))
 			{
 				
-				tempBolsa = getBolsaDrop(dado, idTipoPersonagem, idRaca, 180);
+				tempBolsa = getBolsaInicialVendedor(dado, (int)personagem->getType(), (int)personagem->getRace(), 180);
 			}
+
+			personagem->setBolsa(tempBolsa);
 		}
 
 
@@ -683,7 +692,7 @@ CItem * CDataManager::getItem(int id)
 
 		bool b2  = Int32::Parse(dados[nomeCampos->IndexOf(L"ITDROPAVEL")]->ToString());
 
-		item->setType((TipoItem)dado[0]);
+		item->setType((TipoItem)tipoItem);
 		item->setPrice(dado[1]);
 		item->setDropable(b2);
 
@@ -716,6 +725,31 @@ CItem * CDataManager::relacionaItemPersonagem(int idPersonagem, int idBaseItem)
 	}
 	
 
+	int idRelacional = getIdRelacionalUltimoItem();
+
+	CItem * newItem = getItem(idBaseItem);
+
+	if(newItem == NULL)
+	{
+		WarBugsLog::_log->Items->Add(L"Não foi possível criar um objeto para o relacionamento do item "+idBaseItem
+			                         +" com o personagem "+idPersonagem);
+		return NULL;
+	}
+
+	//coloca o novo id para o item
+	newItem->setID(idRelacional);
+	newItem->setBaseID((TypeItens)idBaseItem);
+
+	return newItem;
+}
+
+
+/*
+	Obtem o ultimo maior id de item relaiconal
+*/
+int CDataManager::getIdRelacionalUltimoItem()
+{
+	String ^ query;
 	TDadosBD ^ dados      = gcnew TDadosBD();
 	unsigned int numRegs   = 0;
 	unsigned int numCampos = 0;
@@ -728,30 +762,15 @@ CItem * CDataManager::relacionaItemPersonagem(int idPersonagem, int idBaseItem)
 	//se o registro não foi selecionado
 	if(numRegs == 0 || numCampos == 0)
 	{
-		WarBugsLog::_log->Items->Add(L"Não foi possível criar um objeto para o relacionamento do item "+idBaseItem
-			                         +" com o personagem "+idPersonagem);
-		return NULL;
+		WarBugsLog::_log->Items->Add(L"Não foi possível selecionar o maior id do item relacional");
+		return -1;
 	}
 
 	//remove o nome do campo
 	dados->RemoveAt(0);
 
-	CItem * newItem = getItem(idBaseItem);
-
-	if(newItem == NULL)
-	{
-		WarBugsLog::_log->Items->Add(L"Não foi possível criar um objeto para o relacionamento do item "+idBaseItem
-			                         +" com o personagem "+idPersonagem);
-		return NULL;
-	}
-
-	//coloca o novo id para o item
-	newItem->setID(Int32::Parse(dados[0]->ToString()));
-	newItem->setBaseID((TypeItens)idBaseItem);
-
-	return newItem;
+	return Int32::Parse(dados[0]->ToString());
 }
-
 
 /*
 	Obtem a arma que o personagem está equipado
@@ -948,16 +967,86 @@ CCenarioList * CDataManager::getListCenario()
 	{
 
 		int idcenario = Int32::Parse(dados[nomeCampos->IndexOf(L"CNID")]->ToString());
+
+		CPeopleList * tempList = new CPeopleList();
 		
+		//Lista de Inimigos do Cenário
 		CPeopleList * listaInimigos = getPersonagem( SOLDADO, ALLRACE, idcenario);
+			
+			//retira todos os Soldados das Racas dos personagens jogaveis
+			// e os coloca em uma lista temporária
+			for(int p = 0; p < listaInimigos->size(); p++)
+			{
+				switch(listaInimigos->getElementAt(p)->getRace())
+				{
+					case ARANHA:
+					case BESOURO:
+					case ESCORPIAO:
+					case LOUVADEUS:
+					case VESPA:
+						{
+							tempList->addPersonagem(listaInimigos->removePersonagemAt(p));
+							break;
+						}
+					default:
+						{
+							break;
+						}
+				}//end switch
+			}//end for
+
+
+		//Lista de Personagens Jogadores do Cenário
 		CPeopleList * listaPersonagem = new CPeopleList();
-		CPeopleList * listaNPC = new CPeopleList();
-		CPeopleList * listaVendedores = new CPeopleList();
+
+		//Lista de NPCs do Cenário
+
+			//Primeiro os lideres
+			//ele vai pegar todos os lideres de todas as racas
+			CPeopleList * listaNPC = getPersonagem( LIDER, ALLRACE, idcenario);
+
+			//caso alguém da lista não for um NPC Lider da raça jogavel
+			// ele é considerado um inimigo e incluido na lista de inimigos
+			for(int p = 0; p < listaNPC->size(); p++)
+			{
+				//adiciona os soldados da raca dos personagens jogaveis
+				// que estiverem na lista temporária
+				if(tempList->size() > 0)
+				{
+					listaNPC->addPersonagem(tempList->removePersonagemAt(0));
+				}
+
+				switch(listaNPC->getElementAt(p)->getRace())
+				{
+					case ARANHA:
+					case BESOURO:
+					case ESCORPIAO:
+					case LOUVADEUS:
+					case VESPA:
+						{
+							break;
+						}
+					default:
+						{
+							listaInimigos->addPersonagem(listaNPC->removePersonagemAt(p));
+						}
+				}//end switch
+			}//end for
+
+
+
+
+		//Lista de Vendedores do Cenário
+		CPeopleList * listaVendedores = getPersonagem( VENDEDOR, ALLRACE, idcenario);
+
+		//Lista de Bolsas do Cenário
 		CBolsaList  * listaBolsas = getListBolsa(idcenario);
-		CPortal * portalSul = getPortal(idcenario,D_SOUTH);
-		CPortal * portalNorte = getPortal(idcenario,D_NORTH);
-		CPortal * portalOeste = getPortal(idcenario,D_WEST);
-		CPortal * portalLeste = getPortal(idcenario,D_EAST);
+
+
+		CPortal * portalSul   = getPortal( idcenario, D_SOUTH);
+		CPortal * portalNorte = getPortal( idcenario, D_NORTH);
+		CPortal * portalOeste = getPortal( idcenario, D_WEST);
+		CPortal * portalLeste = getPortal( idcenario, D_EAST);
 
 		CCenario * cenarioTemp = new CCenario(idcenario, listaPersonagem, listaInimigos, listaNPC, listaVendedores, listaBolsas, portalNorte, portalSul, portalOeste, portalLeste);
 
@@ -971,8 +1060,7 @@ CCenarioList * CDataManager::getListCenario()
 		for(int j = 0; j < (int)numCampos; j++)
 		{
 			dados->RemoveAt(0);
-		}		
-		
+		}
 	}
 	
 
@@ -997,10 +1085,9 @@ int	CDataManager::getCenarioId(int idPersonagem, int idJogador)
 	unsigned int numCampos = 0;
 	String ^ query;
 
-	query = L"SELECT C.CNID FROM CENARIO C, PERSONAGEM_CENARIO PC, JOGADOR_PERSONAGEM JP "
-		    +"WHERE PC.PGID = JP.PGID AND C.CNID  = PC.CNID AND "
-			+"JP.JDID = "+idJogador
-			+" AND JP.PGID = "+idPersonagem;
+	query = L"SELECT PC.CNID FROM PERSONAGEM_CENARIO PC, JOGADOR_PERSONAGEM JP "
+			+" WHERE PC.PGID = JP.PGID AND  JP.JDID = "+idJogador+" " 
+			+"	AND PC.PCID = "+idPersonagem;
 
 	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
 
@@ -1040,11 +1127,12 @@ CBolsa * CDataManager::getBolsaPersonagem(int idPersonagem)
 	unsigned int numCampos = 0;
 	String ^ query;
 
-	query = L"SELECT I.*, IR.IRVALBONUS1, IR.IRPRECO, IR.IRVALBONUS2, IR.IRVALBONUS3, IR.IRVALBONUS4,"
+	query = L"SELECT I.*, IR.IRVALBONUS1, IR.IRVALBONUS2, IR.IRVALBONUS3, IR.IRVALBONUS4,"
             +" IR.IRVALBONUS5, IR.IRVALBONUS6, IR.IRID, IR.IRDURABILIDADE "
-			+"FROM ITEMBASE I, ITEM_RELACIONAL IR, PERSONAGEM P "
+			+"FROM ITEMBASE I, ITEM_RELACIONAL IR, PERSONAGEM P, PERSONAGEM_CENARIO PC "
 			+"WHERE "
-			+" I.ITID = IR.ITID AND IR.PGID =  P.PGID AND IR.IRID <> P.PGIDARMOR AND IR.IRID <> P.PGIDWEAPON"
+			+" I.ITID = IR.ITID AND PC.PGID =  P.PGID AND IR.IRID <> P.PGIDARMOR AND IR.IRID <> P.PGIDWEAPON"
+			+" AND PC.PCID = IR.PCID "
 			+"AND IR.PCID = "+idPersonagem;
 
 	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
@@ -1157,7 +1245,7 @@ CBolsaList * CDataManager::getListBolsa(int idCenario)
 	unsigned int numCampos = 0;
 	String ^ query;
 
-	query = L"SELECT I.*, IR.IRVALBONUS1,IR.IRPRECO,IR.IRVALBONUS2,IR.IRVALBONUS3,IR.IRVALBONUS4,"
+	query = L"SELECT I.*, IR.IRVALBONUS1,IR.IRVALBONUS2,IR.IRVALBONUS3,IR.IRVALBONUS4,"
             +"IR.IRVALBONUS5,IR.IRVALBONUS6,IR.IRDURABILIDADE, IR.IRID, B.BSID,B.BSX,B.BSY,B.BSZ "
 			+"FROM ITEMBASE I, ITEM_RELACIONAL IR, BOLSA B "
 			+"WHERE "
@@ -1693,10 +1781,10 @@ bool CDataManager::deletePersonagemJogador(int idJogador, int idPersonagem, char
 	temp = gcnew String(nomePersonagem);
 
 
-	query = L"DELETE FROM JOGADOR_PERSONAGEM JP "+
+	query = L"DELETE FROM JOGADOR_PERSONAGEM JP "
 			+" USING JOGADOR_PERSONAGEM JP, PERSONAGEM P, PERSONAGEM_CENARIO PC "
 			+" WHERE JP.PGID = P.PGID AND JP.JDID = "+idJogador
-			+" AND P.PGID = PC.PGID
+			+" AND P.PGID = PC.PGID "
 			+" AND PC.PCID = "+idPersonagem
 			+" AND P.PGNOME = '"+temp+"' ";
 
@@ -1805,19 +1893,19 @@ void CDataManager::backupAll(CCenarioList * cenarioList)
 		//salva os itens dos monstros
 		for(int l = 0; l < cenarioList->getElementAt(p)->monsterCount(); l++)
 		{
-			updatePersonagem(cenarioList->getElementAt(p)->getMonsterAt(l));
+			updateItensPersonagem(cenarioList->getElementAt(p)->getMonsterAt(l));
 		}
 
 		//salva os itens dos NPCS
 		for(int h = 0; h < cenarioList->getElementAt(p)->NPCCount(); h++)
 		{
-			updatePersonagem(cenarioList->getElementAt(p)->getNpcAt(h));
+			updateItensPersonagem(cenarioList->getElementAt(p)->getNpcAt(h));
 		}
 
 		//salva os itens do vendedor
 		for(int e = 0; e < cenarioList->getElementAt(p)->salesmanCount(); e++)
 		{
-			updatePersonagem(cenarioList->getElementAt(p)->getSalesmanAt(e));
+			updateItensPersonagem(cenarioList->getElementAt(p)->getSalesmanAt(e));
 		}
 
 
@@ -1917,7 +2005,7 @@ void CDataManager::updatePersonagemJogador(CPersonagemJogador * p1)
 	{
 
 		//não esquecer que o item equipado também entra nesta lista
-		query = L"DELETE FROM ITEM_RELACIONAL WHERE PGID = "+p1->getID();
+		query = L"DELETE FROM ITEM_RELACIONAL WHERE PCID = "+p1->getID();
 				
 		//se exluiu os itens que não estavam com ele
 		if(_dataBase->deleteNow(toChar(query)))
@@ -1928,7 +2016,7 @@ void CDataManager::updatePersonagemJogador(CPersonagemJogador * p1)
 				if(p1->getBolsa()->getElementAt(p) != NULL)
 				if(p1->getBolsa()->getElementAt(p)->getID() != NULL)
 				{
-					insereItemRelacional(p1->getBolsa()->getElementAt(p), p1->getID(), -1);					
+					insereItemRelacional(p1->getBolsa()->getElementAt(p), -1, p1->getID());					
 				}
 		
 			}
@@ -1937,7 +2025,7 @@ void CDataManager::updatePersonagemJogador(CPersonagemJogador * p1)
 			if(p1->getEquip()->arma != NULL)
 			if(p1->getEquip()->arma->getID() != NULL)
 			{
-				insereItemRelacional(p1->getEquip()->arma, p1->getID(), -1);
+				insereItemRelacional(p1->getEquip()->arma, -1, p1->getID());
 			}
 
 
@@ -1945,12 +2033,12 @@ void CDataManager::updatePersonagemJogador(CPersonagemJogador * p1)
 			if(p1->getEquip()->armadura != NULL)
 			if(p1->getEquip()->armadura->getID() != NULL)
 			{
-				insereItemRelacional(p1->getEquip()->armadura, p1->getID(), -1);
+				insereItemRelacional(p1->getEquip()->armadura,-1,p1->getID());
 			}
 			
 			//ATUALIZA O CENÁRIO NO JOGADOR SE ENCONTRA
-			query = L"UPDATE PERSONAGEM_CENARIO SET CNID = "+p1->getScene()->getSceneID()
-					+", PGID = "+p1->getID()+" WHERE PGID = "+p1->getID();
+			query = L"UPDATE PERSONAGEM_CENARIO SET CNID = "+p1->getScene()->getID()
+					+" WHERE PCID = "+p1->getID();
 
 			_dataBase->updateNow(toChar(query));
 
@@ -2049,6 +2137,11 @@ void CDataManager::insereItemRelacional(CItem * item, int idPersonagem, int idde
 		return;		
 	}
 
+	if(query)
+	{
+		item->setID(getIdRelacionalUltimoItem());
+	}
+
 }
 
 /*
@@ -2101,6 +2194,11 @@ void CDataManager::insereItemRelacional(CItem * item, int idBolsa)
 	{
 		WarBugsLog::_log->Items->Add(L"Não foi possível inserir o relacionamento entre personagem e item");
 		return;		
+	}
+
+	if(!query)
+	{
+		item->setID(getIdRelacionalUltimoItem());
 	}
 
 }
@@ -2166,8 +2264,10 @@ CBolsa * CDataManager::getBolsaDrop(int idPersonagem, int idTipoPersonagem, int 
 
 	for(int i = 0; i < qtdItensMaxima; i++)
 	{
+		Random ^ r = gcnew Random();
+
 		CItem * tempItem;
-		int index = Random::Next(porcentagem->Count);
+		int index = r->Next(porcentagem->Count);
 		
 		double porc = Double::Parse(porcentagem[index]->ToString());
 
@@ -2175,7 +2275,7 @@ CBolsa * CDataManager::getBolsaDrop(int idPersonagem, int idTipoPersonagem, int 
 		
 		// se o item foi sorteado
 		// quando tempPorcentagem for 1 o item será escolhido com certeza
-		if(Random::Next(tempPorcentagem) == 0)
+		if(r->Next(tempPorcentagem) == 0)
 		{
 			int tempIdItem = Int32::Parse(itens[index]->ToString());
 
@@ -2185,8 +2285,9 @@ CBolsa * CDataManager::getBolsaDrop(int idPersonagem, int idTipoPersonagem, int 
 
 			insereItemRelacional(tempItem,-1,idPersonagem);
 		}
-	
 	}
+
+	WarBugsLog::_log->Items->Add(L"Bolsa de Drop criada para este tipo de personagem = "+idTipoPersonagem+" com esta raça = "+idRaca);
 	
 
     return bolsa;	
@@ -2449,4 +2550,39 @@ void CDataManager::getDropItem(int idTipoPersonagem, int idRaca, TDadosBD ^ idIt
 		dados->RemoveAt(0);
 		dados->RemoveAt(0);
 	}
+}
+
+/*
+	
+*/
+void CDataManager::atualizaMercado()
+{
+	/*
+	TDadosBD ^ dados      = gcnew TDadosBD();
+	TDadosBD ^ nomeCampos = gcnew TDadosBD();
+	unsigned int numCampos = 0;
+	unsigned int numRegs   = 0;
+
+	String ^  query;
+	query = L"SELECT D.ITID, D.DPCHANCE "
+			+" FROM DROP_ITEM D, PERSONAGEM P "
+			+" WHERE P.PGID = D.PGID AND "
+			+" P.PGTIPOPERSONAGEM = "+idTipoPersonagem
+			+" AND P.PGRACA = "+idRaca;
+
+	_dataBase->selectNow(toChar(query), numCampos, numRegs, dados);
+
+	if(numCampos == 0 || numRegs == 0)
+	{
+		WarBugsLog::_log->Items->Add(L"Não foi possivel obter os coeficientes de Mercado!");
+		return;
+	}
+
+	for(int i = 0; i < (int)numCampos; i++)
+	{
+		nome
+		dados->RemoveAt(0);
+	}	
+
+*/
 }
