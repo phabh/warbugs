@@ -8,6 +8,7 @@ CBugThread::CBugThread()
 {
 	_error = 0;
 	_running = false;
+	InitializeCriticalSection(&m_cs);
 }
 
 CBugThread::~CBugThread() 
@@ -18,7 +19,7 @@ CBugThread::~CBugThread()
 bool CBugThread::start() 
 {
 	_running = true;
-	InitializeCriticalSection(&m_cs);
+	
 	_error = _beginthread( CBugThread::_exec, 0, (void *) this);
 	if( _error != 0 ) 
 		return false;
