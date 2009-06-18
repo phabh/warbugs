@@ -1569,7 +1569,7 @@ private: System::Windows::Forms::Timer^  timer;
 				| System::Windows::Forms::ToolStripStatusLabelBorderSides::Right) 
 				| System::Windows::Forms::ToolStripStatusLabelBorderSides::Bottom));
 			this->barNumJogadores->Name = L"barNumJogadores";
-			this->barNumJogadores->Size = System::Drawing::Size(200, 17);
+			this->barNumJogadores->Size = System::Drawing::Size(180, 17);
 			this->barNumJogadores->Text = L"Número de Jogador ON:";
 			// 
 			// barHora
@@ -1579,7 +1579,7 @@ private: System::Windows::Forms::Timer^  timer;
 				| System::Windows::Forms::ToolStripStatusLabelBorderSides::Right) 
 				| System::Windows::Forms::ToolStripStatusLabelBorderSides::Bottom));
 			this->barHora->Name = L"barHora";
-			this->barHora->Size = System::Drawing::Size(100, 17);
+			this->barHora->Size = System::Drawing::Size(120, 17);
 			this->barHora->Text = L"Horario do Server";
 			// 
 			// barFPS
@@ -1787,10 +1787,10 @@ private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  
 			{
 				for(int j = 0; j < _coreServer->_cenarioList->getElementAt(i)->monsterCount(); j++)
 				{
-					float x = _coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->x + 0.02f;
-					float z = _coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->z + 0.02f;
+					float x = _coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->x + 1.0f;
+					float z = _coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->z + 1.0f;
 					_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->setPosition( x, z);
-					CCoreServer::sendMessage(true,_coreServer->_cenarioList->getElementAt(i)->getID(),NULL,UPDATE_POSITION,_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getSceneID(),_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->x,_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->z, _coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getDirection());
+					CCoreServer::sendMessage(true,_coreServer->_cenarioList->getElementAt(i)->getID(),NULL,UPDATE_POSITION,_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getSceneID(),(int)(_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->x*100),(int)(_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->z*100), (int)_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getDirection());
 				}			
 			}
 
@@ -1820,8 +1820,11 @@ private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  
 				}
 			}*/
 
+
+
 			//Envia mensagens para os clientes
-			_coreServer->sendAllMessages();
+			_coreServer->sendMessage(true, -1, NULL, END_FRAME);
+			//_coreServer->sendAllMessages();
 
 			//Verifica a taxa de atualização e FPS
 			__int64 timeNow = DateTime::Now.Ticks;
