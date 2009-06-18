@@ -601,7 +601,7 @@ bool CGameCore::conectar(char *login, char *password)
 	catch(...)
 	{
 		_connected = false;
-		cout << "\nNão foi possivel encontrar o servidor." << endl;
+		cout << "\nNão foi possivel criar o socket." << endl;
 	}
 
 	return _connected;
