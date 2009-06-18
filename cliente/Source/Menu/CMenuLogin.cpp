@@ -28,6 +28,35 @@ bool CMenuLogin::start(CGameCore *gameCore)
 
 	_loadingStage = LS_PERSONAGENS;
 
+
+	std::string line;
+	size_t separ_pos;
+
+	ifstream serverFile (pathServerSetup);
+	
+	if (serverFile.is_open())
+	{
+		//while (!serverFile.eof() )
+		//{
+			getline (serverFile, line);
+		//}
+		serverFile.close();
+
+		separ_pos = line.find_first_of(":");
+		
+		_gameCore->SERVERHOST = line.substr(0, separ_pos);
+		_gameCore->SERVERPORT = atoi( (line.substr(separ_pos+1, line.size())).c_str() );		
+		/*
+		cout << "\n" << _gameCore->SERVERHOST << endl;
+		cout << "\n" << _gameCore->SERVERPORT << endl;
+		system("pause");*/
+	}
+	else
+	{
+		cout << "\nFalha ao abrir o arquivo servidor.txt" << endl;
+		system("pause");
+	}
+
 	return true;
 }
 
@@ -80,10 +109,28 @@ void CMenuLogin::updateHuds()
 
 void CMenuLogin::readCommands()
 {
+
+	IGUIElement *temp = _gerHud->getFocus();
+	//_gerHud->setFocus(NULL);
+	
+
 	if(_gerEventos->isKeyDown(KEY_ESCAPE))
 	{
 		_nextID = MN_SAIDA;
 		return;
+	}
+    
+	if(_gerEventos->isKeyPressed(KEY_RETURN))
+	{
+		_gerHud->setFocus(NULL);
+	}
+	
+	if(_gerEventos->isKeyReleased(KEY_RETURN))
+	{
+		
+		//_nextID = MN_SAIDA;
+		//return;
+		cout << "\nENTER!\n";
 	}
 
 	if(_gerEventos->getEventCallerByElement(EGET_BUTTON_CLICKED))
@@ -109,6 +156,7 @@ void CMenuLogin::readCommands()
 			}
 		}
 	}
+	_gerHud->setFocus(temp);
 }
 
 //-----------------------------------------------------------------------------------------------------------------

@@ -76,7 +76,7 @@ public:
 	int _ultimoEstado;
 
 	float _velAnim;
-	int _direcao;
+	float _direcao;
 
 	int _idAlvo;
 

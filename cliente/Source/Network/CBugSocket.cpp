@@ -112,6 +112,8 @@ std::string CBugSocket::ReceiveBytes() {
 
 void CBugSocket::ReceiveLine(CBugMessage &m) {
   //std::string ret;
+	//recv(_socket, m._data, 1400, 0);
+	
   while (1) {
     char r;
 
@@ -144,7 +146,7 @@ void CBugSocket::SendLine(CBugMessage &m) {
   m.writeByte('|');
   //s += '\n';
   //send(_socket,s.c_str(),s.length(),0);
-	send(_socket,m._data,m.getSize(),0);
+	send(_socket, m._data, m.getSize(), 0);
 }
 
 void CBugSocket::SendBytes(const std::string& s) {

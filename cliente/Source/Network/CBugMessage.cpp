@@ -1,15 +1,15 @@
 /*
-	Classse para serializar dados para envio e recebimento via socket
-	Baseada na classe dreamMessage.h do livro Programming Multiplayer Games
-	@autor Paulo
+Classse para serializar dados para envio e recebimento via socket
+Baseada na classe dreamMessage.h do livro Programming Multiplayer Games
+@autor Paulo
 */
 #include "CBugMessage.h"
 #include <iostream>
 
 /*
-	Inicializa as variaveis
-	@param d -> vetor de bytes
-	@param lenght -> tamanho do vetor de bytes
+Inicializa as variaveis
+@param d -> vetor de bytes
+@param lenght -> tamanho do vetor de bytes
 */
 void CBugMessage::init(char *d, int length)
 {
@@ -21,7 +21,7 @@ void CBugMessage::init(char *d, int length)
 }
 
 /*
-	Limpa as variaveis size, readCount e overflow
+Limpa as variaveis size, readCount e overflow
 */
 void CBugMessage::clear(void)
 {
@@ -31,9 +31,9 @@ void CBugMessage::clear(void)
 }
 
 /*
-	Obtem um novo ponto para inclusão de dados
-	@param length -> tamanho do dado a ser inserido
-	@return -> ponteiro para a posição inicial de inserção
+Obtem um novo ponto para inclusão de dados
+@param length -> tamanho do dado a ser inserido
+@return -> ponteiro para a posição inicial de inserção
 */
 char * CBugMessage::getNewPoint(int length)
 {
@@ -53,9 +53,9 @@ char * CBugMessage::getNewPoint(int length)
 }
 
 /*
-	Escreve no vetor de bytes um tipo qualquer do tamanho qualquer
-	@param *d -> qualquer tipo de dado
-	@param length -> tamanho deste dado
+Escreve no vetor de bytes um tipo qualquer do tamanho qualquer
+@param *d -> qualquer tipo de dado
+@param length -> tamanho deste dado
 */
 void CBugMessage::write(void *d, int length)
 {
@@ -63,8 +63,8 @@ void CBugMessage::write(void *d, int length)
 }
 
 /*
-	Escreve um byte no vetor
-	@param c-> byte a ser escrito
+Escreve um byte no vetor
+@param c-> byte a ser escrito
 */
 void CBugMessage::writeByte(char c)
 {
@@ -74,8 +74,8 @@ void CBugMessage::writeByte(char c)
 }
 
 /*
-	Escreve um short no vetor
-	@param c-> short a ser escrito
+Escreve um short no vetor
+@param c-> short a ser escrito
 */
 void CBugMessage::writeShort(short c)
 {
@@ -85,10 +85,10 @@ void CBugMessage::writeShort(short c)
 }
 
 /*
-	Escreve um long no vetor
-	@param c-> long a ser escrito
+Escreve um long no vetor
+@param c-> long a ser escrito
 */
-void CBugMessage::writeLong(long c)
+void CBugMessage::writeInt(int c)
 {
 	char *buf;
 	buf = getNewPoint(4);
@@ -96,8 +96,8 @@ void CBugMessage::writeLong(long c)
 }
 
 /*
-	Escreve um float no vetor
-	@param c-> float a ser escrito
+Escreve um float no vetor
+@param c-> float a ser escrito
 */
 void CBugMessage::writeFloat(float c)
 {
@@ -107,8 +107,8 @@ void CBugMessage::writeFloat(float c)
 }
 
 /*
-	Escreve uma string no vetor
-	@param s-> string a ser escrito
+Escreve uma string no vetor
+@param s-> string a ser escrito
 */
 void CBugMessage::writeString(char *s)
 {
@@ -122,7 +122,7 @@ void CBugMessage::writeString(char *s)
 
 
 /*
-	Inicializa a leitura do vetor
+Inicializa a leitura do vetor
 */
 void CBugMessage::beginReading(void)
 {
@@ -130,8 +130,8 @@ void CBugMessage::beginReading(void)
 }
 
 /*
-	Inicializa a leitura do vetor até o tamanho passado
-	@param s-> tamanho do vetor
+Inicializa a leitura do vetor até o tamanho passado
+@param s-> tamanho do vetor
 */
 void CBugMessage::beginReading(int s)
 {
@@ -140,9 +140,9 @@ void CBugMessage::beginReading(int s)
 }
 
 /*
-	Lê o vetor de bytes até o tamanho passado
-	@param s -> tamanho até onde será realizada a leitura
-	@return -> vetor da posição 0 até a posição passada
+Lê o vetor de bytes até o tamanho passado
+@param s -> tamanho até onde será realizada a leitura
+@return -> vetor da posição 0 até a posição passada
 */
 char * CBugMessage::read(int s)
 {
@@ -158,8 +158,8 @@ char * CBugMessage::read(int s)
 }
 
 /*
-	Lê um byte do vetor e atualiza a posição de leitura
-	@return -> o byte lido
+Lê um byte do vetor e atualiza a posição de leitura
+@return -> o byte lido
 */
 char CBugMessage::readByte(void)
 {
@@ -175,8 +175,8 @@ char CBugMessage::readByte(void)
 }
 
 /*
-	Lê um short do vetor e atualiza a posição de leitura
-	@return -> o short lido
+Lê um short do vetor e atualiza a posição de leitura
+@return -> o short lido
 */
 short CBugMessage::readShort(void)
 {
@@ -190,8 +190,8 @@ short CBugMessage::readShort(void)
 }
 
 /*
-	Lê um long do vetor e atualiza a posição de leitura
-	@return -> o long lido
+Lê um long do vetor e atualiza a posição de leitura
+@return -> o long lido
 */
 int CBugMessage::readInt(void)
 {
@@ -205,8 +205,8 @@ int CBugMessage::readInt(void)
 }
 
 /*
-	Lê um float do vetor e atualiza a posição de leitura
-	@return -> o float lido
+Lê um float do vetor e atualiza a posição de leitura
+@return -> o float lido
 */
 float CBugMessage::readFloat(void)
 {
@@ -220,8 +220,8 @@ float CBugMessage::readFloat(void)
 }
 
 /*
-	Lê uma string do vetor e atualiza a posição de leitura
-	@return -> a string lida
+Lê uma string do vetor e atualiza a posição de leitura
+@return -> a string lida
 */
 char * CBugMessage::readString(void)
 {

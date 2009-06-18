@@ -7,10 +7,10 @@ void CMenuJogo::receivePackages()
 	int retorno = SUCESSO;
 	bool fim = false;
 
-	do
-	{
+	//do
+//	{
 		retorno = _gameCore->receberPacote();
-
+/*
 		switch (retorno)
 		{
 
@@ -19,7 +19,7 @@ void CMenuJogo::receivePackages()
 
 		};
 
-	}while(!fim);
+	}while(!fim);*/
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -396,7 +396,7 @@ void CMenuJogo::graphicsDrawAddOn()
 	_gerVideo->setMaterial(_material);
 	_gerVideo->draw3DTriangle(_trianguloCapt, SColor(0,255,0,0));
 
-	_gameCore->contourAll(_gerCena->getRootSceneNode());
+	//_gameCore->contourAll(_gerCena->getRootSceneNode());
 }
 
 //-----------------------------------------------------------------------------------------------------------------

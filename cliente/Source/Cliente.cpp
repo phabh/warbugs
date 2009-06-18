@@ -19,7 +19,6 @@ int main()
 
 	if(feedbackInit == SUCESSO)
 	{
-		//Warbugs->loadGameData(); // Carrega os dados do jogo na memória
 
 		TypeMenuID nextMenu = MN_ABERTURA;
 
