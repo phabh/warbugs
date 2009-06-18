@@ -85,8 +85,8 @@ private:
 	CBugMessage _packageToSend,    // Pacote a enviar
 		_packageReceived; // Pacote a receber
 
-	char _dataToSend[PACKAGESIZE],
-		_dataReceived[PACKAGESIZE];
+	/*char _dataToSend[PACKAGESIZE],
+		_dataReceived[PACKAGESIZE];*/
 
 	//! Objeto para carregar as matrizes de colisão do cenário
 	CArquivoMatrizes *_fileMtx;
@@ -131,6 +131,12 @@ private:
 	
 
 public:
+
+	std::string SERVERHOST;
+	int SERVERPORT;
+	
+	//= "127.0.0.1";//"warbugs.ddns.com.br";/*"189.61.169.212"; "10.16.11.31";*/ // IP do servidor
+//const int SERVERPORT
 
 	ITriangleSelector* _sceneTris;
 
@@ -257,6 +263,8 @@ public:
 
 	//! Atualiza a posição 3D de um elemento do cenário
 	vector3df upd3DPosition(float posX, float posZ);
+
+	float getDistancia(vector3df v1, vector3df v2);
 
 
 int manhattan(int linhaO, int colunaO, int linhaD, int colunaD);

@@ -213,88 +213,95 @@ float CPersonagem::getRotationTo(vector3d<f32> destino)
 }
 
 // -----------------------------------------------------------------------------------------
+
 /*
-void CPersonagem::SetAnimation(int state, int nextState)
+void CPersonagem::SetAnimation(int estado, int proxEstado)
 {
 	switch (state)
 	{
 
-	case IDLE:
+	case PARADO:
 
-		m_startFrame = 251;
-		m_endFrame = 310;
+		_startFrame = 1;
+		_endFrame = 60;
 		break;
 
-	case RUN:
+	case SAUDACAO:
 
-		m_startFrame = 40;
-		m_endFrame = 70;
+		_startFrame = 61;
+		_endFrame = 90;
 		break;
 
-	case ATTACK1:
+	case CORRENDO:
 
-		m_startFrame = 1;
-		m_endFrame = 30;
+		_startFrame = 91;
+		_endFrame = 120;
 		break;
 
-	case ATTACK2:
+	case ATAQUE1:
 
-		m_startFrame = 371;
-		m_endFrame = 400;
+		_startFrame = 121;
+		_endFrame = 150;
 		break;
 
-	case ATTACK3:
+	case ATAQUE2:
 
-		m_startFrame = 401;
-		m_endFrame = 420;
+		_startFrame = 151;
+		_endFrame = 180;
 		break;
 
-	case POWER1:
+	case ATAQUE3:
 
-		m_startFrame = 80;
-		m_endFrame = 100;
+		_startFrame = 181;
+		_endFrame = 210;
 		break;
 
-	case POWER2:
+	case ATAQUE4:
 
-		m_startFrame = 205;
-		m_endFrame = 245;
+		_startFrame = 211;
+		_endFrame = 240;
 		break;
 
-	case POWER3:
+	case PODER1:
 
-		m_startFrame = 355;
-		m_endFrame = 385;
+		_startFrame = 241;
+		_endFrame = 270;
 		break;
 
-	case PAIN:
+	case PODER2:
 
-		m_startFrame = 54;
-		m_endFrame = 57;
+		_startFrame = 271;
+		_endFrame = 300;
 		break;
 
-	case BUFF_OFF:
+	case PODER3:
 
-		m_startFrame = 135;
-		m_endFrame = 153;
+		_startFrame = 301;
+		_endFrame = 330;
 		break;
 
-	case BUFF_ON:
+	case BUFF_BOM:
 
-		m_startFrame = 154;
-		m_endFrame = 159;
+		_startFrame = 331;
+		_endFrame = 360;
 		break;
 
-	case DEATH:
+	case BUFF_RUIM:
 
-		m_startFrame = 173;
-		m_endFrame = 177;
+		_startFrame = 361;
+		_endFrame = 390;
 		break;
 
-	case SELECTED:
+	case APANHANDO:
 
-		m_startFrame = 66;
-		m_endFrame = 71;
+		_startFrame = 391;
+		_endFrame = 420;
+		break;
+
+	case MORRENDO:
+
+		_startFrame = 421;
+		_endFrame = 450;
 		break;
 
 	default:
@@ -302,12 +309,12 @@ void CPersonagem::SetAnimation(int state, int nextState)
 		return;
 	}
 
-	if (m_state != state)
+	if (_estado != estado)
 	{
-		m_currentFrame = m_startFrame;
-		m_nextFrame = m_startFrame + 1;
+		_currentFrame = _startFrame;
+		_nextFrame = _startFrame + 1;
 	}
 
-	m_state = state;
-	m_nextState = nextState;
+	_estado = estado;
+	_proxEstado = proxEstado;
 }*/
