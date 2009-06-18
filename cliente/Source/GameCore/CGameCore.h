@@ -82,12 +82,8 @@ private:
 
 	CBugSocketClient *_gameSocket;
 
-	CBugMessage _packageToSend,    // Pacote a enviar
-		_packageReceived; // Pacote a receber
-
-	/*char _dataToSend[PACKAGESIZE],
-		_dataReceived[PACKAGESIZE];*/
-
+	CBugMessage _packageToSend;    // Pacote a enviar
+				
 	//! Objeto para carregar as matrizes de colisão do cenário
 	CArquivoMatrizes *_fileMtx;
 

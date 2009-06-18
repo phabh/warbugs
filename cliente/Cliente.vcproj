@@ -263,6 +263,10 @@
 					RelativePath=".\Source\Network\CBugSocket.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\Network\CBugThread.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Event"
@@ -423,6 +427,10 @@
 				</File>
 				<File
 					RelativePath=".\Source\Network\CBugSocket.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Network\CBugThread.h"
 					>
 				</File>
 			</Filter>
