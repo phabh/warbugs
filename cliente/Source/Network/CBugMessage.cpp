@@ -8,13 +8,11 @@ Baseada na classe dreamMessage.h do livro Programming Multiplayer Games
 
 /*
 Inicializa as variaveis
-@param d -> vetor de bytes
-@param lenght -> tamanho do vetor de bytes
 */
-void CBugMessage::init(char *d, int length)
+void CBugMessage::init()
 {
-	_data = d;
-	_maxSize = length;
+	_data = new char[MAXPACKAGESIZE];
+	_maxSize = MAXPACKAGESIZE;
 	_size = 0;
 	_readCount = 0;
 	_overFlow = false;
