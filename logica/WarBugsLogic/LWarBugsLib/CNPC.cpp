@@ -169,6 +169,10 @@ void CNPC::giveQuest(CPersonagemJogador *alvo)
 {
 	alvo->acceptQuest(_quest);
 }
+int CNPC::getDEF()
+{
+	return(this->getStats()->getDefense());
+}
 bool CNPC::tryAttack()
 {
 	return(true);

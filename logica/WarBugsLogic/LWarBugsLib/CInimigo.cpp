@@ -161,6 +161,10 @@ void CInimigo::takeDecision()
 		}
 	}
 }
+int CInimigo::getDEF()
+{
+	return(this->getStats()->getDefense());
+}
 bool CInimigo::tryAttack()
 {
 	int testValue = 0;

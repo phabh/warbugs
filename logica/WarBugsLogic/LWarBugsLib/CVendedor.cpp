@@ -306,6 +306,10 @@ void CVendedor::sell(CPersonagemJogador *comprador, CItem *item)
 		plusDemand(item->getType());
 	}	
 }
+int CVendedor::getDEF()
+{
+	return(this->getStats()->getDefense());
+}
 bool CVendedor::tryAttack()
 {
 	return(true);

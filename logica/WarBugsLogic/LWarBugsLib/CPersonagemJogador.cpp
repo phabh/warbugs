@@ -517,6 +517,13 @@ void CPersonagemJogador::takeDamage(int damage, CPersonagem *atkr)
 		divisorxp->addAttacker(atkr, damage);
 	}
 }
+int CPersonagemJogador::getDEF()
+{
+	if((_equip!= NULL)&&(_equip->armadura!=NULL))
+		return(this->getStats()->getDefense()+_equip->armadura->getDef());
+	else
+		return(this->getStats()->getDefense());
+}
 bool CPersonagemJogador::tryAttack()
 {
 	int testValue = 0;
@@ -530,7 +537,7 @@ bool CPersonagemJogador::tryAttack()
 			checkInventory();
 		}
 
-		if(testValue > alvo->getStats()->getDefense())
+		if(testValue > alvo->getDEF())
 		{
 			return(true);
 		}
