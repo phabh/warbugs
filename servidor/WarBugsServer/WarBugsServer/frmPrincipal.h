@@ -1790,7 +1790,7 @@ private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  
 					float x = _coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->x + 1.0f;
 					float z = _coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->z + 1.0f;
 					_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->setPosition( x, z);
-					CCoreServer::sendMessage(true,_coreServer->_cenarioList->getElementAt(i)->getID(),NULL,UPDATE_POSITION,_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getSceneID(),(int)(_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->x*100),(int)(_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->z*100), (int)_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getDirection());
+					CCoreServer::sendMessage(true,_coreServer->_cenarioList->getElementAt(i)->getID(),NULL,UPDATE_POSITION,_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getSceneID(),_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->x,_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->z, _coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getDirection());
 				}			
 			}
 
@@ -1823,8 +1823,8 @@ private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  
 
 
 			//Envia mensagens para os clientes
-			_coreServer->sendMessage(true, -1, NULL, END_FRAME);
-			//_coreServer->sendAllMessages();
+			//_coreServer->sendMessage(true, -1, NULL, END_FRAME);
+			_coreServer->sendAllMessages();
 
 			//Verifica a taxa de atualização e FPS
 			__int64 timeNow = DateTime::Now.Ticks;
@@ -1856,11 +1856,13 @@ private: void kicar(int posJogador)
 		 {
 			 if(_coreServer->getPlayers()->size() > 0)
 			 {
-				char c[1400];
-				CBugMessage m;
-				m.init(c,1400);
-	
-				 m.writeByte(DISCONNECT);
+				//char c[1400];
+				CBugMessage * m = new CBugMessage();
+				//m.init(c,1400);
+				m->init();
+
+				m->writeInt(0);
+				m->writeInt(DISCONNECT);
 
 				_coreServer->getPlayers()->getElementAt(posJogador)->getSocket()->SendLine(m);
 				_coreServer->getPlayers()->getElementAt(posJogador)->getSocket()->Close();

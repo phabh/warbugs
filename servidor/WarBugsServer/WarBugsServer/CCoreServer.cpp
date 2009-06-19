@@ -116,9 +116,10 @@ int CCoreServer::getToleranceMaxPing()
 
 void CCoreServer::readPackets()
 {
-	char data[1400];
-	CBugMessage mesRecebida;// = new CBugMessage();
-	mesRecebida.init(data,sizeof(data));
+	//char data[1400];
+	CBugMessage mesRecebida;
+	//mesRecebida.init(data,sizeof(data));
+	mesRecebida.init();
 
 	int tipoMensagem;
 
@@ -143,10 +144,11 @@ void CCoreServer::readPackets()
 		//std::string str;
 
 		//recebe a mensagem do socket 
+		mesRecebida.init();
 		mesRecebida.clear();
 		//_playersList->getElementAt(indexJogador)->getSocket()->ReceiveLine(mesRecebida);
 		//str = _playersList->getElementAt(indexJogador)->getSocket()->ReceiveBytes();
-		_playersList->getElementAt(indexJogador)->getSocket()->ReceiveLine(mesRecebida);
+		_playersList->getElementAt(indexJogador)->getSocket()->ReceiveLine(&mesRecebida);
 		
 		//mesRecebida.write((void *)str.c_str(),str.length());
 
@@ -1084,9 +1086,10 @@ void CCoreServer::readPackets()
 						int    idPersonagem	= mesRecebida.readInt();
 						int    idNPC		= mesRecebida.readInt();
 
-						char * data = new char[1400];
+						//char * data = new char[1400];
 						CBugMessage * tempMes = new CBugMessage();
-						tempMes->init(data,1400);
+						//tempMes->init(data,1400);
+						tempMes->init();
 
 						CVendedor * tempVendedor = _playersList->getElementAt(indexJogador)->getScene()->getSalesman(idNPC);
 
@@ -1321,7 +1324,7 @@ void CCoreServer::readPackets()
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, CBugMessage * mes)
 {
-
+/*
 	if(toAll)
 	{
 		for(int index = 0; index < _playersList->size(); index++)
@@ -1335,7 +1338,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, C
 					{
 						//std::string str;
 						//str.assign(frame->_message->_data,frame->_message->getSize());
-						_playersList->getElementAt(index)->getSocket()->SendLine(*mes);
+						_playersList->getElementAt(index)->getSocket()->SendLine(mes);
 						//cList->getElementAt(index)->getSocket()->SendBytes(str);
 					}
 				}
@@ -1353,7 +1356,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, C
 				{
 					//std::string str;
 					//str.assign(frame->_message->_data,frame->_message->getSize());
-					_playersList->getElementAt(index)->getSocket()->SendLine(*mes);
+					_playersList->getElementAt(index)->getSocket()->SendLine(mes);
 					//memcpy(data1,frame->_message->_data,frame->_message->getSize());
 							//cList->getElementAt(index)->getSocket()->SendBytes(str);
 				}
@@ -1372,7 +1375,7 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, C
 		{
 			//std::string str;
 			//str.assign(frame->_message->_data,frame->_message->getSize());
-			destino->SendLine(*mes);
+			destino->SendLine(mes);
 			//memcpy(data1,frame->_message->_data,frame->_message->getSize());
 			//frame->_socket->SendBytes(str);
 		}
@@ -1391,21 +1394,22 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, C
 		{
 			destino->Close();
 		}
-	}
-	/*
+	}*/
+	
 	CFrame ^ frame = gcnew CFrame(toAll, destino, mes, idCenario);
 
 	_buffer->Add(frame);
-	*/
+	
 }
 
 
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, float f1, float f2)
 {
-	char * data = new char[1400];
+	//char * data = new char[1400];
 	CBugMessage * mes = new CBugMessage();
-	mes->init(data,1400);
+	//mes->init(data,1400);
+	mes->init();
 
 	mes->writeInt(0);
 
@@ -1419,9 +1423,10 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino,  int idMensagem, TypeClassChars tipoPersonagem, CPersonagem  * p1)
 {
-	char * data = new char[1400];
+	//char * data = new char[1400];
 	CBugMessage * mes = new CBugMessage();
-	mes->init(data,1400);
+	//mes->init(data,1400);
+	mes->init();
 
 	int idArmor		= -1;
 	int idWeapon	= -1;
@@ -1759,9 +1764,10 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino,  
 */
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, CPeopleList * p1)
 {
-	char * data = new char[1400];
+	//char * data = new char[1400];
 	CBugMessage * mes = new CBugMessage();
-	mes->init(data,1400);
+	//mes->init(data,1400);
+	mes->init();
 
 	mes->writeInt(0);
 
@@ -1801,9 +1807,10 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, float f1, float f2, float f3)
 {
-	char * data = new char[1400];
+	//char * data = new char[1400];
 	CBugMessage * mes = new CBugMessage();
-	mes->init(data,1400);
+	//mes->init(data,1400);
+	mes->init();
 
 	mes->writeInt(0);
 
@@ -1820,9 +1827,10 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4)//float f1, float f2)
 {
-	char * data = new char[1400];
+	//char * data = new char[1400];
 	CBugMessage * mes = new CBugMessage();
-	mes->init(data,1400);
+	//mes->init(data,1400);
+	mes->init();
 
 	mes->writeInt(0);
 
@@ -1840,9 +1848,10 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10)
 {
-	char * data = new char[1400];
+	//char * data = new char[1400];
 	CBugMessage * mes = new CBugMessage();
-	mes->init(data,1400);
+	//mes->init(data,1400);
+	mes->init();
 
 	mes->writeInt(0);
 
@@ -1864,9 +1873,10 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1)
 {
-	char * data = new char[1400];
+	//char * data = new char[1400];
 	CBugMessage * mes = new CBugMessage();
-	mes->init(data,1400);
+	//mes->init(data,1400);
+	mes->init();
 
 	mes->writeInt(0);
 
@@ -1879,9 +1889,10 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2)
 {
-	char * data = new char[1400];
+	//char * data = new char[1400];
 	CBugMessage * mes = new CBugMessage();
-	mes->init(data,1400);
+	//mes->init(data,1400);
+	mes->init();
 
 	mes->writeInt(0);
 
@@ -1895,9 +1906,10 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3)
 {
-	char * data = new char[1400];
+	//char * data = new char[1400];
 	CBugMessage * mes = new CBugMessage();
-	mes->init(data,1400);
+	//mes->init(data,1400);
+	mes->init();
 
 	mes->writeInt(0);
 
@@ -1912,9 +1924,10 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem)
 { 
-	char * data = new char[1400];
+	//char * data = new char[1400];
 	CBugMessage * mes = new CBugMessage();
-	mes->init(data,1400);
+	//mes->init(data,1400);
+	mes->init();
 
 	mes->writeInt(0);
 
@@ -1925,9 +1938,10 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9)
 {
-	char * data = new char[1400];
+	//char * data = new char[1400];
 	CBugMessage * mes = new CBugMessage();
-	mes->init(data,1400);
+	//mes->init(data,1400);
+	mes->init();
 
 	mes->writeInt(0);
 
@@ -1948,9 +1962,10 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10, int i11, int i12, int i13, int i14, int i15, int i16, int i17)
 {
-	char * data = new char[1400];
+	//char * data = new char[1400];
 	CBugMessage * mes = new CBugMessage();
-	mes->init(data,1400);
+	//mes->init(data,1400);
+	mes->init();
 
 	mes->writeInt(0);
 
@@ -1978,9 +1993,10 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int i1, int i2, int i3, int i4, int i5, int i6)
 {
-	char * data = new char[1400];
+	//char * data = new char[1400];
 	CBugMessage * mes = new CBugMessage();
-	mes->init(data,1400);
+	//mes->init(data,1400);
+	mes->init();
 
 	mes->writeInt(0);
 
@@ -1998,9 +2014,10 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, char * mensagem)
 {
-	char * data = new char[1400];
+	//char * data = new char[1400];
 	CBugMessage * mes = new CBugMessage();
-	mes->init(data,1400);
+	//mes->init(data,1400);
+	mes->init();
 
 	mes->writeInt(0);
 
@@ -2013,9 +2030,10 @@ void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, i
 
 void CCoreServer::sendMessage(bool toAll, int idCenario, CBugSocket * destino, int idMensagem, int v1[30], int v2[30])
 {
-	char * data = new char[1400];
+	//char * data = new char[1400];
 	CBugMessage * mes = new CBugMessage();
-	mes->init(data,1400);
+	//mes->init(data,1400);
+	mes->init();
 
 	mes->writeInt(0);
 
@@ -2061,7 +2079,7 @@ void CCoreServer::sendMessagesFrame(CPlayerList * cList)
 							{
 								//std::string str;
 								//str.assign(frame->_message->_data,frame->_message->getSize());
-								cList->getElementAt(index)->getSocket()->SendLine(*frame->_message);
+								cList->getElementAt(index)->getSocket()->SendLine(frame->_message);
 								//cList->getElementAt(index)->getSocket()->SendBytes(str);
 							}
 						}
@@ -2079,7 +2097,7 @@ void CCoreServer::sendMessagesFrame(CPlayerList * cList)
 						{
 							//std::string str;
 							//str.assign(frame->_message->_data,frame->_message->getSize());
-							cList->getElementAt(index)->getSocket()->SendLine(*frame->_message);
+							cList->getElementAt(index)->getSocket()->SendLine(frame->_message);
 							//memcpy(data1,frame->_message->_data,frame->_message->getSize());
 							//cList->getElementAt(index)->getSocket()->SendBytes(str);
 						}
@@ -2097,7 +2115,7 @@ void CCoreServer::sendMessagesFrame(CPlayerList * cList)
 				try{
 					//std::string str;
 					//str.assign(frame->_message->_data,frame->_message->getSize());
-					frame->_socket->SendLine(*frame->_message);
+					frame->_socket->SendLine(frame->_message);
 					//memcpy(data1,frame->_message->_data,frame->_message->getSize());
 					//frame->_socket->SendBytes(str);
 				}
