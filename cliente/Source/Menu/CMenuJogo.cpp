@@ -7,10 +7,10 @@ void CMenuJogo::receivePackages()
 	int retorno = SUCESSO;
 	bool fim = false;
 
-	//do
-//	{
+	do
+	{
 		retorno = _gameCore->receberPacote();
-/*
+
 		switch (retorno)
 		{
 
@@ -19,7 +19,7 @@ void CMenuJogo::receivePackages()
 
 		};
 
-	}while(!fim);*/
+	}while(!fim);
 }
 
 //-----------------------------------------------------------------------------------------------------------------

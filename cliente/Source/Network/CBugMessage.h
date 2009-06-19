@@ -19,7 +19,7 @@ class CBugMessage
 		char *getNewPoint(int length);          
 
 	public:
-		char   * _data;							// vetor com os dados
+		char  * _data;							// vetor com os dados
 
 		void    init();
 

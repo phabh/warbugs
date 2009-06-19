@@ -13,7 +13,6 @@
 
 #include "CGerEventos.h"
 #include "CGameData.h"
-//#include "CGameScene.h"
 
 #include "CPersonagem.h"
 
@@ -82,8 +81,9 @@ private:
 
 	CBugSocketClient *_gameSocket;
 
-	CBugMessage _packageToSend;    // Pacote a enviar
-				
+	CBugMessage _packageToSend,   // Pacote a enviar
+			   *_packageReceived; // Pacote a receber
+
 	//! Objeto para carregar as matrizes de colisão do cenário
 	CArquivoMatrizes *_fileMtx;
 
