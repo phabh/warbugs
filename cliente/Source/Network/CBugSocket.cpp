@@ -1,5 +1,3 @@
-#ifndef _CBUGSOCKET_CPP_
-#define _CBUGSOCKET_CPP_
 /* 
    CBugSocket.h
 
@@ -15,8 +13,6 @@
 #pragma warning(push)
 #pragma warning(disable:4996)
 
-
-
 #include "CBugSocket.h"
 #include <iostream>
 
@@ -24,60 +20,48 @@ using namespace std;
 
 int CBugSocket::_nofSockets = 0;
 
-void CBugSocket::Inicia() 
-{
-  if (!_nofSockets) 
-  {
+void CBugSocket::Start() {
+  if (!_nofSockets) {
     WSADATA info;
-    if (WSAStartup(MAKEWORD(2,0), &info)) 
-	{
+    if (WSAStartup(MAKEWORD(2,0), &info)) {
       throw "Could not start WSA";
     }
   }
   ++_nofSockets;
 }
 
-void CBugSocket::Finaliza() 
-{
+void CBugSocket::End() {
   WSACleanup();
 }
 
-CBugSocket::CBugSocket() : _socket(0) 
-{
-  Inicia();
-
+CBugSocket::CBugSocket() : _socket(0) {
+  Start();
+  // UDP: use SOCK_DGRAM instead of SOCK_STREAM
   _socket = socket(AF_INET,SOCK_STREAM,0);
 
-  if (_socket == INVALID_SOCKET) 
-  {
+  if (_socket == INVALID_SOCKET) {
     throw "INVALID_SOCKET";
   }
 
   _refCounter = new int(1);
-
-  bufferMensagens = new CDoubleList<CBugMessage>;
 }
 
-CBugSocket::CBugSocket(SOCKET s) : _socket(s) 
-{
-  Inicia();
+CBugSocket::CBugSocket(SOCKET s) : _socket(s) {
+  Start();
   _refCounter = new int(1);
 };
 
-CBugSocket::~CBugSocket() 
-{
-  if (! --(*_refCounter)) 
-  {
+CBugSocket::~CBugSocket() {
+  if (! --(*_refCounter)) {
     Close();
     delete _refCounter;
   }
 
   --_nofSockets;
-  if (!_nofSockets) Finaliza();
+  if (!_nofSockets) End();
 }
 
-CBugSocket::CBugSocket(const CBugSocket& o) 
-{
+CBugSocket::CBugSocket(const CBugSocket& o) {
   _refCounter=o._refCounter;
   (*_refCounter)++;
   _socket         =o._socket;
@@ -85,8 +69,7 @@ CBugSocket::CBugSocket(const CBugSocket& o)
   _nofSockets++;
 }
 
-CBugSocket& CBugSocket::operator=(CBugSocket& o) 
-{
+CBugSocket& CBugSocket::operator=(CBugSocket& o) {
   (*o._refCounter)++;
 
   _refCounter=o._refCounter;
@@ -97,18 +80,15 @@ CBugSocket& CBugSocket::operator=(CBugSocket& o)
   return *this;
 }
 
-void CBugSocket::Close() 
-{
+void CBugSocket::Close() {
   closesocket(_socket);
 }
 
-std::string CBugSocket::ReceiveBytes() 
-{
+std::string CBugSocket::ReceiveBytes() {
   std::string ret;
   char buf[1024];
  
-  while (1) 
-  {
+  while (1) {
     u_long arg = 0;
     if (ioctlsocket(_socket, FIONREAD, &arg) != 0)
       break;
@@ -130,67 +110,234 @@ std::string CBugSocket::ReceiveBytes()
   return ret;
 }
 
-void CBugSocket::ReceiveLine(CBugMessage * m) 
-{
-	if(m == NULL)
+void CBugSocket::ReceiveLine(CBugMessage * m) {
+	char buffer[6]  = "00000";
+  int  contAntigo = 0, contAtual = 0;
+	//std::string ret;
+	//recv(_socket, m._data, 1400, 0);
+  int erro;
+	
+  while (1) {
+    char r;
+    switch(recv(_socket, &r, 1, 0)) 
+	{
+	  case 0: // não está conectado
+        return;
+	  case SOCKET_ERROR: // 
+		  {
+				erro = WSAGetLastError();
+
+				switch(erro)
+				{
+				
+					case WSANOTINITIALISED:
+						{
+							m = new CBugMessage();
+							return;
+							//errorMsg.append("need to call WSAStartup to initialize socket system on Window system.");
+							break;
+						}		
+					case WSAENETDOWN:
+						{
+							m = new CBugMessage();
+							return;
+							//errorMsg.append("The network subsystem has failed.");
+							break;
+						}
+					case WSAHOST_NOT_FOUND:
+						{
+							m = new CBugMessage();
+							return;
+							//errorMsg.append("Authoritative Answer Host not found.");
+							break;
+						}
+					case WSATRY_AGAIN:
+						{
+							m = new CBugMessage();
+							return;
+							//errorMsg.append("Non-Authoritative Host not found, or server failure.");
+							break;
+						}
+					case WSANO_RECOVERY:
+						{
+							m = new CBugMessage();
+							return;
+							//errorMsg.append("Nonrecoverable error occurred.");
+							break;
+						}
+					case WSANO_DATA:
+						{
+							m = new CBugMessage();
+							return;
+							//errorMsg.append("Valid name, no data record of requested type.");
+							break;
+						}
+					case WSAEINPROGRESS:
+						{
+							m = new CBugMessage();
+							return;
+							//errorMsg.append("A blocking Windows Sockets 1.1 call is in progress, or the service provider is still processing a callback function.");
+							break;
+						}
+					case WSAEFAULT:
+						{
+							m = new CBugMessage();
+							return;
+							//errorMsg.append("The name parameter is not a valid part of the user address space.");
+							break;
+						}
+					case WSAEINTR:
+						{
+							m = new CBugMessage();
+							return;
+							//errorMsg.append("A blocking Windows Socket 1.1 call was canceled through WSACancelBlockingCall.");	
+							break;
+						}
+					case WSAEWOULDBLOCK:
+						{
+							//m->writeByte(r);
+							//Erro comum
+							break;						
+						}
+					default:
+						{
+							
+							if(erro != 0)
+							{
+								m = new CBugMessage();
+								return;
+							}
+							break;
+						}
+				}
+		  }// case Socket Error;        
+    }
+
+
+    //ret += r;
+	m->writeByte(r);
+
+	if(m->getOverFlow())
 	{
 		m = new CBugMessage();
-		m->init();
+		return;
 	}
 
-	recv(_socket, m->_data, MAXPACKAGESIZE, 0);
-}
+	contAtual += 1;
 
-void CBugSocket::SendLine(CBugMessage * m) 
-{
-	send(_socket, m->_data, MAXPACKAGESIZE,0);  
-}
 
-void CBugSocket::SendBytes(const std::string& s) 
-{
-	send(_socket,s.c_str(),s.length(),0);
-}
-
-bool CBugSocket::run()
-{
-	CBugMessage * newMessage = new CBugMessage();
-	newMessage->init();
-
-	try
+	// |FIM| sinaliza o fim do pacote
+	switch(r)
 	{
-		this->ReceiveLine(newMessage);
-		enterCriticalSection();
-		bufferMensagens->addElement(newMessage,bufferMensagens->size());
-		leaveCriticalSection();
-
-		Sleep(2);
+		case '|':
+			{
+				if(buffer[0] == '0')
+				{
+					buffer[0] = '|';
+					contAntigo = contAtual;
+				}
+				else if(buffer[4] == '0' && 
+					    buffer[3] == 'M' && 
+						buffer[2] == 'I' && 
+						buffer[1] == 'F' && 
+						buffer[0] == '|' &&
+						contAntigo == (contAtual-1))
+				{
+					buffer[4] = '|';
+					return;
+				}
+				else
+				{
+					strcpy(buffer,"00000");
+					contAntigo = 0;
+				}
+				break;
+			}
+		case 'F':
+			{
+				if(buffer[4] == '0' && 
+				   buffer[3] == '0' && 
+				   buffer[2] == '0' && 
+				   buffer[1] == '0' && 
+				   buffer[0] == '|' &&
+				   contAntigo == (contAtual-1))
+				{
+					buffer[1] = 'F';
+					contAntigo = contAtual;
+				}
+				else
+				{
+					strcpy(buffer,"00000");
+					contAntigo = 0;
+				}
+				break;
+			}
+		case 'I':
+			{
+				if(buffer[4] == '0' && 
+				   buffer[3] == '0' && 
+				   buffer[2] == '0' && 
+				   buffer[1] == 'F' && 
+				   buffer[0] == '|' &&
+				   contAntigo == (contAtual-1))
+				{
+					buffer[2] = 'I';
+					contAntigo = contAtual;
+				}
+				else
+				{
+					strcpy(buffer,"00000");
+					contAntigo = 0;
+				}	
+				break;
+			}
+		case 'M':
+			{
+				if(buffer[4] == '0' && 
+				   buffer[3] == '0' && 
+				   buffer[2] == 'I' && 
+				   buffer[1] == 'F' && 
+				   buffer[0] == '|' &&
+				   contAntigo == (contAtual-1))
+				{
+					buffer[3] = 'M';
+					contAntigo = contAtual;
+				}
+				else
+				{
+					strcpy(buffer,"00000");
+					contAntigo = 0;
+				}		
+				break;
+			}
 	}
-	catch(...)
-	{
-		return false;
-	}
-
-	return true;
-}
-
-void  CBugSocket::limpaBufferMensagens()
-{
-	enterCriticalSection();
-	while(bufferMensagens->size() > 0)
-	{
-		bufferMensagens->removeElementAt(0);
-	}
-	leaveCriticalSection();
-}
-
-
-
+	
 /*
-	Socket de Servidor
-
+    if (r == '|')
+	{
+		break;
+	}
 */
-CBugSocketServer::CBugSocketServer(int port, int connections, TypeSocket type) 
-{
+  }
+}
+
+void CBugSocket::SendLine(CBugMessage * m) {
+  m->writeByte('|');
+  m->writeByte('F');
+  m->writeByte('I');
+  m->writeByte('M');
+  m->writeByte('|');
+  //s += '\n';
+  //send(_socket,s.c_str(),s.length(),0);
+	send(_socket,m->_data,m->getSize(),0);
+  
+}
+
+void CBugSocket::SendBytes(const std::string& s) {
+  send(_socket,s.c_str(),s.length(),0);
+}
+
+CBugSocketServer::CBugSocketServer(int port, int connections, TypeSocket type) {
   sockaddr_in sa;
 
   memset(&sa, 0, sizeof(sa));
@@ -198,51 +345,32 @@ CBugSocketServer::CBugSocketServer(int port, int connections, TypeSocket type)
   sa.sin_family = PF_INET;             
   sa.sin_port = htons(port);          
   _socket = socket(AF_INET, SOCK_STREAM, 0);
-
-  if (_socket == INVALID_SOCKET) 
-  {
+  if (_socket == INVALID_SOCKET) {
     throw "INVALID_SOCKET";
   }
 
-  if(type==NonBlockingSocket) 
-  {
+  if(type==NonBlockingSocket) {
     u_long arg = 1;
-	//Parametro 1 -> Socket
-	//Parametro 2 -> FIONBIO - Habilita ou não o modo sem bloqueio
-	//Parametro 3 -> 0 para bloqueio e diferente de 0 para desbloqueio
     ioctlsocket(_socket, FIONBIO, &arg);
   }
 
-
-  if (bind(_socket, (sockaddr *)&sa, sizeof(sockaddr_in)) == SOCKET_ERROR) 
-  {
+  /* bind the socket to the internet address */
+  if (bind(_socket, (sockaddr *)&sa, sizeof(sockaddr_in)) == SOCKET_ERROR) {
     closesocket(_socket);
     throw "INVALID_SOCKET";
   }
-
-  enterCriticalSection();
-
-  bufferMensagens = new CDoubleList<CBugMessage>;
-  bufferConexoes = new CDoubleList<CBugSocket>;
-
-  leaveCriticalSection();
-
-  listen(_socket, connections);       
+  
+  listen(_socket, connections);                               
 }
 
-CBugSocket* CBugSocketServer::Accept() 
-{
+CBugSocket* CBugSocketServer::Accept() {
   SOCKET new_sock = accept(_socket, 0, 0);
-
-  if (new_sock == INVALID_SOCKET) 
-  {
+  if (new_sock == INVALID_SOCKET) {
     int rc = WSAGetLastError();
-    if(rc==WSAEWOULDBLOCK) 
-	{
+    if(rc==WSAEWOULDBLOCK) {
       return 0; // non-blocking call, no request pending
     }
-    else 
-	{
+    else {
       throw "Invalid Socket";
     }
   }
@@ -251,55 +379,11 @@ CBugSocket* CBugSocketServer::Accept()
   return r;
 }
 
-bool CBugSocketServer::run()
-{
-	CBugSocket * newSocket = NULL;
-
-	try
-	{
-		newSocket = Accept();
-
-		if(newSocket != NULL)
-		{
-			enterCriticalSection();
-
-			bufferConexoes->addElement(newSocket,bufferConexoes->size());
-
-			leaveCriticalSection();
-		}
-		else
-		{
-			return false;
-		}
-
-		Sleep(2);
-	}
-	catch(...)
-	{
-		return false;
-	}
-	return true;
-}
-
-void  CBugSocketServer::limpaBufferConexoes()
-{
-	enterCriticalSection();
-	while(bufferConexoes->size() > 0)
-	{
-		bufferConexoes->removeElementAt(0);
-	}
-	leaveCriticalSection();
-}
-
-
-
-CBugSocketClient::CBugSocketClient(const std::string& host, int port) : CBugSocket() 
-{
+CBugSocketClient::CBugSocketClient(const std::string& host, int port) : CBugSocket() {
   std::string error;
 
   hostent *he;
-  if ((he = gethostbyname(host.c_str())) == 0) 
-  {
+  if ((he = gethostbyname(host.c_str())) == 0) {
 	  error = strerror(errno);
     throw error;
   }
@@ -310,20 +394,16 @@ CBugSocketClient::CBugSocketClient(const std::string& host, int port) : CBugSock
   addr.sin_addr = *((in_addr *)he->h_addr);
   memset(&(addr.sin_zero), 0, 8); 
 
-  if (::connect(_socket, (sockaddr *) &addr, sizeof(sockaddr))) 
-  {
+  if (::connect(_socket, (sockaddr *) &addr, sizeof(sockaddr))) {
     error = strerror(WSAGetLastError());
     throw error;
   }
 }
 
-CBugSocketSelect::CBugSocketSelect(CBugSocket const * const s1, CBugSocket const * const s2, TypeSocket type) 
-{
+CBugSocketSelect::CBugSocketSelect(CBugSocket const * const s1, CBugSocket const * const s2, TypeSocket type) {
   FD_ZERO(&fds_);
   FD_SET(const_cast<CBugSocket*>(s1)->_socket,&fds_);
-
-  if(s2) 
-  {
+  if(s2) {
     FD_SET(const_cast<CBugSocket*>(s2)->_socket,&fds_);
   }     
 
@@ -332,12 +412,10 @@ CBugSocketSelect::CBugSocketSelect(CBugSocket const * const s1, CBugSocket const
   tval.tv_usec = 1;
 
   TIMEVAL *ptval;
-  if(type==NonBlockingSocket) 
-  {
+  if(type==NonBlockingSocket) {
     ptval = &tval;
   }
-  else 
-  { 
+  else { 
     ptval = 0;
   }
 
@@ -345,12 +423,9 @@ CBugSocketSelect::CBugSocketSelect(CBugSocket const * const s1, CBugSocket const
     throw "Error in select";
 }
 
-bool CBugSocketSelect::Readable(CBugSocket const* const s) 
-{
+bool CBugSocketSelect::Readable(CBugSocket const* const s) {
   if (FD_ISSET(s->_socket,&fds_)) return true;
   return false;
 }
 
 #pragma warning(pop)
-
-#endif

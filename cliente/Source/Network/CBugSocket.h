@@ -1,96 +1,78 @@
 /* 
-	CBugSocket.h
+   CBugSocket.h
 
 	Classe de controle de conexão via socket
 
 	Baseada na Socket.h
-	Copyright (C) 2002-2004 René Nyffenegger
-	René Nyffenegger rene.nyffenegger@adp-gmbh.ch
+   Copyright (C) 2002-2004 René Nyffenegger
+   René Nyffenegger rene.nyffenegger@adp-gmbh.ch
 
    @autor Paulo
 */
 
 #ifndef _CBUGSOCKET_H_
 #define _CBUGSOCKET_H_
+
 #include <WinSock2.h>
+
 #include <string>
-
-
-
 #include "CBugMessage.h"
-#include "CBugThread.h"
-#include "CDoubleList.h"
-
 
 enum TypeSocket {BlockingSocket, NonBlockingSocket};
 
-class CBugSocket : public CBugThread
-{
+class CBugSocket {
 public:
 
-	virtual ~CBugSocket();
-	CBugSocket(const CBugSocket&);
-	CBugSocket& operator=(CBugSocket&);
+  virtual ~CBugSocket();
+  CBugSocket(const CBugSocket&);
+  CBugSocket& operator=(CBugSocket&);
 
-	void ReceiveLine(CBugMessage * m);
-	std::string ReceiveBytes();
+  void        ReceiveLine(CBugMessage *m);
+  std::string ReceiveBytes();
 
-	void   Close();
+  void   Close();
 
-	bool   run();
+  // The parameter of SendLine is not a const reference
+  // because SendLine modifes the std::string passed.
+  void   SendLine (CBugMessage *mes);
 
-	CDoubleList<CBugMessage> * bufferMensagens;
-
-	void   SendLine(CBugMessage * m);
-
-	void   SendBytes(const std::string&);
-
-	void  limpaBufferMensagens();
+  // The parameter of SendBytes is a const reference
+  // because SendBytes does not modify the std::string passed 
+  // (in contrast to SendLine).
+  void   SendBytes(const std::string&);
 
 protected:
-	friend class CBugSocketServer;
-	friend class CBugSocketSelect;
+  friend class CBugSocketServer;
+  friend class CBugSocketSelect;
 
-	CBugSocket(SOCKET s);
-	CBugSocket();
+  CBugSocket(SOCKET s);
+  CBugSocket();
 
 
-	SOCKET _socket;
+  SOCKET _socket;
 
-	int* _refCounter;
+  int* _refCounter;
 
 private:
-	static void Inicia();
-	static void Finaliza();
-	static int  _nofSockets;
-
+  static void Start();
+  static void End();
+  static int  _nofSockets;
 };
 
-
-class CBugSocketClient : public CBugSocket 
-{
+class CBugSocketClient : public CBugSocket {
 public:
   CBugSocketClient(const std::string& host, int port);
 };
 
-class CBugSocketServer : public CBugSocket 
-{
+class CBugSocketServer : public CBugSocket {
 public:
+  CBugSocketServer(int port, int connections, TypeSocket type=BlockingSocket);
 
-	CDoubleList<CBugSocket> * bufferConexoes;
-
-	void  limpaBufferConexoes();
-
-    CBugSocketServer(int port, int connections, TypeSocket type=BlockingSocket);
-
-    CBugSocket* Accept();
-
-	bool run();
+  CBugSocket* Accept();
 };
 
-
-class CBugSocketSelect 
-{
+// http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winsock/wsapiref_2tiq.asp
+class CBugSocketSelect {
   public:
     CBugSocketSelect(CBugSocket const * const s1, CBugSocket const * const s2=NULL, TypeSocket type=BlockingSocket);
 

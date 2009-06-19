@@ -8,6 +8,8 @@ Baseada na classe dreamMessage.h do livro Programming Multiplayer Games
 
 /*
 Inicializa as variaveis
+@param d -> vetor de bytes
+@param lenght -> tamanho do vetor de bytes
 */
 void CBugMessage::init()
 {
