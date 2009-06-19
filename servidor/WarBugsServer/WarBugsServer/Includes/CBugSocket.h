@@ -27,14 +27,14 @@ public:
   CBugSocket(const CBugSocket&);
   CBugSocket& operator=(CBugSocket&);
 
-  void        ReceiveLine(CBugMessage &m);
+  void        ReceiveLine(CBugMessage *m);
   std::string ReceiveBytes();
 
   void   Close();
 
   // The parameter of SendLine is not a const reference
   // because SendLine modifes the std::string passed.
-  void   SendLine (CBugMessage &mes);
+  void   SendLine (CBugMessage *mes);
 
   // The parameter of SendBytes is a const reference
   // because SendBytes does not modify the std::string passed 

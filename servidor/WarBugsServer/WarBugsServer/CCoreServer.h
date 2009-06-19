@@ -15,7 +15,7 @@ ref class CFrame
 {
 	public:
 		bool			_toAll;
-		char        *   _data;
+		//char        *   _data;
 		CBugSocket  *	_socket;
 		CBugMessage *	_message;
 		int             _idCenario;
@@ -24,9 +24,10 @@ ref class CFrame
 		{
 			_toAll	= false;
 			_socket = NULL;
-			_data   = new char[1400];
+			//_data   = new char[1400];
 			_message = new CBugMessage();
-			_message->init(_data,1400);
+			//_message->init(_data,1400);
+			_message->init();
 			_idCenario = -1;
 		}
 

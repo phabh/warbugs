@@ -6,6 +6,8 @@
 
 #pragma once
 
+#define MAXPACKAGESIZE 300
+
 class CBugMessage
 {
 	private:
@@ -19,7 +21,7 @@ class CBugMessage
 	public:
 		char  * _data;							// vetor com os dados
 
-		void    init(char *d, int length);
+		void    init();
 
 		void    clear(void);
 		void    write(void *d, int length);
