@@ -586,7 +586,7 @@ bool CGameCore::conectar(char *login, char *password)
 	strcpy(_myPassword, password);
 
 	//_packageToSend.init(_dataToSend, PACKAGESIZE);
-	//	_packageReceived->init(_dataReceived, PACKAGESIZE);
+	//	_packageReceived.init(_dataReceived, PACKAGESIZE);
 
 	try
 	{
@@ -762,7 +762,7 @@ int CGameCore::pathfindingRTA(CPersonagem *personagem)
 
 void CGameCore::enviarPacote(int packageID)
 {
-	_packageToSend.init();
+	//_packageToSend.init();
 	_packageToSend.clear();
 
 	_packageToSend.writeInt(packageID);
@@ -776,7 +776,7 @@ void CGameCore::enviarPacote(int packageID)
 
 void CGameCore::enviarPacote(int packageID, int i1)
 {
-	_packageToSend.init();
+//_packageToSend.init();
 	_packageToSend.clear();
 
 	_packageToSend.writeInt(packageID);
@@ -789,7 +789,7 @@ void CGameCore::enviarPacote(int packageID, int i1)
 
 void CGameCore::enviarPacote(int packageID, int i1, int i2)
 {
-	_packageToSend.init();
+//_packageToSend.init();
 	_packageToSend.clear();
 
 	_packageToSend.writeInt(packageID);
@@ -803,7 +803,7 @@ void CGameCore::enviarPacote(int packageID, int i1, int i2)
 
 void CGameCore::enviarPacote(int packageID, int i1, int i2, char *s1 )
 {
-	_packageToSend.init();
+//_packageToSend.init();
 	_packageToSend.clear();
 
 	_packageToSend.writeInt(packageID);
@@ -818,7 +818,7 @@ void CGameCore::enviarPacote(int packageID, int i1, int i2, char *s1 )
 
 void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3)
 {
-	_packageToSend.init();
+//_packageToSend.init();
 	_packageToSend.clear();
 
 	_packageToSend.writeInt(packageID);
@@ -833,7 +833,7 @@ void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3)
 
 void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, int i4)
 {
-	_packageToSend.init();
+//_packageToSend.init();
 	_packageToSend.clear();
 
 	_packageToSend.writeInt(packageID);
@@ -849,7 +849,7 @@ void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, int i4)
 
 void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, int i4, int i5, int i6)
 {
-	_packageToSend.init();
+//_packageToSend.init();
 	_packageToSend.clear();
 
 	_packageToSend.writeInt(packageID);
@@ -867,7 +867,7 @@ void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, int i4, int 
 
 void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9)
 {
-	_packageToSend.init();
+//_packageToSend.init();
 	_packageToSend.clear();
 
 	_packageToSend.writeInt(packageID);
@@ -888,7 +888,7 @@ void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, int i4, int 
 
 void CGameCore::enviarPacote(int packageID, int i1, char *s1)
 {
-	_packageToSend.init();
+//_packageToSend.init();
 	_packageToSend.clear();
 
 	_packageToSend.writeInt(packageID);
@@ -902,7 +902,7 @@ void CGameCore::enviarPacote(int packageID, int i1, char *s1)
 
 void CGameCore::enviarPacote(int packageID, int i1, float f1, float f2)
 {
-	_packageToSend.init();
+//_packageToSend.init();
 	_packageToSend.clear();
 
 	_packageToSend.writeInt(packageID);
@@ -917,7 +917,7 @@ void CGameCore::enviarPacote(int packageID, int i1, float f1, float f2)
 
 void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, float f1, float f2)
 {
-	_packageToSend.init();
+//_packageToSend.init();
 	_packageToSend.clear();
 
 	_packageToSend.writeInt(packageID);
@@ -934,7 +934,7 @@ void CGameCore::enviarPacote(int packageID, int i1, int i2, int i3, float f1, fl
 
 void CGameCore::enviarPacote(int packageID, char *s1, char *s2)
 {
-	_packageToSend.init();
+//_packageToSend.init();
 	_packageToSend.clear();
 
 	_packageToSend.writeInt(packageID);
@@ -960,50 +960,50 @@ int CGameCore::receberPacote()
 
 	CPersonagem *personagem = new CPersonagem();
 
-	_packageReceived = new CBugMessage();
+	//_packageReceived;
 
-	_packageReceived->init();
+//_packageReceived.init();
 
-	_packageReceived->clear();
+	_packageReceived.clear();
 
-	_gameSocket->ReceiveLine(_packageReceived);
+	_gameSocket->ReceiveLine(&_packageReceived);
 
-	if(_packageReceived->getSize() != 0) // Se o pacote não extiver vazio
+	if(_packageReceived.getSize() != 0) // Se o pacote não extiver vazio
 	{
-		_packageReceived->beginReading();
+		_packageReceived.beginReading();
 
-		i = _packageReceived->readInt();
+		i = _packageReceived.readInt();
 
 		switch(i) // Lê o byte de identificação do pacote
 		{
 
 		case SHOW_PERSONAGENS: // CODIGO: MOSTRAR PERSONAGENS DO JOGADOR
 
-			_numMyChars = _packageReceived->readInt(); // número de personagens cadastrados
+			_numMyChars = _packageReceived.readInt(); // número de personagens cadastrados
 
 			for(int i=0; i<_numMyChars; i++)
 			{
-				_myStructChar[i]._id = _packageReceived->readInt();
-				_myStructChar[i]._nome = _packageReceived->readString();
-				_myStructChar[i]._nivel = _packageReceived->readInt();
+				_myStructChar[i]._id = _packageReceived.readInt();
+				_myStructChar[i]._nome = _packageReceived.readString();
+				_myStructChar[i]._nivel = _packageReceived.readInt();
 
-				_myStructChar[i]._agilidade = _packageReceived->readInt();
-				_myStructChar[i]._destreza = _packageReceived->readInt();
-				_myStructChar[i]._forca = _packageReceived->readInt();
-				_myStructChar[i]._instinto = _packageReceived->readInt();
-				_myStructChar[i]._resistencia = _packageReceived->readInt();
+				_myStructChar[i]._agilidade = _packageReceived.readInt();
+				_myStructChar[i]._destreza = _packageReceived.readInt();
+				_myStructChar[i]._forca = _packageReceived.readInt();
+				_myStructChar[i]._instinto = _packageReceived.readInt();
+				_myStructChar[i]._resistencia = _packageReceived.readInt();
 
-				_myStructChar[i]._taxaAtaque = _packageReceived->readInt();
-				_myStructChar[i]._tempoCarga = _packageReceived->readInt();
-				_myStructChar[i]._defesa = _packageReceived->readInt();
-				_myStructChar[i]._ataqueCorporal = _packageReceived->readInt();
-				_myStructChar[i]._danoCorporal = _packageReceived->readInt();
-				_myStructChar[i]._raioAtaque = _packageReceived->readInt();
-				_myStructChar[i]._raioDano = _packageReceived->readInt();
+				_myStructChar[i]._taxaAtaque = _packageReceived.readInt();
+				_myStructChar[i]._tempoCarga = _packageReceived.readInt();
+				_myStructChar[i]._defesa = _packageReceived.readInt();
+				_myStructChar[i]._ataqueCorporal = _packageReceived.readInt();
+				_myStructChar[i]._danoCorporal = _packageReceived.readInt();
+				_myStructChar[i]._raioAtaque = _packageReceived.readInt();
+				_myStructChar[i]._raioDano = _packageReceived.readInt();
 
-				_myStructChar[i]._idModelo = _packageReceived->readInt();
-				_myStructChar[i]._idTextura = _packageReceived->readInt();
-				_myStructChar[i]._idHud = _packageReceived->readInt();
+				_myStructChar[i]._idModelo = _packageReceived.readInt();
+				_myStructChar[i]._idTextura = _packageReceived.readInt();
+				_myStructChar[i]._idHud = _packageReceived.readInt();
 
 				_myChar[i] = _gerenciadorCena->addAnimatedMeshSceneNode( getMAnimMesh(_myStructChar[i]._idModelo), 0, _myStructChar[i]._id );
 				_myChar[i]->setMaterialFlag(EMF_LIGHTING, false);
@@ -1031,12 +1031,12 @@ int CGameCore::receberPacote()
 
 		case ENTER_CENARIO: // CODIGO: ENTROU EM UM CENÁRIO COM SUCESSO.
 
-			_myMapSceneID  = _packageReceived->readInt();
+			_myMapSceneID  = _packageReceived.readInt();
 			loadGameScene(pathCenario[_myMapSceneID]);
 
-			_myCharSceneID = _packageReceived->readInt();
+			_myCharSceneID = _packageReceived.readInt();
 
-			updMapPortals(_packageReceived->readInt(), _packageReceived->readInt(), _packageReceived->readInt(), _packageReceived->readInt());
+			updMapPortals(_packageReceived.readInt(), _packageReceived.readInt(), _packageReceived.readInt(), _packageReceived.readInt());
 
 			cout << "\nPersonagem entrou no cenário." << endl;
 
@@ -1054,13 +1054,13 @@ int CGameCore::receberPacote()
 
 		case  UPDATE_POSITION: // CODIGO: ATUALIZA A POSIÇÃO DE UM PERSONAGEM
 
-			personagem = _listaPersonagens->getElement(_packageReceived->readInt());
+			personagem = _listaPersonagens->getElement(_packageReceived.readInt());
 
-			x = (_packageReceived->readFloat());		
-			z = (_packageReceived->readFloat());
+			x = (_packageReceived.readFloat());		
+			z = (_packageReceived.readFloat());
 			personagem->_posicao = upd3DPosition(x, z);
 			personagem->_modelo->setPosition(personagem->_posicao);
-			personagem->_direcao = (_packageReceived->readFloat()); 
+			personagem->_direcao = (_packageReceived.readFloat()); 
 
 			//cout << "\nPosição de personagem atualizada." << endl;
 
@@ -1068,22 +1068,22 @@ int CGameCore::receberPacote()
 
 		case ADD_PERSONAGEM: // CODIGO: INSERÇÃO DE PERSONAGEM NO CENÁRIO
 
-			personagem->_id = _packageReceived->readInt();
+			personagem->_id = _packageReceived.readInt();
 			//personagem->_nome = new char[30];
-			//strcpy(personagem->_nome, _packageReceived->readString());
-			personagem->_posicao = upd3DPosition(_packageReceived->readFloat(), _packageReceived->readFloat());
+			//strcpy(personagem->_nome, _packageReceived.readString());
+			personagem->_posicao = upd3DPosition(_packageReceived.readFloat(), _packageReceived.readFloat());
 
-			personagem->_pv = _packageReceived->readInt();
-			personagem->_pp = _packageReceived->readInt();
-			personagem->_xp = _packageReceived->readInt();
+			personagem->_pv = _packageReceived.readInt();
+			personagem->_pp = _packageReceived.readInt();
+			personagem->_xp = _packageReceived.readInt();
 
-			personagem->_pvMax = _packageReceived->readInt();
-			personagem->_ppMax = _packageReceived->readInt();
-			personagem->_xpMax = _packageReceived->readInt();
+			personagem->_pvMax = _packageReceived.readInt();
+			personagem->_ppMax = _packageReceived.readInt();
+			personagem->_xpMax = _packageReceived.readInt();
 
-			personagem->_nivel = _packageReceived->readInt();
+			personagem->_nivel = _packageReceived.readInt();
 
-			buffs = _packageReceived->readShort();
+			buffs = _packageReceived.readShort();
 
 			for(int i = 0; i < BUFF_COUNT; i++)
 			{
@@ -1098,17 +1098,17 @@ int CGameCore::receberPacote()
 			//for(int i=0; i<BUFF_COUNT; i++)
 			//	 buffs & pow(2, i);
 
-			personagem->_raca = _packageReceived->readInt();
-			personagem->_classe = _packageReceived->readInt();
-			personagem->_estado = _packageReceived->readInt();
+			personagem->_raca = _packageReceived.readInt();
+			personagem->_classe = _packageReceived.readInt();
+			personagem->_estado = _packageReceived.readInt();
 
 			personagem->_ultimoEstado = personagem->_estado;
 
-			personagem->_velAnim = _packageReceived->readFloat();
+			personagem->_velAnim = _packageReceived.readFloat();
 
-			personagem->_direcao = _packageReceived->readInt();
-			personagem->_idBaseArma = _packageReceived->readInt();
-			personagem->_idBaseArmadura = _packageReceived->readInt();
+			personagem->_direcao = _packageReceived.readInt();
+			personagem->_idBaseArma = _packageReceived.readInt();
+			personagem->_idBaseArmadura = _packageReceived.readInt();
 
 			addPersonagem(personagem);
 
@@ -1116,14 +1116,14 @@ int CGameCore::receberPacote()
 
 		case ADD_BOLSA: // CODIGO: ADICIONAR BOLSA AO CENÁRIO
 
-			addBolsa(_packageReceived->readInt(), _packageReceived->readFloat(), _packageReceived->readFloat());
+			addBolsa(_packageReceived.readInt(), _packageReceived.readFloat(), _packageReceived.readFloat());
 			cout << "\nBolsa inserida no cenário." << endl;
 
 			break;
 
 		case REMOVE_BOLSA: // CODIGO: REMOVER BOLSA DO CENÁRIO
 
-			removeBolsa(_packageReceived->readInt());
+			removeBolsa(_packageReceived.readInt());
 			cout << "\nBolsa removida do cenário." << endl;
 
 			break;
@@ -1194,7 +1194,7 @@ int CGameCore::receberPacote()
 
 		case LOGIN_OK: // CODIGO: LOGIN EFETUADO COM SUCESSO
 
-			_myUserID = _packageReceived->readInt();
+			_myUserID = _packageReceived.readInt();
 			cout << "\nConectado." << endl;
 			_connected = true;
 
