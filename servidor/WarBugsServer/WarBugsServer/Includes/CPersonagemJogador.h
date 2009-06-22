@@ -11,7 +11,7 @@
 #include <iostream>
 using namespace std;
 
-#include "CBugSocket.h"
+#include "CClientSocketThread.h"
 #ifndef _CPERSONAGEM_H_
 #include "CPersonagem.h"
 #ifndef _CPERSONAGEM_H_
@@ -43,7 +43,7 @@ class CQuest;
 #define _CPERSONAGEMJOGADOR_H_
 class CPersonagemJogador : public CPersonagem
 {
-	CBugSocket *_socketJogador;
+	CClientSocketThread *_socketJogador;
 	
 	int _skillLevel[3];
 	int _pontoDistribuir;
@@ -85,7 +85,7 @@ public:
 	CEquipamento *getEquip();
 	int getPointsLeft();
 	int getSkillPointsLeft();
-	CBugSocket *getSocket();
+	CClientSocketThread *getSocket();
 	
 	//Setters
 	void setPointsToDistribute(int points);
@@ -107,7 +107,7 @@ public:
 	void setIDTrader(int value);
 	void setIDItemTrade(int value);
 	void setIDMoneyTrade(int value);
-	void setSocket(CBugSocket * socket);
+	void setSocket(CClientSocketThread * socket);
 
 	//Outros Métodos
 	//Manipulação de itens
@@ -138,6 +138,7 @@ public:
 	void speakToNPC(CPersonagem *alvo);
 	//Batalha
 	void takeDamage(int damage, CPersonagem *atkr);
+	int getDEF();
 	bool tryAttack();
 	void attack();
 	//Level Up
