@@ -110,6 +110,7 @@ public:
 	void setBaseBonus(CBonus *bonus);
 	void setBonus(CBonus *bonus);
 	void setTarget(CPersonagem *alvo);
+	void setTargetPosition(Ponto *posicao);
 	void setScene(CCenario *newScene);
 
 	void addMoney(int value);
