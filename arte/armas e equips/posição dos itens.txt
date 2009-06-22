@@ -1,0 +1,61 @@
+Besouro 
+
+Armaduras
+/posição hercules
+	capacete->setPosition(vector3df(0.f,-0.5f,0.f));
+	capacete->setRotation(vector3df(90.f,180.f,0.f));
+
+	//posição elmo barbaro
+
+	capacete->setPosition(vector3df(0.f,0.f,-1.5f));
+	capacete->setRotation(vector3df(90.f,180.f,0.f));
+
+
+Armas
+        // posição martelo
+	//bazuca->setPosition(vector3df(-1.f,0.f,0.9f));
+	//bazuca->setRotation(vector3df(0.f,0.f,90.f)); 
+    
+	// posição maça
+//	bazuca->setPosition(vector3df(-1.f,0.f,1.f));
+//	bazuca->setRotation(vector3df(0.f,0.f,90.f)); 
+
+	// posição bazuca
+	bazuca->setPosition(vector3df(0.f,0.f,0.f));
+	bazuca->setRotation(vector3df(0.f,0.f,0.f)); 
+
+	// posição metralhadora
+	bazuca->setPosition(vector3df(1.f,0.5f,0.f));
+	bazuca->setRotation(vector3df(-90.f,0.f,0.f)); 
+
+
+Vespa
+
+Armaduras
+	Posição oculosaviador
+        capacete->setPosition(vector3df(0.f,-0.2f,-1.3f)); 
+	capacete->setRotation(vector3df(90.f,180.f,0.f)); 
+	
+	posicao mascara de gas
+	capacete->setPosition(vector3df(0.f,2.3f,0.9f)); 
+	capacete->setRotation(vector3df(90.f,180.f,0.f)); 
+	capacete->setScale(vector3df(1.2f,1.2f,1.2f));
+
+
+ARmas
+	// posição mamona
+	//bazuca->setPosition(vector3df(0.f,0.f,0.f));
+	//bazuca->setRotation(vector3df(0.f,180.f,0.f)); 
+	
+	// posição cebola
+	//bazuca->setPosition(vector3df(0.f,0.f,0.f));
+	//bazuca->setRotation(vector3df(0.f,180.f,0.f)); 
+
+	
+	// posição espingarda
+	bazuca->setPosition(vector3df(0.f,0.5f,-0.5f));
+	bazuca->setRotation(vector3df(-10.f,-10.f,90.f)); 
+
+	// posição estilingue
+	//bazuca->setPosition(vector3df(0.f,0.f,0.f));
+	//bazuca->setRotation(vector3df(0.f,0.f,90.f));
