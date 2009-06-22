@@ -12,6 +12,7 @@ Limpa as variaveis size, readCount e overflow
 void CBugMessage::clear(void)
 {
 	_readCount = 0;
+	_data.clear();
 }
 
 /*
@@ -103,7 +104,7 @@ Lê um short do vetor e atualiza a posição de leitura
 short CBugMessage::readShort(void)
 {
 	 
-	int posArroba = _readCount;
+	int posArroba = _readCount+1;
 
 	while(_data[posArroba] != '@')
 	{
@@ -111,11 +112,11 @@ short CBugMessage::readShort(void)
 	}
 
 
-	std::string str = _data.substr( _readCount, posArroba);
+	std::string str = _data.substr( _readCount, posArroba-(_readCount+1));
 
 	short s = (short)atoi(str.c_str());
 
-	_readCount += posArroba;
+	_readCount += (posArroba-(_readCount+1));
 
 	return s;
 }
@@ -126,18 +127,18 @@ Lê um long do vetor e atualiza a posição de leitura
 */
 int CBugMessage::readInt(void)
 {
-	int posArroba = _readCount;
+	int posArroba = _readCount+1;
 
 	while(_data[posArroba] != '@')
 	{
 		posArroba++;
 	}
 
-	std::string s = _data.substr(_readCount,posArroba);
+	std::string s = _data.substr(_readCount,posArroba-(_readCount+1));
 
 	int i = atoi(s.c_str());
 
-	_readCount += posArroba;
+	_readCount += (posArroba-(_readCount+1));
 
 	return i;
 }
@@ -148,18 +149,18 @@ Lê um float do vetor e atualiza a posição de leitura
 */
 float CBugMessage::readFloat(void)
 {
-	int posArroba = _readCount;
+	int posArroba = _readCount+1;
 
 	while(_data[posArroba] != '@')
 	{
 		posArroba++;
 	}
 
-	std::string s = _data.substr(_readCount,posArroba);
+	std::string s = _data.substr(posArroba-(_readCount+1),posArroba);
 
 	float f = atof(s.c_str());
 
-	_readCount += posArroba;
+	_readCount += (posArroba-(_readCount+1));
 
 	return f;
 }
@@ -170,18 +171,22 @@ Lê uma string do vetor e atualiza a posição de leitura
 */
 char * CBugMessage::readString(void)
 {
-	int posArroba = _readCount;
+	char s [2000];
+
+	int posArroba = _readCount+1;
 
 	while(_data[posArroba] != '@')
 	{
 		posArroba++;
 	}
 
-	std::string str = _data.substr(_readCount,posArroba);
+	std::string str = _data.substr(_readCount,posArroba-(_readCount+1));
 
 	str+= '\0';
 
-	_readCount += posArroba;
+	_readCount += (posArroba-(_readCount+1));
 
-	return (char *)str.c_str();
+	strcpy(s,str.c_str());
+
+	return s;
 }
