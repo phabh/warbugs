@@ -5,6 +5,7 @@ Baseada na classe dreamMessage.h do livro Programming Multiplayer Games
 */
 #include "CBugMessage.h"
 #include <iostream>
+#include <math.h>
 
 /*
 Limpa as variaveis size, readCount e overflow
@@ -57,10 +58,45 @@ Escreve um float no vetor
 */
 void CBugMessage::writeFloat(float c)
 {
-     std::ostringstream buff;
-     buff<<c;
-	 
-	 _data.append(buff.str());
+
+	double inteiro, resto;
+
+	int i, r;
+
+	resto = modf( c, &inteiro);
+
+	i = (int)inteiro;
+
+	resto = resto * 10000;
+
+	double inteiro2;
+
+	modf(resto, &inteiro2);
+
+	r = inteiro2;
+
+	char *myBuff;
+	std::string strRetVal;
+
+	myBuff = new char[20];
+
+	memset(myBuff,'\0',20);
+
+	itoa( i, myBuff, 10);
+
+	strRetVal = myBuff; 
+
+	_data += strRetVal;
+	_data += '.';
+
+	memset(myBuff,'\0',20);
+
+	itoa( r, myBuff, 10);
+
+	strRetVal = myBuff; 
+
+	_data += strRetVal;
+
 	_data += '@';
 }
 
@@ -111,12 +147,11 @@ short CBugMessage::readShort(void)
 		posArroba++;
 	}
 
-
-	std::string str = _data.substr( _readCount, posArroba-(_readCount+1));
+	std::string str = _data.substr( _readCount, posArroba-_readCount);
 
 	short s = (short)atoi(str.c_str());
 
-	_readCount += (posArroba-(_readCount+1));
+	_readCount += ((posArroba+1)-_readCount);
 
 	return s;
 }
@@ -134,11 +169,11 @@ int CBugMessage::readInt(void)
 		posArroba++;
 	}
 
-	std::string s = _data.substr(_readCount,posArroba-(_readCount+1));
+	std::string s = _data.substr(_readCount,posArroba-_readCount);
 
 	int i = atoi(s.c_str());
 
-	_readCount += (posArroba-(_readCount+1));
+	_readCount += ((posArroba+1)-_readCount);
 
 	return i;
 }
@@ -156,11 +191,11 @@ float CBugMessage::readFloat(void)
 		posArroba++;
 	}
 
-	std::string s = _data.substr(posArroba-(_readCount+1),posArroba);
+	std::string s = _data.substr(_readCount,posArroba-_readCount);
 
 	float f = atof(s.c_str());
 
-	_readCount += (posArroba-(_readCount+1));
+	_readCount += ((posArroba+1)-_readCount);
 
 	return f;
 }
@@ -180,11 +215,11 @@ char * CBugMessage::readString(void)
 		posArroba++;
 	}
 
-	std::string str = _data.substr(_readCount,posArroba-(_readCount+1));
+	std::string str = _data.substr(_readCount,posArroba-_readCount);
 
 	str+= '\0';
 
-	_readCount += (posArroba-(_readCount+1));
+	_readCount += ((posArroba+1)-_readCount);
 
 	strcpy(s,str.c_str());
 
