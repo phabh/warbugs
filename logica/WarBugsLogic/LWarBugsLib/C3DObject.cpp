@@ -14,7 +14,7 @@
 
 void C3DObject::initC3DObject()
 {
-	coordenada = NULL;
+	coordenada = new Ponto();
 	modelo = -1;
 	textura2D = -1;
 	textura3D = -1;

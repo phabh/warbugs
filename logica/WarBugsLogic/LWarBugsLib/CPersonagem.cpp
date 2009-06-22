@@ -204,6 +204,10 @@ void CPersonagem::setTarget(CPersonagem *Alvo)
 	if(alvo != NULL)
 		destino = alvo->getPosition();
 }
+void CPersonagem::setTargetPosition(Ponto *posicao)
+{
+	destino = posicao;
+}
 void CPersonagem::setScene(CCenario *newScene)
 {
 	cenario = newScene;
