@@ -70,7 +70,7 @@ float CPersonagem::getDirection()
 }
 float CPersonagem::getMoveSpeed()
 {
-	return(FPS+(float)(getAGI()/10.0f));
+	return((float)1+(float)(getAGI()/10.0f));
 }
 int CPersonagem::getFOR()
 {
@@ -222,8 +222,9 @@ void CPersonagem::addXP(int value)
 	experiencia = experiencia + value;
 }
 //Outros métodos
-void CPersonagem::move()
+bool CPersonagem::move()
 {
+	bool resposta = false;
 	float PI = 3.14159265358979323846f;
 	Ponto *teste = new Ponto(getPosition()->x, getPosition()->z);
 	if(this->getPosition()->x < destino->x)
@@ -231,6 +232,7 @@ void CPersonagem::move()
 		if(this->getPosition()->x <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed()))
 	    {
            teste->x = this->getPosition()->x + getMoveSpeed();
+		   resposta = true;
         }
     }
     else
@@ -238,6 +240,7 @@ void CPersonagem::move()
         if(this->getPosition()->x >= getMoveSpeed())
         {
            teste->x = this->getPosition()->x - getMoveSpeed();
+		   resposta = true;
         }
 	}
     if(this->getPosition()->z < destino->z)
@@ -245,6 +248,7 @@ void CPersonagem::move()
         if(this->getPosition()->z <= ((MAPMAXCOL*TAMQUADRANTE)-getMoveSpeed()))
 	   	{
            teste->z = this->getPosition()->z + getMoveSpeed();
+		   resposta = true;
         }
     }
     else
@@ -252,10 +256,12 @@ void CPersonagem::move()
         if(this->getPosition()->z >= getMoveSpeed())
         {
            teste->z = this->getPosition()->z - getMoveSpeed();
+		   resposta = true;
         }
     }
 	setPosition(teste->x, teste->z);
     setDirection(atan2(destino->z - getPosition()->z, destino->x - getPosition()->x) * 180 / PI);
+	return(resposta);
 }
 //void CPersonagem::die(){}
 void CPersonagem::useSkill(TipoPoder skill, int skillLevel)

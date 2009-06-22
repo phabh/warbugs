@@ -221,9 +221,12 @@ void CInimigo::update()
 	{
 		this->attack();
 	}
-	else if((destino->x != this->getPosition()->x)||(destino->z != this->getPosition()->z))
+	else if(this->getScene()->getQuadID(this->getPosition()) != this->getScene()->getQuadID(this->destino))
 	{
-		this->move();
+		if(!this->move())
+		{
+			this->takeDecision();
+		}
 	}
 	else// if((destino->x == getPosition()->x)||(destino->z == getPosition()->z))
 	{
