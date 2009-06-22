@@ -5,61 +5,15 @@ Baseada na classe dreamMessage.h do livro Programming Multiplayer Games
 */
 #include "CBugMessage.h"
 #include <iostream>
-
-/*
-Inicializa as variaveis
-@param d -> vetor de bytes
-@param lenght -> tamanho do vetor de bytes
-*/
-void CBugMessage::init()
-{
-	_data = new char[MAXPACKAGESIZE];
-	_maxSize = MAXPACKAGESIZE;
-	_size = 0;
-	_readCount = 0;
-	_overFlow = false;
-}
+#include <math.h>
 
 /*
 Limpa as variaveis size, readCount e overflow
 */
 void CBugMessage::clear(void)
 {
-	_size = 0;
 	_readCount = 0;
-	_overFlow = false;
-}
-
-/*
-Obtem um novo ponto para inclusão de dados
-@param length -> tamanho do dado a ser inserido
-@return -> ponteiro para a posição inicial de inserção
-*/
-char * CBugMessage::getNewPoint(int length)
-{
-	char *tempData;
-
-	// Check for overflow
-	if(_size + length > _maxSize)
-	{
-		clear();
-		_overFlow = true;
-	}
-
-	tempData = _data + _size;
-	_size += length;
-
-	return tempData;
-}
-
-/*
-Escreve no vetor de bytes um tipo qualquer do tamanho qualquer
-@param *d -> qualquer tipo de dado
-@param length -> tamanho deste dado
-*/
-void CBugMessage::write(void *d, int length)
-{
-	memcpy(getNewPoint(length), d, length);
+	_data.clear();
 }
 
 /*
@@ -68,9 +22,8 @@ Escreve um byte no vetor
 */
 void CBugMessage::writeByte(char c)
 {
-	char *buf;
-	buf = getNewPoint(1);
-	memcpy(buf, &c, 1);
+	_data += c;
+	_data += '@';
 }
 
 /*
@@ -79,9 +32,11 @@ Escreve um short no vetor
 */
 void CBugMessage::writeShort(short c)
 {
-	char *buf;
-	buf = getNewPoint(2);
-	memcpy(buf, &c, 2);
+     std::ostringstream buff;
+     buff<<c;
+	 
+	 _data.append(buff.str());
+	_data += '@';
 }
 
 /*
@@ -90,9 +45,11 @@ Escreve um long no vetor
 */
 void CBugMessage::writeInt(int c)
 {
-	char *buf;
-	buf = getNewPoint(4);
-	memcpy(buf, &c, 4);
+     std::ostringstream buff;
+     buff<<c;
+	 
+	 _data.append(buff.str());
+	_data += '@';
 }
 
 /*
@@ -101,9 +58,46 @@ Escreve um float no vetor
 */
 void CBugMessage::writeFloat(float c)
 {
-	char *buf;
-	buf = getNewPoint(4);
-	memcpy(buf, &c, 4);
+
+	double inteiro, resto;
+
+	int i, r;
+
+	resto = modf( c, &inteiro);
+
+	i = (int)inteiro;
+
+	resto = resto * 10000;
+
+	double inteiro2;
+
+	modf(resto, &inteiro2);
+
+	r = inteiro2;
+
+	char *myBuff;
+	std::string strRetVal;
+
+	myBuff = new char[20];
+
+	memset(myBuff,'\0',20);
+
+	itoa( i, myBuff, 10);
+
+	strRetVal = myBuff; 
+
+	_data += strRetVal;
+	_data += '.';
+
+	memset(myBuff,'\0',20);
+
+	itoa( r, myBuff, 10);
+
+	strRetVal = myBuff; 
+
+	_data += strRetVal;
+
+	_data += '@';
 }
 
 /*
@@ -112,12 +106,8 @@ Escreve uma string no vetor
 */
 void CBugMessage::writeString(char *s)
 {
-	if(!s)
-	{
-		return;
-	}
-	else
-		write(s, strlen(s)+1);
+	 _data.append(s);
+	_data += '@';
 }
 
 
@@ -129,33 +119,6 @@ void CBugMessage::beginReading(void)
 	_readCount = 0;
 }
 
-/*
-Inicializa a leitura do vetor até o tamanho passado
-@param s-> tamanho do vetor
-*/
-void CBugMessage::beginReading(int s)
-{
-	_size = s;
-	_readCount = 0;
-}
-
-/*
-Lê o vetor de bytes até o tamanho passado
-@param s -> tamanho até onde será realizada a leitura
-@return -> vetor da posição 0 até a posição passada
-*/
-char * CBugMessage::read(int s)
-{
-	static char c[2048];
-
-	if(_readCount+s > _size)
-		return NULL;
-	else
-		memcpy(&c, &_data[_readCount], s);
-
-	_readCount += s;
-	return c;
-}
 
 /*
 Lê um byte do vetor e atualiza a posição de leitura
@@ -163,15 +126,11 @@ Lê um byte do vetor e atualiza a posição de leitura
 */
 char CBugMessage::readByte(void)
 {
-	char c = -1;
+	 char c = _data[_readCount];
+	
+	 _readCount += 2;
 
-	if(_readCount+1 > _size)
-		c = -1;
-	else
-		memcpy(&c, &_data[_readCount], 1);
-
-	_readCount++;
-	return c;
+	 return c;
 }
 
 /*
@@ -180,13 +139,21 @@ Lê um short do vetor e atualiza a posição de leitura
 */
 short CBugMessage::readShort(void)
 {
-	short c = -1;
+	 
+	int posArroba = _readCount+1;
 
-	if(_readCount+2 <= _size)
-		memcpy(&c, &_data[_readCount], 2);
+	while(_data[posArroba] != '@')
+	{
+		posArroba++;
+	}
 
-	_readCount += 2;
-	return c;
+	std::string str = _data.substr( _readCount, posArroba-_readCount);
+
+	short s = (short)atoi(str.c_str());
+
+	_readCount += ((posArroba+1)-_readCount);
+
+	return s;
 }
 
 /*
@@ -195,13 +162,20 @@ Lê um long do vetor e atualiza a posição de leitura
 */
 int CBugMessage::readInt(void)
 {
-	int c = -1;
+	int posArroba = _readCount+1;
 
-	if(_readCount+4 <= _size)
-		memcpy(&c, &_data[_readCount], 4);
+	while(_data[posArroba] != '@')
+	{
+		posArroba++;
+	}
 
-	_readCount += 4;
-	return c;
+	std::string s = _data.substr(_readCount,posArroba-_readCount);
+
+	int i = atoi(s.c_str());
+
+	_readCount += ((posArroba+1)-_readCount);
+
+	return i;
 }
 
 /*
@@ -210,13 +184,20 @@ Lê um float do vetor e atualiza a posição de leitura
 */
 float CBugMessage::readFloat(void)
 {
-	float c = -1;
+	int posArroba = _readCount+1;
 
-	if(_readCount+4 <= _size)
-		memcpy(&c, &_data[_readCount], 4);
+	while(_data[posArroba] != '@')
+	{
+		posArroba++;
+	}
 
-	_readCount += 4;
-	return c;
+	std::string s = _data.substr(_readCount,posArroba-_readCount);
+
+	float f = atof(s.c_str());
+
+	_readCount += ((posArroba+1)-_readCount);
+
+	return f;
 }
 
 /*
@@ -225,21 +206,22 @@ Lê uma string do vetor e atualiza a posição de leitura
 */
 char * CBugMessage::readString(void)
 {
-	static char string[2048];
-	int l, c;
+	char s [2000];
 
-	l=0;
-	do
+	int posArroba = _readCount+1;
+
+	while(_data[posArroba] != '@')
 	{
-		c = readByte();
+		posArroba++;
+	}
 
-		if (c == -1 || c == 0)
-			break;
+	std::string str = _data.substr(_readCount,posArroba-_readCount);
 
-		string[l] = c;
-		l++;
-	} while(l < (sizeof(string)-1));
+	str+= '\0';
 
-	string[l] = 0;
-	return string;
+	_readCount += ((posArroba+1)-_readCount);
+
+	strcpy(s,str.c_str());
+
+	return s;
 }
