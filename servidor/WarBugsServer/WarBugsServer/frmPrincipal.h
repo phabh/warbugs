@@ -1780,16 +1780,17 @@ private: System::Void timerBD_Tick(System::Object^  sender, System::EventArgs^  
 
 			
 			//Atualiza os Server
-			//_coreServer->updateAll();
+			_coreServer->updateAll();
 
 			if(_coreServer->getPlayers()->size() > 0)
-			for(int i = 0; i < _coreServer->_cenarioList->size(); i++)
+		for(int i = 0; i < _coreServer->_cenarioList->size(); i++)
 			{
 				for(int j = 0; j < _coreServer->_cenarioList->getElementAt(i)->monsterCount(); j++)
 				{
-					float x = _coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->x + 1.0f;
-					float z = _coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->z + 1.0f;
-					_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->setPosition( x, z);
+					/*
+					float x = _coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->x + 0.2f;
+					float z = _coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->z + 0.2f;
+					_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->setPosition( x, z);*/
 					
 					CCoreServer::sendMessage(true,_coreServer->_cenarioList->getElementAt(i)->getID(),NULL,UPDATE_POSITION,_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getSceneID(),_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->x,_coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getPosition()->z, _coreServer->_cenarioList->getElementAt(i)->getMonsterAt(j)->getDirection());
 				}			
