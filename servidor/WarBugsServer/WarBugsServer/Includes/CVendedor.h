@@ -46,6 +46,7 @@ public:
 	void buy(CPersonagemJogador *vendedor, CItem *item);
 	void sell(CPersonagemJogador *comprador, CItem *item);
 
+	int getDEF();
 	bool tryAttack();
 	void attack();
 	void takeDamage(int damage, CPersonagem *atkr);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CBugSocket.h"
+#include "CClientSocketThread.h"
 #include <iostream>
 using namespace std;
 #include "CWarBugObject.h"
@@ -15,7 +15,7 @@ private:
 	char					_email[30];
 	char					_login[15];
 	char					_senha[15];
-	CBugSocket *			_socket;
+	CClientSocketThread *			_socket;
 	CPersonagemJogador *	_personagem;
 	CCenario *              _cenario;
 	long					_TempoEnvioPing;
@@ -30,7 +30,7 @@ public:
 	char *					getEmail();
 	char *					getLogin();
 	char *					getPassword();
-	CBugSocket *			getSocket();
+	CClientSocketThread *			getSocket();
 	CPersonagemJogador *	getCharacter();
 	CCenario *              getScene();
 	bool					isPlaying();
@@ -40,7 +40,7 @@ public:
 	void					setEmail(char *value);
 	void					setLogin(char *value);
 	void					setPassword(char *value);
-	void					setSocket(CBugSocket * socket);
+	void					setSocket(CClientSocketThread * socket);
 	void					setCharacter(CPersonagemJogador * personagem);
 	void					setScene(CCenario * cenario);
 	void					setPlaying(bool isplaying);

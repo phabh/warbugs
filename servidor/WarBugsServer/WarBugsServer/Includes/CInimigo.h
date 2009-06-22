@@ -31,6 +31,7 @@ public:
 
 	void takeDecision();
 
+	int getDEF();
 	bool tryAttack();
 	void attack();
 	void takeDamage(int damage, CPersonagem *atkr);
