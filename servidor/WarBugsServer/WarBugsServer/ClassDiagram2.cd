@@ -1,0 +1,582 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CTimer">
+    <Position X="2.25" Y="19" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAABAABIAQAAEAECAEAAAAAAAAAAACAAEAEEQAA=</HashCode>
+      <FileName>Includes\CTimer.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CCenarioServer">
+    <Position X="16.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AwAAAAQACAABoAAAACAAAAAACEAACAAgCEAAAAACEAA=</HashCode>
+      <FileName>CCenarioServer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CDataBase">
+    <Position X="2.25" Y="7.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AEQAAAEAAQAAAAAAIAAAwAAAAAAAAKRCAIAABAAABAA=</HashCode>
+      <FileName>CDataBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CDataManager">
+    <Position X="4.5" Y="12.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AIQAQgAQVCAAogAgAAAACCAggBAQgCYAQABkgAIADAQ=</HashCode>
+      <FileName>CDataManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBugMessage">
+    <Position X="0.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gEAAAAAAJIAGABAAAAAAAEAAACAAAAKAAAFAAAAAAAA=</HashCode>
+      <FileName>Includes\CBugMessage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBugSocket">
+    <Position X="1.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAKAAACAACAAAAAAAAAQAQAAAACAAIQAAAAAQACIAAA=</HashCode>
+      <FileName>Includes\CBugSocket.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBugSocketClient">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Includes\CBugSocket.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBugSocketServer">
+    <Position X="2.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Includes\CBugSocket.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBugSocketSelect">
+    <Position X="4.5" Y="20" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAACAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Includes\CBugSocket.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CClientSocketThread">
+    <Position X="9" Y="3.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAGAAAAQQQAAAAoBAgAAAAAEIAAIAAAAAAAAA=</HashCode>
+      <FileName>Includes\CClientSocketThread.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CServerSocketThread">
+    <Position X="12" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAGAAAAAQAAAACAAQAACAAAAgAAAAAACAAAAA=</HashCode>
+      <FileName>Includes\CServerSocketThread.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="C3DObject">
+    <Position X="39.75" Y="5.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAIIoAAEAIAAAAAQAAAxAACAAAgAAAAAABAAEAIAAg=</HashCode>
+      <FileName>Includes\C3DObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CObjectCount">
+    <Position X="0.5" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAgAAAAAAAAAAIAAAgAAACBACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Includes\CWarBugObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWarBugObject">
+    <Position X="26.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAACAACBAAAAAAAAAAAAAAAAAAAAECAI=</HashCode>
+      <FileName>Includes\CWarBugObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CHabilidades">
+    <Position X="23.25" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>CAAADAAAwAgCEAABAgEAYUAAAAAAgCAACAIAAAABAAA=</HashCode>
+      <FileName>Includes\CHabilidades.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CHabilidadesSecundarias">
+    <Position X="25.5" Y="5.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>CPAnAlgABAEAAgABCAQAYAMAEgLAACAKQACQABEAAUY=</HashCode>
+      <FileName>Includes\CHabilidadesSecundarias.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CItem">
+    <Position X="36.25" Y="15.75" Width="1.5" />
+    <InheritanceLine Type="C3DObject" ManuallyRouted="true">
+      <Path>
+        <Point X="40.875" Y="9.284" />
+        <Point X="40.875" Y="14.896" />
+        <Point X="37" Y="14.896" />
+        <Point X="37" Y="15.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ECAAJIAACAAAACCDAAAAAVAAARABAQAIggAAIwAAAAA=</HashCode>
+      <FileName>Includes\CItem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CLealdade">
+    <Position X="18.5" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>EAQAAAAAQAAABwgEAABAgAAAEAAAAACAAARgwAAMIMA=</HashCode>
+      <FileName>Includes\CLealdade.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBuff">
+    <Position X="28.5" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>EAAIAAAAAAAAIAAEAAAUAADwAQAAAAAKAAAABAACAAI=</HashCode>
+      <FileName>Includes\CBuff.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBonus">
+    <Position X="5.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAgAAACAEAAAAAACAIAAAAAACAABAAAICAEA=</HashCode>
+      <FileName>Includes\CBonus.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBonusPrimario">
+    <Position X="4.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACBABAAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Includes\CBonusPrimario.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBonusSecundario">
+    <Position X="7" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACBAAAAAAAAAIAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Includes\CBonusSecundario.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CDivisorXP">
+    <Position X="2.25" Y="13.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>QAAAgAABAAAACAAAAAAAAAAAIAAAAAAAAAAAAAKAQAA=</HashCode>
+      <FileName>Includes\CDivisorXP.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPoder">
+    <Position X="45.5" Y="5.5" Width="1.5" />
+    <InheritanceLine Type="CWarBugObject" ManuallyRouted="true">
+      <Path>
+        <Point X="27.5" Y="2.685" />
+        <Point X="27.5" Y="5.083" />
+        <Point X="46.25" Y="5.083" />
+        <Point X="46.25" Y="5.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>gAARABAAAABAAAMICIBQEAAEAAAIAAAEBoAgAAAAgAA=</HashCode>
+      <FileName>Includes\CPoder.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CQuest">
+    <Position X="20.75" Y="5.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>EAAAlAUNOCgAESABEAAAEcIMYAABgAAAAAAAABAgIGA=</HashCode>
+      <FileName>Includes\CQuest.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CInimigo">
+    <Position X="43.25" Y="22.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FAAAAAAAACACAAAAAAAAAABAAAAAAACAAAAAAACEAAA=</HashCode>
+      <FileName>Includes\CInimigo.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CNPC">
+    <Position X="43.25" Y="25.25" Width="1.5" />
+    <InheritanceLine Type="CPersonagem" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="45.5" Y="25.687" />
+        <Point X="44.75" Y="25.687" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>FIAAAAAAACACAAAAAAEAAAAAABAAAACABCAAAACEAAA=</HashCode>
+      <FileName>Includes\CNPC.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPersonagem">
+    <Position X="45.5" Y="15.5" Width="1.75" />
+    <InheritanceLine Type="C3DObject" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="40.875" Y="9.284" />
+        <Point X="40.875" Y="14.979" />
+        <Point X="46.25" Y="14.979" />
+        <Point X="46.25" Y="15.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>R4cUTrgUgSBDABSUDDEKAEAhERMIkYTAAABERoSASAY=</HashCode>
+      <FileName>Includes\CPersonagem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPersonagemJogador">
+    <Position X="48" Y="15.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>dIAgCCMmMiIGBEAAFziD4IECAADQCBCUpAHAIAWkgEA=</HashCode>
+      <FileName>Includes\CPersonagemJogador.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CVendedor">
+    <Position X="42.75" Y="16.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>FIAAAAICYDBGAAAAAAAQIAAAAAAAQAKAAKAAACiEABg=</HashCode>
+      <FileName>Includes\CVendedor.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CArmor">
+    <Position X="36.75" Y="21.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAABAICCAAAAAAAAAAAAAAAAAgAICYAAgAAA=</HashCode>
+      <FileName>Includes\CArmor.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CConsumableItem">
+    <Position X="32" Y="21.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAIiBAAAIQAAAIAAAgAAACQAABIAAAAAA=</HashCode>
+      <FileName>Includes\CConsumableItem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CLoyaltyScroll">
+    <Position X="34.5" Y="21.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAACAAAAAAAAAAAAAAAAAAJIAAIAAAAAA=</HashCode>
+      <FileName>Includes\CLoyaltyScroll.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CQItem">
+    <Position X="38.75" Y="21.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAgAAAAAAAAAAJAAAIAAAAAA=</HashCode>
+      <FileName>Includes\CQItem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CScroll">
+    <Position X="40.75" Y="21.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAIEAAAICCAAABAAGAAAEBAgQABAAAIIAAIAAA=</HashCode>
+      <FileName>Includes\CScroll.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWeapon">
+    <Position X="29.75" Y="21.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>CAAAABAgAABAICAgAAAAAAAAEABAAAABwAIYIAAoAAA=</HashCode>
+      <FileName>Includes\CWeapon.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CJogador">
+    <Position X="47.25" Y="5.5" Width="1.75" />
+    <InheritanceLine Type="CWarBugObject" ManuallyRouted="true">
+      <Path>
+        <Point X="27.5" Y="2.685" />
+        <Point X="27.5" Y="5.063" />
+        <Point X="48.125" Y="5.063" />
+        <Point X="48.125" Y="5.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>IIAAIEAQAEEYAAiAQRFIAAAAAAAIBIBEAIAk4BAAAIE=</HashCode>
+      <FileName>Includes\CJogador.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CCenario">
+    <Position X="26.5" Y="15.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>RhgBoAABEIoAiQgIAiQAhDAKECQACAAQEJYwgCqeCAQ=</HashCode>
+      <FileName>Includes\CCenario.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPortal">
+    <Position X="30.25" Y="15.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>CIAAAIAAAAAAAAAQAAABAAAACAAIAAAoAABABAAAAAA=</HashCode>
+      <FileName>Includes\CPortal.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBolsa">
+    <Position X="33.5" Y="15.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>gAgAAAAhRARAAAAEAICAAAAAAAAAAAAAAAAIACIAQAQ=</HashCode>
+      <FileName>Includes\CBolsa.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBolsaList">
+    <Position X="33" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABCAwAAAgAAIAABAACAAAAAEAgAAAAIAIAQAA=</HashCode>
+      <FileName>Includes\CBolsaList.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBuffList">
+    <Position X="30.75" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>EAAgAAABAARAQAAQAIAAAADAAAAAAAAAAAAABAoAQAA=</HashCode>
+      <FileName>Includes\CBuffList.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CCenarioList">
+    <Position X="35.25" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAABAQBAAQAAgAAAIgAEAAAAAAAAAAAAAAAAAIEQAA=</HashCode>
+      <FileName>Includes\CCenarioList.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPeopleList">
+    <Position X="43.25" Y="5.5" Width="2" />
+    <InheritanceLine Type="CWarBugObject" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="27.5" Y="2.685" />
+        <Point X="27.5" Y="5.083" />
+        <Point X="44.25" Y="5.083" />
+        <Point X="44.25" Y="5.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAJAAQAAAAAAIABAAABAACAAAAAAAAEAAYgQAA=</HashCode>
+      <FileName>Includes\CPeopleList.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPlayerList">
+    <Position X="37.5" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAABAAQAAAAAAIAJAACAAAAAAAAAAABAAAJARAA=</HashCode>
+      <FileName>Includes\CPlayerList.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CThread">
+    <Position X="10.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AFAAACAACCAAAAQAAAAgAAAAAAAAAIAABAABAAAAAAI=</HashCode>
+      <FileName>Includes\CThread.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="SCelula&lt;A&gt;">
+    <Position X="20.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAABAAAIAAAA=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Ponto">
+    <Position X="2.25" Y="11.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAQAAAAA=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SMarket">
+    <Position X="0.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAACABAAAAGIAAACABAAAAAAAAAACAIAQABAAAAAAAA=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SDivisorXP">
+    <Position X="2.25" Y="17" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIgAYAAAA=</HashCode>
+      <FileName>Includes\CDivisorXP.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CEquipamento">
+    <Position X="2.25" Y="15.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAE=</HashCode>
+      <FileName>Includes\CEquipamento.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="CBufferFrame" Collapsed="true">
+    <Position X="9.5" Y="20.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CCoreServer.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="TDadosBD" Collapsed="true">
+    <Position X="9.5" Y="21.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CDataBase.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="SElemento" Collapsed="true">
+    <Position X="23" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Includes\CBolsa.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="SBagElemento" Collapsed="true">
+    <Position X="17.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Includes\CBolsaList.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="SBuffElemento" Collapsed="true">
+    <Position X="19.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Includes\CBuffList.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="SCenarioElemento" Collapsed="true">
+    <Position X="24.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Includes\CCenarioList.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="SCharElemento" Collapsed="true">
+    <Position X="21.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Includes\CPeopleList.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="SPlayerElemento" Collapsed="true">
+    <Position X="16" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Includes\CPlayerList.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="TYPE_MESSAGE">
+    <Position X="13.25" Y="7.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AXQMUAEQgQQihExqSGQItxgOAdFAAoCglUyAAmlxCKU=</HashCode>
+      <FileName>commom.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Item_result">
+    <Position X="9.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAABAAIAAAA=</HashCode>
+      <FileName>MySQL\mysql_com.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TypeSocket">
+    <Position X="11.25" Y="21" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Includes\CBugSocket.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TipoClasse">
+    <Position X="7.25" Y="18.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAgAxAAACAACAAEAAAAgAAQAAAAAEAAABAAAAAABACA=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Raca">
+    <Position X="11.25" Y="15" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>CAAIDAAACQgEAAACAABAAAEBCEACAAAAAACBACAAAAQ=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TypeClassChars">
+    <Position X="11.25" Y="19" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAABQAIEAAAAAAAIAAAAQAAAAAABAAAAAAAAAAACA=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TypeModelos">
+    <Position X="9.5" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAKDUAFAAAkBQAAigAkAMaABAAAAQQABAEwIAGUE0gA=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TypeItens">
+    <Position X="11.25" Y="7.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AEMAAAAVEAAAVABABiARAEAACQAEAEMqAIiA4JECAAA=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Atrib">
+    <Position X="4.5" Y="9.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAIQACIACGAIAAAAAAIAAAEAAIAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TipoBuff">
+    <Position X="7.25" Y="14.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAgCEQgQCAEAAAgAAQQAAAAgCCAAAAMAAAAAQAI=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="EstadoItem">
+    <Position X="9.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQQAAAAAAAAAAAAABAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TipoItem">
+    <Position X="7.25" Y="7.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAACAAAAAEAAAAAAAAAAAAAAAACCAAAAEA=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="EstadoPersonagem">
+    <Position X="4.5" Y="7.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAACAAAAAABAAQAQAAQBAAA=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TypeDirecao">
+    <Position X="7.25" Y="10.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ACACAAAAAQAAAAAAAAAAAAAACAAAIAYAAAAAAAAAAAA=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TipoPoder">
+    <Position X="7.25" Y="12.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAKAAAAAAgAAABAAAAhAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="QuestState">
+    <Position X="7.25" Y="9.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAEAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Moon">
+    <Position X="9.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABgAAAAAAAAgAAAAAAAAEAAAAAAAAEAAAABAAAA=</HashCode>
+      <FileName>Includes\Enumerators.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>
