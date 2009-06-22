@@ -6,7 +6,7 @@ void CCenario::initMatrix()
 	{
 		for(int j = 0; j < MAPMAXCOL; j = j + 1)
 		{
-			matrizDeCaminhamento[i][j] = NAOPASSAVEL;
+			matrizDeCaminhamento[i][j] = PASSAVEL;
 		}
 	}
 }

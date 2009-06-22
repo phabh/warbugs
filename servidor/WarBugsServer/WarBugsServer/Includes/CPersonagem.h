@@ -115,7 +115,7 @@ public:
 	void addMoney(int value);
 	void addXP(int value);
 	//Outros métodos
-	void move();
+	bool move();
 	virtual int getDEF()=0;
 	virtual bool tryAttack()=0;
 	virtual void attack()=0;
