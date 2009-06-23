@@ -737,7 +737,7 @@ void CMenuJogo::updateGraphics()
 		
 	//_gameCamera->setParent(_emptyCam);
 	//	_gameCamera->setPosition( vector3df(-20,20,0));
-	//	_gameCamera->setTarget(_emptyCam->getPosition());
+	_menuCamera->setTarget(_gameCore->_emptyCam->getPosition());
 
 	_gameCore->_emptyCam->setPosition(_gameCore->_myPlayerChar->_modelo->getPosition());
 
