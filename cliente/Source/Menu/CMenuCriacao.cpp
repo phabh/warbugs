@@ -73,7 +73,7 @@ void CMenuCriacao::updateHuds()
 
 	_gerHud->addButton(rect<s32>(midW-400, minH+10, midW-300, minH+50), 0, 301, L"<");
 	_gerHud->addButton(rect<s32>(midW+300, minH+10, midW+400, minH+50), 0, 302, L">");
-	_gerHud->addButton(rect<s32>(midW-50, maxH-5, midW+50, maxH-45), 0, 303, L"Criar");
+	_gerHud->addButton(rect<s32>(midW-50, maxH-45, midW+50, maxH-5), 0, 303, L"Criar");
 
 	_menuFlag[HUDUPDATED] = true;
 }
