@@ -636,20 +636,28 @@ void CMenuJogo::readCommands()
 
 		if(_gerEventos->isKeyDown(KEY_KEY_W))
 		{
+			//float x = cos(((direcao+90)*PI)/180)*velocidade;
+			//float z = -sin(((direcao+90)*PI)/180)*velocidade;
 			_gameCore->_myPlayerChar->_modelo->setPosition(_gameCore->_myPlayerChar->_modelo->getPosition() + 
-				vector3df(cos(((_gameCore->_myPlayerChar->_direcao)*PI)/180)*_gameCore->_myPlayerChar->_velAnim,
+				
+				vector3df(
+				cos(((_gameCore->_myPlayerChar->_direcao+90)*PI)/180)*_gameCore->_myPlayerChar->_velAnim,
 				0,
-				-sin(((_gameCore->_myPlayerChar->_direcao)*PI)/180)*_gameCore->_myPlayerChar->_velAnim));
+				-sin(((_gameCore->_myPlayerChar->_direcao+90)*PI)/180)*_gameCore->_myPlayerChar->_velAnim));
 
 			_newPosition = true;
 		}
 
 		if(_gerEventos->isKeyDown(KEY_KEY_S))
 		{
+			//float x = cos(((direcao+180+90)*PI)/180)*velocidade;
+			//float z = -sin(((direcao+180+90)*PI)/180)*velocidade;
+
 			_gameCore->_myPlayerChar->_modelo->setPosition(_gameCore->_myPlayerChar->_modelo->getPosition() + 
-				vector3df(cos(((_gameCore->_myPlayerChar->_direcao+180)*PI)/180)*_gameCore->_myPlayerChar->_velAnim,
+				vector3df(cos(((_gameCore->_myPlayerChar->_direcao+180+90)*PI)/180)*_gameCore->_myPlayerChar->_velAnim,
 				0,
-				-sin(((_gameCore->_myPlayerChar->_direcao+180)*PI)/180)*_gameCore->_myPlayerChar->_velAnim));
+				-sin(((_gameCore->_myPlayerChar->_direcao+180)*PI)/180+90)*_gameCore->_myPlayerChar->_velAnim));
+			_newPosition = true;
 		}
 
 		if(_gerEventos->isKeyDown(KEY_KEY_Q))
