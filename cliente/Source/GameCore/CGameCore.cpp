@@ -424,7 +424,7 @@ void CGameCore::addPersonagem( CPersonagem *personagem )
 	personagem->_modelo = _gerenciadorCena->addAnimatedMeshSceneNode(_gerenciadorCena->getMesh(pathMtxCharsModels[r][c]));
 	personagem->_modelo->setMaterialFlag(EMF_LIGHTING, false);
 	personagem->_modelo->setMaterialTexture(0, _gerenciadorVideo->getTexture(pathMtxCharsTextures[r][c]));
-	personagem->_modelo->setPosition(personagem->_posicao + vector3df(0,10,0));
+	personagem->_modelo->setPosition(personagem->_posicao + vector3df(0,0.2f,0));
 
 	_listaPersonagens->addElement(personagem, personagem->getId());
 
@@ -472,7 +472,7 @@ void CGameCore::addPersonagem( CPersonagem *personagem )
 		_myPlayerChar = personagem;
 
 		_emptyCam = _gerenciadorCena->addEmptySceneNode();
-		_emptyCam->setPosition(_myPlayerChar->_posicao);
+		_emptyCam->setPosition(_myPlayerChar->_modelo->getPosition());
 		_gameCamera->setParent(_emptyCam);
 		_gameCamera->setPosition( vector3df(-20,20,0));
 		_gameCamera->setTarget(_emptyCam->getPosition());
