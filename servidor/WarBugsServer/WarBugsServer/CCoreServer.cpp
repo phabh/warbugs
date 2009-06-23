@@ -174,8 +174,9 @@ void CCoreServer::readPackets()
 			{
 					case DISCONNECT:
 						{
+							/*
 							if(_playersList->getElementAt(indexJogador)->getSocket()->_connected)
-								_playersList->getElementAt(indexJogador)->getSocket()->close();
+								_playersList->getElementAt(indexJogador)->getSocket()->close();*/
 
 							_playersList->removeJogadorAt(indexJogador);
 							break;
@@ -213,12 +214,12 @@ void CCoreServer::readPackets()
 									sendMessage(false,-1,_playersList->getElementAt(p)->getSocket(),(int)DISCONNECT);
 									String ^ tempString = gcnew String(login);
 									WarBugsLog::_log->Items->Add(L"Houve duplicidade de login para o jogador de login "+tempString);
-
+									/*
 									if(_playersList->getElementAt(indexJogador)->getSocket()->_connected)
 										_playersList->getElementAt(indexJogador)->getSocket()->close();
 
 									if(_playersList->getElementAt(p)->getSocket()->_connected)
-										_playersList->getElementAt(p)->getSocket()->close();
+										_playersList->getElementAt(p)->getSocket()->close();*/
 									indexJogador = _playersList->getElementAt(indexJogador)->getID();
 									_playersList->removeJogadorAt(p);
 									_playersList->removeJogador(indexJogador);
