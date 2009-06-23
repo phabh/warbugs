@@ -377,27 +377,6 @@ void CGameCore::createLight(ISceneNode *parent, vector3df posicao, f32 raio)
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-/*
-void CGameCore::loadGameData()
-{
-//_Data = new CGameData(_dispositivoGrafico);
-
-_barraLoad = new CHudProgressBar(_gerenciadorHud->getRootGUIElement(), _gerenciadorHud, rect<s32>(10,150,610,180));
-
-_barraLoad->setProgress(0.0);
-
-int estagio = 0; // estágio de loading
-float progresso = 0.000;
-
-while(estagio < 6) // Carrega elementos do jogo
-{
-_gameData->loadStage(estagio);
-_barraLoad->setProgress(_gameData->porcentagem/100.00);
-estagio++;
-}
-
-_barraLoad->drop();	
-}*/
 
 void CGameCore::loadGameData(int stage)
 {
@@ -448,6 +427,45 @@ void CGameCore::addPersonagem( CPersonagem *personagem )
 	personagem->_modelo->setPosition(personagem->_posicao);
 
 	_listaPersonagens->addElement(personagem, personagem->getId());
+
+		// TIRAR
+	
+	
+	// modelo capacete
+	capacete = _gerenciadorCena->addAnimatedMeshSceneNode(_gerenciadorCena->getMesh("recursos/modelos/i3d_elmo_barbaro.b3d"), 0, -2);
+	capacete->setMaterialFlag(EMF_LIGHTING, false);
+	capacete->setMaterialTexture(0, _gerenciadorVideo->getTexture("recursos/texturas/tx3d_elmo_barbaro.png"));
+
+	//  modelo maca
+	maca = _gerenciadorCena->addAnimatedMeshSceneNode(_gerenciadorCena->getMesh("recursos/modelos/i3d_maca.b3d"), 0, -2);
+	maca->setMaterialFlag(EMF_LIGHTING, false);
+	maca->setMaterialTexture(0, _gerenciadorVideo->getTexture("recursos/texturas/tx3d_maca.png"));
+
+	
+	// joints besouro
+	boneCabeca = personagem->_modelo->getJointNode("visao"); 
+	boneMao = personagem->_modelo->getJointNode("mao_L"); 
+
+	capacete->setPosition(vector3df(0.f,0.f,-1.5f));
+	capacete->setRotation(vector3df(90.f,180.f,0.f));
+
+	maca->setPosition(vector3df(-1.f,0.f,1.f));
+	maca->setRotation(vector3df(0.f,0.f,90.f)); 
+
+	// parents Besouro
+	boneCabeca->addChild(capacete); 
+	boneMao->addChild(maca); 
+
+	capacete->setAnimationSpeed(30);
+	maca->setAnimationSpeed(30);
+
+	///////
+
+	personagem->_estado = ATAQUE2;
+	personagem->_ultimoEstado = -1;
+	personagem->updAnimation(true);
+
+	personagem->_modelo->setAnimationSpeed(30);
 
 	if(personagem->getId() == _myCharSceneID)
 	{
