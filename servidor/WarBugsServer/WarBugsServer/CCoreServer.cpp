@@ -319,7 +319,8 @@ void CCoreServer::readPackets()
 							int    idJogador	 = mesRecebida.readInt();
 							int    idPersonagem	 = mesRecebida.readInt();
 							char   nome[15];
-							strcpy_s(nome,sizeof(nome),mesRecebida.readString());
+							//strcpy_s(nome,sizeof(nome),mesRecebida.readString());
+							strcpy_s(nome,sizeof(nome),"Fulano");
 							
 							if(_dataManager->qtdPersonagemJogador(idJogador) <= 0)
 							{
