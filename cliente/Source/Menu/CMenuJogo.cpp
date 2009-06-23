@@ -460,6 +460,31 @@ void CMenuJogo::readCommands()
 			switch(_gerEventos->getEventCallerByID())
 			{
 
+			case 400: // Btn inv
+				_menuFlag[INVENTARIOON] = !_menuFlag[INVENTARIOON];
+				invWindow->setVisible(_menuFlag[INVENTARIOON]);
+				break;
+
+			case 401: // Btn trade
+				_menuFlag[TRADEON] = !_menuFlag[TRADEON];
+				tradeWindow->setVisible(_menuFlag[TRADEON]);
+				break;
+
+			case 402: // Btn shop
+				_menuFlag[SHOPON] = !_menuFlag[SHOPON];
+				shopWindow->setVisible(_menuFlag[SHOPON]);
+				break;
+
+			case 403: // Btn status
+				_menuFlag[STATUSON] = !_menuFlag[STATUSON];
+				statWindow->setVisible(_menuFlag[STATUSON]);
+				break;
+
+			case 406: // Btn alert
+				_menuFlag[ALERTON] = !_menuFlag[ALERTON];
+				alertWindow->setVisible(_menuFlag[ALERTON]);
+				break;
+
 			case 404: // Btn Config
 				_menuFlag[CONFIGON] = !_menuFlag[CONFIGON];
 				cfgWindow->setVisible(_menuFlag[CONFIGON]);
@@ -478,14 +503,15 @@ void CMenuJogo::readCommands()
 				invWindow->setVisible(_menuFlag[INVENTARIOON]);
 				break;
 
-				/*
-				if(_gerEventos->isKeyReleased(KEY_KEY_E))
-				{
-				// Mostrar | Esconder janela de equipamentos do jogador
-				_menuFlag[EQUIPON] = !_menuFlag[EQUIPON];
-				_equipWindow->setVisible(_menuFlag[EQUIPON]);
-				}*/
+			case 624: // Btn Close bag
+				_menuFlag[BOLSAON] = !_menuFlag[BOLSAON];
+				bagWindow->setVisible(_menuFlag[BOLSAON]);
+				break;
 
+			case 812: // Btn Close trade
+				_menuFlag[TRADEON] = !_menuFlag[TRADEON];
+				tradeWindow->setVisible(_menuFlag[TRADEON]);
+				break;
 			};
 
 			if(_nextID != MN_JOGO)
@@ -498,6 +524,7 @@ void CMenuJogo::readCommands()
 			// Não é clique em botão
 		}
 	}
+
 
 	if(_gerEventos->wheelMoved())
 	{
@@ -545,12 +572,25 @@ void CMenuJogo::readCommands()
 	// Se o modo chat estiver desabilitado, leia as outras teclas
 	if(!_menuFlag[CHATON])
 	{
-
-		if(_gerEventos->isKeyReleased(KEY_KEY_F))
+		if(_gerEventos->isKeyReleased(KEY_KEY_B))
 		{
-			// Habilitar | Desabilitar janela de configuração do jogo
-			_menuFlag[CONFIGON] = !_menuFlag[CONFIGON];
-			cfgWindow->setVisible(_menuFlag[CONFIGON]);
+			// Mostrar | Esconder janela de bolsa
+			_menuFlag[BOLSAON] = !_menuFlag[BOLSAON];
+			bagWindow->setVisible(_menuFlag[BOLSAON]);
+		}
+
+		if(_gerEventos->isKeyReleased(KEY_KEY_I))
+		{
+			// Mostrar | Esconder janela de inventario
+			_menuFlag[INVENTARIOON] = !_menuFlag[INVENTARIOON];
+			invWindow->setVisible(_menuFlag[INVENTARIOON]);
+		}
+
+		if(_gerEventos->isKeyReleased(KEY_KEY_Z))
+		{
+			// Mostrar | Esconder janela de status extendido
+			_menuFlag[STATUSON] = !_menuFlag[STATUSON];
+			statWindow->setVisible(_menuFlag[STATUSON]);
 		}
 
 		if(_gerEventos->isKeyReleased(KEY_KEY_M))
@@ -560,26 +600,20 @@ void CMenuJogo::readCommands()
 			mapWindow->setVisible(_menuFlag[MAPAON]);
 		}
 
-		if(_gerEventos->isKeyReleased(KEY_KEY_I))
+		if(_gerEventos->isKeyReleased(KEY_KEY_F))
 		{
-			// Mostrar | Esconder janela de inventário do jogador
-			_menuFlag[INVENTARIOON] = !_menuFlag[INVENTARIOON];
-			invWindow->setVisible(_menuFlag[INVENTARIOON]);
-		}
-
-		if(_gerEventos->isKeyReleased(KEY_KEY_Z))
-		{
-			// Mostrar | Esconder janela de status expandido do jogador
-			_menuFlag[STATUSON] = !_menuFlag[STATUSON];
-			statWindow->setVisible(_menuFlag[STATUSON]);
+			// Habilitar | Desabilitar janela de config
+			_menuFlag[CONFIGON] = !_menuFlag[CONFIGON];
+			cfgWindow->setVisible(_menuFlag[CONFIGON]);
 		}
 
 		if(_gerEventos->isKeyReleased(KEY_KEY_R))
 		{
-			// Mostrar | Esconder janela de alertas ao jogador
+			// Habilitar | Desabilitar janela de config
 			_menuFlag[ALERTON] = !_menuFlag[ALERTON];
 			alertWindow->setVisible(_menuFlag[ALERTON]);
 		}
+
 
 		if(_gerEventos->isKeyReleased(KEY_TAB))
 		{
@@ -591,59 +625,51 @@ void CMenuJogo::readCommands()
 		if(_gerEventos->isKeyReleased(KEY_KEY_T))
 		{
 			// Habilitar | Desabilitar negociação de troca com o alvo
-			/*			if(!_gameCore->_myCharPlayer->_combatMode)
-			{
+			//if(!_gameCore->_myPlayerChar->_combatMode)
+			//{
 			// Não trocar em modo combate ativado
 			_menuFlag[TRADEON] = !_menuFlag[TRADEON];
-			_tradeWindow->setVisible(_menuFlag[TRADEON]);
-			}*/
+			tradeWindow->setVisible(_menuFlag[TRADEON]);
+			//}
 		}
 
 
 		if(_gerEventos->isKeyDown(KEY_KEY_W))
 		{
-
 			_gameCore->_myPlayerChar->_modelo->setPosition(_gameCore->_myPlayerChar->_modelo->getPosition() + 
 				vector3df(cos(((_gameCore->_myPlayerChar->_direcao)*PI)/180)*_gameCore->_myPlayerChar->_velAnim,
 				0,
 				-sin(((_gameCore->_myPlayerChar->_direcao)*PI)/180)*_gameCore->_myPlayerChar->_velAnim));
 
 			_newPosition = true;
-
 		}
 
 		if(_gerEventos->isKeyDown(KEY_KEY_S))
 		{
-
 			_gameCore->_myPlayerChar->_modelo->setPosition(_gameCore->_myPlayerChar->_modelo->getPosition() + 
 				vector3df(cos(((_gameCore->_myPlayerChar->_direcao+180)*PI)/180)*_gameCore->_myPlayerChar->_velAnim,
 				0,
 				-sin(((_gameCore->_myPlayerChar->_direcao+180)*PI)/180)*_gameCore->_myPlayerChar->_velAnim));
-
 		}
 
 		if(_gerEventos->isKeyDown(KEY_KEY_Q))
 		{
-
 			_gameCore->_myPlayerChar->_modelo->setPosition(_gameCore->_myPlayerChar->_modelo->getPosition() + 
 				vector3df(cos(((_gameCore->_myPlayerChar->_direcao)*PI)/180)*_gameCore->_myPlayerChar->_velAnim,
 				0,
 				-sin(((_gameCore->_myPlayerChar->_direcao)*PI)/180)*_gameCore->_myPlayerChar->_velAnim));
 
 			_newPosition = true;
-
 		}
 
 		if(_gerEventos->isKeyDown(KEY_KEY_E))
 		{
-
 			_gameCore->_myPlayerChar->_modelo->setPosition(_gameCore->_myPlayerChar->_modelo->getPosition() + 
 				vector3df(cos(((_gameCore->_myPlayerChar->_direcao+180)*PI)/180)*_gameCore->_myPlayerChar->_velAnim,
 				0,
 				-sin(((_gameCore->_myPlayerChar->_direcao+180)*PI)/180)*_gameCore->_myPlayerChar->_velAnim));
 
 			_newPosition = true;
-
 		}
 
 		if(_gerEventos->isKeyDown(KEY_KEY_A))
@@ -736,43 +762,6 @@ void CMenuJogo::graphicsDrawAddOn()
 	{
 		_gameCore->contourAll(_gerCena->getRootSceneNode());
 	}
-}
-
-//-----------------------------------------------------------------------------------------------------------------
-
-void CMenuJogo::addNewBtn( IGUIButton *&ptrBtn, rect<s32> posicao, IGUIElement *parent, s32 id, const wchar_t *texto, const wchar_t *dica, bool isTexturedBtn, bool isPushBtn, int idImageUp, int idImagePressed)
-{
-	ptrBtn = _gerHud->addButton( posicao, parent, id, texto, dica );
-	ptrBtn->setIsPushButton(isPushBtn);
-	ptrBtn->setPressed(false);
-
-	if(isTexturedBtn)
-	{
-		if(idImageUp >= 0)
-			ptrBtn->setImage(_gerVideo->getTexture(pathTexture2D[idImageUp]));
-
-		if(idImagePressed >= 0)
-			ptrBtn->setPressedImage(_gerVideo->getTexture(pathUsedTexture2D[idImagePressed]));
-	}
-	ptrBtn->setUseAlphaChannel(true);
-}
-
-//-----------------------------------------------------------------------------------------------------------------
-
-void CMenuJogo::addNewText( IGUIStaticText *&ptrTexto, const wchar_t *texto, rect<s32> posicao, bool hasBorder, bool isWrap, bool fillBg, IGUIElement *parent, s32 id, EGUI_ALIGNMENT horizontal, EGUI_ALIGNMENT vertical )
-{
-	ptrTexto = _gerHud->addStaticText(texto, posicao, hasBorder, isWrap, parent, id, fillBg);
-	ptrTexto->setTextAlignment(horizontal, vertical);
-}
-
-//-----------------------------------------------------------------------------------------------------------------
-
-void CMenuJogo::addNewWindow( IGUIWindow *&ptrWindow, rect<s32> posicao, bool modal, const wchar_t *titulo, IGUIElement *parent, int id)
-{
-	ptrWindow = _gerHud->addWindow(posicao, modal, titulo, parent, id); 
-	ptrWindow->getCloseButton()->setEnabled(false); 
-	ptrWindow->getCloseButton()->setToolTipText(L""); 
-	ptrWindow->getCloseButton()->setVisible(false);
 }
 
 //-----------------------------------------------------------------------------------------------------------------

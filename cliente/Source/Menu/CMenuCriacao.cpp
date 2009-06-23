@@ -48,6 +48,13 @@ bool CMenuCriacao::start(CGameCore *gameCore)
 
 	//_toonShader = new CToonShader(_dispGrafico, _luz);
 
+	maxH = _gameCore->sHeight;
+	maxW = _gameCore->sWidth;
+	minH = 0;
+	minW = 0;
+	midH = maxH/2;
+	midW = maxW/2;
+
 	return true;
 }
 
@@ -64,9 +71,9 @@ void CMenuCriacao::updateHuds()
 {
 	_gerHud->clear();
 
-	_gerHud->addButton(rect<s32>(140,10,240,50), 0, 301, L"<");
-	_gerHud->addButton(rect<s32>(540,10,640,50), 0, 302, L">");
-	_gerHud->addButton(rect<s32>(440, 600, 540, 640), 0, 303, L"Criar");
+	_gerHud->addButton(rect<s32>(midW-400, minH+10, midW-300, minH+50), 0, 301, L"<");
+	_gerHud->addButton(rect<s32>(midW+300, minH+10, midW+400, minH+50), 0, 302, L">");
+	_gerHud->addButton(rect<s32>(midW-50, maxH-5, midW+50, maxH-45), 0, 303, L"Criar");
 
 	_menuFlag[HUDUPDATED] = true;
 }
