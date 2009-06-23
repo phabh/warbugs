@@ -214,107 +214,101 @@ float CPersonagem::getRotationTo(vector3d<f32> destino)
 
 // -----------------------------------------------------------------------------------------
 
-/*
-void CPersonagem::SetAnimation(int estado, int proxEstado)
+void CPersonagem::updAnimation(bool isLoop)
 {
-	switch (state)
+	if (_estado != _ultimoEstado)
 	{
+		switch (_estado)
+		{
 
-	case PARADO:
+		case PARADO:
 
-		_startFrame = 1;
-		_endFrame = 60;
-		break;
+			_startFrame = 1;
+			_endFrame = 59;
+			break;
 
-	case SAUDACAO:
+		case SAUDACAO:
 
-		_startFrame = 61;
-		_endFrame = 90;
-		break;
+			_startFrame = 61;
+			_endFrame = 89;
+			break;
 
-	case CORRENDO:
+		case CORRENDO:
 
-		_startFrame = 91;
-		_endFrame = 120;
-		break;
+			_startFrame = 91;
+			_endFrame = 119;
+			break;
 
-	case ATAQUE1:
+		case ATAQUE1:
 
-		_startFrame = 121;
-		_endFrame = 150;
-		break;
+			_startFrame = 121;
+			_endFrame = 149;
+			break;
 
-	case ATAQUE2:
+		case ATAQUE2:
 
-		_startFrame = 151;
-		_endFrame = 180;
-		break;
+			_startFrame = 151;
+			_endFrame = 179;
+			break;
 
-	case ATAQUE3:
+		case ATAQUE3:
 
-		_startFrame = 181;
-		_endFrame = 210;
-		break;
+			_startFrame = 181;
+			_endFrame = 209;
+			break;
 
-	case ATAQUE4:
+		case ATAQUE4:
 
-		_startFrame = 211;
-		_endFrame = 240;
-		break;
+			_startFrame = 211;
+			_endFrame = 239;
+			break;
 
-	case PODER1:
+		case PODER1:
 
-		_startFrame = 241;
-		_endFrame = 270;
-		break;
+			_startFrame = 241;
+			_endFrame = 269;
+			break;
 
-	case PODER2:
+		case PODER2:
 
-		_startFrame = 271;
-		_endFrame = 300;
-		break;
+			_startFrame = 271;
+			_endFrame = 299;
+			break;
 
-	case PODER3:
+		case PODER3:
 
-		_startFrame = 301;
-		_endFrame = 330;
-		break;
+			_startFrame = 301;
+			_endFrame = 329;
+			break;
 
-	case BUFF_BOM:
+		case BUFF_BOM:
 
-		_startFrame = 331;
-		_endFrame = 360;
-		break;
+			_startFrame = 331;
+			_endFrame = 359;
+			break;
 
-	case BUFF_RUIM:
+		case BUFF_RUIM:
 
-		_startFrame = 361;
-		_endFrame = 390;
-		break;
+			_startFrame = 360;
+			_endFrame = 390;
+			break;
 
-	case APANHANDO:
+		case APANHANDO:
 
-		_startFrame = 391;
-		_endFrame = 420;
-		break;
+			_startFrame = 391;
+			_endFrame = 410;
+			break;
 
-	case MORRENDO:
+		case MORRENDO:
 
-		_startFrame = 421;
-		_endFrame = 450;
-		break;
+			_startFrame = 421;
+			_endFrame = 449;
+			break;
+		}
 
-	default:
-
-		return;
+		this->_modelo->setFrameLoop(_startFrame, _endFrame);
+		_ultimoEstado = _estado;
 	}
 
-	if (_estado != estado)
-	{
-		_currentFrame = _startFrame;
-		_nextFrame = _startFrame + 1;
-	}
-
-	_estado = estado;
-	_proxEstado = proxEstado;
-}*/
+	this->_modelo->setLoopMode(isLoop);
+}

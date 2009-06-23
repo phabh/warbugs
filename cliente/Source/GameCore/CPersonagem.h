@@ -56,6 +56,8 @@ public:
 	int _roleta[NUMROLETAOPCOES];
 	
 	*/
+	int _startFrame, 
+		_endFrame;
 
 	int _id;
 	char *_nome;
@@ -148,4 +150,6 @@ public:
 	float getRotationTo(vector3d<f32> destino);
 
 	void LRTAStar(SQuadrante origem, vector3df objetivo, SQuadrante &proximoPasso, bool Matriz[MAPMAXLIN][MAPMAXCOL]);
+
+	void updAnimation(bool isLoop);
 };
