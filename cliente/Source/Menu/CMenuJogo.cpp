@@ -710,7 +710,7 @@ void CMenuJogo::updateGraphics()
 
 	if(_newPosition)
 	{
-		meOnMap->setRelativePosition(meOnMap->getRelativePosition() + position2d<s32>(1,1));
+		//meOnMap->setRelativePosition(meOnMap->getRelativePosition() + position2d<s32>(1,1));
 		_newPosition = false;
 	}
 
@@ -721,8 +721,8 @@ void CMenuJogo::updateGraphics()
 
 void CMenuJogo::graphicsDrawAddOn() 
 {
-	_gameCore->boneMao->updateAbsolutePositionOfAllChildren();
-	_gameCore->boneCabeca->updateAbsolutePositionOfAllChildren();
+	//_gameCore->boneMao->updateAbsolutePositionOfAllChildren();
+	//_gameCore->boneCabeca->updateAbsolutePositionOfAllChildren();
 	_gameCore->maca->updateAbsolutePosition();
 	_gameCore->capacete->updateAbsolutePosition();
 	
