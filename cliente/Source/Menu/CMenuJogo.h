@@ -1,56 +1,64 @@
 #pragma once
 
 #include "CMenu.h"
-#include "CHudChat.cpp"
-#include "CHudMiniMapa.cpp"
 #include "CHudRoleta.cpp"
-#include "CHudStatus.cpp"
+
 
 class CMenuJogo : public CMenu
 {
 
 private:
 
-	//int _idPersonagem, 
-	//	_idInimigo;
-
-	//ITriangleSelector* _selector;
-
 	int _idInimigo;
 
 	ICameraSceneNode *_menuCamera;
 	
-	bool _combate;
+	bool _combate, _newPosition;
 
 	TypeCfg _gameConfig;
 
-	IGUIListBox *_chatText;
-	IGUIEditBox *_chatInput; 
+	IGUIListBox *chatPlayers,
+				*gameMessages;
 
-	IGUIWindow *_invWindow,
-		*_chatWindow,	
-		*_statWindow,
-		*_cfgWindow,
-		*_mapWindow,
-		*_equipWindow,
-		*_alertWindow;
+	IGUIEditBox *chatInput; 
+
+	IGUIWindow *invWindow,
+			   *shopWindow,
+			   *tradeWindow,
+			   *statWindow,
+			   *cfgWindow,
+			   *mapWindow,
+			   *alertWindow,
+			   *bagWindow;
+
+	IGUIButton *slotInv[11], *invBtn[3], // Inventário
+			   *slotInvBag[11], *slotBag[9], *bagBtn[3], // Bolsa do cenário
+			   *slotInvShop[11], *slotShop[9], *shopBtn[7], // Shop
+			   *slotInvTrade[11], *slotTrade[2], *tradeBtn[5], // Trade
+			   *hudBtn[11];
+
+	IGUIStaticText *cashInv,
+				   *cashInvBag,
+				   *cashInvShop, *cashToSell, *cashToBuy,
+				   *cashTradeSend, *cashTradeRecv,
+				   *cfgCaption[2];
+		
+	IGUIImage *meOnMap, *imgMoon, *bgMoon, *statusBg, *statusFace;
+
+	IGUIScrollBar *cfgVolume;
+
+	IGUICheckBox *cfgContorno;
+
+	CHudProgressBar *barPV,
+					*barPP,
+					*barXP,
+					*barMP;
+		
 
 	CHudRoleta *_roleta;
 
-	//ITerrainSceneNode *_terreno;
-	//IAnimatedMesh *_malha[10];
-	//ITexture *_textura[10];
-	//IAnimatedMeshSceneNode *_modelo[10];
-
-	//float _direcao, 
-	//	_velocidade;
-
 	float rotV, 
 		rotH;
-
-	//ISceneNode *_empty;
-	//ILightSceneNode *_luz;
-
 
 	// Variáveis para tratar o click do mouse no terreno
 	SMaterial _material;
@@ -76,8 +84,10 @@ public:
 
 	CMenuJogo();
 	bool start(CGameCore *gameCore);
-
 	void updateScene();
 
+	void addNewBtn( IGUIButton *&ptrBtn, rect<s32> posicao, IGUIElement *parent, s32 id=-1, const wchar_t *texto=0, const wchar_t *dica=0, bool isTexturedBtn=false, bool isPushBtn=false, int idImageUp=-1, int idImagePressed=-1);
+	void addNewText( IGUIStaticText *&ptrTexto, const wchar_t *texto, rect<s32> posicao, bool hasBorder=false, bool isWrap=false, bool fillBg=false, IGUIElement *parent=0, s32 id=-1, EGUI_ALIGNMENT horizontal = EGUIA_LOWERRIGHT , EGUI_ALIGNMENT vertical = EGUIA_CENTER);
+	void addNewWindow( IGUIWindow *&ptrWindow, rect<s32> posicao, bool modal=false, const wchar_t *titulo=0, IGUIElement *parent=0, int id=-1);
 	
 };

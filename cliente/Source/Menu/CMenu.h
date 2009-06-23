@@ -32,6 +32,13 @@ protected:
 
 public:
 
+	int maxH,
+		maxW,
+		minH,
+		minW,
+		midH,
+		midW;
+
 	CMenu(){}
 	
 	bool start(CGameCore *gameCore);
