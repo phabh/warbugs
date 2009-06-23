@@ -128,6 +128,11 @@ private:
 
 public:
 
+	IBoneSceneNode *boneCabeca, *boneMao;
+	IAnimatedMeshSceneNode *capacete, *maca;
+
+	bool showContorno;
+
 	std::string SERVERHOST;
 	int SERVERPORT;
 	
