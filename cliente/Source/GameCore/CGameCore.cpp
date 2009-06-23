@@ -424,7 +424,7 @@ void CGameCore::addPersonagem( CPersonagem *personagem )
 	personagem->_modelo = _gerenciadorCena->addAnimatedMeshSceneNode(_gerenciadorCena->getMesh(pathMtxCharsModels[r][c]));
 	personagem->_modelo->setMaterialFlag(EMF_LIGHTING, false);
 	personagem->_modelo->setMaterialTexture(0, _gerenciadorVideo->getTexture(pathMtxCharsTextures[r][c]));
-	personagem->_modelo->setPosition(personagem->_posicao);
+	personagem->_modelo->setPosition(personagem->_posicao + vector3df(0,10,0));
 
 	_listaPersonagens->addElement(personagem, personagem->getId());
 
