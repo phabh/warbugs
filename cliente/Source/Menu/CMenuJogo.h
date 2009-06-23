@@ -84,10 +84,5 @@ public:
 
 	CMenuJogo();
 	bool start(CGameCore *gameCore);
-	void updateScene();
-
-	void addNewBtn( IGUIButton *&ptrBtn, rect<s32> posicao, IGUIElement *parent, s32 id=-1, const wchar_t *texto=0, const wchar_t *dica=0, bool isTexturedBtn=false, bool isPushBtn=false, int idImageUp=-1, int idImagePressed=-1);
-	void addNewText( IGUIStaticText *&ptrTexto, const wchar_t *texto, rect<s32> posicao, bool hasBorder=false, bool isWrap=false, bool fillBg=false, IGUIElement *parent=0, s32 id=-1, EGUI_ALIGNMENT horizontal = EGUIA_LOWERRIGHT , EGUI_ALIGNMENT vertical = EGUIA_CENTER);
-	void addNewWindow( IGUIWindow *&ptrWindow, rect<s32> posicao, bool modal=false, const wchar_t *titulo=0, IGUIElement *parent=0, int id=-1);
-	
+	void updateScene();	
 };

@@ -59,3 +59,42 @@ TypeMenuID CMenu::run()
 
 	return _nextID;
 }
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CMenu::addNewBtn( IGUIButton *&ptrBtn, rect<s32> posicao, IGUIElement *parent, s32 id, const wchar_t *texto, const wchar_t *dica, bool isTexturedBtn, bool isPushBtn, int idImageUp, int idImagePressed)
+{
+	ptrBtn = _gerHud->addButton( posicao, parent, id, texto, dica );
+	ptrBtn->setIsPushButton(isPushBtn);
+	ptrBtn->setPressed(false);
+
+	if(isTexturedBtn)
+	{
+		if(idImageUp >= 0)
+			ptrBtn->setImage(_gerVideo->getTexture(pathTexture2D[idImageUp]));
+
+		if(idImagePressed >= 0)
+			ptrBtn->setPressedImage(_gerVideo->getTexture(pathUsedTexture2D[idImagePressed]));
+	}
+	ptrBtn->setUseAlphaChannel(true);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CMenu::addNewText( IGUIStaticText *&ptrTexto, const wchar_t *texto, rect<s32> posicao, bool hasBorder, bool isWrap, bool fillBg, IGUIElement *parent, s32 id, EGUI_ALIGNMENT horizontal, EGUI_ALIGNMENT vertical )
+{
+	ptrTexto = _gerHud->addStaticText(texto, posicao, hasBorder, isWrap, parent, id, fillBg);
+	ptrTexto->setTextAlignment(horizontal, vertical);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+void CMenu::addNewWindow( IGUIWindow *&ptrWindow, rect<s32> posicao, bool modal, const wchar_t *titulo, IGUIElement *parent, int id)
+{
+	ptrWindow = _gerHud->addWindow(posicao, modal, titulo, parent, id); 
+	ptrWindow->getCloseButton()->setEnabled(false); 
+	ptrWindow->getCloseButton()->setToolTipText(L""); 
+	ptrWindow->getCloseButton()->setVisible(false);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
