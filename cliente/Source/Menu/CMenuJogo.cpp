@@ -735,6 +735,10 @@ void CMenuJogo::updateGraphics()
 {	
 	//_gameCore->_myPlayerChar->_modelo->setPosition(_gameCore->upd3DPosition(_gameCore->_myPlayerChar->_modelo->getPosition().X, _gameCore->_myPlayerChar->_modelo->getPosition().Z));
 		
+	//_gameCamera->setParent(_emptyCam);
+	//	_gameCamera->setPosition( vector3df(-20,20,0));
+	//	_gameCamera->setTarget(_emptyCam->getPosition());
+
 	_gameCore->_emptyCam->setPosition(_gameCore->_myPlayerChar->_modelo->getPosition());
 
 	_gameCore->_emptyCam->setRotation(_gameCore->rotacaoResultante(0, _gameCore->camRotHor, _gameCore->camRotVert));
