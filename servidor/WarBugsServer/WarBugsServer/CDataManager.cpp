@@ -1781,7 +1781,7 @@ bool CDataManager::deletePersonagemJogador(int idJogador, int idPersonagem, char
 	temp = gcnew String(nomePersonagem);
 
 
-	query = L"DELETE FROM JOGADOR_PERSONAGEM JP "
+	query = L"DELETE FROM PERSONAGEM_CENARIO PC, JOGADOR_PERSONAGEM JP "
 			+" USING JOGADOR_PERSONAGEM JP, PERSONAGEM P, PERSONAGEM_CENARIO PC "
 			+" WHERE JP.PGID = P.PGID AND JP.JDID = "+idJogador
 			+" AND P.PGID = PC.PGID "
