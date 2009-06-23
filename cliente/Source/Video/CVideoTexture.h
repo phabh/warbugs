@@ -55,41 +55,38 @@ public:
 
 	//! Cria textura de vídeo para Irrlicht
 	/*!
-	\param device Irrlicht device
-	\param file File Name
-	\return Pointer to a Video Texture or NULL if failed
+	\param1: dispositivo da Irrlicht
+	\param2: nome do arquivo
+	\retorna null (falha) ou um ponteiro para a textura
 	*/
 	static CVideoTexture* createVideoTexture( IrrlichtDevice *device ,const char* file);
 
-	//! Creates Irrlicht Capture texture
+	//! Cria uma textura de captura
 	/*!
-	Opens Capture device and renders it's content to a texture.
-	\param device Irrlicht device
-	\param cap Capture Device ID.Not Implemented
-	\return Pointer to a Video Texture or NULL if failed
+	Abre um dispositivo de captura de vídeo e renderiza seu conteúdo em uma textura
+	\param1: dispositivo da Irrlicht
+	\retorna null (falha) ou um ponteiro para a textura
 	*/
 	static CVideoTexture* createCaptureTexture( IrrlichtDevice *device , dsvt::ICaptureDevice *cap = NULL);
 
 	//! Returns Irrlicht texture pointer
 	/*!
-	\return Pointer to an Irrlicht Texture.
+	\retorna um ponteiro para a textura
 	*/
 	virtual ITexture *getTexture();
 
-	//! Remove Video texture
+	//! Remove a textura de vídeo
 	/*!
-	Video texture can't be used anymore.
-	Irrlicht texture that was returned by getTexture will not be removed.
+	A textura de vídeo não poderá ser reutilizada
 	*/
 	virtual void drop()
 	{
 		delete this;
 	}
 
-	//! Update Video texture
+	//! Atualização da textura de vídeo
 	/*!
-	Should be called as often as necessary.
-	Also when using callback function.
+	Atualiza o frame corrente
 	*/
 	virtual bool update()
 	{
