@@ -63,12 +63,10 @@ CVideoTexture::CVideoTexture( IrrlichtDevice *device, const char* file, bool& bS
     m_video_buffer_size = m_dshow_player->getWidth() * m_dshow_player->getHeight() * 4 /* RGB_32*/;
     m_copy_buffer_size = m_video_buffer_size;
 
-    // Create texture
     m_pTempTexture = device->getVideoDriver()->addTexture(dimension2d<s32>( m_dshow_player->getWidth(),
                                                         m_dshow_player->getHeight()),
                                                         "target",ECF_A8R8G8B8);
 
-    // Kill Video texture if target texture could't be initialised
     if( !m_pTempTexture )
     {
         bSuccess = false;
@@ -80,7 +78,6 @@ CVideoTexture::CVideoTexture( IrrlichtDevice *device, const char* file, bool& bS
 
     m_pTempTexture->grab();
 
-    // Get texture color format
     m_color_format = m_pTempTexture->getColorFormat();
 
     switch( m_color_format )
@@ -102,7 +99,6 @@ CVideoTexture::CVideoTexture( IrrlichtDevice *device, const char* file, bool& bS
     if( texture_size < m_copy_buffer_size)
         m_copy_buffer_size = texture_size;
 
-    // set callback
     switch( m_dshow_player->getFormat() )
     {
         case RGB_8:
@@ -234,12 +230,10 @@ CVideoTexture::CVideoTexture( IrrlichtDevice *device, dsvt::ICaptureDevice *cap,
     m_video_buffer_size = m_dshow_player->getWidth() * m_dshow_player->getHeight() * 4 /* RGB_32*/;
     m_copy_buffer_size = m_video_buffer_size;
 
-    // Create texture
     m_pTempTexture = device->getVideoDriver()->addTexture(core::dimension2d<s32>( m_dshow_player->getWidth(),
                                                         m_dshow_player->getHeight()),
                                                         "target",ECF_A8R8G8B8);
 
-    // Kill Video texture if target texture could't be initialised
     if( !m_pTempTexture )
     {
         bSuccess = false;
@@ -251,7 +245,6 @@ CVideoTexture::CVideoTexture( IrrlichtDevice *device, dsvt::ICaptureDevice *cap,
 
     m_pTempTexture->grab();
 
-    // Get texture color format
     m_color_format = m_pTempTexture->getColorFormat();
 
     switch( m_color_format )
@@ -273,7 +266,6 @@ CVideoTexture::CVideoTexture( IrrlichtDevice *device, dsvt::ICaptureDevice *cap,
     if( texture_size < m_copy_buffer_size)
         m_copy_buffer_size = texture_size;
 
-    // set callback
     switch( m_dshow_player->getFormat() )
     {
         case RGB_8:
@@ -397,7 +389,7 @@ CVideoTexture::~CVideoTexture()
     m_pTempTexture = 0;
 }
 
-// Create irrlicht video texture
+
 CVideoTexture* CVideoTexture::createVideoTexture( IrrlichtDevice *device, const char* file)
 {
     if( !device)
@@ -405,23 +397,19 @@ CVideoTexture* CVideoTexture::createVideoTexture( IrrlichtDevice *device, const 
         return 0;
     }
 
-    //File test
     if( !device->getFileSystem()->existFile( file ))
     {
-        printf("error: file not existing: %s%s",file,"\n");
+        printf("erro: arquivo nao existe: %s%s",file,"\n");
 
         return 0;
     }
 
-    // Get Video Driver
     IVideoDriver *driver = device->getVideoDriver();
 
-    // first try to get static texture
     ITexture *stTex = driver->getTexture( file );
 
     CVideoTexture *tmpTexture = 0;
 
-    // Static texture loaded successfully
     if( stTex )
     {
         tmpTexture = new CVideoTexture(device, stTex);
@@ -429,11 +417,11 @@ CVideoTexture* CVideoTexture::createVideoTexture( IrrlichtDevice *device, const 
         if( !tmpTexture )
             return 0;
 
-        printf( "static texture created: %s%s",file,"\n");
+        printf( "textura estatica criada: %s%s",file,"\n");
     }
-    else    // Create video textre
+    else  
     {
-        // Test device
+
         E_DRIVER_TYPE drvtp = device->getVideoDriver()->getDriverType();
         if( drvtp == EDT_SOFTWARE || drvtp == EDT_BURNINGSVIDEO || drvtp==EDT_NULL)
         {
@@ -449,7 +437,7 @@ CVideoTexture* CVideoTexture::createVideoTexture( IrrlichtDevice *device, const 
             return 0;
         }
 
-        printf( "dynamic texture created: %s%s",file,"\n");
+        printf( "textura dinamica criada: %s%s",file,"\n");
     }
 
     return tmpTexture;
@@ -479,7 +467,7 @@ CVideoTexture* CVideoTexture::createCaptureTexture( IrrlichtDevice *device , dsv
         return 0;
     }
 
-    printf( "capture texture created\n");
+    printf( "textura de captura criada\n");
 
     return tmpTexture;
 }
@@ -495,7 +483,6 @@ bool CVideoTexture::playCutscene( void )
     IVideoDriver *drv = m_device->getVideoDriver();
     rect<s32> viewport = drv->getViewPort();
 
-    //Create event receiver
     class VideoEventReceiver : public irr::IEventReceiver
     {
         public:
@@ -510,8 +497,6 @@ bool CVideoTexture::playCutscene( void )
             }
     };
 
-
-	//Get old Event receiver
     IEventReceiver *oldEvent = m_device->getEventReceiver();
     VideoEventReceiver myEventReceiver;
     myEventReceiver.bQuit = false;
@@ -523,7 +508,6 @@ bool CVideoTexture::playCutscene( void )
 
     while( (bIrrlichtRun = m_device->run()) && !myEventReceiver.bQuit)
     {
-        //update texture
         update();
 
         drv->beginScene(true,true,video::SColor(255,0,0,0));
@@ -538,7 +522,6 @@ bool CVideoTexture::playCutscene( void )
         }
     }
 
-    // Set old event receiver
     if( bIrrlichtRun )
         m_device->setEventReceiver(oldEvent);
 
@@ -550,7 +533,6 @@ bool CVideoTexture::playCutscene( void )
 bool CVideoTexture::drawBackground( )
 {
     IVideoDriver *drv = m_device->getVideoDriver();
-    //rect<s32> tsize = drv->getViewPort();
     dimension2d<s32> ssize = drv->getCurrentRenderTargetSize();
     dimension2d<s32> tsize = getSize();
 
@@ -580,7 +562,7 @@ void CVideoTexture::RGB_32_To_A8R8G8B8( SFrameData& data )
 
     if( !texture_buffer )
     {
-        printf(" lock failed \n");
+        printf("falha no lock\n");
         return;
     }
 
@@ -621,7 +603,7 @@ void CVideoTexture::RGB_32_To_A1R5G5B5(dsvt::SFrameData& data)
 
     if( !texture_buffer )
     {
-        printf(" lock failed \n");
+        printf("falha no lock\n");
         return;
     }
 
@@ -665,7 +647,7 @@ void CVideoTexture::RGB_32_To_R5G6B5(dsvt::SFrameData& data)
 
     if( !texture_buffer )
     {
-        printf(" lock failed \n");
+        printf("falha no lock\n");
         return;
     }
 
@@ -708,7 +690,7 @@ void CVideoTexture::RGB_32_To_R8G8B8(dsvt::SFrameData& data)
 
     if( !texture_buffer )
     {
-        printf(" lock failed \n");
+        printf("falha no lock\n");
         return;
     }
 
@@ -752,7 +734,7 @@ void CVideoTexture::RGB_24_To_A8R8G8B8(dsvt::SFrameData& data)
 
     if( !texture_buffer )
     {
-        printf(" lock failed \n");
+        printf("falha no lock\n");
         return;
     }
 
@@ -804,7 +786,7 @@ void CVideoTexture::RGB_24_To_R5G6B5(dsvt::SFrameData& data)
 
     if( !texture_buffer )
     {
-        printf(" lock failed \n");
+        printf("falha no lock\n");
         return;
     }
 
@@ -848,7 +830,7 @@ void CVideoTexture::RGB_24_To_R8G8B8(dsvt::SFrameData& data)
 
     if( !texture_buffer )
     {
-        printf(" lock failed \n");
+        printf("falha no lock\n");
         return;
     }
 
@@ -889,7 +871,7 @@ void CVideoTexture::RGB_565_To_A8R8G8B8(dsvt::SFrameData& data)
 
     if( !texture_buffer )
     {
-        printf(" lock failed \n");
+        printf("falha no lock\n");
         return;
     }
 
