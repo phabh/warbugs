@@ -443,8 +443,8 @@ void CGameCore::addPersonagem( CPersonagem *personagem )
 
 	
 	// joints besouro
-	boneCabeca = personagem->_modelo->getJointNode("visao"); 
-	boneMao = personagem->_modelo->getJointNode("mao_L"); 
+	//boneCabeca = personagem->_modelo->getJointNode("visao"); 
+	//boneMao = personagem->_modelo->getJointNode("mao_L"); 
 
 	capacete->setPosition(vector3df(0.f,0.f,-1.5f));
 	capacete->setRotation(vector3df(90.f,180.f,0.f));
@@ -453,8 +453,8 @@ void CGameCore::addPersonagem( CPersonagem *personagem )
 	maca->setRotation(vector3df(0.f,0.f,90.f)); 
 
 	// parents Besouro
-	boneCabeca->addChild(capacete); 
-	boneMao->addChild(maca); 
+//	boneCabeca->addChild(capacete); 
+//	boneMao->addChild(maca); 
 
 	capacete->setAnimationSpeed(30);
 	maca->setAnimationSpeed(30);
